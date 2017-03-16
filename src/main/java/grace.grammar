@@ -1,0 +1,92 @@
+Package k31.grc;
+
+
+Helpers
+
+	letter = [['a' .. 'z'] + ['A' .. 'Z']];
+	digit = ['0' .. '9'];
+	underscore = '_';
+	
+	printablechar = [32 .. 126];
+	specialchar = [[''' + '"'] + '\'];
+	commonchar = [printablechar - specialchar];
+	
+	hexdigit = digit | ['a' .. 'f'] | ['A' .. 'F'];
+	escapechar = '\n' | '\t' | '\r' | '\e' | '\\' | '\' ''' | '\"' | '\x' hexdigit hexdigit;
+
+	tab = 9;
+	cr = 13;
+	lf = 10;
+	
+	eol = cr | lf | cr lf;
+	whitespace = ' ' | tab | eol;
+	
+	stringchar = [commonchar - [cr + lf]];
+
+Tokens
+
+// keywords
+
+	key_and = 'and';
+	key_char = 'char';
+	key_div = 'div';
+	key_do = 'do';
+	key_else = 'else';
+	key_fun = 'fun';
+	key_if = 'if';
+	key_int = 'int';
+	key_mod = 'mod';
+	key_not = 'not';
+	key_nothing = 'nothing';
+	key_or = 'or';
+	key_ref = 'ref';
+	key_return = 'return';
+	key_then = 'then';
+	key_var = 'var';
+	key_while = 'while';
+
+
+// main
+
+	identifier = letter (letter | digit | underscore)*;
+
+	const_int = digit+;
+	const_char = ''' (commonchar | escapechar) ''';
+	const_string = '"' (stringchar | escapechar)* '"';
+
+
+// ignored
+
+	white_span = (whitespace)*;
+	comment_line = '$' (printablechar)* eol;
+	comment_span = '$$' (printablechar | eol)* '$$';
+
+
+// operators
+
+	oper_plus = '+';
+	oper_minus = '-';
+	oper_mult = '*';
+	oper_div = '/';
+	oper_hash = '#';
+	oper_eq = '=';
+	oper_ne = '<>';
+	oper_lt = '<';
+	oper_gt = '>';
+	oper_le = '<=';
+	oper_ge = '>=';
+
+
+// separators
+
+	sep_lpar = '(';
+	sep_rpar = ')';
+	sep_lbrack = '[';
+	sep_rbrack = ']';
+	sep_lbrace = '{';
+	sep_rbrace = '}';
+
+
+Ignored Tokens
+
+	white_span, comment_line, comment_span;
