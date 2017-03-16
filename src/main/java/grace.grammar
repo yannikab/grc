@@ -7,86 +7,98 @@ Helpers
 	digit = ['0' .. '9'];
 	underscore = '_';
 	
-	printablechar = [32 .. 126];
-	specialchar = [[''' + '"'] + '\'];
-	commonchar = [printablechar - specialchar];
-	
-	hexdigit = digit | ['a' .. 'f'] | ['A' .. 'F'];
-	escapechar = '\n' | '\t' | '\r' | '\e' | '\\' | '\' ''' | '\"' | '\x' hexdigit hexdigit;
-
 	tab = 9;
 	cr = 13;
 	lf = 10;
 	
 	eol = cr | lf | cr lf;
 	whitespace = ' ' | tab | eol;
+		
+	printchar = [32 .. 126];
+	prtabchar = [printchar + tab];
 	
-	stringchar = [commonchar - [cr + lf]];
+	specialchar = [[''' + '"'] + '\'];
+	commonchar = [printchar - specialchar];
+	
+	hexdigit = digit | ['a' .. 'f'] | ['A' .. 'F'];
+	escape = '\n' | '\t' | '\r' | '\e' | '\\' | '\' ''' | '\"' | '\x' hexdigit hexdigit;
+	
 
+States
+
+	code, comment, comment_possible_end;
+
+	
 Tokens
-
+	
 // keywords
 
-	key_and = 'and';
-	key_char = 'char';
-	key_div = 'div';
-	key_do = 'do';
-	key_else = 'else';
-	key_fun = 'fun';
-	key_if = 'if';
-	key_int = 'int';
-	key_mod = 'mod';
-	key_not = 'not';
-	key_nothing = 'nothing';
-	key_or = 'or';
-	key_ref = 'ref';
-	key_return = 'return';
-	key_then = 'then';
-	key_var = 'var';
-	key_while = 'while';
+	{code} key_and = 'and';
+	{code} key_char = 'char';
+	{code} key_div = 'div';
+	{code} key_do = 'do';
+	{code} key_else = 'else';
+	{code} key_fun = 'fun';
+	{code} key_if = 'if';
+	{code} key_int = 'int';
+	{code} key_mod = 'mod';
+	{code} key_not = 'not';
+	{code} key_nothing = 'nothing';
+	{code} key_or = 'or';
+	{code} key_ref = 'ref';
+	{code} key_return = 'return';
+	{code} key_then = 'then';
+	{code} key_var = 'var';
+	{code} key_while = 'while';
 
 
 // main
 
-	identifier = letter (letter | digit | underscore)*;
+	{code} identifier = letter (letter | digit | underscore)*;
 
-	const_int = digit+;
-	const_char = ''' (commonchar | escapechar) ''';
-	const_string = '"' (stringchar | escapechar)* '"';
-
-
-// ignored
-
-	white_span = (whitespace)*;
-	comment_line = '$' (printablechar)* eol;
-	comment_span = '$$' (printablechar | eol)* '$$';
-
-
+	{code} const_int = digit+;
+	{code} const_char = ''' (commonchar | escape) ''';
+	{code} const_string = '"' (commonchar | escape)* '"';
+	
 // operators
 
-	oper_plus = '+';
-	oper_minus = '-';
-	oper_mult = '*';
-	oper_div = '/';
-	oper_hash = '#';
-	oper_eq = '=';
-	oper_ne = '<>';
-	oper_lt = '<';
-	oper_gt = '>';
-	oper_le = '<=';
-	oper_ge = '>=';
+	{code} oper_plus = '+';
+	{code} oper_minus = '-';
+	{code} oper_mult = '*';
+	{code} oper_div = '/';
+	{code} oper_hash = '#';
+	{code} oper_eq = '=';
+	{code} oper_ne = '<>';
+	{code} oper_lt = '<';
+	{code} oper_gt = '>';
+	{code} oper_le = '<=';
+	{code} oper_ge = '>=';
 
 
 // separators
 
-	sep_lpar = '(';
-	sep_rpar = ')';
-	sep_lbrack = '[';
-	sep_rbrack = ']';
-	sep_lbrace = '{';
-	sep_rbrace = '}';
+	{code} sep_lpar = '(';
+	{code} sep_rpar = ')';
+	{code} sep_lbrack = '[';
+	{code} sep_rbrack = ']';
+	{code} sep_lbrace = '{';
+	{code} sep_rbrace = '}';
+
+
+// ignored
+
+	// whitespace
+	{code} whitespace = (whitespace)*;
+
+	// comment line
+	{code} comment_line = '$' ( [prtabchar - '$'] prtabchar* )? eol?;
+		
+	// comment span
+	{code -> comment} comment_start = '$$';
+	{comment_possible_end -> code} comment_end = '$'; // priority over next token
+	{comment -> comment_possible_end, comment_possible_end} comment_content = ([prtabchar - '$'] | eol)* '$'?;
 
 
 Ignored Tokens
 
-	white_span, comment_line, comment_span;
+	whitespace, comment_line, comment_start, comment_content, comment_end;

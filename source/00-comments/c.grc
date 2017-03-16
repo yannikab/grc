@@ -1,0 +1,3 @@
+$$ comment span with a $$ nested span $$ which is wrong syntax $$
+
+$$ comment span with a $$ nested span $$ which is wrong syntax, no newline $$

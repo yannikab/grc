@@ -1,0 +1,3 @@
+while $$ comment span after keyword $$
+
+while $$ comment span after keyword, no newline $$

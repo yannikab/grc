@@ -1,0 +1,7 @@
+$$ this is
+a multi line
+span comment $$
+
+$$ same thing
+but without a
+newline $$

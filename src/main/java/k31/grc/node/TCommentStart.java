@@ -5,14 +5,14 @@ package k31.grc.node;
 import k31.grc.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TCommentSwitch extends Token
+public final class TCommentStart extends Token
 {
-    public TCommentSwitch()
+    public TCommentStart()
     {
         super.setText("$$");
     }
 
-    public TCommentSwitch(int line, int pos)
+    public TCommentStart(int line, int pos)
     {
         super.setText("$$");
         setLine(line);
@@ -22,17 +22,17 @@ public final class TCommentSwitch extends Token
     @Override
     public Object clone()
     {
-      return new TCommentSwitch(getLine(), getPos());
+      return new TCommentStart(getLine(), getPos());
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTCommentSwitch(this);
+        ((Analysis) sw).caseTCommentStart(this);
     }
 
     @Override
     public void setText(@SuppressWarnings("unused") String text)
     {
-        throw new RuntimeException("Cannot change TCommentSwitch text.");
+        throw new RuntimeException("Cannot change TCommentStart text.");
     }
 }

@@ -11,8 +11,6 @@ public interface Analysis extends Switch
     Object getOut(Node node);
     void setOut(Node node, Object o);
 
-    void caseTCommentSwitch(TCommentSwitch node);
-    void caseTCommentContent(TCommentContent node);
     void caseTKeyAnd(TKeyAnd node);
     void caseTKeyChar(TKeyChar node);
     void caseTKeyDiv(TKeyDiv node);
@@ -34,9 +32,6 @@ public interface Analysis extends Switch
     void caseTConstInt(TConstInt node);
     void caseTConstChar(TConstChar node);
     void caseTConstString(TConstString node);
-    void caseTWhiteSpan(TWhiteSpan node);
-    void caseTCommentLine(TCommentLine node);
-    void caseTCommentSpan(TCommentSpan node);
     void caseTOperPlus(TOperPlus node);
     void caseTOperMinus(TOperMinus node);
     void caseTOperMult(TOperMult node);
@@ -54,5 +49,10 @@ public interface Analysis extends Switch
     void caseTSepRbrack(TSepRbrack node);
     void caseTSepLbrace(TSepLbrace node);
     void caseTSepRbrace(TSepRbrace node);
+    void caseTWhitespace(TWhitespace node);
+    void caseTCommentLine(TCommentLine node);
+    void caseTCommentStart(TCommentStart node);
+    void caseTCommentEnd(TCommentEnd node);
+    void caseTCommentContent(TCommentContent node);
     void caseEOF(EOF node);
 }

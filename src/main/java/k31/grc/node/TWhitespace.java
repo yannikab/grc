@@ -5,14 +5,14 @@ package k31.grc.node;
 import k31.grc.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TCommentSpan extends Token
+public final class TWhitespace extends Token
 {
-    public TCommentSpan(String text)
+    public TWhitespace(String text)
     {
         setText(text);
     }
 
-    public TCommentSpan(String text, int line, int pos)
+    public TWhitespace(String text, int line, int pos)
     {
         setText(text);
         setLine(line);
@@ -22,11 +22,11 @@ public final class TCommentSpan extends Token
     @Override
     public Object clone()
     {
-      return new TCommentSpan(getText(), getLine(), getPos());
+      return new TWhitespace(getText(), getLine(), getPos());
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTCommentSpan(this);
+        ((Analysis) sw).caseTWhitespace(this);
     }
 }

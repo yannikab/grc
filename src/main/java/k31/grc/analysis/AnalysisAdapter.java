@@ -64,16 +64,6 @@ public class AnalysisAdapter implements Analysis
         }
     }
 
-    public void caseTCommentSwitch(TCommentSwitch node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTCommentContent(TCommentContent node)
-    {
-        defaultCase(node);
-    }
-
     public void caseTKeyAnd(TKeyAnd node)
     {
         defaultCase(node);
@@ -179,21 +169,6 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseTWhiteSpan(TWhiteSpan node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTCommentLine(TCommentLine node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTCommentSpan(TCommentSpan node)
-    {
-        defaultCase(node);
-    }
-
     public void caseTOperPlus(TOperPlus node)
     {
         defaultCase(node);
@@ -275,6 +250,31 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseTSepRbrace(TSepRbrace node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTWhitespace(TWhitespace node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTCommentLine(TCommentLine node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTCommentStart(TCommentStart node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTCommentEnd(TCommentEnd node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTCommentContent(TCommentContent node)
     {
         defaultCase(node);
     }

@@ -1,0 +1,10 @@
+$$ this is
+a multi line
+span comment
+with a
+$ line comment
+embedded in it $$
+
+$$ same thing
+$ but without a
+newline $$
