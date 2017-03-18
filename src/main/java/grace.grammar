@@ -79,6 +79,10 @@ Tokens
 	{code} sep_rbrack = ']';
 	{code} sep_lbrace = '{';
 	{code} sep_rbrace = '}';
+	{code} sep_comma = ',';
+	{code} sep_colon = ':';
+	{code} sep_semic = ';';
+	{code} sep_assign = '<-';
 
 
 // main
@@ -115,17 +119,35 @@ Productions
 
 	expr = term expr2;
 	expr2 = {add} oper_plus term expr2
-	          | {sub} oper_minus term expr2
-	          | {e};
+	      | {sub} oper_minus term expr2
+	      | {e};
 
 	term = fact term2;
 	term2 = {mul} oper_mul fact term2
-	          | {div} oper_div fact term2
-	          | {mod} oper_mod fact term2
-	          | {e};
+	      | {div} oper_div fact term2
+	      | {mod} oper_mod fact term2
+	      | {e};
 
 	fact = {int} const_int
 	     | {char} const_chr
 	     | {par} sep_lpar expr sep_rpar
 	     | {plus} oper_plus fact
-	     | {minus} oper_minus fact;
+	     | {minus} oper_minus fact
+	     | {lval} l_value
+	     | {fun} fun_call;
+
+
+// l-value
+
+	l_value = {lval} l_value sep_lbrack expr sep_rbrack
+	       | {str} const_str
+	       | {id} identifier;
+
+
+// function call
+
+	fun_call = identifier sep_lpar fun_arg? sep_rpar;
+	fun_arg = expr fun_arg2*;
+	fun_arg2 = sep_comma expr;
+	
+	

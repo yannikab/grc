@@ -1,0 +1,2 @@
+42 + - 3 * (22 + 'a') div - 18 mod + '\t' - - - 27 + + + 4 div - '\n' +
+identifier - array[ 2 + 3 ] + - "string"[2][3]['a'] mod "another"[ 'a' div "str" ]
