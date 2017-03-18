@@ -9,4 +9,6 @@
 	      | e
 
 	factor = id
-		   | number
+	       | number
+	       | ( expr )
+	       | ( + | - ) factor

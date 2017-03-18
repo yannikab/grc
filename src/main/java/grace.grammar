@@ -111,18 +111,21 @@ Ignored Tokens
 
 Productions
 
-// constant integer arithmetic
+// constant arithmetic
 
-	int_expr = int_term int_expr2;
-	int_expr2 = {add} oper_plus int_term int_expr2
-	          | {sub} oper_minus int_term int_expr2
+	expr = term expr2;
+	expr2 = {add} oper_plus term expr2
+	          | {sub} oper_minus term expr2
 	          | {e};
 
-	int_term = int_fact int_term2;
-	int_term2 = {mul} oper_mul int_fact int_term2
-	          | {div} oper_div int_fact int_term2
-	          | {mod} oper_mod int_fact int_term2
+	term = fact term2;
+	term2 = {mul} oper_mul fact term2
+	          | {div} oper_div fact term2
+	          | {mod} oper_mod fact term2
 	          | {e};
 
-	int_fact = {con} const_int
-	         | {par} sep_lpar int_expr sep_rpar;
+	fact = {int} const_int
+	     | {char} const_chr
+	     | {par} sep_lpar expr sep_rpar
+	     | {plus} oper_plus fact
+	     | {minus} oper_minus fact;
