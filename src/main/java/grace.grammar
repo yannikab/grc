@@ -6,74 +6,70 @@ Helpers
 	letter = [['a' .. 'z'] + ['A' .. 'Z']];
 	digit = ['0' .. '9'];
 	underscore = '_';
-	
+
 	tab = 9;
 	cr = 13;
 	lf = 10;
-	
+
 	eol = cr | lf | cr lf;
 	whitespace = ' ' | tab | eol;
-		
+
 	printchar = [32 .. 126];
 	prtabchar = [printchar + tab];
-	
+
 	specialchar = [[''' + '"'] + '\'];
 	commonchar = [printchar - specialchar];
-	
+
 	hexdigit = digit | ['a' .. 'f'] | ['A' .. 'F'];
 	escape = '\n' | '\t' | '\r' | '\e' | '\\' | '\' ''' | '\"' | '\x' hexdigit hexdigit;
-	
+
 
 States
 
 	code, comment, comment_possible_end;
 
-	
+
 Tokens
-	
+
 // keywords
 
-	{code} key_and = 'and';
-	{code} key_char = 'char';
-	{code} key_div = 'div';
-	{code} key_do = 'do';
-	{code} key_else = 'else';
-	{code} key_fun = 'fun';
-	{code} key_if = 'if';
-	{code} key_int = 'int';
-	{code} key_mod = 'mod';
-	{code} key_not = 'not';
-	{code} key_nothing = 'nothing';
-	{code} key_or = 'or';
-	{code} key_ref = 'ref';
-	{code} key_return = 'return';
-	{code} key_then = 'then';
 	{code} key_var = 'var';
-	{code} key_while = 'while';
-
-
-// main
-
-	{code} identifier = letter (letter | digit | underscore)*;
-
-	{code} const_int = digit+;
-	{code} const_char = ''' (commonchar | escape) ''';
-	{code} const_string = '"' (commonchar | escape)* '"';
 	
+	{code} key_char = 'char';
+	{code} key_int = 'int';
+	
+	{code} key_if = 'if';
+	{code} key_then = 'then';
+	{code} key_else = 'else';
+	{code} key_while = 'while';
+	{code} key_do = 'do';
+	
+	{code} key_fun = 'fun';
+	{code} key_ref = 'ref';
+	{code} key_nothing = 'nothing';
+	{code} key_return = 'return';
+	
+
 // operators
 
 	{code} oper_plus = '+';
 	{code} oper_minus = '-';
-	{code} oper_mult = '*';
-	{code} oper_div = '/';
+	{code} oper_mul = '*';
+	{code} oper_div = 'div';
+	{code} oper_mod = 'mod';
 	{code} oper_hash = '#';
+	
 	{code} oper_eq = '=';
 	{code} oper_ne = '<>';
 	{code} oper_lt = '<';
 	{code} oper_gt = '>';
 	{code} oper_le = '<=';
 	{code} oper_ge = '>=';
-
+	
+	{code} oper_and = 'and';
+	{code} oper_or = 'or';
+	{code} oper_not = 'not';
+	
 
 // separators
 
@@ -85,6 +81,15 @@ Tokens
 	{code} sep_rbrace = '}';
 
 
+// main
+
+	{code} identifier = letter (letter | digit | underscore)*;
+
+	{code} const_int = digit+;
+	{code} const_chr = ''' (commonchar | escape) ''';
+	{code} const_str = '"' (commonchar | escape)* '"';
+
+
 // ignored
 
 	// whitespace
@@ -92,7 +97,7 @@ Tokens
 
 	// comment line
 	{code} comment_line = '$' ( [prtabchar - '$'] prtabchar* )? eol?;
-		
+
 	// comment span
 	{code -> comment} comment_start = '$$';
 	{comment_possible_end -> code} comment_end = '$'; // priority over next token
@@ -102,3 +107,22 @@ Tokens
 Ignored Tokens
 
 	whitespace, comment_line, comment_start, comment_content, comment_end;
+
+
+Productions
+
+// constant integer arithmetic
+
+	int_expr = int_term int_expr2;
+	int_expr2 = {add} oper_plus int_term int_expr2
+	          | {sub} oper_minus int_term int_expr2
+	          | {e};
+
+	int_term = int_fact int_term2;
+	int_term2 = {mul} oper_mul int_fact int_term2
+	          | {div} oper_div int_fact int_term2
+	          | {mod} oper_mod int_fact int_term2
+	          | {e};
+
+	int_fact = {con} const_int
+	         | {par} sep_lpar int_expr sep_rpar;

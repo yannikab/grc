@@ -1,0 +1,12 @@
+	expr = term expr2
+	expr2 = + term expr2
+	      | - term expr2
+	      | e
+
+	term = factor term2
+	term2 = mul factor term2
+	      | div factor term2
+	      | e
+
+	factor = id
+		   | number
