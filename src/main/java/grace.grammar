@@ -81,7 +81,7 @@ Tokens
 	{code} sep_rbrace = '}';
 	{code} sep_comma = ',';
 	{code} sep_colon = ':';
-	{code} sep_semic = ';';
+	{code} sep_semi = ';';
 	{code} sep_assign = '<-';
 
 
@@ -115,7 +115,13 @@ Ignored Tokens
 
 Productions
 
+	prog = {expr} prog_expr
+	     | {cond} prog_cond;
+
+
 // constant arithmetic
+
+	prog_expr = expr;
 
 	expr = term expr2;
 	expr2 = {add} oper_plus term expr2
@@ -149,5 +155,32 @@ Productions
 	fun_call = identifier sep_lpar fun_arg? sep_rpar;
 	fun_arg = expr fun_arg2*;
 	fun_arg2 = sep_comma expr;
-	
-	
+
+
+// condition
+
+	prog_cond = cond_semi*;
+	cond_semi = cond sep_semi;
+
+	cond = cond_o;
+
+	cond_o = cond_a cond_o2;
+	cond_o2 = {or} oper_or cond_a cond_o2
+	        | {e};
+
+	cond_a = cond_n cond_a2;
+	cond_a2 = {and} oper_and cond_n cond_a2
+	        | {e};
+
+	cond_n = {not} oper_not cond_r
+	       | {one} cond_r;
+
+	cond_r = {par} sep_lpar cond_o sep_rpar
+	       | {rel} [l]:expr rel_op [r]:expr;
+
+	rel_op = {eq} oper_eq
+	       | {ne} oper_ne
+	       | {gt} oper_gt
+	       | {lt} oper_lt
+	       | {ge} oper_ge
+	       | {le} oper_le;

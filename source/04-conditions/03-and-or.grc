@@ -1,0 +1,3 @@
+not 2 <> 33 and - 3 div 'a' * 2 = "string" + 3;
+"mine" = 1 or not 2 + '\t' = 3 div "str";
++2 >= name or not "john" = 3 and 2 + (3 div 16) = "me";
