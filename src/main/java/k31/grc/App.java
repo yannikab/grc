@@ -25,7 +25,6 @@ public class App {
 		System.out.print("hello\n");
 		System.out.println(args[0]);
 
-		
 		FileReader fr;
 
 		try {
@@ -39,29 +38,28 @@ public class App {
 			return;
 		}
 
-		
 		Lexer lexer = new Lexer(new PushbackReader(fr, 4096));
 
-		
-		Token token;
+		// Token token;
+		//
+		// try {
+		//
+		// for (token = lexer.next(); !(token instanceof EOF); token =
+		// lexer.next()) {
+		//
+		// System.out.print("\"" + token.getText() + "\": " +
+		// token.getClass().toString() + System.lineSeparator());
+		// }
+		//
+		// } catch (LexerException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		//
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 
-		try {
-
-			for (token = lexer.next(); !(token instanceof EOF); token = lexer.next()) {
-
-				System.out.print("\"" + token.getText() + "\": " + token.getClass().toString() + System.lineSeparator());
-			}
-
-		} catch (LexerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		
 		try {
 
 			fr = new FileReader(args[0]);
@@ -73,10 +71,8 @@ public class App {
 			return;
 		}
 
-		
 		lexer = new Lexer(new PushbackReader(fr, 4096));
-		
-		
+
 		Parser parser = new Parser(lexer);
 
 		Start s;
@@ -85,7 +81,11 @@ public class App {
 
 			s = parser.parse();
 
-			System.out.println("success");
+			SimpleTraversal traversal = new SimpleTraversal();
+
+			s.apply(traversal);
+
+			// System.out.println("success");
 
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block

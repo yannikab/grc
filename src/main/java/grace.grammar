@@ -34,7 +34,7 @@ Tokens
 // keywords
 
 	{code} key_var = 'var';
-	
+
 	{code} key_char = 'char';
 	{code} key_int = 'int';
 	
@@ -43,12 +43,12 @@ Tokens
 	{code} key_else = 'else';
 	{code} key_while = 'while';
 	{code} key_do = 'do';
-	
+
 	{code} key_fun = 'fun';
 	{code} key_ref = 'ref';
 	{code} key_nothing = 'nothing';
 	{code} key_return = 'return';
-	
+
 
 // operators
 
@@ -57,19 +57,18 @@ Tokens
 	{code} oper_mul = '*';
 	{code} oper_div = 'div';
 	{code} oper_mod = 'mod';
-	{code} oper_hash = '#';
-	
+
 	{code} oper_eq = '=';
-	{code} oper_ne = '<>';
+	{code} oper_ne = '#';
 	{code} oper_lt = '<';
 	{code} oper_gt = '>';
 	{code} oper_le = '<=';
 	{code} oper_ge = '>=';
-	
+
 	{code} oper_and = 'and';
 	{code} oper_or = 'or';
 	{code} oper_not = 'not';
-	
+
 
 // separators
 
@@ -115,72 +114,62 @@ Ignored Tokens
 
 Productions
 
-	prog = {expr} prog_expr
-	     | {cond} prog_cond;
+	grammar = {expression} grammar_expression
+	        | {condition} grammar_condition;
 
 
 // constant arithmetic
 
-	prog_expr = expr;
+	grammar_expression = expression;
 
-	expr = term expr2;
-	expr2 = {add} oper_plus term expr2
-	      | {sub} oper_minus term expr2
-	      | {e};
+	expression = {addition} expression oper_plus term
+	           | {subtraction} expression oper_minus term
+	           | {term} term;
 
-	term = fact term2;
-	term2 = {mul} oper_mul fact term2
-	      | {div} oper_div fact term2
-	      | {mod} oper_mod fact term2
-	      | {e};
+	term = {multiplication} term oper_mul factor
+	     | {division} term oper_div factor
+	     | {modulo} term oper_mod factor
+	     | {factor} factor;
 
-	fact = {int} const_int
-	     | {char} const_chr
-	     | {par} sep_lpar expr sep_rpar
-	     | {plus} oper_plus fact
-	     | {minus} oper_minus fact
-	     | {lval} l_value
-	     | {fun} fun_call;
+	factor = {integer} const_int
+	       | {character} const_chr
+	       | {parenthesis} sep_lpar expression sep_rpar
+	       | {plus} oper_plus factor
+	       | {minus} oper_minus factor
+	       | {lvalue} lvalue
+	       | {funcall} fun_call;
 
 
 // l-value
 
-	l_value = {lval} l_value sep_lbrack expr sep_rbrack
-	       | {str} const_str
-	       | {id} identifier;
+	lvalue = {lvalue} lvalue sep_lbrack expression sep_rbrack
+	       | {string} const_str
+	       | {identifier} identifier;
 
 
 // function call
 
 	fun_call = identifier sep_lpar fun_arg? sep_rpar;
-	fun_arg = expr fun_arg2*;
-	fun_arg2 = sep_comma expr;
+	fun_arg = expression fun_arg2*;
+	fun_arg2 = sep_comma expression;
 
 
 // condition
 
-	prog_cond = cond_semi*;
-	cond_semi = cond sep_semi;
+	grammar_condition = expression_l_semi*;
+	expression_l_semi = expression_l sep_semi;
 
-	cond = cond_o;
+	expression_l = {or_op} expression_l oper_or term_l
+	             | {term_l} term_l;
 
-	cond_o = cond_a cond_o2;
-	cond_o2 = {or} oper_or cond_a cond_o2
-	        | {e};
+	term_l = {and_op} term_l oper_and factor_l
+	       | {factor_l} factor_l;
 
-	cond_a = cond_n cond_a2;
-	cond_a2 = {and} oper_and cond_n cond_a2
-	        | {e};
-
-	cond_n = {not} oper_not cond_r
-	       | {one} cond_r;
-
-	cond_r = {par} sep_lpar cond_o sep_rpar
-	       | {rel} [l]:expr rel_op [r]:expr;
-
-	rel_op = {eq} oper_eq
-	       | {ne} oper_ne
-	       | {gt} oper_gt
-	       | {lt} oper_lt
-	       | {ge} oper_ge
-	       | {le} oper_le;
+	factor_l = {not_op} oper_not factor_l
+	         | {parenthesis} sep_lpar expression_l sep_rpar
+	         | {equal} [l]:expression oper_eq [r]:expression
+	         | {notequal} [l]:expression oper_ne [r]:expression
+	         | {greaterthan} [l]:expression oper_gt [r]:expression	         
+	         | {lessthan} [l]:expression oper_lt [r]:expression
+	         | {greaterequal} [l]:expression oper_ge [r]:expression
+	         | {lessequal} [l]:expression oper_le [r]:expression;
