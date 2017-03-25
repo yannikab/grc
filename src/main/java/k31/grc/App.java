@@ -5,11 +5,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
 
+import k31.grc.graphviz.GVNode;
+import k31.grc.graphviz.GraphVizTraversal;
 import k31.grc.lexer.Lexer;
 import k31.grc.lexer.LexerException;
-import k31.grc.node.EOF;
 import k31.grc.node.Start;
-import k31.grc.node.Token;
 import k31.grc.parser.Parser;
 import k31.grc.parser.ParserException;
 
@@ -22,8 +22,8 @@ public class App {
 	public static void main(String[] args) {
 
 		// System.out.println("Hello World!");
-		System.out.print("hello\n");
-		System.out.println(args[0]);
+		// System.out.print("hello\n");
+		// System.out.println(args[0]);
 
 		FileReader fr;
 
@@ -81,9 +81,19 @@ public class App {
 
 			s = parser.parse();
 
-			SimpleTraversal traversal = new SimpleTraversal();
+			// SimpleTraversal traversal = new SimpleTraversal();
+			// s.apply(traversal);
 
+			GVNode root = new GVNode(-1);
+			GraphVizTraversal traversal = new GraphVizTraversal(root);
 			s.apply(traversal);
+
+			// root.print();
+			// root.printRelations();
+
+			System.out.println("graph\n{");
+			root.printGraphViz();
+			System.out.println("}");
 
 			// System.out.println("success");
 
