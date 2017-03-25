@@ -115,7 +115,8 @@ Ignored Tokens
 Productions
 
 	grammar = {expression} grammar_expression
-	        | {condition} grammar_condition;
+	        | {condition} grammar_condition
+	        | {block} block;
 
 
 // constant arithmetic
@@ -126,9 +127,9 @@ Productions
 	           | {subtraction} expression oper_minus term
 	           | {term} term;
 
-	term = {multiplication} term oper_mul factor
-	     | {division} term oper_div factor
-	     | {modulo} term oper_mod factor
+	term = {multiply} term oper_mul factor
+	     | {div} term oper_div factor
+	     | {mod} term oper_mod factor
 	     | {factor} factor;
 
 	factor = {integer} const_int
@@ -136,22 +137,22 @@ Productions
 	       | {parenthesis} sep_lpar expression sep_rpar
 	       | {plus} oper_plus factor
 	       | {minus} oper_minus factor
-	       | {lvalue} lvalue
-	       | {funcall} fun_call;
+	       | {l_value} l_value
+	       | {function_call} function_call;
 
 
 // l-value
 
-	lvalue = {lvalue} lvalue sep_lbrack expression sep_rbrack
+	l_value = {indexed} l_value sep_lbrack expression sep_rbrack
 	       | {string} const_str
 	       | {identifier} identifier;
 
 
 // function call
 
-	fun_call = identifier sep_lpar fun_arg? sep_rpar;
-	fun_arg = expression fun_arg2*;
-	fun_arg2 = sep_comma expression;
+	function_call = identifier sep_lpar function_args? sep_rpar;
+	function_args = expression function_args_more*;
+	function_args_more = sep_comma expression;
 
 
 // condition
@@ -173,3 +174,16 @@ Productions
 	         | {lessthan} [l]:expression oper_lt [r]:expression
 	         | {greaterequal} [l]:expression oper_ge [r]:expression
 	         | {lessequal} [l]:expression oper_le [r]:expression;
+
+// statement
+
+	statement = {semicolon} sep_semi
+	          | {assign} l_value sep_assign expression sep_semi
+	          | {block} block
+	          | {function_call} function_call sep_semi
+	          | {while} key_while expression_l key_do statement
+	          | {return} key_return expression? sep_semi;
+
+// block
+
+    block = sep_lbrace statement* sep_rbrace;
