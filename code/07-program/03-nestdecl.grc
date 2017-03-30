@@ -1,0 +1,6 @@
+fun program() : int
+
+fun function() : nothing;
+
+{
+}

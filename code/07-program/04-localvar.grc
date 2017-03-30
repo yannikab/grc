@@ -1,0 +1,11 @@
+fun program() : nothing
+
+fun function() : int
+{
+}
+
+var a, b : int[5];
+var c : char;
+
+{
+}

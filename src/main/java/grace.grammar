@@ -21,7 +21,7 @@ Helpers
 	commonchar = [printchar - specialchar];
 
 	hexdigit = digit | ['a' .. 'f'] | ['A' .. 'F'];
-	escape = '\n' | '\t' | '\r' | '\e' | '\\' | '\' ''' | '\"' | '\x' hexdigit hexdigit;
+	escape = '\n' | '\t' | '\r' | '\0' | '\\' | '\' ''' | '\"' | '\x' hexdigit hexdigit;
 
 
 States
@@ -114,14 +114,13 @@ Ignored Tokens
 
 Productions
 
-	grammar = {expression} grammar_expression
-	        | {condition} grammar_condition
-	        | {block} block;
+
+// program
+
+	program = func_def; 
 
 
 // constant arithmetic
-
-	grammar_expression = expression;
 
 	expression = {addition} expression oper_plus term
 	           | {subtraction} expression oper_minus term
@@ -157,8 +156,6 @@ Productions
 
 // condition
 
-	grammar_condition = expression_l_semi*;
-	expression_l_semi = expression_l sep_semi;
 
 	expression_l = {or_op} expression_l oper_or term_l
 	             | {term_l} term_l;
@@ -213,3 +210,67 @@ Productions
 	while = key_while expression_l key_do statement;
 
 	while_else = key_while expression_l key_do statement_else;
+
+
+// data type
+
+	data_type = {char} key_char
+	          | {int} key_int;
+
+
+// return type
+
+	return_type = {data} data_type
+	            | {nothing} key_nothing;
+
+
+// array dimensions
+
+	array_no_dim = sep_lbrack sep_rbrack;
+	array_dim = sep_lbrack const_int sep_rbrack;
+
+
+// type
+
+	type = data_type array_dim*;
+
+
+// variable definition
+
+	var_def = key_var identifier var_more* sep_colon type sep_semi;
+	var_more = sep_comma identifier;
+
+
+// formal parameter type
+
+	fpar_type = data_type array_no_dim? array_dim*;
+
+
+// formal parameter definition
+
+	fpar_def = key_ref? identifier fpar_more* sep_colon fpar_type;
+	fpar_more = sep_comma identifier;
+
+
+// function header
+
+	header = key_fun identifier sep_lpar func_args? sep_rpar sep_colon return_type;
+	func_args = fpar_def fpar_def_more*;
+	fpar_def_more = sep_semi fpar_def;
+
+
+// function declaration
+
+	func_decl = header sep_semi;
+
+
+// function definition
+
+	func_def = header local_def* block;
+
+
+// local definition
+
+	local_def = {func} func_def
+	          | {f_decl} func_decl
+	          | {var} var_def;
