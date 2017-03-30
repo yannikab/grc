@@ -1,0 +1,31 @@
+{
+	if 4 > 4 then
+		;
+	else
+		;
+
+
+	if 4 > 4 then
+		if 3 = 2 then
+			counter <- 'a';
+		else
+			"string" <- 2;
+
+
+	if 4 > 4 then
+			;
+	else
+		if 3 = 3 then
+			;
+		else
+			;
+
+
+	if 4 > 4 then
+		if 3 = 3 then
+			;
+		else
+			;
+	else
+			;
+}

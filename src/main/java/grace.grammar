@@ -144,8 +144,8 @@ Productions
 // l-value
 
 	l_value = {indexed} l_value sep_lbrack expression sep_rbrack
-	       | {string} const_str
-	       | {identifier} identifier;
+	        | {string} const_str
+	        | {identifier} identifier;
 
 
 // function call
@@ -175,15 +175,41 @@ Productions
 	         | {greaterequal} [l]:expression oper_ge [r]:expression
 	         | {lessequal} [l]:expression oper_le [r]:expression;
 
+
 // statement
 
 	statement = {semicolon} sep_semi
 	          | {assign} l_value sep_assign expression sep_semi
 	          | {block} block
 	          | {function_call} function_call sep_semi
-	          | {while} key_while expression_l key_do statement
-	          | {return} key_return expression? sep_semi;
+	          | {return} key_return expression? sep_semi
+	          | {if} if
+	          | {while} key_while expression_l key_do statement;
+
+	statement_else = {semicolon} sep_semi
+	               | {assign} l_value sep_assign expression sep_semi
+	               | {block} block
+	               | {function_call} function_call sep_semi
+	               | {return} key_return expression? sep_semi
+	               | {if_else} if_else
+	               | {while_else} while_else;
+
 
 // block
 
-    block = sep_lbrace statement* sep_rbrace;
+	block = sep_lbrace statement* sep_rbrace;
+
+
+// if
+
+	if = {then} key_if expression_l key_then statement
+	   | {else} key_if expression_l key_then statement_else key_else statement;
+
+	if_else = key_if expression_l key_then [t]:statement_else key_else [e]:statement_else;
+
+
+// while
+
+	while = key_while expression_l key_do statement;
+
+	while_else = key_while expression_l key_do statement_else;

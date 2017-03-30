@@ -1,0 +1,28 @@
+{
+    while 4 > a
+	do {
+	}
+
+    while
+		4 > a
+	do
+		counter <- 'a';
+    "string" <- 2;
+
+	while
+	4 > a
+	and 4 # array[idx] do
+		return;
+
+	while 4 = 4
+    do {
+	    array['a'] <- foo(arg1, "arg2");
+    	function();
+    }
+
+	while 3 = 3 do
+		while 4 = 4 do
+			name <- value;
+
+    return;
+}

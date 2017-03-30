@@ -1,0 +1,28 @@
+{
+    if 4 > a
+	then {
+	}
+
+    if
+		4 > a
+	then
+	counter <- 'a';
+    "string" <- 2;
+
+	if
+	4 > a
+	and 4 # array[idx] then
+		return;
+
+    if 4 > a then
+		if 3 = 3 then
+			counter <- 'a';
+    "string" <- 2;
+
+$$
+    array['a'] <- foo(arg1, "arg2");
+    function();
+    return;
+    return value;
+$$
+}

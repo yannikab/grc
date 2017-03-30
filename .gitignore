@@ -1,2 +1,3 @@
 target/
 grace.grammar
+source/*/*.png
