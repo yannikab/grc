@@ -1,2 +1,5 @@
-identifier - array[ 2 + 3 ] + - "string"[function()][3]['a'] mod "another"[ 'a' div "str" ] -
-function2(arg1, arg2, 2, 'a' div function3("string", 15))
+fun program() : nothing
+{
+	x <- identifier - array[ 2 + 3 ] + - "string"[function()][3]['a'] mod
+	"another"[ 'a' div "str" ] - function2(arg1, arg2, 2, 'a' div function3("string", 15));
+}

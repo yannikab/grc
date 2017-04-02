@@ -1,3 +1,6 @@
-$$ comment span with a $$ nested span $$ which is wrong syntax $$
+fun program() : nothing
+{
+}
+$ $$ comment span with a $$ nested span $$ which is wrong syntax $$
 
-$$ comment span with a $$ nested span $$ which is wrong syntax, no newline $$
+$ $$ comment span with a $$ nested span $$ which is wrong syntax, no newline $$

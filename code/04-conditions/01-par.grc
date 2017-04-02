@@ -1,2 +1,5 @@
-(2 + '\t' = 3 div "str");
-(+2 >= name );
+fun program() : nothing
+{
+	if (2 + '\t' = 3 div "str") then ;
+	while (+2 >= name ) do ;
+}

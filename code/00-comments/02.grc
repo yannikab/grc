@@ -1,3 +1,9 @@
-for $ comment line after keyword
+fun program() : nothing
+{
 
-for $ comment line after keyword, no newline
+	while $ comment line after keyword
+	3 # 4
+	do
+	;
+}
+$ for $ comment line after keyword, no newline

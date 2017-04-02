@@ -1,2 +1,5 @@
-"this is a multi
-line string"
+fun program() : nothing
+{
+$	x <- "this is a multi
+$	line string";
+}

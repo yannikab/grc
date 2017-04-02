@@ -9,7 +9,8 @@ import k31.grc.graphviz.GVNode;
 import k31.grc.graphviz.GraphVizTraversal;
 import k31.grc.lexer.Lexer;
 import k31.grc.lexer.LexerException;
-import k31.grc.node.Start;
+import k31.grc.node.EOF;
+import k31.grc.node.Token;
 import k31.grc.parser.Parser;
 import k31.grc.parser.ParserException;
 
@@ -21,15 +22,37 @@ public class App {
 
 	public static void main(String[] args) {
 
-		// System.out.println("Hello World!");
-		// System.out.print("hello\n");
-		// System.out.println(args[0]);
+		String module = args[0];
+		String action = args[1];
+		String fileName = args[args.length - 1];
+
+		// System.out.println(module);
+		// System.out.println(action);
+		// System.out.println(fileName);
+
+		if (module.equals("lex")) {
+			System.out.println("lex");
+			lex(fileName);
+		} else if (module.equals("parse")) {
+			if (action.equals("cst"))
+				parseCST(fileName);
+			else if (action.equals("ast"))
+				parseAST(fileName);
+		} else if (module.equals("graphviz")) {
+			if (action.equals("cst"))
+				graphvizCST(fileName);
+			else if (action.equals("ast"))
+				graphvizAST(fileName);
+		}
+	}
+
+	private static void lex(String fileName) {
 
 		FileReader fr;
 
 		try {
 
-			fr = new FileReader(args[0]);
+			fr = new FileReader(fileName);
 
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
@@ -40,62 +63,46 @@ public class App {
 
 		Lexer lexer = new Lexer(new PushbackReader(fr, 4096));
 
-		// Token token;
-		//
-		// try {
-		//
-		// for (token = lexer.next(); !(token instanceof EOF); token =
-		// lexer.next()) {
-		//
-		// System.out.print("\"" + token.getText() + "\": " +
-		// token.getClass().toString() + System.lineSeparator());
-		// }
-		//
-		// } catch (LexerException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		//
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+		Token token;
 
 		try {
 
-			fr = new FileReader(args[0]);
+			for (token = lexer.next(); !(token instanceof EOF); token = lexer.next()) {
 
-		} catch (FileNotFoundException e1) {
+				System.out.print("\"" + token.getText() + "\": " + token.getClass().toString() + System.lineSeparator());
+			}
+
+		} catch (LexerException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private static void parseCST(String fileName) {
+
+		FileReader fr;
+
+		try {
+
+			fr = new FileReader(fileName);
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 
 			return;
 		}
 
-		lexer = new Lexer(new PushbackReader(fr, 4096));
-
-		Parser parser = new Parser(lexer);
-
-		Start s;
+		Parser parser = new Parser(new Lexer(new PushbackReader(fr, 4096)));
 
 		try {
 
-			s = parser.parse();
-
-			// SimpleTraversal traversal = new SimpleTraversal();
-			// s.apply(traversal);
-
-			GVNode root = new GVNode(-1);
-			GraphVizTraversal traversal = new GraphVizTraversal(root);
-			s.apply(traversal);
-
-			// root.print();
-			// root.printRelations();
-
-			System.out.println("graph\n{");
-			root.printGraphViz();
-			System.out.println("}");
-
-			// System.out.println("success");
+			parser.parse();
+			System.out.println("success");
 
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block
@@ -107,5 +114,59 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	}
+
+	private static void parseAST(String fileName) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private static void graphvizCST(String fileName) {
+
+		FileReader fr;
+
+		try {
+
+			fr = new FileReader(fileName);
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+			return;
+		}
+
+		Lexer lexer = new Lexer(new PushbackReader(fr, 4096));
+
+		Parser parser = new Parser(lexer);
+
+		try {
+
+			GVNode root = new GVNode(-1);
+			parser.parse().apply(new GraphVizTraversal(root));
+
+			// root.print();
+			// root.printRelations();
+
+			System.out.println("graph\n{");
+			root.printGraphViz();
+			System.out.println("}");
+
+		} catch (ParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LexerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private static void graphvizAST(String fileName) {
+		// TODO Auto-generated method stub
+
 	}
 }

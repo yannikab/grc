@@ -1,3 +1,5 @@
 $$ comment span with $ comment line in it $$
-
+fun program() : nothing
+{
+}
 $$ comment span with $ comment line in it, no newline $$

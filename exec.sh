@@ -4,4 +4,4 @@ if [ $# -ne 1 ]; then exit; fi
 
 if ! echo $1 | grep -q '.*\.grc$'; then exit; fi
 
-java -jar target/grc-0.0.1-SNAPSHOT.jar $*
+java -jar target/grc-0.0.1-SNAPSHOT.jar parse cst $*

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-for f in $1/*; do ./exec.sh $f; read; done
+for f in $1/*.grc; do echo $f; ./exec.sh $f; done

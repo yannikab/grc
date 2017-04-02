@@ -1,3 +1,6 @@
-not 2 # 33;
-- 3 div 'a' * 2 = "string" + 3;
-not 2 + '\t' = 3 div "str";
+fun program() : nothing
+{
+	if not 2 # 33 then ;
+	while - 3 div 'a' * 2 = "string" + 3 do ;
+	if not 2 + '\t' = 3 div "str" then ; else ;
+}

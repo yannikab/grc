@@ -1,3 +1,7 @@
-while $$ comment span after keyword $$
-
-while $$ comment span after keyword, no newline $$
+fun program() : nothing
+{
+	while $$ comment span after keyword $$
+	4 # 3
+	do ;
+}
+$ while $$ comment span after keyword, no newline $$

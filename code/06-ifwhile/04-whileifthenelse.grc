@@ -1,5 +1,5 @@
+fun program() : nothing
 {
-
 	while 3 = 3 do
 		if 4 > 4 then
 			;

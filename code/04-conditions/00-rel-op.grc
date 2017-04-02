@@ -1,2 +1,5 @@
-2 # 33;
-- 3 div 'a' * 2 = "string" + 3;
+fun program() : nothing
+{
+	while 2 # 33 do ;
+	if - 3 div 'a' * 2 = "string" + 3 then ;
+}

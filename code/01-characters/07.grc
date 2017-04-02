@@ -1,3 +1,6 @@
-'\x32' '\xf2'
-
-'\x32' '\xf2' '\xzy'
+fun program() : nothing
+{
+	x <- '\x32';
+	y <- '\xf2';
+$	z <- '\xzy';
+}

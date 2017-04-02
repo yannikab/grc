@@ -1,3 +1,7 @@
+fun program() : nothing
+{
+}
+
 $ comment line
 
 $ comment line, no newline

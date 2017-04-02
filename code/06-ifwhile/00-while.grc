@@ -1,13 +1,14 @@
+fun program() : nothing
 {
-    while 4 > a
+	while 4 > a
 	do {
 	}
 
-    while
+	while
 		4 > a
 	do
 		counter <- 'a';
-    "string" <- 2;
+	"string" <- 2;
 
 	while
 	4 > a
@@ -15,14 +16,14 @@
 		return;
 
 	while 4 = 4
-    do {
-	    array['a'] <- foo(arg1, "arg2");
-    	function();
-    }
+	do {
+		array['a'] <- foo(arg1, "arg2");
+		function();
+	}
 
 	while 3 = 3 do
 		while 4 = 4 do
 			name <- value;
 
-    return;
+	return;
 }

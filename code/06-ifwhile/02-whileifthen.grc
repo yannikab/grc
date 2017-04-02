@@ -1,3 +1,4 @@
+fun program() : nothing
 {
 
 	while 4 > a do

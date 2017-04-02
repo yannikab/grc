@@ -1,3 +1,6 @@
-"abc" "Route66" "Helloworld!\n"
+fun program() : nothing
+{
+	x <- "abc"; y <- "Route66"; z <- "Helloworld!\n";
 
-"Name:\t\"Douglas Adams\"\nValue:\t42\n"
+	k <- "Name:\t\"Douglas Adams\"\nValue:\t42\n";
+}

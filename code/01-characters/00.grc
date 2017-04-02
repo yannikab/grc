@@ -1,3 +1,5 @@
-'a'
-
-'a'
+fun program() : nothing
+{
+	x <- 'a';
+}
+$ 'a'

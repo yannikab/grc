@@ -4,7 +4,9 @@ span comment
 with a
 $ line comment
 embedded in it $$
-
+fun program() : nothing
+{
+}
 $$ same thing
 $ but without a
 newline $$

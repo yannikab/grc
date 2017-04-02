@@ -1,7 +1,9 @@
 $$ this is
 a multi line
 span comment $$
-
+fun program() : nothing
+{
+}
 $$ same thing
 but without a
 newline $$

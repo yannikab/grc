@@ -1,8 +1,9 @@
+fun program() : nothing
 {
-    counter <- 'a';
-    "string" <- 2;
-    array['a'] <- foo(arg1, "arg2");
-    function();
-    return;
-    return value;
+	counter <- 'a';
+	"string" <- 2;
+	array['a'] <- foo(arg1, "arg2");
+	function();
+	return;
+	return value;
 }

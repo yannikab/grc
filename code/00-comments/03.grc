@@ -1,3 +1,6 @@
+fun program() : nothing
+{
+}
 $ comment line that contains a $ symbol
 
 $ comment line that contains a $ symbol, no newline
