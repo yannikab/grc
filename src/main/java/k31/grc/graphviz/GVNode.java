@@ -63,7 +63,7 @@ public class GVNode {
 
 			System.out.println("\t" + this.gvName() + " ;");
 
-			System.out.println("\t" + this.gvName() + " [label=\"" + data + "\"] ;");
+			System.out.println("\t" + this.gvName() + " [label=\"" + gvData() + "\"] ;");
 		}
 
 		// in
@@ -76,10 +76,20 @@ public class GVNode {
 		}
 
 		// post
-		
+
 	}
 
 	public String gvName() {
-		return String.format("n%1$02d", this.id);
+
+		return String.format("n%1$04d", this.id);
+	}
+
+	public String gvData() {
+
+		return data
+				.replace("\\", "\\\\")
+				.replace("\"", "\\\"")
+				.replace("[", "\\[")
+				.replace("]", "\\]");
 	}
 }

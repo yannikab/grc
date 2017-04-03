@@ -1,4 +1,4 @@
-Package k31.grc;
+Package k31.grc.cst;
 
 
 Helpers
@@ -88,9 +88,9 @@ Tokens
 
 	{code} identifier = letter (letter | digit | underscore)*;
 
-	{code} const_int = digit+;
-	{code} const_chr = ''' (commonchar | escape) ''';
-	{code} const_str = '"' (commonchar | escape)* '"';
+	{code} integer = digit+;
+	{code} character = ''' (commonchar | escape) ''';
+	{code} string = '"' (commonchar | escape)* '"';
 
 
 // ignored
@@ -131,8 +131,8 @@ Productions
 	     | {mod} term oper_mod factor
 	     | {factor} factor;
 
-	factor = {integer} const_int
-	       | {character} const_chr
+	factor = {integer} integer
+	       | {character} character
 	       | {parenthesis} sep_lpar expression sep_rpar
 	       | {plus} oper_plus factor
 	       | {minus} oper_minus factor
@@ -143,7 +143,7 @@ Productions
 // l-value
 
 	l_value = {indexed} l_value sep_lbrack expression sep_rbrack
-	        | {string} const_str
+	        | {string} string
 	        | {identifier} identifier;
 
 
@@ -227,7 +227,7 @@ Productions
 // array dimensions
 
 	array_no_dim = sep_lbrack sep_rbrack;
-	array_dim = sep_lbrack const_int sep_rbrack;
+	array_dim = sep_lbrack integer sep_rbrack;
 
 
 // type

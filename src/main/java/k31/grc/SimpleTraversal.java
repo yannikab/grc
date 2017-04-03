@@ -1,7 +1,7 @@
 package k31.grc;
 
-import k31.grc.analysis.DepthFirstAdapter;
-import k31.grc.node.Node;
+import k31.grc.cst.analysis.DepthFirstAdapter;
+import k31.grc.cst.node.Node;
 
 public class SimpleTraversal extends DepthFirstAdapter {
 

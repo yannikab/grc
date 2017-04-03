@@ -5,14 +5,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
 
+import k31.grc.cst.lexer.Lexer;
+import k31.grc.cst.lexer.LexerException;
+import k31.grc.cst.node.EOF;
+import k31.grc.cst.node.Token;
+import k31.grc.cst.parser.Parser;
+import k31.grc.cst.parser.ParserException;
 import k31.grc.graphviz.GVNode;
 import k31.grc.graphviz.GraphVizTraversal;
-import k31.grc.lexer.Lexer;
-import k31.grc.lexer.LexerException;
-import k31.grc.node.EOF;
-import k31.grc.node.Token;
-import k31.grc.parser.Parser;
-import k31.grc.parser.ParserException;
+import k31.grc.graphviz.GraphVizTraversalTokens;
 
 /**
  * Hello world!
@@ -39,8 +40,10 @@ public class App {
 			else if (action.equals("ast"))
 				parseAST(fileName);
 		} else if (module.equals("graphviz")) {
-			if (action.equals("cst"))
-				graphvizCST(fileName);
+			if (action.equals("cstsimple"))
+				graphvizCST(fileName, true);
+			else if (action.equals("cst"))
+				graphvizCST(fileName, false);
 			else if (action.equals("ast"))
 				graphvizAST(fileName);
 		}
@@ -69,7 +72,7 @@ public class App {
 
 			for (token = lexer.next(); !(token instanceof EOF); token = lexer.next()) {
 
-				System.out.print("\"" + token.getText() + "\": " + token.getClass().toString() + System.lineSeparator());
+				System.out.print("\"" + token.getText() + "\": " + token.getClass().getSimpleName().toString() + System.lineSeparator());
 			}
 
 		} catch (LexerException e) {
@@ -122,7 +125,7 @@ public class App {
 
 	}
 
-	private static void graphvizCST(String fileName) {
+	private static void graphvizCST(String fileName, boolean simple) {
 
 		FileReader fr;
 
@@ -144,7 +147,7 @@ public class App {
 		try {
 
 			GVNode root = new GVNode(-1);
-			parser.parse().apply(new GraphVizTraversal(root));
+			parser.parse().apply(simple ? new GraphVizTraversal(root) : new GraphVizTraversalTokens(root));
 
 			// root.print();
 			// root.printRelations();

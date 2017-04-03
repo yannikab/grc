@@ -2,14 +2,15 @@ package k31.grc.graphviz;
 
 import java.util.Stack;
 
-import k31.grc.analysis.DepthFirstAdapter;
-import k31.grc.node.Node;
+import k31.grc.cst.analysis.DepthFirstAdapter;
+import k31.grc.cst.node.Node;
+import k31.grc.cst.node.Token;
 
 public class GraphVizTraversal extends DepthFirstAdapter {
 
 	private static int nodeNumber = 0;
 
-	Stack<GVNode> stack;
+	private Stack<GVNode> stack;
 
 	public GraphVizTraversal(GVNode root) {
 
@@ -23,14 +24,21 @@ public class GraphVizTraversal extends DepthFirstAdapter {
 		// TODO Auto-generated method stub
 		// super.defaultIn(node);
 
-		GVNode n = new GVNode(nodeNumber, node.getClass().getSimpleName());
-		stack.peek().addChild(n);
-		stack.push(n);
-
-		nodeNumber++;
+		addNode(node, node.getClass().getSimpleName());
 
 		// System.out.printf("%02d: I ", level);
 		// System.out.println();
+	}
+
+	protected void addNode(Node node, String text) {
+
+		GVNode n = new GVNode(nodeNumber, text);
+		stack.peek().addChild(n);
+
+		if (!(node instanceof Token))
+			stack.push(n);
+
+		nodeNumber++;
 	}
 
 	@Override
