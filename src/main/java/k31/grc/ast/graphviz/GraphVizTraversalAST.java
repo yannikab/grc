@@ -5,6 +5,7 @@ package k31.grc.ast.graphviz;
 import java.util.Stack;
 
 import k31.grc.cst.analysis.DepthFirstAdapter;
+import k31.grc.cst.graphviz.GVNode;
 import k31.grc.cst.node.AAdditionExpression;
 import k31.grc.cst.node.AAndOpTermL;
 import k31.grc.cst.node.AArrayDim;
@@ -20,9 +21,7 @@ import k31.grc.cst.node.AFparDef;
 import k31.grc.cst.node.AFparMore;
 import k31.grc.cst.node.AFparType;
 import k31.grc.cst.node.AFuncDecl;
-import k31.grc.cst.node.AFuncDeclLocalDef;
 import k31.grc.cst.node.AFuncDef;
-import k31.grc.cst.node.AFuncLocalDef;
 import k31.grc.cst.node.AFunctionCall;
 import k31.grc.cst.node.AGreaterEqualFactorL;
 import k31.grc.cst.node.AGreaterThanFactorL;
@@ -53,7 +52,6 @@ import k31.grc.cst.node.AVarDef;
 import k31.grc.cst.node.AVarMore;
 import k31.grc.cst.node.AWhileStmt;
 import k31.grc.cst.node.AWhileStmtElse;
-import k31.grc.graphviz.GVNode;
 
 public class GraphVizTraversalAST extends DepthFirstAdapter {
 

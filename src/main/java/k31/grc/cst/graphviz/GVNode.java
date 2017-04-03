@@ -1,4 +1,4 @@
-package k31.grc.graphviz;
+package k31.grc.cst.graphviz;
 
 import java.util.LinkedList;
 import java.util.List;
