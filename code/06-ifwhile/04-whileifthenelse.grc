@@ -1,11 +1,5 @@
 fun program() : nothing
 {
-	while 3 = 3 do
-		if 4 > 4 then
-			;
-		else
-			;
-
 	if 4 > 4 then
 		while 3 = 3 do
 			;
@@ -41,4 +35,18 @@ fun program() : nothing
 				;
 	else
 			;
+
+	if 4 > 4 then
+		if 3 = 3 then
+			while 3 = 3 do
+				;
+		else
+			;
+
+	if 4 > 4 then
+		if 3 = 3 then
+			;
+		else
+			while 3 = 3 do
+				;
 }

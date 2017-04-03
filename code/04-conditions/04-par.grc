@@ -2,6 +2,6 @@ fun program() : nothing
 {
 	if not (2 = 5 and 3 = 6) then ;
 	while not (2 # 33 and - 3 div 'a' * 2 = "string" + 3) do ;
-	if "mine" = 1 or not 2 + '\t' = 3 div "str" then ;
-	while +2 >= name or not "john" = 3 and 2 + (3 div 16) = "me" do ;
+	if ("mine" = 1 or not 4 = 3) and 2 + '\t' = 3 div "str" then ;
+	while +2 >= name or not ("john" = 3 and 2 + (3 div 16) = "me") do ;
 }
