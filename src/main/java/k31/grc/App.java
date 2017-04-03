@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
 
+import k31.grc.ast.graphviz.GraphVizTraversalAST;
 import k31.grc.cst.lexer.Lexer;
 import k31.grc.cst.lexer.LexerException;
 import k31.grc.cst.node.EOF;
@@ -171,5 +172,44 @@ public class App {
 	private static void graphvizAST(String fileName) {
 		// TODO Auto-generated method stub
 
+		FileReader fr;
+
+		try {
+
+			fr = new FileReader(fileName);
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+			return;
+		}
+
+		Lexer lexer = new Lexer(new PushbackReader(fr, 4096));
+
+		Parser parser = new Parser(lexer);
+
+		try {
+
+			GVNode root = new GVNode(-1);
+			parser.parse().apply(new GraphVizTraversalAST(root));
+
+			// root.print();
+			// root.printRelations();
+
+			System.out.println("graph\n{");
+			root.printGraphViz();
+			System.out.println("}");
+
+		} catch (ParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LexerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

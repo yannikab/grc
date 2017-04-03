@@ -166,50 +166,70 @@ Productions
 	factor_l = {not_op} oper_not factor_l
 	         | {parenthesis} sep_lpar expression_l sep_rpar
 	         | {equal} [l]:expression oper_eq [r]:expression
-	         | {notequal} [l]:expression oper_ne [r]:expression
-	         | {greaterthan} [l]:expression oper_gt [r]:expression	         
-	         | {lessthan} [l]:expression oper_lt [r]:expression
-	         | {greaterequal} [l]:expression oper_ge [r]:expression
-	         | {lessequal} [l]:expression oper_le [r]:expression;
+	         | {not_equal} [l]:expression oper_ne [r]:expression
+	         | {greater_than} [l]:expression oper_gt [r]:expression	         
+	         | {less_than} [l]:expression oper_lt [r]:expression
+	         | {greater_equal} [l]:expression oper_ge [r]:expression
+	         | {less_equal} [l]:expression oper_le [r]:expression;
 
 
 // statement
 
-	statement = {semicolon} sep_semi
-	          | {assign} l_value sep_assign expression sep_semi
-	          | {block} block
-	          | {function_call} function_call sep_semi
-	          | {return} key_return expression? sep_semi
-	          | {if} if
-	          | {while} key_while expression_l key_do statement;
+	statement = {semicolon} semicolon_stmt
+	          | {assign} assign_stmt
+	          | {block} block_stmt
+	          | {function_call} function_call_stmt
+	          | {return} return_stmt
+	          | {if} if_stmt
+	          | {while} while_stmt;
 
-	statement_else = {semicolon} sep_semi
-	               | {assign} l_value sep_assign expression sep_semi
-	               | {block} block
-	               | {function_call} function_call sep_semi
-	               | {return} key_return expression? sep_semi
-	               | {if_else} if_else
-	               | {while_else} while_else;
-
-
-// block
-
-	block = sep_lbrace statement* sep_rbrace;
+	statement_else = {semicolon} semicolon_stmt
+	               | {assign} assign_stmt
+	               | {block} block_stmt
+	               | {function_call} function_call_stmt
+	               | {return} return_stmt
+	               | {if} if_stmt_else
+	               | {while} while_stmt_else;
 
 
-// if
+// semicolon statement
 
-	if = {then} key_if expression_l key_then statement
-	   | {else} key_if expression_l key_then statement_else key_else statement;
-
-	if_else = key_if expression_l key_then [t]:statement_else key_else [e]:statement_else;
+	semicolon_stmt = sep_semi;
 
 
-// while
+// assign statement
 
-	while = key_while expression_l key_do statement;
+	assign_stmt = l_value sep_assign expression sep_semi;
 
-	while_else = key_while expression_l key_do statement_else;
+
+// block statement
+
+	block_stmt = sep_lbrace statement* sep_rbrace;
+
+
+// function call statement
+
+	function_call_stmt = function_call sep_semi;
+
+
+// return statement
+
+	return_stmt = key_return expression? sep_semi;
+
+
+// if statement
+
+	if_stmt = {then} key_if expression_l key_then statement
+	        | {then_else} key_if expression_l key_then statement_else key_else statement;
+
+	if_stmt_else = key_if expression_l key_then [t]:statement_else key_else [e]:statement_else;
+
+
+// while statement
+
+	while_stmt = key_while expression_l key_do statement;
+
+	while_stmt_else = key_while expression_l key_do statement_else;
 
 
 // data type
@@ -266,11 +286,11 @@ Productions
 
 // function definition
 
-	func_def = header local_def* block;
+	func_def = header local_def* block_stmt;
 
 
 // local definition
 
 	local_def = {func} func_def
-	          | {f_decl} func_decl
+	          | {func_decl} func_decl
 	          | {var} var_def;
