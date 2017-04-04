@@ -108,6 +108,8 @@ public class App {
 			parser.parse();
 			System.out.println("success");
 
+			return;
+
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -119,6 +121,7 @@ public class App {
 			e.printStackTrace();
 		}
 
+		System.out.println("failure");
 	}
 
 	private static void parseAST(String fileName) {

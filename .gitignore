@@ -1,3 +1,4 @@
-target/
-grace.grammar
-code/*/*.png
+/target
+/grace.grammar
+/code/*/*.png
+/notes

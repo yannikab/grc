@@ -1,0 +1,52 @@
+fun program() : nothing
+{
+	if 4 > 4 then
+		while 3 = 3 do
+			;
+	else
+		;
+
+	if 4 > 4 then
+		;
+	else
+		while 3 = 3 do
+			;
+
+	while 4 > 4 do
+		if 3 = 2 then
+			counter <- 'a';
+		else
+			"string" <- 2;
+
+	if 4 > 4 then
+			;
+	else
+		if 3 = 3 then
+			while 3 = 3 do
+				;
+		else
+			;
+
+	if 4 > 4 then
+		if 3 = 3 then
+			;
+		else
+			while 3 = 3 do
+				;
+	else
+			;
+
+	if 4 > 4 then
+		if 3 = 3 then
+			while 3 = 3 do
+				;
+		else
+			;
+
+	if 4 > 4 then
+		if 3 = 3 then
+			;
+		else
+			while 3 = 3do
+				;
+}

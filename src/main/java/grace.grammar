@@ -89,6 +89,7 @@ Tokens
 	{code} identifier = letter (letter | digit | underscore)*;
 
 	{code} integer = digit+;
+	{code} integer_error = digit+ (letter)+;
 	{code} character = ''' (commonchar | escape) ''';
 	{code} string = '"' (commonchar | escape)* '"';
 

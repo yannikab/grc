@@ -1,0 +1,4 @@
+fun program() : nothing
+{
+	x <- 18mod 5;
+}
