@@ -5,16 +5,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
 
-import k31.grc.cst.graphviz.GVNode;
-import k31.grc.cst.graphviz.GraphVizTraversal;
-import k31.grc.cst.graphviz.GraphVizTraversalAST;
-import k31.grc.cst.graphviz.GraphVizTraversalTokens;
 import k31.grc.cst.lexer.Lexer;
 import k31.grc.cst.lexer.LexerException;
 import k31.grc.cst.node.EOF;
 import k31.grc.cst.node.Token;
 import k31.grc.cst.parser.Parser;
 import k31.grc.cst.parser.ParserException;
+import k31.grc.cst.visitor.GVNode;
+import k31.grc.cst.visitor.GraphVizTraversal;
+import k31.grc.cst.visitor.GraphVizTraversalAST;
+import k31.grc.cst.visitor.GraphVizTraversalTokens;
 
 /**
  * Hello world!

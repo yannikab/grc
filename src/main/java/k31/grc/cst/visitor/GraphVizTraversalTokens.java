@@ -1,4 +1,4 @@
-package k31.grc.cst.graphviz;
+package k31.grc.cst.visitor;
 
 import k31.grc.cst.node.TCharacter;
 import k31.grc.cst.node.TIdentifier;

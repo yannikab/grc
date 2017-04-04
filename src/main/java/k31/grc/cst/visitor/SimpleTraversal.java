@@ -1,4 +1,4 @@
-package k31.grc;
+package k31.grc.cst.visitor;
 
 import k31.grc.cst.analysis.DepthFirstAdapter;
 import k31.grc.cst.node.Node;
