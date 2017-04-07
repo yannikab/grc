@@ -29,10 +29,4 @@ fun program() : nothing
 			;
 	else
 			;
-
-	if 3 = 3 then
-		if 4 = 4 then
-			;
-		else
-			;
 }

@@ -1,0 +1,18 @@
+fun program() : nothing
+
+fun decl(a, b, c : int [][2][3]) : nothing;
+
+fun def() : int
+{
+	return;
+	return;
+}
+
+var a, b : int[5];
+var c : char;
+
+{
+	return;
+	return;
+	return;
+}
