@@ -5,12 +5,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
 
+import k31.grc.ast.node.NodeBase;
+import k31.grc.ast.node.aux.Root;
+import k31.grc.ast.visitor.GraphVizNodeDataVisitor;
 import k31.grc.cst.lexer.Lexer;
 import k31.grc.cst.lexer.LexerException;
 import k31.grc.cst.node.EOF;
 import k31.grc.cst.node.Token;
 import k31.grc.cst.parser.Parser;
 import k31.grc.cst.parser.ParserException;
+import k31.grc.cst.visitor.ASTCreationVisitor;
 import k31.grc.cst.visitor.GVNode;
 import k31.grc.cst.visitor.GraphVizTraversal;
 import k31.grc.cst.visitor.GraphVizTraversalAST;
@@ -45,6 +49,8 @@ public class App {
 				graphvizCST(fileName, true);
 			else if (action.equals("cst"))
 				graphvizCST(fileName, false);
+			else if (action.equals("cst2ast"))
+				graphvizCSTtoAST(fileName);
 			else if (action.equals("ast"))
 				graphvizAST(fileName);
 		}
@@ -76,6 +82,10 @@ public class App {
 				System.out.print("\"" + token.getText() + "\": " + token.getClass().getSimpleName().toString() + System.lineSeparator());
 			}
 
+			System.out.println("success");
+
+			return;
+
 		} catch (LexerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,6 +94,8 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		System.out.println("failure");
 	}
 
 	private static void parseCST(String fileName) {
@@ -125,8 +137,40 @@ public class App {
 	}
 
 	private static void parseAST(String fileName) {
-		// TODO Auto-generated method stub
+		FileReader fr;
 
+		try {
+
+			fr = new FileReader(fileName);
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+			return;
+		}
+
+		Parser parser = new Parser(new Lexer(new PushbackReader(fr, 4096)));
+
+		try {
+
+			parser.parse().apply(new ASTCreationVisitor(new Root()));
+			System.out.println("success");
+
+			return;
+
+		} catch (ParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LexerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println("failure");
 	}
 
 	private static void graphvizCST(String fileName, boolean simple) {
@@ -172,8 +216,7 @@ public class App {
 		}
 	}
 
-	private static void graphvizAST(String fileName) {
-		// TODO Auto-generated method stub
+	private static void graphvizCSTtoAST(String fileName) {
 
 		FileReader fr;
 
@@ -203,6 +246,44 @@ public class App {
 			System.out.println("graph\n{");
 			root.printGraphViz();
 			System.out.println("}");
+
+		} catch (ParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LexerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private static void graphvizAST(String fileName) {
+
+		FileReader fr;
+
+		try {
+
+			fr = new FileReader(fileName);
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+			return;
+		}
+
+		Parser parser = new Parser(new Lexer(new PushbackReader(fr, 4096)));
+
+		try {
+
+			NodeBase root = new Root();
+
+			parser.parse().apply(new ASTCreationVisitor(root));
+
+			// root.accept(new GraphVizChildrenVisitor());
+			root.accept(new GraphVizNodeDataVisitor());
 
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block

@@ -15,11 +15,11 @@ import k31.grc.cst.node.ADataReturnType;
 import k31.grc.cst.node.ADivTerm;
 import k31.grc.cst.node.AEqualFactorL;
 import k31.grc.cst.node.AFparDef;
-import k31.grc.cst.node.AFparMore;
 import k31.grc.cst.node.AFparType;
 import k31.grc.cst.node.AFuncDecl;
 import k31.grc.cst.node.AFuncDef;
 import k31.grc.cst.node.AFunctionCall;
+import k31.grc.cst.node.AFunctionCallStmt;
 import k31.grc.cst.node.AGreaterEqualFactorL;
 import k31.grc.cst.node.AGreaterThanFactorL;
 import k31.grc.cst.node.AHeader;
@@ -37,6 +37,7 @@ import k31.grc.cst.node.ANotEqualFactorL;
 import k31.grc.cst.node.ANotOpFactorL;
 import k31.grc.cst.node.ANothingReturnType;
 import k31.grc.cst.node.AOrOpExpressionL;
+import k31.grc.cst.node.AParMore;
 import k31.grc.cst.node.APlusFactor;
 import k31.grc.cst.node.AReturnStmt;
 import k31.grc.cst.node.ASemicolonStmt;
@@ -49,7 +50,6 @@ import k31.grc.cst.node.AVarDef;
 import k31.grc.cst.node.AVarMore;
 import k31.grc.cst.node.AWhileStmt;
 import k31.grc.cst.node.AWhileStmtElse;
-import k31.grc.cst.visitor.GVNode;
 
 public class GraphVizTraversalAST extends DepthFirstAdapter {
 
@@ -197,7 +197,6 @@ public class GraphVizTraversalAST extends DepthFirstAdapter {
 
 	@Override
 	public void outAMinusFactor(AMinusFactor node) {
-
 		defaultOut(node);
 
 		popNode();
@@ -221,7 +220,7 @@ public class GraphVizTraversalAST extends DepthFirstAdapter {
 	public void inAStringLValue(AStringLValue node) {
 		defaultIn(node);
 
-		pushNode(node.getString().toString());
+		pushNode(node.getString().getText());
 	}
 
 	@Override
@@ -428,10 +427,24 @@ public class GraphVizTraversalAST extends DepthFirstAdapter {
 	}
 
 	@Override
+	public void inAFunctionCallStmt(AFunctionCallStmt node) {
+		defaultIn(node);
+
+		// pushNode("()");
+	}
+
+	@Override
+	public void outAFunctionCallStmt(AFunctionCallStmt node) {
+		defaultOut(node);
+
+		// popNode();
+	}
+
+	@Override
 	public void inAReturnStmt(AReturnStmt node) {
 		defaultIn(node);
 
-		pushNode(String.format("%s%s", node.getKeyReturn().getText(), node.getSepSemi().getText()));
+		pushNode(node.getKeyReturn().getText());
 	}
 
 	@Override
@@ -539,12 +552,14 @@ public class GraphVizTraversalAST extends DepthFirstAdapter {
 		popNode();
 	}
 
+	@Override
 	public void inADataReturnType(ADataReturnType node) {
 		defaultIn(node);
 
 		pushNode("type");
 	}
 
+	@Override
 	public void outADataReturnType(ADataReturnType node) {
 		defaultOut(node);
 
@@ -571,7 +586,7 @@ public class GraphVizTraversalAST extends DepthFirstAdapter {
 	public void inAArrayNoDim(AArrayNoDim node) {
 		defaultIn(node);
 
-		pushNode(String.format("%s%s", node.getSepLbrack(), node.getSepRbrack()));
+		pushNode(String.format("%s%s", node.getSepLbrack().getText(), node.getSepRbrack().getText()));
 	}
 
 	@Override
@@ -585,7 +600,7 @@ public class GraphVizTraversalAST extends DepthFirstAdapter {
 	public void inAArrayDim(AArrayDim node) {
 		defaultIn(node);
 
-		pushNode(String.format("%s%s%s", node.getSepLbrack(), node.getInteger().getText(), node.getSepRbrack()));
+		pushNode(String.format("%s%s%s", node.getSepLbrack().getText(), node.getInteger().getText(), node.getSepRbrack().getText()));
 	}
 
 	@Override
@@ -645,7 +660,7 @@ public class GraphVizTraversalAST extends DepthFirstAdapter {
 
 		pushNode("type");
 	}
-	
+
 	@Override
 	public void outAFparType(AFparType node) {
 		defaultOut(node);
@@ -670,14 +685,14 @@ public class GraphVizTraversalAST extends DepthFirstAdapter {
 	}
 
 	@Override
-	public void inAFparMore(AFparMore node) {
+	public void inAParMore(AParMore node) {
 		defaultIn(node);
 
 		pushNode(node.getIdentifier().getText());
 	}
 
 	@Override
-	public void outAFparMore(AFparMore node) {
+	public void outAParMore(AParMore node) {
 		defaultOut(node);
 
 		popNode();
@@ -700,28 +715,28 @@ public class GraphVizTraversalAST extends DepthFirstAdapter {
 	@Override
 	public void inAFuncDecl(AFuncDecl node) {
 		defaultIn(node);
-		
+
 		pushNode("func-decl");
 	}
 
 	@Override
 	public void outAFuncDecl(AFuncDecl node) {
 		defaultOut(node);
-		
+
 		popNode();
 	}
 
 	@Override
 	public void inAFuncDef(AFuncDef node) {
 		defaultIn(node);
-		
+
 		pushNode("func-def");
 	}
 
 	@Override
 	public void outAFuncDef(AFuncDef node) {
 		defaultOut(node);
-		
+
 		popNode();
 	}
 }

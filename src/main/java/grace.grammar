@@ -118,10 +118,11 @@ Productions
 
 // program
 
-	program = func_def; 
+	program = func_def;
 
 
-// constant arithmetic
+
+// expression
 
 	expression = {addition} expression oper_plus term
 	           | {subtraction} expression oper_minus term
@@ -269,14 +270,14 @@ Productions
 
 // formal parameter definition
 
-	fpar_def = key_ref? identifier fpar_more* sep_colon fpar_type;
-	fpar_more = sep_comma identifier;
+	fpar_def = key_ref? identifier par_more* sep_colon fpar_type;
+	par_more = sep_comma identifier;
 
 
 // function header
 
-	header = key_fun identifier sep_lpar func_args? sep_rpar sep_colon return_type;
-	func_args = fpar_def fpar_def_more*;
+	header = key_fun identifier sep_lpar func_params? sep_rpar sep_colon return_type;
+	func_params = fpar_def fpar_def_more*;
 	fpar_def_more = sep_semi fpar_def;
 
 
