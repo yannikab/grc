@@ -28,45 +28,103 @@ public class App {
 
 	public static void main(String[] args) {
 
-		String module = args[0];
-		String action = args[1];
-		String fileName = args[args.length - 1];
+		String filename = null;
+		String module = null;
+		String action = null;
+
+		if (args.length == 0 || args.length > 3) {
+
+			System.out.println("Usage: grc [module] [action] file");
+			return;
+
+		} else if (args.length == 1) {
+
+			module = "graphviz";
+			action = "ast";
+			filename = args[0];
+
+		} else if (args.length == 2) {
+
+			module = args[0];
+			action = "ast";
+			filename = args[1];
+
+		} else if (args.length == 3) {
+
+			module = args[0];
+			action = args[1];
+			filename = args[2];
+		}
 
 		// System.out.println(module);
 		// System.out.println(action);
-		// System.out.println(fileName);
+		// System.out.println(filename);
 
 		if (module.equals("lex")) {
-			System.out.println("lex");
-			lex(fileName);
+
+			lex(filename);
+
 		} else if (module.equals("parse")) {
-			if (action.equals("cst"))
-				parseCST(fileName);
-			else if (action.equals("ast"))
-				parseAST(fileName);
+
+			if (action.equals("cst")) {
+
+				parseCST(filename);
+
+			} else if (action.equals("ast")) {
+
+				parseAST(filename);
+
+			} else {
+
+				System.out.println(String.format("Invalid action name '%s'", action));
+				System.out.println(String.format("(available actions for module 'parse': %s, %s)", "cst", "ast"));
+				return;
+			}
+
 		} else if (module.equals("graphviz")) {
-			if (action.equals("cstsimple"))
-				graphvizCST(fileName, true);
-			else if (action.equals("cst"))
-				graphvizCST(fileName, false);
-			else if (action.equals("cst2ast"))
-				graphvizCSTtoAST(fileName);
-			else if (action.equals("ast"))
-				graphvizAST(fileName);
+
+			if (action.equals("cstsimple")) {
+
+				graphvizCST(filename, true);
+
+			} else if (action.equals("cst")) {
+
+				graphvizCST(filename, false);
+
+			} else if (action.equals("cst2ast")) {
+
+				graphvizCSTtoAST(filename);
+
+			} else if (action.equals("ast")) {
+
+				graphvizAST(filename);
+
+			} else {
+
+				System.out.println(String.format("Invalid action name '%s'", action));
+				System.out.println(String.format("(available actions for module 'graphviz': %s, %s, %s, %s)", "cstsimple", "cst", "cst2ast", "ast"));
+				return;
+			}
+
+		} else {
+
+			System.out.println(String.format("Invalid module name '%s'", module));
+			System.out.println(String.format("(available modules: %s, %s, %s)", "lex", "parse", "graphviz"));
+			return;
 		}
 	}
 
-	private static void lex(String fileName) {
+	private static void lex(String filename) {
 
 		FileReader fr;
 
 		try {
 
-			fr = new FileReader(fileName);
+			fr = new FileReader(filename);
 
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// e.printStackTrace();
+			System.out.println("File not found: " + filename);
 
 			return;
 		}
@@ -98,17 +156,17 @@ public class App {
 		System.out.println("failure");
 	}
 
-	private static void parseCST(String fileName) {
+	private static void parseCST(String filename) {
 
 		FileReader fr;
 
 		try {
 
-			fr = new FileReader(fileName);
+			fr = new FileReader(filename);
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
+			System.out.println("File not found: " + filename);
 
 			return;
 		}
@@ -136,16 +194,16 @@ public class App {
 		System.out.println("failure");
 	}
 
-	private static void parseAST(String fileName) {
+	private static void parseAST(String filename) {
 		FileReader fr;
 
 		try {
 
-			fr = new FileReader(fileName);
+			fr = new FileReader(filename);
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
+			System.out.println("File not found: " + filename);
 
 			return;
 		}
@@ -173,17 +231,17 @@ public class App {
 		System.out.println("failure");
 	}
 
-	private static void graphvizCST(String fileName, boolean simple) {
+	private static void graphvizCST(String filename, boolean simple) {
 
 		FileReader fr;
 
 		try {
 
-			fr = new FileReader(fileName);
+			fr = new FileReader(filename);
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
+			System.out.println("File not found: " + filename);
 
 			return;
 		}
@@ -216,17 +274,17 @@ public class App {
 		}
 	}
 
-	private static void graphvizCSTtoAST(String fileName) {
+	private static void graphvizCSTtoAST(String filename) {
 
 		FileReader fr;
 
 		try {
 
-			fr = new FileReader(fileName);
+			fr = new FileReader(filename);
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
+			System.out.println("File not found: " + filename);
 
 			return;
 		}
@@ -259,17 +317,17 @@ public class App {
 		}
 	}
 
-	private static void graphvizAST(String fileName) {
+	private static void graphvizAST(String filename) {
 
 		FileReader fr;
 
 		try {
 
-			fr = new FileReader(fileName);
+			fr = new FileReader(filename);
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
+			System.out.println("File not found: " + filename);
 
 			return;
 		}

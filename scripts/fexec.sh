@@ -1,3 +1,5 @@
 #!/bin/bash
 
-for f in $1/*.grc; do echo $f; ./exec.sh $f; done
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+for f in $1/*.grc; do ${DIR}/exec.sh $f; done

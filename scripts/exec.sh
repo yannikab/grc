@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 # modules: lex | parse
 MODULE="parse"
 
@@ -10,4 +12,7 @@ if [ $# -ne 1 ]; then exit; fi
 
 if ! echo $1 | grep -q '.*\.grc$'; then exit; fi
 
-./grc $MODULE $ACTION $1
+INFILE=$1
+echo ${INFILE} | sed s://:/:
+
+${DIR}/grc $MODULE $ACTION $1

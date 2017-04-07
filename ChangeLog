@@ -1,0 +1,27 @@
+194fa9f	Kampylafkas Ioannis	2017-04-07 17:46:49 +0300	Minor test code changes. Removed notes folder from revision control.
+24a0aac	Kampylafkas Ioannis	2017-04-07 07:17:53 +0300	- Added AST class hierarchy. - Created a CST visitor that transforms CST to AST. - Created an AST visitor that outputs the AST to GraphViz format.
+617a320	Kampylafkas Ioannis	2017-04-04 18:32:53 +0300	Package name change.
+f350d31	Kampylafkas Ioannis	2017-04-04 18:27:14 +0300	Minor addition to grammar in order to reject integer and keyword concatenations.
+74c8c92	Kampylafkas Ioannis	2017-04-04 18:18:21 +0300	Moved helper scripts to subdirectory.
+2c013f4	Kampylafkas Ioannis	2017-04-03 21:37:45 +0300	Moved abstract syntax tree visualization to cst package since it operates on the concrete syntax tree.
+b1e314e	Kampylafkas Ioannis	2017-04-03 17:25:57 +0300	Moved concrete syntax tree visualization to cst package.
+6e8718a	Kampylafkas Ioannis	2017-04-03 17:13:32 +0300	Test code changes.
+34661d0	Kampylafkas Ioannis	2017-04-03 17:11:25 +0300	Helper script changes.
+27b78d7	Kampylafkas Ioannis	2017-04-03 17:09:01 +0300	Creation and visualization of untyped abstract syntax tree. Grammar modified to facilitate ast creation.
+82ce922	Kampylafkas Ioannis	2017-04-03 16:57:20 +0300	Visualization of complete concrete syntax tree, with tokens.
+f7ccebf	Kampylafkas Ioannis	2017-04-02 13:46:19 +0300	Housekeeping changes.
+0cb969a	Kampylafkas Ioannis	2017-03-30 19:44:28 +0300	Grammar specification complete. Example programs are parsed correctly.
+c1fbdba	Kampylafkas Ioannis	2017-03-30 15:26:39 +0300	Renamed Grace source code folder.
+0717b61	Kampylafkas Ioannis	2017-03-30 15:24:52 +0300	If and While statements with dangling Else taken into account.
+229240d	Kampylafkas Ioannis	2017-03-25 20:40:56 +0200	Added parse tree visualization support using Graphviz.
+779baab	Kampylafkas Ioannis	2017-03-25 08:38:55 +0200	Some statements added to the grammar, example source changes.
+3a0ca37	Kampylafkas Ioannis	2017-03-24 07:11:16 +0200	Left associativity for arithmetic and logical expressions. Added a simple traversal class.
+b8580b5	Kampylafkas Ioannis	2017-03-19 03:10:44 +0200	Conditions.
+e8017b6	Kampylafkas Ioannis	2017-03-18 23:59:42 +0200	l-values, function calls.
+4e01375	Kampylafkas Ioannis	2017-03-18 21:13:59 +0200	Unary arithmetic operators, constant character operands.
+2fdc055	Kampylafkas Ioannis	2017-03-18 19:32:41 +0200	Added productions for basic integer arithmetic.
+b5edd91	Kampylafkas Ioannis	2017-03-18 04:52:55 +0200	Removed auto-generated files from revision control.
+c94aac0	Kampylafkas Ioannis	2017-03-16 20:55:09 +0200	Some basic source files for constant characters and strings.
+28149d6	Kampylafkas Ioannis	2017-03-16 19:27:34 +0200	Comment scanning should be functional, some test code added.
+459ff4f	Kampylafkas Ioannis	2017-03-16 02:42:15 +0200	Initial lexical specification.
+230723b	Kampylafkas Ioannis	2017-03-15 18:27:14 +0200	Initial empty project commit.
