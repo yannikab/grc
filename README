@@ -18,27 +18,25 @@ createlog.sh    Creates ChangeLog from git commit log
 - Executing
 
 grc             Symbolic link to Grace compiler
-
 exec.sh         Executes compiler with a single *.grc file argument
-execgv.sh       Executes compiler with a single *.grc file argument, produces GraphViz output.
+execgv.sh       Executes compiler with a single *.grc file argument, produces GraphViz output
 
 	Modules in exec.sh:
-	- lex       Compiler only does lexical analysis, outputs tokens.
-	- parse     Compiler does both lexical analysis and syntax analysis.
+	- lex       Compiler only does lexical analysis, outputs tokens
+	- parse     Compiler does both lexical analysis and syntax analysis
 	
 	Actions in exec.sh:
 	- cst       Compiler creates concrete syntax tree only
 	- ast       Compiler creates cst and applies a visitor that transforms it to an ast
 
-
 	Modules in execgv.sh:
 	- graphviz  Compiler generates GraphViz DOT graph description language output
 	
-	Actions in exec.sh:
+	Actions in execgv.sh:
 	- cstsimple Compiler outputs concrete syntax tree without tokens
-	- cst       Compiler outputs concrete syntax tree in DOT language
-	- cst2ast   Compiler outputs an abstract syntax tree by traversing the cst.
-	- ast       Compiler creates cst, transforms it to ast, then traverses ast for output.
+	- cst       Compiler outputs complete concrete syntax tree
+	- cst2ast   Compiler outputs an abstract syntax tree by traversing the cst
+	- ast       Compiler creates cst, transforms it to ast, then traverses ast for output
 
 
 fexec.sh        Executes exec.sh for all *.grc files in its folder parameter
@@ -53,5 +51,5 @@ TL;DR suggested usage:
 - Install GraphViz
 - Create directories under /code directory containing Grace source code files (*.grc)
 - Choose desired action by editing execgv.sh (suggested: cst, ast)
-- Execute allexecgv.sh to process all directories under /code or fexecgv.sh with a single directory parameter
+- Execute allexecgv.sh to process all directories under /code or fexecgv.sh for a single directory
 - Inspect directories under /code for .png output

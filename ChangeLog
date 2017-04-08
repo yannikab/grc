@@ -1,3 +1,4 @@
+de76478	Kampylafkas Ioannis	2017-04-07 21:05:16 +0300	Final packaging changes for first part of the project.
 194fa9f	Kampylafkas Ioannis	2017-04-07 17:46:49 +0300	Minor test code changes. Removed notes folder from revision control.
 24a0aac	Kampylafkas Ioannis	2017-04-07 07:17:53 +0300	- Added AST class hierarchy. - Created a CST visitor that transforms CST to AST. - Created an AST visitor that outputs the AST to GraphViz format.
 617a320	Kampylafkas Ioannis	2017-04-04 18:32:53 +0300	Package name change.
