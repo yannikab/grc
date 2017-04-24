@@ -1,1 +1,1 @@
-../../NetGrc/Grc/Program.cs
+../../DotNetGrc/Grc/Program.cs
