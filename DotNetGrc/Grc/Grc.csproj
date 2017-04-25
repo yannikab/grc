@@ -158,13 +158,71 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ast\Node\Cond\CondAnd.cs" />
+    <Compile Include="Ast\Node\Cond\CondBase.cs" />
+    <Compile Include="Ast\Node\Cond\CondEq.cs" />
+    <Compile Include="Ast\Node\Cond\CondGe.cs" />
+    <Compile Include="Ast\Node\Cond\CondGt.cs" />
+    <Compile Include="Ast\Node\Cond\CondLe.cs" />
+    <Compile Include="Ast\Node\Cond\CondLt.cs" />
+    <Compile Include="Ast\Node\Cond\CondNe.cs" />
+    <Compile Include="Ast\Node\Cond\CondNot.cs" />
+    <Compile Include="Ast\Node\Cond\CondOr.cs" />
+    <Compile Include="Ast\Node\Cond\CondRelOpBase.cs" />
+    <Compile Include="Ast\Node\Expr\ExprCharacterT.cs" />
+    <Compile Include="Ast\Node\Expr\ExprDiv.cs" />
+    <Compile Include="Ast\Node\Expr\ExprFuncCall.cs" />
+    <Compile Include="Ast\Node\Expr\ExprIntegerT.cs" />
+    <Compile Include="Ast\Node\Expr\ExprMinus.cs" />
+    <Compile Include="Ast\Node\Expr\ExprMod.cs" />
+    <Compile Include="Ast\Node\Expr\ExprMul.cs" />
+    <Compile Include="Ast\Node\Expr\ExprPlus.cs" />
+    <Compile Include="Ast\Node\Expr\ExprLValBase.cs" />
+    <Compile Include="Ast\Node\Expr\ExprLValIdentifierT.cs" />
+    <Compile Include="Ast\Node\Expr\ExprLValIndexed.cs" />
+    <Compile Include="Ast\Node\Expr\ExprLValStringT.cs" />
+    <Compile Include="Ast\Node\Func\FParIdentifierT.cs" />
+    <Compile Include="Ast\Node\Func\LocalBase.cs" />
+    <Compile Include="Ast\Node\Func\LocalFuncDecl.cs" />
+    <Compile Include="Ast\Node\Func\LocalFuncDef.cs" />
+    <Compile Include="Ast\Node\Func\LocalVarDef.cs" />
+    <Compile Include="Ast\Node\Func\VarIdentifierT.cs" />
+    <Compile Include="Ast\Node\Helper\HRef.cs" />
+    <Compile Include="Ast\Node\Helper\Root.cs" />
+    <Compile Include="Ast\Node\Helper\HType.cs" />
+    <Compile Include="Ast\Node\Helper\HVal.cs" />
+    <Compile Include="Ast\Node\NodeBase.cs" />
+    <Compile Include="Ast\Node\Expr\ExprAdd.cs" />
+    <Compile Include="Ast\Node\Expr\ExprBase.cs" />
+    <Compile Include="Ast\Node\Expr\ExprBinOpBase.cs" />
+    <Compile Include="Ast\Node\Expr\ExprSub.cs" />
+    <Compile Include="Ast\Node\Parameter.cs" />
+    <Compile Include="Ast\Node\Stmt\StmtAssign.cs" />
+    <Compile Include="Ast\Node\Stmt\StmtBase.cs" />
+    <Compile Include="Ast\Node\Stmt\StmtBlock.cs" />
+    <Compile Include="Ast\Node\Stmt\StmtFuncCall.cs" />
+    <Compile Include="Ast\Node\Stmt\StmtIfThen.cs" />
+    <Compile Include="Ast\Node\Stmt\StmtIfThenElse.cs" />
+    <Compile Include="Ast\Node\Stmt\StmtNoOpT.cs" />
+    <Compile Include="Ast\Node\Stmt\StmtReturn.cs" />
+    <Compile Include="Ast\Node\Stmt\StmtWhileDo.cs" />
+    <Compile Include="Ast\Node\Type\DimEmptyT.cs" />
+    <Compile Include="Ast\Node\Type\DimIntegerT.cs" />
+    <Compile Include="Ast\Node\Type\TypeDataBase.cs" />
+    <Compile Include="Ast\Node\Type\TypeDataCharT.cs" />
+    <Compile Include="Ast\Node\Type\TypeDataIntT.cs" />
+    <Compile Include="Ast\Node\Type\TypeReturnBase.cs" />
+    <Compile Include="Ast\Node\Type\TypeReturnNothingT.cs" />
+    <Compile Include="Ast\Node\Variable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ast\Visitor\IVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
