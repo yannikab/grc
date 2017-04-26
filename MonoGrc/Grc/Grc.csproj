@@ -178,6 +178,12 @@
     <Compile Include="Ast\Node\Type\TypeReturnNothingT.cs" />
     <Compile Include="Ast\Node\Parameter.cs" />
     <Compile Include="Ast\Node\Variable.cs" />
+    <Compile Include="Ast\Visitor\GraphVizNodeDataVisitor.cs" />
+    <Compile Include="Ast\Visitor\VisitorAdapter.cs" />
+    <Compile Include="Cst\Visitor\ASTCreationVisitor.cs" />
+    <Compile Include="Cst\Visitor\GraphVizVisitor.cs" />
+    <Compile Include="Cst\Visitor\GraphVizVisitorTokens.cs" />
+    <Compile Include="Cst\Visitor\GVNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -14,13 +14,13 @@ namespace Grc.Ast.Node.Expr
 
 		public virtual string Id
 		{
-			get { return id; }
+			get { return this.id; }
 			set { this.id = value; }
 		}
 
 		public virtual IReadOnlyList<ExprBase> Args
 		{
-			get { return args; }
+			get { return this.args; }
 		}
 
 		public ExprFuncCall(string text) : base(text)
@@ -28,6 +28,11 @@ namespace Grc.Ast.Node.Expr
 			this.id = text;
 
 			this.args = new List<ExprBase>();
+		}
+
+		public virtual void AddArg(ExprBase arg)
+		{
+			this.args.Add(arg);
 		}
 
 		public override void Accept(IVisitor v)

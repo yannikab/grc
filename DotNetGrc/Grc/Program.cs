@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Ast.Node;
+using Grc.Ast.Node.Helper;
+using Grc.Ast.Visitor;
+using Grc.Cst.Visitor;
 using java.io;
-using k31.grc.ast.node;
-using k31.grc.ast.node.aux;
-using k31.grc.ast.visitor;
 using k31.grc.cst.lexer;
 using k31.grc.cst.node;
 using k31.grc.cst.parser;
-using k31.grc.cst.visitor;
 
 namespace Grc
 {
@@ -46,23 +46,26 @@ namespace Grc
 				filename = args[2];
 			}
 
+			if (module == null || action == null || filename == null)
+				return;
+
 			// Console.WriteLine(module);
 			// Console.WriteLine(action);
 			// Console.WriteLine(filename);
 
 			if (module.Equals("lex"))
 			{
-				lex(filename);
+				Lex(filename);
 			}
 			else if (module.Equals("parse"))
 			{
 				if (action.Equals("cst"))
 				{
-					parseCST(filename);
+					ParseCst(filename);
 				}
 				else if (action.Equals("ast"))
 				{
-					parseAST(filename);
+					ParseAst(filename);
 				}
 				else
 				{
@@ -75,19 +78,19 @@ namespace Grc
 			{
 				if (action.Equals("cstsimple"))
 				{
-					graphvizCST(filename, true);
+					GraphvizCst(filename, true);
 				}
 				else if (action.Equals("cst"))
 				{
-					graphvizCST(filename, false);
+					GraphvizCst(filename, false);
 				}
 				else if (action.Equals("cst2ast"))
 				{
-					graphvizCSTtoAST(filename);
+					GraphvizCsTtoAst(filename);
 				}
 				else if (action.Equals("ast"))
 				{
-					graphvizAST(filename);
+					GraphvizAst(filename);
 				}
 				else
 				{
@@ -104,7 +107,7 @@ namespace Grc
 			}
 		}
 
-		private static void lex(string filename)
+		private static void Lex(string filename)
 		{
 			FileReader fr;
 
@@ -127,9 +130,7 @@ namespace Grc
 			try
 			{
 				for (token = lexer.next(); !(token is EOF); token = lexer.next())
-				{
 					System.Console.Write("\"" + token.getText() + "\": " + token.getClass().getSimpleName() + Environment.NewLine);
-				}
 
 				System.Console.WriteLine("success");
 
@@ -149,7 +150,7 @@ namespace Grc
 			System.Console.WriteLine("failure");
 		}
 
-		private static void parseCST(string filename)
+		private static void ParseCst(string filename)
 		{
 			FileReader fr;
 
@@ -193,7 +194,7 @@ namespace Grc
 			System.Console.WriteLine("failure");
 		}
 
-		private static void parseAST(string filename)
+		private static void ParseAst(string filename)
 		{
 			FileReader fr;
 
@@ -237,7 +238,7 @@ namespace Grc
 			System.Console.WriteLine("failure");
 		}
 
-		private static void graphvizCST(string filename, bool simple)
+		private static void GraphvizCst(string filename, bool simple)
 		{
 			FileReader fr;
 
@@ -286,7 +287,7 @@ namespace Grc
 			}
 		}
 
-		private static void graphvizCSTtoAST(string filename)
+		private static void GraphvizCsTtoAst(string filename)
 		{
 			FileReader fr;
 
@@ -308,15 +309,16 @@ namespace Grc
 
 			try
 			{
-				GVNode root = new GVNode(-1);
-				parser.parse().apply(new GraphVizTraversalAST(root));
+				//GVNode root = new GVNode(-1);
+				//parser.parse().apply(new GraphVizTraversalAST(root));
+				parser.parse();
 
-				// root.print();
-				// root.printRelations();
+				//// root.print();
+				//// root.printRelations();
 
-				System.Console.WriteLine("graph\n{");
-				root.printGraphViz();
-				System.Console.WriteLine("}");
+				//System.Console.WriteLine("graph\n{");
+				//root.printGraphViz();
+				//System.Console.WriteLine("}");
 			}
 			catch (ParserException e)
 			{
@@ -335,7 +337,7 @@ namespace Grc
 			}
 		}
 
-		private static void graphvizAST(string filename)
+		private static void GraphvizAst(string filename)
 		{
 			FileReader fr;
 
@@ -360,7 +362,7 @@ namespace Grc
 				parser.parse().apply(new ASTCreationVisitor(root));
 
 				// root.accept(new GraphVizChildrenVisitor());
-				root.accept(new GraphVizNodeDataVisitor());
+				root.Accept(new GraphVizNodeDataVisitor());
 			}
 			catch (ParserException e)
 			{

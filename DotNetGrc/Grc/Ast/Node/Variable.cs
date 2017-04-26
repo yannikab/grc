@@ -11,9 +11,9 @@ namespace Grc.Ast.Node
 	{
 		private string id;
 		private TypeDataBase type;
-		private IList<int?> dims;
+		private IList<int> dims;
 
-		public Variable(string id, TypeDataBase type, IList<int?> dims)
+		public Variable(string id, TypeDataBase type, IList<int> dims)
 		{
 			this.id = id;
 			this.type = type;

@@ -13,9 +13,9 @@ namespace Grc.Ast.Node
 		private string id;
 		private TypeDataBase type;
 		private bool nodim;
-		private IList<int?> dims;
+		private IList<int> dims;
 
-		public Parameter(string id, bool @ref, TypeDataBase type, bool nodim, IList<int?> dims)
+		public Parameter(string id, bool @ref, TypeDataBase type, bool nodim, IList<int> dims)
 		{
 			this.id = id;
 			this.@ref = @ref;

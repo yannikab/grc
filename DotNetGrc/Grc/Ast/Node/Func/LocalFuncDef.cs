@@ -62,6 +62,21 @@ namespace Grc.Ast.Node.Func
 			this.funcDecls = new List<LocalFuncDecl>();
 		}
 
+		public virtual void AddVar(Variable var)
+		{
+			this.vars.Add(var);
+		}
+
+		public virtual void AddFuncDecl(LocalFuncDecl funcDecl)
+		{
+			this.funcDecls.Add(funcDecl);
+		}
+
+		public virtual void AddFuncDef(LocalFuncDef funcDef)
+		{
+			this.funcDefs.Add(funcDef);
+		}
+
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);

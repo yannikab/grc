@@ -29,6 +29,11 @@ namespace Grc.Ast.Node.Stmt
 			this.args = new List<ExprBase>();
 		}
 
+		public virtual void AddArg(ExprBase arg)
+		{
+			this.args.Add(arg);
+		}
+
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
