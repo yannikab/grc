@@ -1,9 +1,5 @@
 package k31.grc.ast.visitor;
 
-import k31.grc.ast.node.aux.Ref;
-import k31.grc.ast.node.aux.Root;
-import k31.grc.ast.node.aux.Type;
-import k31.grc.ast.node.aux.Val;
 import k31.grc.ast.node.cond.CondAnd;
 import k31.grc.ast.node.cond.CondNot;
 import k31.grc.ast.node.cond.CondOr;
@@ -22,6 +18,10 @@ import k31.grc.ast.node.func.LocalFuncDecl;
 import k31.grc.ast.node.func.LocalFuncDef;
 import k31.grc.ast.node.func.LocalVarDef;
 import k31.grc.ast.node.func.VarIdentifierT;
+import k31.grc.ast.node.helper.Ref;
+import k31.grc.ast.node.helper.Root;
+import k31.grc.ast.node.helper.Type;
+import k31.grc.ast.node.helper.Val;
 import k31.grc.ast.node.stmt.StmtAssign;
 import k31.grc.ast.node.stmt.StmtBlock;
 import k31.grc.ast.node.stmt.StmtFuncCall;

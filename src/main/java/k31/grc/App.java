@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PushbackReader;
 
 import k31.grc.ast.node.NodeBase;
-import k31.grc.ast.node.aux.Root;
+import k31.grc.ast.node.helper.Root;
 import k31.grc.ast.visitor.GraphVizNodeDataVisitor;
 import k31.grc.cst.lexer.Lexer;
 import k31.grc.cst.lexer.LexerException;

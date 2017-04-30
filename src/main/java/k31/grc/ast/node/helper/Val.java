@@ -1,12 +1,12 @@
-package k31.grc.ast.node.aux;
+package k31.grc.ast.node.helper;
 
 import k31.grc.ast.node.NodeBase;
 import k31.grc.ast.visitor.Visitor;
 
-public class Type extends NodeBase {
+public class Val extends NodeBase {
 
-	public Type() {
-		super("type");
+	public Val() {
+		super("val");
 	}
 
 	@Override
