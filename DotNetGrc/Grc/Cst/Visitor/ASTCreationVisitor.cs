@@ -1078,19 +1078,7 @@ namespace Grc.Cst.Visitor
 
 			n.Header = (LocalFuncDecl)n.Children[0];
 
-			StmtBlock s = (StmtBlock)n.Children[n.Children.Count - 1];
-
-			// for (int i = 0; i < s.getChildren().size(); i++) {
-			//
-			// NodeBase c = s.getChildren().get(i);
-			//
-			// if (!(c instanceof StmtBase))
-			// return;
-			//
-			// s.getStmts().add((StmtBase) c);
-			// }
-
-			n.Block = s;
+			n.Block = (StmtBlock)n.Children[n.Children.Count - 1];
 
 			for (int j = 1; j < n.Children.Count - 1; j++)
 			{
@@ -1098,9 +1086,7 @@ namespace Grc.Cst.Visitor
 
 				if (c is LocalVarDef)
 				{
-					n.VarDef = (LocalVarDef)c;
-
-					getVars(c);
+					getVars((LocalVarDef)c);
 				}
 				else if (c is LocalFuncDecl)
 				{
@@ -1113,7 +1099,7 @@ namespace Grc.Cst.Visitor
 			}
 		}
 
-		private void getVars(NodeBase n)
+		private void getVars(LocalVarDef n)
 		{
 			if (!(n.Parent is LocalFuncDef))
 				return;
@@ -1202,5 +1188,4 @@ namespace Grc.Cst.Visitor
 			defaultOut(node);
 		}
 	}
-
 }

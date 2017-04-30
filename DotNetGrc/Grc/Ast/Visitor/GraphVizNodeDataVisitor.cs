@@ -300,10 +300,6 @@ namespace Grc.Ast.Visitor
 		{
 			Pre(n);
 
-			if (n.Parent is LocalFuncDef)
-				foreach (Variable v in ((LocalFuncDef)n.Parent).Vars)
-					AddString(v.ToString());
-
 			Post(n);
 		}
 
@@ -327,8 +323,15 @@ namespace Grc.Ast.Visitor
 
 			n.Header.Accept(this);
 
-			if (n.VarDef != null)
-				n.VarDef.Accept(this);
+			if (n.Vars.Count > 0)
+			{
+				Pre(new LocalVarDef("var"));
+
+				foreach (Variable v in n.Vars)
+					AddString(v.ToString());
+
+				Post(null);
+			}
 
 			foreach (LocalBase l in n.FuncDecls)
 				l.Accept(this);

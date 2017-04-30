@@ -12,7 +12,6 @@ namespace Grc.Ast.Node.Func
 	{
 		private LocalFuncDecl header;
 		private List<Variable> vars;
-		private LocalVarDef varDef;
 		private List<LocalFuncDecl> funcDecls;
 		private List<LocalFuncDef> funcDefs;
 		private StmtBlock block;
@@ -23,23 +22,17 @@ namespace Grc.Ast.Node.Func
 			set { this.header = value; }
 		}
 
-		public virtual IList<Variable> Vars
+		public virtual IReadOnlyList<Variable> Vars
 		{
 			get { return this.vars; }
 		}
 
-		public virtual LocalVarDef VarDef
-		{
-			get { return this.varDef; }
-			set { this.varDef = value; }
-		}
-
-		public virtual IList<LocalFuncDecl> FuncDecls
+		public virtual IReadOnlyList<LocalFuncDecl> FuncDecls
 		{
 			get { return this.funcDecls; }
 		}
 
-		public virtual IList<LocalFuncDef> FuncDefs
+		public virtual IReadOnlyList<LocalFuncDef> FuncDefs
 		{
 			get { return this.funcDefs; }
 		}
