@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Grc.Ast.Node.Expr
 {
-	abstract class ExprLValBase : ExprBase
+	public abstract class ExprLValBase : ExprBase
 	{
 		public ExprLValBase(string text) : base(text)
 		{

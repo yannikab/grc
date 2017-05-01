@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Type
 {
-	class DimIntegerT : NodeBase
+	public class DimIntegerT : NodeBase
 	{
 		private int dim;
 

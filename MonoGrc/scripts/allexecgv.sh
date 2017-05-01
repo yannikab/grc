@@ -2,4 +2,4 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-(cd ${DIR}/../..; for d in code/*; do echo $d; ./MonoGrc/scripts/fexecgv.sh $d; done)
+(cd ${DIR}/../..; for d in code/*/*; do echo $d; ./MonoGrc/scripts/fexecgv.sh $d; done)

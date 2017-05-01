@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Grc.Ast.Node.Type
 {
-	abstract class TypeReturnBase : NodeBase
+	public abstract class TypeReturnBase : NodeBase
 	{
 		public TypeReturnBase(string text) : base(text)
 		{

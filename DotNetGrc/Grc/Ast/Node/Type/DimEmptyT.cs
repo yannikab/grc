@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Type
 {
-	class DimEmptyT : NodeBase
+	public class DimEmptyT : NodeBase
 	{
 		public DimEmptyT(string text) : base(text)
 		{

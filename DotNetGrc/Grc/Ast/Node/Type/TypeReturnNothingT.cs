@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Type
 {
-	class TypeReturnNothingT : TypeReturnBase
+	public class TypeReturnNothingT : TypeReturnBase
 	{
 		public TypeReturnNothingT(string text) : base(text)
 		{

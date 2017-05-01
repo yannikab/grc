@@ -184,6 +184,7 @@
     <Compile Include="Cst\Visitor\GraphVizVisitor.cs" />
     <Compile Include="Cst\Visitor\GraphVizVisitorTokens.cs" />
     <Compile Include="Cst\Visitor\GVNode.cs" />
+    <Compile Include="Ast\Visitor\DepthFirstVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

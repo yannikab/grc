@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Func
 {
-	class VarIdentifierT : NodeBase
+	public class VarIdentifierT : NodeBase
 	{
 		public VarIdentifierT(string text) : base(text)
 		{

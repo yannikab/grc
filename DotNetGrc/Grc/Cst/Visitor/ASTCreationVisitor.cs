@@ -15,7 +15,7 @@ using k31.grc.cst.node;
 
 namespace Grc.Cst.Visitor
 {
-	class ASTCreationVisitor : DepthFirstAdapter
+	public class ASTCreationVisitor : DepthFirstAdapter
 	{
 		private Stack<NodeBase> stack;
 
@@ -821,6 +821,10 @@ namespace Grc.Cst.Visitor
 		{
 			defaultOut(node);
 
+			LocalVarDef n = (LocalVarDef)GetNode();
+
+			n.getVars();
+
 			PopNode();
 		}
 
@@ -899,123 +903,9 @@ namespace Grc.Cst.Visitor
 
 			LocalFuncDecl n = (LocalFuncDecl)GetNode();
 
+			n.ProcessFuncDecl();
+
 			PopNode();
-
-			processFuncDecl(n);
-		}
-
-		private void processFuncDecl(LocalFuncDecl n)
-		{
-			if (n.Children.Count < 1)
-				return;
-
-			for (int i = 0; i < n.Children.Count; i++)
-			{
-				NodeBase c = n.Children[i];
-
-				if (c is HRef)
-				{
-					getParams(c, true);
-				}
-				else if (c is HVal)
-				{
-					getParams(c, false);
-				}
-				else if (c is HType)
-				{
-					getReturnType((HType)c);
-				}
-				else
-				{
-					return;
-				}
-			}
-		}
-
-		private void getParams(NodeBase n, bool @ref)
-		{
-			if (!(n.Parent is LocalFuncDecl))
-				return;
-
-			LocalFuncDecl d = (LocalFuncDecl)n.Parent;
-
-			IList<string> @params = new List<string>();
-
-			for (int i = 0; i < n.Children.Count; i++)
-			{
-				NodeBase p = n.Children[i];
-
-				if (p is FParIdentifierT)
-				{
-					@params.Add(((FParIdentifierT)p).Text);
-				}
-				else if (p is HType)
-				{
-					addParams(d, @ref, @params, (HType)p);
-				}
-				else
-				{
-					return;
-				}
-			}
-		}
-
-		private void addParams(LocalFuncDecl d, bool @ref, IList<string> @params, HType t)
-		{
-			TypeDataBase type = null;
-
-			bool dimEmpty = false;
-
-			IList<int> dims = new List<int>();
-
-			for (int i = 0; i < t.Children.Count; i++)
-			{
-				NodeBase c = t.Children[i];
-
-				if (c is TypeDataBase)
-				{
-					type = (TypeDataBase)c;
-				}
-				else if (c is DimEmptyT)
-				{
-					if (dimEmpty)
-						return;
-
-					dimEmpty = true;
-				}
-				else if (c is DimIntegerT)
-				{
-					dims.Add(((DimIntegerT)c).Dim);
-				}
-				else
-				{
-					return;
-				}
-			}
-
-			if (type == null)
-				return;
-
-			for (int i = 0; i < @params.Count; i++)
-				d.AddParam(new Parameter(@params[i], @ref, type, dimEmpty, dims));
-		}
-
-		private void getReturnType(HType n)
-		{
-			if (!(n.Parent is LocalFuncDecl))
-				return;
-
-			LocalFuncDecl d = (LocalFuncDecl)n.Parent;
-
-			if (n.Children.Count != 1)
-				return;
-
-			NodeBase t = n.Children[0];
-
-			if (!(t is TypeReturnBase))
-				return;
-
-			d.ReturnType = (TypeReturnBase)t;
 		}
 
 		public override void inAFuncParams(AFuncParams node)
@@ -1078,84 +968,10 @@ namespace Grc.Cst.Visitor
 
 			n.Header = (LocalFuncDecl)n.Children[0];
 
-			n.Block = (StmtBlock)n.Children[n.Children.Count - 1];
-
 			for (int j = 1; j < n.Children.Count - 1; j++)
-			{
-				NodeBase c = n.Children[j];
+				n.AddLocal(n.Children[j] as LocalBase);
 
-				if (c is LocalVarDef)
-				{
-					getVars((LocalVarDef)c);
-				}
-				else if (c is LocalFuncDecl)
-				{
-					n.AddFuncDecl((LocalFuncDecl)c);
-				}
-				else if (c is LocalFuncDef)
-				{
-					n.AddFuncDef((LocalFuncDef)c);
-				}
-			}
-		}
-
-		private void getVars(LocalVarDef n)
-		{
-			if (!(n.Parent is LocalFuncDef))
-				return;
-
-			LocalFuncDef d = (LocalFuncDef)n.Parent;
-
-			IList<string> vars = new List<string>();
-
-			for (int i = 0; i < n.Children.Count; i++)
-			{
-				NodeBase p = n.Children[i];
-
-				if (p is VarIdentifierT)
-				{
-					vars.Add(((VarIdentifierT)p).Text);
-				}
-				else if (p is HType)
-				{
-					addVars(d, vars, (HType)p);
-				}
-				else
-				{
-					return;
-				}
-			}
-		}
-
-		private void addVars(LocalFuncDef d, IList<string> vars, HType t)
-		{
-			TypeDataBase type = null;
-
-			IList<int> dims = new List<int>();
-
-			for (int i = 0; i < t.Children.Count; i++)
-			{
-				NodeBase c = t.Children[i];
-
-				if (c is TypeDataBase)
-				{
-					type = (TypeDataBase)c;
-				}
-				else if (c is DimIntegerT)
-				{
-					dims.Add(((DimIntegerT)c).Dim);
-				}
-				else
-				{
-					return;
-				}
-			}
-
-			if (type == null)
-				return;
-
-			for (int i = 0; i < vars.Count; i++)
-				d.AddVar(new Variable(vars[i], type, dims));
+			n.Block = (StmtBlock)n.Children[n.Children.Count - 1];
 		}
 
 		public override void inAFuncLocalDef(AFuncLocalDef node)

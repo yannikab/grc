@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Expr
 {
-	abstract class ExprBinOpBase : ExprBase
+	public abstract class ExprBinOpBase : ExprBase
 	{
 		private ExprBase left;
 		private ExprBase right;

@@ -7,7 +7,7 @@ using Grc.Ast.Node.Type;
 
 namespace Grc.Ast.Node
 {
-	class Variable
+	public class Variable
 	{
 		private string id;
 		private TypeDataBase type;

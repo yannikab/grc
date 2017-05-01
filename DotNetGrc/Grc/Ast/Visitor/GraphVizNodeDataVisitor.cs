@@ -10,7 +10,7 @@ using Grc.Ast.Node.Type;
 
 namespace Grc.Ast.Visitor
 {
-	class GraphVizNodeDataVisitor : VisitorAdapter
+	class GraphVizNodeDataVisitor : DepthFirstVisitor
 	{
 		private IDictionary<NodeBase, int?> id = new Dictionary<NodeBase, int?>();
 
@@ -39,7 +39,7 @@ namespace Grc.Ast.Visitor
 			return text.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("[", "\\[").Replace("]", "\\]");
 		}
 
-		private void Pre(NodeBase n)
+		public override void DefaultPre(NodeBase n)
 		{
 			if (!id.ContainsKey(n))
 				id[n] = nextId++;
@@ -53,335 +53,55 @@ namespace Grc.Ast.Visitor
 			stack.Push(n);
 		}
 
-		private void Post(NodeBase n)
+		public override void DefaultPost(NodeBase n)
 		{
 			stack.Pop();
 		}
 
-		public override void Visit(Root n)
+		public override void Pre(Root n)
 		{
 			Console.WriteLine("graph\n{");
+		}
 
-			// Pre(n);
-
-			if (n.Children.Count == 1)
-				n.Children[0].Accept(this);
-
-			// Post(n);
-
+		public override void Post(Root n)
+		{
 			Console.WriteLine("}");
-		}
-
-		public override void Visit(ExprIntegerT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(ExprCharacterT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(ExprLValIdentifierT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(ExprLValStringT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(ExprLValIndexed n)
-		{
-			Pre(n);
-
-			n.Lval.Accept(this);
-
-			n.Expr.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(ExprBinOpBase n)
-		{
-			Pre(n);
-
-			n.Left.Accept(this);
-
-			n.Right.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(ExprPlus n)
-		{
-			Pre(n);
-
-			n.Expr.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(ExprMinus n)
-		{
-			Pre(n);
-
-			n.Expr.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(ExprFuncCall n)
-		{
-			Pre(n);
-
-			foreach (ExprBase e in n.Args)
-				e.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(CondRelOpBase n)
-		{
-			Pre(n);
-
-			n.Left.Accept(this);
-
-			n.Right.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(CondOr n)
-		{
-			Pre(n);
-
-			n.Left.Accept(this);
-
-			n.Right.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(CondAnd n)
-		{
-			Pre(n);
-
-			n.Left.Accept(this);
-
-			n.Right.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(CondNot n)
-		{
-			Pre(n);
-
-			n.Cond.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(StmtNoOpT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(StmtBlock n)
-		{
-			Pre(n);
-
-			foreach (StmtBase s in n.Stmts)
-				s.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(StmtAssign n)
-		{
-			Pre(n);
-
-			n.Lval.Accept(this);
-
-			n.Expr.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(StmtIfThen n)
-		{
-			Pre(n);
-
-			n.Cond.Accept(this);
-
-			n.Stmt.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(StmtIfThenElse n)
-		{
-			Pre(n);
-
-			n.Cond.Accept(this);
-
-			n.StmtThen.Accept(this);
-
-			n.StmtElse.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(StmtWhileDo n)
-		{
-			Pre(n);
-
-			n.Cond.Accept(this);
-
-			n.Stmt.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(StmtFuncCall n)
-		{
-			Pre(n);
-
-			foreach (ExprBase e in n.Args)
-				e.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(StmtReturn n)
-		{
-			Pre(n);
-
-			if (n.Expr != null)
-				n.Expr.Accept(this);
-
-			Post(n);
-		}
-
-		public override void Visit(HRef n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(HVal n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(FParIdentifierT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(LocalVarDef n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(VarIdentifierT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(HType n)
-		{
-			Pre(n);
-
-			Post(n);
 		}
 
 		public override void Visit(LocalFuncDef n)
 		{
-			Pre(n);
+			DefaultPre(n);
 
 			n.Header.Accept(this);
 
-			if (n.Vars.Count > 0)
-			{
-				Pre(new LocalVarDef("var"));
-
-				foreach (Variable v in n.Vars)
-					AddString(v.ToString());
-
-				Post(null);
-			}
-
-			foreach (LocalBase l in n.FuncDecls)
-				l.Accept(this);
-
-			foreach (LocalBase l in n.FuncDefs)
+			foreach (LocalBase l in n.Locals)
 				l.Accept(this);
 
 			n.Block.Accept(this);
 
-			Post(n);
+			DefaultPost(n);
+		}
+
+		public override void Visit(LocalVarDef n)
+		{
+			DefaultPre(n);
+
+			foreach (var v in n.Vars)
+				AddString(v.ToString());
+
+			DefaultPost(n);
 		}
 
 		public override void Visit(LocalFuncDecl n)
 		{
-			Pre(n);
+			DefaultPre(n);
 
 			foreach (Parameter p in n.Params)
 				AddString(p.ToString());
 
 			n.ReturnType.Accept(this);
 
-			Post(n);
-		}
-
-		public override void Visit(TypeDataBase n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(TypeReturnNothingT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(DimEmptyT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public override void Visit(DimIntegerT n)
-		{
-			Pre(n);
-
-			Post(n);
+			DefaultPost(n);
 		}
 	}
 }

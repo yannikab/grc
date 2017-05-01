@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Grc.Ast.Node.Func
 {
-	abstract class LocalBase : NodeBase
+	public abstract class LocalBase : NodeBase
 	{
 		public LocalBase(string @string) : base(@string)
 		{

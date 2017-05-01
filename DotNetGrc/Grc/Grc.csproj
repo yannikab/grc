@@ -214,6 +214,7 @@
     <Compile Include="Ast\Node\Type\TypeReturnBase.cs" />
     <Compile Include="Ast\Node\Type\TypeReturnNothingT.cs" />
     <Compile Include="Ast\Node\Variable.cs" />
+    <Compile Include="Ast\Visitor\DepthFirstVisitor.cs" />
     <Compile Include="Ast\Visitor\GraphVizNodeDataVisitor.cs" />
     <Compile Include="Ast\Visitor\VisitorAdapter.cs" />
     <Compile Include="Cst\Visitor\ASTCreationVisitor.cs" />

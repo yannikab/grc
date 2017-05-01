@@ -12,7 +12,7 @@ using Grc.Ast.Node.Type;
 
 namespace Grc.Ast.Visitor
 {
-	interface IVisitor
+	public interface IVisitor
 	{
 		void Visit(Root n);
 

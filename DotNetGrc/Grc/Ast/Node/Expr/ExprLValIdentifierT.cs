@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Expr
 {
-	class ExprLValIdentifierT : ExprLValBase
+	public class ExprLValIdentifierT : ExprLValBase
 	{
 		public ExprLValIdentifierT(string text) : base(text)
 		{

@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Helper
 {
-	class HType : NodeBase
+	public class HType : NodeBase
 	{
 		public HType() : base("type")
 		{

@@ -8,7 +8,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Stmt
 {
-	class StmtIfThenElse : StmtBase
+	public class StmtIfThenElse : StmtBase
 	{
 		private CondBase cond;
 		private StmtBase stmtThen;

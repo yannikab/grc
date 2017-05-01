@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Stmt
 {
-	class StmtNoOpT : StmtBase
+	public class StmtNoOpT : StmtBase
 	{
 		public StmtNoOpT(string text) : base(text)
 		{

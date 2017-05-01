@@ -7,7 +7,7 @@ using Grc.Ast.Node.Type;
 
 namespace Grc.Ast.Node
 {
-	class Parameter
+	public class Parameter
 	{
 		private bool @ref;
 		private string id;
