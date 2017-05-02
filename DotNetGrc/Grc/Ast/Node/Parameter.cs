@@ -10,14 +10,19 @@ namespace Grc.Ast.Node
 	public class Parameter
 	{
 		private bool @ref;
-		private string id;
+		private string name;
 		private TypeDataBase type;
 		private bool nodim;
 		private IList<int> dims;
 
-		public Parameter(string id, bool @ref, TypeDataBase type, bool nodim, IList<int> dims)
+		public string Name
 		{
-			this.id = id;
+			get { return name; }
+		}
+
+		public Parameter(string text, bool @ref, TypeDataBase type, bool nodim, IList<int> dims)
+		{
+			this.name = text;
 			this.@ref = @ref;
 			this.type = type;
 			this.nodim = nodim;
@@ -28,7 +33,7 @@ namespace Grc.Ast.Node
 		{
 			string t = @ref ? "ref " : "";
 
-			t += id + "\n" + type.Text;
+			t += name + "\n" + type.Text;
 
 			if (nodim)
 				t += "[]";

@@ -185,6 +185,16 @@
     <Compile Include="Cst\Visitor\GraphVizVisitorTokens.cs" />
     <Compile Include="Cst\Visitor\GVNode.cs" />
     <Compile Include="Ast\Visitor\DepthFirstVisitor.cs" />
+    <Compile Include="Semantic\SymbolTable\Exception\NoCurrentScopeException.cs" />
+    <Compile Include="Semantic\SymbolTable\Exception\SymbolAlreadyInScopeException.cs" />
+    <Compile Include="Semantic\SymbolTable\Exception\SymbolNotDefinedException.cs" />
+    <Compile Include="Semantic\SymbolTable\Exception\SymbolTableException.cs" />
+    <Compile Include="Semantic\SymbolTable\Symbol\SymbolBase.cs" />
+    <Compile Include="Semantic\SymbolTable\Symbol\SymbolFunc.cs" />
+    <Compile Include="Semantic\SymbolTable\Symbol\SymbolVar.cs" />
+    <Compile Include="Semantic\SymbolTable\ISymbolTable.cs" />
+    <Compile Include="Semantic\Visitor\SemanticVisitor.cs" />
+    <Compile Include="Semantic\SymbolTable\StackSymbolTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

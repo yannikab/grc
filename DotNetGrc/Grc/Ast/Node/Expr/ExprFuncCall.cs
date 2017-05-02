@@ -9,13 +9,12 @@ namespace Grc.Ast.Node.Expr
 {
 	public class ExprFuncCall : ExprBase
 	{
-		private string id;
+		private string name;
 		private List<ExprBase> args;
 
-		public virtual string Id
+		public virtual string Name
 		{
-			get { return this.id; }
-			set { this.id = value; }
+			get { return this.name; }
 		}
 
 		public virtual IReadOnlyList<ExprBase> Args
@@ -23,9 +22,10 @@ namespace Grc.Ast.Node.Expr
 			get { return this.args; }
 		}
 
-		public ExprFuncCall(string text) : base(text)
+		public ExprFuncCall(string text)
+			: base(text)
 		{
-			this.id = text;
+			this.name = text.Replace("()", "");
 
 			this.args = new List<ExprBase>();
 		}

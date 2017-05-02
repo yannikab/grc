@@ -24,7 +24,8 @@ namespace Grc.Ast.Node.Expr
 			set { this.expr = value; }
 		}
 
-		public ExprLValIndexed(string text) : base(text)
+		public ExprLValIndexed(string text)
+			: base(text)
 		{
 		}
 

@@ -10,13 +10,13 @@ namespace Grc.Ast.Node.Stmt
 {
 	public class StmtFuncCall : StmtBase
 	{
-		private string id;
+		private string name;
 		private List<ExprBase> args;
 
-		public virtual string Id
+		public virtual string Name
 		{
-			get { return this.id; }
-			set { this.id = value; }
+			get { return this.name; }
+			set { this.name = value; }
 		}
 
 		public virtual IReadOnlyList<ExprBase> Args
@@ -24,7 +24,8 @@ namespace Grc.Ast.Node.Stmt
 			get { return this.args; }
 		}
 
-		public StmtFuncCall() : base("()")
+		public StmtFuncCall()
+			: base("()")
 		{
 			this.args = new List<ExprBase>();
 		}
@@ -41,7 +42,7 @@ namespace Grc.Ast.Node.Stmt
 
 		public override string ToString()
 		{
-			return id;
+			return name;
 		}
 	}
 }

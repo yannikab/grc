@@ -9,8 +9,17 @@ namespace Grc.Ast.Node.Expr
 {
 	public class ExprLValIdentifierT : ExprLValBase
 	{
-		public ExprLValIdentifierT(string text) : base(text)
+		private string name;
+
+		public string Name
 		{
+			get { return name; }
+		}
+
+		public ExprLValIdentifierT(string text)
+			: base(text)
+		{
+			this.name = text;
 		}
 
 		public override void Accept(IVisitor v)

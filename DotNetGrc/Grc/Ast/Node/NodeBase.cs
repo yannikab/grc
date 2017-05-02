@@ -10,7 +10,6 @@ namespace Grc.Ast.Node
 	public abstract class NodeBase
 	{
 		private NodeBase parent;
-
 		private List<NodeBase> children;
 
 		private String text;
@@ -25,12 +24,12 @@ namespace Grc.Ast.Node
 			get { return children; }
 		}
 
-		public String Text
+		public string Text
 		{
 			get { return text; }
 		}
 
-		public NodeBase(String text)
+		public NodeBase(string text)
 		{
 			this.text = text;
 

@@ -553,7 +553,7 @@ namespace Grc.Cst.Visitor
 
 			ExprFuncCall c = (ExprFuncCall)n.Children[0];
 
-			n.Id = c.Id;
+			n.Name = c.Name;
 
 			for (int i = 0; i < c.Children.Count; i++)
 				if (!(c.Children[i] is ExprBase))

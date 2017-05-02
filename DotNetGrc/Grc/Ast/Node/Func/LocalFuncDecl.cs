@@ -17,7 +17,6 @@ namespace Grc.Ast.Node.Func
 		public virtual string Name
 		{
 			get { return this.name; }
-			set { this.name = value; }
 		}
 
 		public virtual TypeReturnBase ReturnType
@@ -34,7 +33,7 @@ namespace Grc.Ast.Node.Func
 		public LocalFuncDecl(string text)
 			: base(text)
 		{
-			this.name = text;
+			this.name = text.Replace("()", "");
 
 			parms = new List<Parameter>();
 		}
