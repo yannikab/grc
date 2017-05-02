@@ -11,6 +11,9 @@ using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.node;
 using k31.grc.cst.parser;
+using Grc.Cst.Visitor.GraphViz;
+using Grc.Cst.Visitor.ASTCreation;
+using Grc.Ast.Visitor.GraphViz;
 
 namespace Grc
 {
@@ -105,6 +108,8 @@ namespace Grc
 				System.Console.WriteLine(string.Format("(available modules: %s, %s, %s)", "lex", "parse", "graphviz"));
 				return;
 			}
+
+			//System.Console.ReadLine();
 		}
 
 		private static void Lex(string filename)
@@ -147,7 +152,7 @@ namespace Grc
 				e.printStackTrace();
 			}
 
-			System.Console.WriteLine("failure");
+			System.Console.WriteLine("lex failure");
 		}
 
 		private static void ParseCst(string filename)
@@ -171,7 +176,7 @@ namespace Grc
 			try
 			{
 				parser.parse();
-				System.Console.WriteLine("success");
+				System.Console.WriteLine("parse cst success");
 
 				return;
 			}
@@ -191,7 +196,7 @@ namespace Grc
 				e.printStackTrace();
 			}
 
-			System.Console.WriteLine("failure");
+			System.Console.WriteLine("parse cst failure");
 		}
 
 		private static void ParseAst(string filename)
@@ -215,7 +220,7 @@ namespace Grc
 			try
 			{
 				parser.parse().apply(new ASTCreationVisitor(new Root()));
-				System.Console.WriteLine("success");
+				System.Console.WriteLine("parse ast success");
 
 				return;
 			}
@@ -235,7 +240,7 @@ namespace Grc
 				e.printStackTrace();
 			}
 
-			System.Console.WriteLine("failure");
+			System.Console.WriteLine("parse ast failure");
 		}
 
 		private static void GraphvizCst(string filename, bool simple)

@@ -5,7 +5,7 @@ using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
 using Grc.Ast.Visitor;
 using Grc.Semantic.SymbolTable;
-using Grc.Semantic.SymbolTable.Exception;
+using Grc.Semantic.SymbolTable.Exceptions;
 using Grc.Semantic.SymbolTable.Symbol;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Grc.Semantic.Visitor
+namespace Grc.Ast.Visitor.Semantic
 {
 	public class SemanticVisitor : DepthFirstVisitor
 	{
@@ -76,9 +76,11 @@ namespace Grc.Semantic.Visitor
 			{
 				st.Lookup(new SymbolVar(n.Name));
 			}
-			catch (SymbolNotDefinedException)
+			catch (SymbolNotDefinedException ex)
 			{
-				throw;
+				string m = string.Format("{0}: {1} {2}", ex.GetType().Name, n.Location, ex.Message);
+
+				throw new SymbolNotDefinedException(m, ex);
 			}
 		}
 
@@ -88,9 +90,11 @@ namespace Grc.Semantic.Visitor
 			{
 				st.Lookup(new SymbolFunc(n.Name));
 			}
-			catch (SymbolNotDefinedException)
+			catch (SymbolNotDefinedException ex)
 			{
-				throw;
+				string m = string.Format("{0}: {1} {2}", ex.GetType().Name, n.Location, ex.Message);
+
+				throw new SymbolNotDefinedException(m, ex);
 			}
 		}
 
@@ -100,9 +104,11 @@ namespace Grc.Semantic.Visitor
 			{
 				st.Lookup(new SymbolFunc(n.Name));
 			}
-			catch (SymbolNotDefinedException)
+			catch (SymbolNotDefinedException ex)
 			{
-				throw;
+				string m = string.Format("{0}: {1} {2}", ex.GetType().Name, n.Location, ex.Message);
+
+				throw new SymbolNotDefinedException(m, ex);
 			}
 		}
 	}

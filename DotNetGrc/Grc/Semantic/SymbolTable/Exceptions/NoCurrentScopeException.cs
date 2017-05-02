@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Grc.Semantic.SymbolTable.Exception
+namespace Grc.Semantic.SymbolTable.Exceptions
 {
 	public class NoCurrentScopeException : SymbolTableException
 	{

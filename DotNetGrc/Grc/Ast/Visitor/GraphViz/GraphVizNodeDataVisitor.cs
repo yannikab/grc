@@ -8,7 +8,7 @@ using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
 using Grc.Ast.Node.Type;
 
-namespace Grc.Ast.Visitor
+namespace Grc.Ast.Visitor.GraphViz
 {
 	class GraphVizNodeDataVisitor : DepthFirstVisitor
 	{

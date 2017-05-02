@@ -12,27 +12,24 @@ namespace Grc.Ast.Node.Expr
 		private string name;
 		private List<ExprBase> args;
 
-		public virtual string Name
-		{
-			get { return this.name; }
-		}
+		private int line;
+		private int pos;
 
-		public virtual IReadOnlyList<ExprBase> Args
-		{
-			get { return this.args; }
-		}
+		public string Name { get { return name; } }
+		public IReadOnlyList<ExprBase> Args { get { return args; } }
 
-		public ExprFuncCall(string text)
+		public int Line { get { return line; } }
+		public int Pos { get { return pos; } }
+		public string Location { get { return string.Format("[{0}, {1}]", line, pos); } }
+
+		public ExprFuncCall(string text, IEnumerable<ExprBase> args, int line, int pos)
 			: base(text)
 		{
 			this.name = text.Replace("()", "");
+			this.args = new List<ExprBase>(args);
 
-			this.args = new List<ExprBase>();
-		}
-
-		public virtual void AddArg(ExprBase arg)
-		{
-			this.args.Add(arg);
+			this.line = line;
+			this.pos = pos;
 		}
 
 		public override void Accept(IVisitor v)

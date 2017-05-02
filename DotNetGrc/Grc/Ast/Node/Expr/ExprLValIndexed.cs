@@ -12,21 +12,14 @@ namespace Grc.Ast.Node.Expr
 		private ExprLValBase lval;
 		private ExprBase expr;
 
-		public virtual ExprLValBase Lval
-		{
-			get { return this.lval; }
-			set { this.lval = value; }
-		}
+		public ExprLValBase Lval { get { return lval; } }
+		public ExprBase Expr { get { return expr; } }
 
-		public virtual ExprBase Expr
+		public ExprLValIndexed(string text, ExprLValBase lval, ExprBase expr)
+			: base(text, lval.Line, lval.Pos)
 		{
-			get { return this.expr; }
-			set { this.expr = value; }
-		}
-
-		public ExprLValIndexed(string text)
-			: base(text)
-		{
+			this.lval = lval;
+			this.expr = expr;
 		}
 
 		public override void Accept(IVisitor v)

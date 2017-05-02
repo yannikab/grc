@@ -1,6 +1,6 @@
 ﻿using k31.grc.cst.node;
 
-namespace Grc.Cst.Visitor
+namespace Grc.Cst.Visitor.GraphViz
 {
 	public class GraphVizTraversalTokens : GraphVizTraversal
 	{

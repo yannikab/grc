@@ -9,8 +9,18 @@ namespace Grc.Ast.Node.Expr
 {
 	public class ExprIntegerT : ExprBase
 	{
-		public ExprIntegerT(string text) : base(text)
+		private int line;
+		private int pos;
+
+		public int Line { get { return line; } }
+		public int Pos { get { return pos; } }
+		public string Location { get { return string.Format("[{0}, {1}]", line, pos); } }
+
+		public ExprIntegerT(string text, int line, int pos)
+			: base(text)
 		{
+			this.line = line;
+			this.pos = pos;
 		}
 
 		public override void Accept(IVisitor v)

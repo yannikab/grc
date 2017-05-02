@@ -7,33 +7,27 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node
 {
-	public abstract class NodeBase
+	public class NodeBase
 	{
 		private NodeBase parent;
 		private List<NodeBase> children;
 
 		private String text;
 
-		public NodeBase Parent
-		{
-			get { return parent; }
-		}
+		public NodeBase Parent { get { return parent; } }
+		public IReadOnlyList<NodeBase> Children { get { return children; } }
 
-		public IReadOnlyList<NodeBase> Children
-		{
-			get { return children; }
-		}
+		public string Text { get { return text; } }
 
-		public string Text
+		public NodeBase()
 		{
-			get { return text; }
+			this.children = new List<NodeBase>();
 		}
 
 		public NodeBase(string text)
+			: this()
 		{
 			this.text = text;
-
-			this.children = new List<NodeBase>();
 		}
 
 		public void AddChild(NodeBase c)
@@ -43,7 +37,27 @@ namespace Grc.Ast.Node
 			children.Add(c);
 		}
 
-		public abstract void Accept(IVisitor v);
+		public void ReplaceWith(NodeBase node)
+		{
+			if (parent != null)
+			{
+				int i = parent.children.IndexOf(this);
+				parent.children.RemoveAt(i);
+				parent.children.Insert(i, node);
+			}
+
+			node.parent = this.parent;
+			this.parent = null;
+
+			foreach (NodeBase c in this.children)
+				node.AddChild(c);
+
+			children.Clear();
+		}
+
+		public virtual void Accept(IVisitor v)
+		{
+		}
 
 		public override string ToString()
 		{

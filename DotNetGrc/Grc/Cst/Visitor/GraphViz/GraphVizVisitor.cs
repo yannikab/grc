@@ -2,7 +2,7 @@
 using k31.grc.cst.analysis;
 using k31.grc.cst.node;
 
-namespace Grc.Cst.Visitor
+namespace Grc.Cst.Visitor.GraphViz
 {
 	public class GraphVizTraversal : DepthFirstAdapter
 	{

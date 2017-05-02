@@ -13,36 +13,29 @@ namespace Grc.Ast.Node.Stmt
 		private string name;
 		private List<ExprBase> args;
 
-		public virtual string Name
-		{
-			get { return this.name; }
-			set { this.name = value; }
-		}
+		private int line;
+		private int pos;
 
-		public virtual IReadOnlyList<ExprBase> Args
-		{
-			get { return this.args; }
-		}
+		public string Name { get { return name; } }
+		public IReadOnlyList<ExprBase> Args { get { return args; } }
 
-		public StmtFuncCall()
-			: base("()")
-		{
-			this.args = new List<ExprBase>();
-		}
+		public int Line { get { return line; } }
+		public int Pos { get { return pos; } }
+		public string Location { get { return string.Format("[{0}, {1}]", line, pos); } }
 
-		public virtual void AddArg(ExprBase arg)
+		public StmtFuncCall(ExprFuncCall funcall)
+			: base(funcall.Text)
 		{
-			this.args.Add(arg);
+			this.name = funcall.Name;
+			this.args = new List<ExprBase>(funcall.Args);
+
+			this.line = funcall.Line;
+			this.pos = funcall.Pos;
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
-		}
-
-		public override string ToString()
-		{
-			return name;
 		}
 	}
 }

@@ -11,13 +11,10 @@ namespace Grc.Ast.Node.Expr
 	{
 		private string name;
 
-		public string Name
-		{
-			get { return name; }
-		}
+		public string Name { get { return name; } }
 
-		public ExprLValIdentifierT(string text)
-			: base(text)
+		public ExprLValIdentifierT(string text, int line, int pos)
+			: base(text, line, pos)
 		{
 			this.name = text;
 		}

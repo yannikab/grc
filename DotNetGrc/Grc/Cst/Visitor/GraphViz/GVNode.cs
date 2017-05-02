@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Grc.Cst.Visitor
+namespace Grc.Cst.Visitor.GraphViz
 {
 	public class GVNode
 	{

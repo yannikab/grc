@@ -2,7 +2,7 @@
 using Grc.Semantic;
 using Grc.Semantic.SymbolTable;
 using Grc.Semantic.SymbolTable.Symbol;
-using Grc.Semantic.SymbolTable.Exception;
+using Grc.Semantic.SymbolTable.Exceptions;
 using NUnit.Framework;
 
 namespace GrcTests.Semantic

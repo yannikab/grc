@@ -1,14 +1,15 @@
-﻿using System;
-using java.io;
-using k31.grc.cst.parser;
-using k31.grc.cst.lexer;
-using Grc.Ast.Node;
+﻿using Grc.Ast.Node;
 using Grc.Ast.Node.Helper;
+using Grc.Ast.Visitor.Semantic;
 using Grc.Cst.Visitor;
-using Grc.Semantic.Visitor;
+using Grc.Cst.Visitor.ASTCreation;
 using Grc.Semantic;
-using Grc.Semantic.SymbolTable.Exception;
+using Grc.Semantic.SymbolTable.Exceptions;
+using java.io;
+using k31.grc.cst.lexer;
+using k31.grc.cst.parser;
 using NUnit.Framework;
+using System;
 
 namespace GrcTests.Semantic
 {

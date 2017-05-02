@@ -9,8 +9,14 @@ namespace Grc.Ast.Node.Expr
 {
 	public class ExprCharacterT : ExprBase
 	{
-		public ExprCharacterT(string text) : base(text)
+		private int line;
+		private int pos;
+
+		public ExprCharacterT(string text, int line, int pos)
+			: base(text)
 		{
+			this.line = line;
+			this.pos = pos;
 		}
 
 		public override void Accept(IVisitor v)
