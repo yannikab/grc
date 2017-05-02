@@ -1,59 +1,50 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Grc.Semantic;
 using Grc.Semantic.SymbolTable;
 using Grc.Semantic.SymbolTable.Symbol;
 using Grc.Semantic.SymbolTable.Exception;
+using NUnit.Framework;
 
 namespace GrcTests.Semantic
 {
-	[TestClass]
+	[TestFixture]
 	public class SymbolTableTests
 	{
-		[ClassInitialize]
-		public static void Initialize(TestContext tc)
-		{
-		}
-
-		[ClassCleanup]
-		public static void Cleanup()
-		{
-		}
-
-		[TestMethod]
-		[ExpectedException(typeof(NoCurrentScopeException))]
+		[Test]
 		public void TestExitWithoutEnter()
 		{
 			ISymbolTable ist = new StackSymbolTable();
-			ist.Exit();
+			Assert.Throws<NoCurrentScopeException>(() => ist.Exit());
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(NoCurrentScopeException))]
+		[Test]
 		public void TestInsertWithoutEnter()
 		{
 			ISymbolTable ist = new StackSymbolTable();
-			ist.Insert(new SymbolVar("test"));
+			Assert.Throws<NoCurrentScopeException>
+				(() => ist.Insert(new SymbolVar("test")));
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(NoCurrentScopeException))]
+		[Test]
+
 		public void TestLookupWithoutEnter()
 		{
 			ISymbolTable ist = new StackSymbolTable();
-			ist.Lookup(new SymbolVar("test"));
+			Assert.Throws<NoCurrentScopeException>
+				(() => ist.Lookup(new SymbolVar("test")));
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(SymbolNotDefinedException))]
+		[Test]
 		public void TestEnterLookup()
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			Assert.IsNull(ist.Lookup(new SymbolVar("test")));
+
+			Assert.Throws<SymbolNotDefinedException>
+				(() => ist.Lookup(new SymbolVar("test")));
 		}
 
-		[TestMethod]
+		[Test]
 		public void EnterInsert()
 		{
 			ISymbolTable ist = new StackSymbolTable();
@@ -61,7 +52,7 @@ namespace GrcTests.Semantic
 			ist.Insert(new SymbolVar("test"));
 		}
 
-		[TestMethod]
+		[Test]
 		public void EnterInsertLookup()
 		{
 			ISymbolTable ist = new StackSymbolTable();
@@ -70,8 +61,7 @@ namespace GrcTests.Semantic
 			Assert.AreEqual(ist.Lookup(new SymbolVar("test")), new SymbolVar("test"));
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(NoCurrentScopeException))]
+		[Test]
 		public void EnterInsertExitLookup()
 		{
 			ISymbolTable ist = new StackSymbolTable();
@@ -79,11 +69,11 @@ namespace GrcTests.Semantic
 			ist.Insert(new SymbolVar("test"));
 			Assert.AreEqual(ist.Lookup(new SymbolVar("test")), new SymbolVar("test"));
 			ist.Exit();
-			ist.Lookup(new SymbolVar("test"));
+			Assert.Throws<NoCurrentScopeException>
+				(() => ist.Lookup(new SymbolVar("test")));
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(NoCurrentScopeException))]
+		[Test]
 		public void EnterInsertExitInsert()
 		{
 			ISymbolTable ist = new StackSymbolTable();
@@ -91,10 +81,11 @@ namespace GrcTests.Semantic
 			ist.Insert(new SymbolVar("test"));
 			Assert.AreEqual(ist.Lookup(new SymbolVar("test")), new SymbolVar("test"));
 			ist.Exit();
-			ist.Insert(new SymbolVar("test2"));
+			Assert.Throws<NoCurrentScopeException>
+				(() => ist.Insert(new SymbolVar("test2")));
 		}
 
-		[TestMethod]
+		[Test]
 		public void EnterInsertManyExit()
 		{
 			ISymbolTable ist = new StackSymbolTable();
@@ -109,7 +100,7 @@ namespace GrcTests.Semantic
 			ist.Exit();
 		}
 
-		[TestMethod]
+		[Test]
 		public void EnterInsertEnterLookup()
 		{
 			ISymbolTable ist = new StackSymbolTable();
@@ -120,7 +111,7 @@ namespace GrcTests.Semantic
 			Assert.AreEqual(ist.Lookup(new SymbolVar("test")), new SymbolVar("test"));
 		}
 
-		[TestMethod]
+		[Test]
 		public void EnterInsertEnterInsertSameExitExit()
 		{
 			ISymbolTable ist = new StackSymbolTable();
@@ -136,8 +127,7 @@ namespace GrcTests.Semantic
 			ist.Exit();
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(SymbolNotDefinedException))]
+		[Test]
 		public void EnterInsertEnterInsertDiffExit()
 		{
 			ISymbolTable ist = new StackSymbolTable();
@@ -151,10 +141,11 @@ namespace GrcTests.Semantic
 			String s = ist.ToString();
 			ist.Exit();
 			Assert.AreEqual(ist.Lookup(new SymbolVar("test1")), new SymbolVar("test1"));
-			ist.Lookup(new SymbolVar("test2"));
+			Assert.Throws<SymbolNotDefinedException>
+				(() => ist.Lookup(new SymbolVar("test2")));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestCount()
 		{
 			ISymbolTable ist = new StackSymbolTable();

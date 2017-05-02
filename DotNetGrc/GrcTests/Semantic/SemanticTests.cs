@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using java.io;
 using k31.grc.cst.parser;
 using k31.grc.cst.lexer;
@@ -9,10 +8,11 @@ using Grc.Cst.Visitor;
 using Grc.Semantic.Visitor;
 using Grc.Semantic;
 using Grc.Semantic.SymbolTable.Exception;
+using NUnit.Framework;
 
 namespace GrcTests.Semantic
 {
-	[TestClass]
+	[TestFixture]
 	public class SemanticTests
 	{
 		private static void AcceptSemanticVisitor(string program)
@@ -25,7 +25,7 @@ namespace GrcTests.Semantic
 		}
 
 
-		[TestMethod]
+		[Test]
 		public void TestSimple()
 		{
 			string program = @"
@@ -39,8 +39,7 @@ fun program() : nothing
 		}
 
 
-		[TestMethod]
-		[ExpectedException(typeof(SymbolAlreadyInScopeException))]
+		[Test]
 		public void TestSameVarVar()
 		{
 			string program = @"
@@ -54,12 +53,12 @@ var a : char;
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			Assert.Throws<SymbolAlreadyInScopeException>
+				(() => AcceptSemanticVisitor(program));
 		}
 
 
-		[TestMethod]
-		[ExpectedException(typeof(SymbolAlreadyInScopeException))]
+		[Test]
 		public void TestSameVarPar()
 		{
 			string program = @"
@@ -76,12 +75,12 @@ fun program() : nothing
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			Assert.Throws<SymbolAlreadyInScopeException>
+				(() => AcceptSemanticVisitor(program));
 		}
 
 
-		[TestMethod]
-		[ExpectedException(typeof(SymbolAlreadyInScopeException))]
+		[Test]
 		public void TestSameParPar()
 		{
 			string program = @"
@@ -95,11 +94,12 @@ fun program() : nothing
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			Assert.Throws<SymbolAlreadyInScopeException>
+				(() => AcceptSemanticVisitor(program));
 		}
 
 
-		[TestMethod]
+		[Test]
 		public void TestSameVarFun()
 		{
 			string program = @"
@@ -119,8 +119,7 @@ var foo : int;
 		}
 
 
-		[TestMethod]
-		[ExpectedException(typeof(SymbolNotDefinedException))]
+		[Test]
 		public void TestNotDefinedVar()
 		{
 			string program = @"
@@ -131,12 +130,12 @@ fun program() : nothing
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			Assert.Throws<SymbolNotDefinedException>
+				(() => AcceptSemanticVisitor(program));
 		}
 
 
-		[TestMethod]
-		[ExpectedException(typeof(SymbolNotDefinedException))]
+		[Test]
 		public void TestNotDefinedFun()
 		{
 			string program = @"
@@ -147,12 +146,12 @@ fun program() : nothing
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			Assert.Throws<SymbolNotDefinedException>
+				(() => AcceptSemanticVisitor(program));
 		}
 
 
-		[TestMethod]
-		[ExpectedException(typeof(SymbolNotDefinedException))]
+		[Test]
 		public void TestNotDefinedVarFun()
 		{
 			string program = @"
@@ -163,11 +162,12 @@ fun program() : nothing
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			Assert.Throws<SymbolNotDefinedException>
+					(() => AcceptSemanticVisitor(program));
 		}
 
 
-		[TestMethod]
+		[Test]
 		public void TestDefinedVar()
 		{
 			string program = @"
@@ -185,7 +185,7 @@ var a : int;
 		}
 
 
-		[TestMethod]
+		[Test]
 		public void TestDefinedPar()
 		{
 			string program = @"
@@ -204,7 +204,7 @@ fun program() : nothing
 		}
 
 
-		[TestMethod]
+		[Test]
 		public void TestDefinedFun()
 		{
 			string program = @"

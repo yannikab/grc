@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grc", "Grc\Grc.csproj", "{9E129899-F68B-4D30-848F-973705F34C98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrcTests", "GrcTests\GrcTests.csproj", "{EEE0ED49-9BF6-409A-99CE-FCBBE2D89AFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,5 +15,9 @@ Global
 		{9E129899-F68B-4D30-848F-973705F34C98}.Debug|x86.Build.0 = Debug|x86
 		{9E129899-F68B-4D30-848F-973705F34C98}.Release|x86.ActiveCfg = Release|x86
 		{9E129899-F68B-4D30-848F-973705F34C98}.Release|x86.Build.0 = Release|x86
+		{EEE0ED49-9BF6-409A-99CE-FCBBE2D89AFE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EEE0ED49-9BF6-409A-99CE-FCBBE2D89AFE}.Debug|x86.Build.0 = Debug|Any CPU
+		{EEE0ED49-9BF6-409A-99CE-FCBBE2D89AFE}.Release|x86.ActiveCfg = Release|Any CPU
+		{EEE0ED49-9BF6-409A-99CE-FCBBE2D89AFE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
