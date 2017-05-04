@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using k31.grc.cst.analysis;
 using k31.grc.cst.node;
 
@@ -27,7 +31,7 @@ namespace Grc.Cst.Visitor.GraphViz
 			// System.out.println();
 		}
 
-		protected internal virtual void addNode(Node node, string text)
+		protected void addNode(Node node, string text)
 		{
 			GVNode n = new GVNode(nodeNumber, text);
 			stack.Peek().addChild(n);

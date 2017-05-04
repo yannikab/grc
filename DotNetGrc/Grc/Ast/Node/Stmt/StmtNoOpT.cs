@@ -9,8 +9,21 @@ namespace Grc.Ast.Node.Stmt
 {
 	public class StmtNoOpT : StmtBase
 	{
-		public StmtNoOpT(string text) : base(text)
+		private string semicolon;
+		private int line;
+		private int pos;
+
+		public override string Text { get { return semicolon; } }
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public StmtNoOpT(string semicolon, int line, int pos)
 		{
+			this.semicolon = semicolon;
+			this.line = line;
+			this.pos = pos;
 		}
 
 		public override void Accept(IVisitor v)

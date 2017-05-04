@@ -10,32 +10,66 @@ namespace Grc.Ast.Node.Stmt
 {
 	public class StmtFuncCall : StmtBase
 	{
-		private string name;
-		private List<ExprBase> args;
+		private ExprFuncCall funCall;
 
-		private int line;
-		private int pos;
+		private string semicolon;
 
-		public string Name { get { return name; } }
-		public IReadOnlyList<ExprBase> Args { get { return args; } }
-
-		public int Line { get { return line; } }
-		public int Pos { get { return pos; } }
-		public string Location { get { return string.Format("[{0}, {1}]", line, pos); } }
-
-		public StmtFuncCall(ExprFuncCall funcall)
-			: base(funcall.Text)
+		public IReadOnlyList<ExprBase> Args
 		{
-			this.name = funcall.Name;
-			this.args = new List<ExprBase>(funcall.Args);
+			get { ProcessChildren(); return funCall.Args; }
+		}
 
-			this.line = funcall.Line;
-			this.pos = funcall.Pos;
+		public override string Text
+		{
+			get
+			{
+				ProcessChildren();
+
+				return string.Format("{0}{1}", funCall.Text, semicolon);
+			}
+		}
+
+		public string Name
+		{
+			get { ProcessChildren(); return funCall.Name; }
+		}
+
+		public override int Line
+		{
+			get { ProcessChildren(); return funCall.Line; }
+		}
+
+		public override int Pos
+		{
+			get { ProcessChildren(); return funCall.Pos; }
+		}
+
+		public StmtFuncCall(string semicolon)
+		{
+			this.semicolon = semicolon;
+		}
+
+		protected override void ProcessChildren()
+		{
+			if (this.funCall != null)
+				return;
+
+			if (Children.Count > 1)
+				throw new NodeException("Function call statement must have one child.");
+
+			this.funCall = (ExprFuncCall)Children[0];
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		public override string ToString()
+		{
+			ProcessChildren();
+
+			return string.Format("{0}{1}", funCall.ToString(), semicolon);
 		}
 	}
 }

@@ -1,11 +1,11 @@
-﻿using Grc.Ast.Node.Helper;
-using Grc.Ast.Node.Stmt;
-using Grc.Ast.Visitor;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Ast.Node.Helper;
+using Grc.Ast.Node.Stmt;
+using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Func
 {
@@ -15,32 +15,66 @@ namespace Grc.Ast.Node.Func
 		private List<LocalBase> locals;
 		private StmtBlock block;
 
-		public virtual LocalFuncDecl Header
+		private string text;
+
+		public LocalFuncDecl Header
 		{
-			get { return this.header; }
-			set { this.header = value; }
+			get { ProcessChildren(); return header; }
 		}
 
-		public virtual IReadOnlyList<LocalBase> Locals
+		public IReadOnlyList<LocalBase> Locals
 		{
-			get { return this.locals; }
+			get { ProcessChildren(); return locals; }
 		}
 
-		public virtual StmtBlock Block
+		public StmtBlock Block
 		{
-			get { return this.block; }
-			set { this.block = value; }
+			get { ProcessChildren(); return block; }
 		}
 
-		public virtual IReadOnlyList<StmtBase> Stmts
+		public override string Text { get { ProcessChildren(); return text; } }
+
+		public override int Line
 		{
-			get { return this.block != null ? this.block.Stmts : null; }
+			get { ProcessChildren(); return header.Line; }
+		}
+
+		public override int Pos
+		{
+			get { ProcessChildren(); return header.Pos; }
 		}
 
 		public LocalFuncDef()
-			: base("func-def")
 		{
+		}
+
+		protected override void ProcessChildren()
+		{
+			if (header != null || locals != null || block != null)
+				return;
+
 			this.locals = new List<LocalBase>();
+
+			StringBuilder sb = new StringBuilder();
+
+			header = (LocalFuncDecl)Children[0];
+
+			sb.Append(header.Text);
+			sb.Append(Environment.NewLine);
+
+			for (int i = 1; i < Children.Count - 1; i++)
+			{
+				locals.Add((LocalBase)Children[i]);
+
+				sb.Append((Children[i] as LocalBase).Text);
+				sb.Append(Environment.NewLine);
+			}
+
+			block = (StmtBlock)Children[Children.Count - 1];
+
+			sb.Append(block.Text);
+
+			this.text = sb.ToString();
 		}
 
 		public override void Accept(IVisitor v)
@@ -48,9 +82,9 @@ namespace Grc.Ast.Node.Func
 			v.Visit(this);
 		}
 
-		public virtual void AddLocal(LocalBase local)
+		public override string ToString()
 		{
-			this.locals.Add(local);
+			return "func-def";
 		}
 	}
 }

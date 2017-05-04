@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Grc.Ast.Node;
-using Grc.Ast.Node.Cond;
-using Grc.Ast.Node.Expr;
-using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Helper;
-using Grc.Ast.Node.Stmt;
-using Grc.Ast.Node.Type;
 
 namespace Grc.Ast.Visitor.GraphViz
 {
 	class GraphVizNodeDataVisitor : DepthFirstVisitor
 	{
-		private IDictionary<NodeBase, int?> id = new Dictionary<NodeBase, int?>();
+		private IDictionary<NodeBase, int> id = new Dictionary<NodeBase, int>();
 
 		private int nextId = 0;
 
@@ -26,7 +24,7 @@ namespace Grc.Ast.Visitor.GraphViz
 			Console.WriteLine("\t" + GvName(i) + " [label=\"" + GvData(s) + "\"] ;");
 
 			if (stack.Count > 0)
-				Console.WriteLine("\t" + GvName(id[stack.Peek()].Value) + " -- " + GvName(i));
+				Console.WriteLine("\t" + GvName(id[stack.Peek()]) + " -- " + GvName(i));
 		}
 
 		private string GvName(int id)
@@ -44,11 +42,11 @@ namespace Grc.Ast.Visitor.GraphViz
 			if (!id.ContainsKey(n))
 				id[n] = nextId++;
 
-			Console.WriteLine("\t" + GvName(id[n].Value) + " ;");
-			Console.WriteLine("\t" + GvName(id[n].Value) + " [label=\"" + GvData(n.ToString()) + "\"] ;");
+			Console.WriteLine("\t" + GvName(id[n]) + " ;");
+			Console.WriteLine("\t" + GvName(id[n]) + " [label=\"" + GvData(n.ToString()) + "\"] ;");
 
 			if (stack.Count > 0)
-				Console.WriteLine("\t" + GvName(id[stack.Peek()].Value) + " -- " + GvName(id[n].Value));
+				Console.WriteLine("\t" + GvName(id[stack.Peek()]) + " -- " + GvName(id[n]));
 
 			stack.Push(n);
 		}
@@ -68,40 +66,15 @@ namespace Grc.Ast.Visitor.GraphViz
 			Console.WriteLine("}");
 		}
 
-		public override void Visit(LocalFuncDef n)
+		public override void Visit(HTypePar n)
 		{
-			DefaultPre(n);
+			AddString(n.Text);
 
-			n.Header.Accept(this);
-
-			foreach (LocalBase l in n.Locals)
-				l.Accept(this);
-
-			n.Block.Accept(this);
-
-			DefaultPost(n);
 		}
 
-		public override void Visit(LocalVarDef n)
+		public override void Visit(HTypeVar n)
 		{
-			DefaultPre(n);
-
-			foreach (var v in n.Vars)
-				AddString(v.ToString());
-
-			DefaultPost(n);
-		}
-
-		public override void Visit(LocalFuncDecl n)
-		{
-			DefaultPre(n);
-
-			foreach (Parameter p in n.Params)
-				AddString(p.ToString());
-
-			n.ReturnType.Accept(this);
-
-			DefaultPost(n);
+			AddString(n.Text);
 		}
 	}
 }

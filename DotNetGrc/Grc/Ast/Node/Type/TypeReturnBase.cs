@@ -8,8 +8,23 @@ namespace Grc.Ast.Node.Type
 {
 	public abstract class TypeReturnBase : NodeBase
 	{
-		public TypeReturnBase(string text) : base(text)
+		private string keyword;
+
+		private int line;
+		private int pos;
+
+		public override string Text { get { return keyword; } }
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public TypeReturnBase(string keyword, int line, int pos)
 		{
+			this.keyword = keyword;
+
+			this.line = line;
+			this.pos = pos;
 		}
 	}
 }

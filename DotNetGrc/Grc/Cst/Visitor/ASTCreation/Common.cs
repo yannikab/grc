@@ -4,12 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node;
-using Grc.Ast.Node.Cond;
-using Grc.Ast.Node.Expr;
-using Grc.Ast.Node.Func;
-using Grc.Ast.Node.Helper;
-using Grc.Ast.Node.Stmt;
-using Grc.Ast.Node.Type;
 using k31.grc.cst.analysis;
 using k31.grc.cst.node;
 
@@ -33,14 +27,9 @@ namespace Grc.Cst.Visitor.ASTCreation
 			stack.Push(node);
 		}
 
-		private NodeBase PopNode()
+		private void PopNode()
 		{
-			return stack.Pop();
-		}
-
-		private NodeBase GetNode()
-		{
-			return stack.Peek();
+			stack.Pop();
 		}
 
 		public override void inStart(Start node)

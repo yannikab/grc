@@ -1,17 +1,16 @@
-﻿using Grc.Ast.Node;
-using Grc.Ast.Node.Expr;
-using Grc.Ast.Node.Func;
-using Grc.Ast.Node.Helper;
-using Grc.Ast.Node.Stmt;
-using Grc.Ast.Visitor;
-using Grc.Semantic.SymbolTable;
-using Grc.Semantic.SymbolTable.Exceptions;
-using Grc.Semantic.SymbolTable.Symbol;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Ast.Node;
+using Grc.Ast.Node.Expr;
+using Grc.Ast.Node.Func;
+using Grc.Ast.Node.Helper;
+using Grc.Ast.Node.Stmt;
+using Grc.Semantic.SymbolTable;
+using Grc.Semantic.SymbolTable.Exceptions;
+using Grc.Semantic.SymbolTable.Symbol;
 
 namespace Grc.Ast.Visitor.Semantic
 {
@@ -66,7 +65,7 @@ namespace Grc.Ast.Visitor.Semantic
 
 		public override void Pre(LocalVarDef n)
 		{
-			foreach (Variable v in n.Vars)
+			foreach (Variable v in n.Variables)
 				st.Insert(new SymbolVar(v.Name));
 		}
 

@@ -21,19 +21,20 @@ namespace Grc.Cst.Visitor.ASTCreation
 		{
 			defaultIn(node);
 
-			PushNode(new LocalVarDef(node.getKeyVar().getText()));
+			Token keyVar = node.getKeyVar();
+			Token id = node.getIdentifier();
+			Token colon = node.getSepColon();
+			Token semicolon = node.getSepSemi();
 
-			PushNode(new VarIdentifierT(node.getIdentifier().getText()));
+			PushNode(new LocalVarDef(keyVar.getText(), colon.getText(), semicolon.getText(), keyVar.getLine(), keyVar.getPos()));
+
+			PushNode(new VarIdentifierT(id.getText(), id.getLine(), id.getPos()));
 			PopNode();
 		}
 
 		public override void outAVarDef(AVarDef node)
 		{
 			defaultOut(node);
-
-			LocalVarDef n = (LocalVarDef)GetNode();
-
-			n.getVars();
 
 			PopNode();
 		}
@@ -42,7 +43,9 @@ namespace Grc.Cst.Visitor.ASTCreation
 		{
 			defaultIn(node);
 
-			PushNode(new VarIdentifierT(node.getIdentifier().getText()));
+			Token id = node.getIdentifier();
+
+			PushNode(new VarIdentifierT(id.getText(), id.getLine(), id.getPos()));
 		}
 
 		public override void outAVarMore(AVarMore node)

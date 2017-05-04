@@ -5,24 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Visitor;
 
-namespace Grc.Ast.Node.Expr
+namespace Grc.Ast.Node.Func
 {
-	public class ExprLValStringT : ExprLValBase
+	public class ParIdentifierT : NodeBase
 	{
-		private string str;
+		private string id;
 
 		private int line;
 		private int pos;
 
-		public override string Text { get { return str; } }
+		public override string Text { get { return id; } }
 
 		public override int Line { get { return line; } }
 
 		public override int Pos { get { return pos; } }
 
-		public ExprLValStringT(string str, int line, int pos)
+		public ParIdentifierT(string id, int line, int pos)
 		{
-			this.str = str;
+			this.id = id;
 
 			this.line = line;
 			this.pos = pos;

@@ -13,20 +13,55 @@ namespace Grc.Ast.Node.Stmt
 		private CondBase cond;
 		private StmtBase stmt;
 
-		public virtual CondBase Cond
+		private string keyWhile;
+		private string keyDo;
+
+		private int line;
+		private int pos;
+
+		public CondBase Cond
 		{
-			get { return this.cond; }
-			set { this.cond = value; }
+			get { ProcessChildren(); return cond; }
 		}
 
-		public virtual StmtBase Stmt
+		public StmtBase Stmt
 		{
-			get { return this.stmt; }
-			set { this.stmt = value; }
+			get { ProcessChildren(); return stmt; }
 		}
 
-		public StmtWhileDo(string text) : base(text)
+		public override string Text
 		{
+			get
+			{
+				ProcessChildren();
+
+				return string.Format("{0} {1} {2} {3}", keyWhile, cond.Text, keyDo, stmt.Text);
+			}
+		}
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public StmtWhileDo(string keyWhile, string keyDo, int line, int pos)
+		{
+			this.keyWhile = keyWhile;
+			this.keyDo = keyDo;
+
+			this.line = line;
+			this.pos = pos;
+		}
+
+		protected override void ProcessChildren()
+		{
+			if (cond != null || stmt != null)
+				return;
+
+			if (Children.Count > 2)
+				throw new NodeException("While-do statement must have two children.");
+
+			cond = (CondBase)Children[0];
+			stmt = (StmtBase)Children[1];
 		}
 
 		public override void Accept(IVisitor v)

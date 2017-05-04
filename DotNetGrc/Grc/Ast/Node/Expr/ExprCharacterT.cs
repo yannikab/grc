@@ -9,12 +9,21 @@ namespace Grc.Ast.Node.Expr
 {
 	public class ExprCharacterT : ExprBase
 	{
+		private string character;
+
 		private int line;
 		private int pos;
 
-		public ExprCharacterT(string text, int line, int pos)
-			: base(text)
+		public override string Text { get { return character; } }
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public ExprCharacterT(string character, int line, int pos)
 		{
+			this.character = character;
+
 			this.line = line;
 			this.pos = pos;
 		}

@@ -9,16 +9,36 @@ namespace Grc.Ast.Node.Type
 {
 	public class DimIntegerT : NodeBase
 	{
-		private int dim;
+		private string integer;
+		private string lbrack;
+		private string rbrack;
 
-		public virtual int Dim
+		private int line;
+		private int pos;
+
+		public int Dim { get { return int.Parse(integer); } }
+
+		public DimIntegerT(string text)
 		{
-			get { return this.dim; }
 		}
 
-		public DimIntegerT(string text) : base(text)
+		public override string Text
 		{
-			this.dim = int.Parse(text.Replace("[", "").Replace("]", ""));
+			get { return string.Format("{0}{1}{2}", lbrack, integer, rbrack); }
+		}
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public DimIntegerT(string integer, string lbrack, string rbrack, int line, int pos)
+		{
+			this.integer = integer;
+			this.lbrack = lbrack;
+			this.rbrack = rbrack;
+
+			this.line = line;
+			this.pos = pos;
 		}
 
 		public override void Accept(IVisitor v)

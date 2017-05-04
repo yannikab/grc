@@ -8,7 +8,8 @@ namespace Grc.Ast.Node.Type
 {
 	class TypeDataCharT : TypeDataBase
 	{
-		public TypeDataCharT(string text) : base(text)
+		public TypeDataCharT(string keyChar, int line, int pos)
+			: base(keyChar, line, pos)
 		{
 		}
 	}

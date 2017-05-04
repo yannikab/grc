@@ -146,15 +146,11 @@
     <Compile Include="Ast\Node\Cond\CondNot.cs" />
     <Compile Include="Ast\Node\Cond\CondOr.cs" />
     <Compile Include="Ast\Node\Cond\CondRelOpBase.cs" />
-    <Compile Include="Ast\Node\Helper\HRef.cs" />
-    <Compile Include="Ast\Node\Helper\HType.cs" />
-    <Compile Include="Ast\Node\Helper\HVal.cs" />
     <Compile Include="Ast\Node\Helper\Root.cs" />
     <Compile Include="Ast\Node\Expr\ExprLValBase.cs" />
     <Compile Include="Ast\Node\Expr\ExprLValIdentifierT.cs" />
     <Compile Include="Ast\Node\Expr\ExprLValIndexed.cs" />
     <Compile Include="Ast\Node\Expr\ExprLValStringT.cs" />
-    <Compile Include="Ast\Node\Func\FParIdentifierT.cs" />
     <Compile Include="Ast\Node\Func\LocalBase.cs" />
     <Compile Include="Ast\Node\Func\LocalFuncDecl.cs" />
     <Compile Include="Ast\Node\Func\LocalFuncDef.cs" />
@@ -192,7 +188,6 @@
     <Compile Include="Cst\Visitor\GraphViz\GraphVizVisitor.cs" />
     <Compile Include="Cst\Visitor\GraphViz\GraphVizVisitorTokens.cs" />
     <Compile Include="Cst\Visitor\GraphViz\GVNode.cs" />
-    <Compile Include="Cst\Visitor\ASTCreation\Exceptions\ASTCreationException.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Common.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Conditions.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\DataTypes.cs" />
@@ -202,6 +197,12 @@
     <Compile Include="Cst\Visitor\ASTCreation\Variables.cs" />
     <Compile Include="Ast\Visitor\GraphViz\GraphVizNodeDataVisitor.cs" />
     <Compile Include="Ast\Visitor\Semantic\SemanticVisitor.cs" />
+    <Compile Include="Ast\Node\NodeException.cs" />
+    <Compile Include="Ast\Node\Helper\HPar.cs" />
+    <Compile Include="Ast\Node\Helper\HTypePar.cs" />
+    <Compile Include="Ast\Node\Helper\HTypeReturn.cs" />
+    <Compile Include="Ast\Node\Helper\HTypeVar.cs" />
+    <Compile Include="Ast\Node\Func\ParIdentifierT.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

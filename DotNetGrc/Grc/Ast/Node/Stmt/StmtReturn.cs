@@ -12,19 +12,61 @@ namespace Grc.Ast.Node.Stmt
 	{
 		private ExprBase expr;
 
-		public virtual ExprBase Expr
+		private string keyReturn;
+		private string semicolon;
+
+		private int line;
+		private int pos;
+
+		public ExprBase Expr
 		{
-			get { return this.expr; }
-			set { this.expr = value; }
+			get { ProcessChildren(); return expr; }
 		}
 
-		public StmtReturn(string text) : base(text)
+		public override string Text
 		{
+			get
+			{
+				ProcessChildren();
+
+				if (expr != null)
+					return string.Format("{0} {1}{2}", keyReturn, expr.Text, semicolon);
+				else
+					return string.Format("{0}{1}", keyReturn, semicolon);
+			}
+		}
+
+		public override int Line { get { return line; } }
+		public override int Pos { get { return pos; } }
+
+		public StmtReturn(string keyReturn, String semicolon, int line, int pos)
+		{
+			this.keyReturn = keyReturn;
+			this.semicolon = semicolon;
+
+			this.line = line;
+			this.pos = pos;
+		}
+
+		protected override void ProcessChildren()
+		{
+			if (expr != null)
+				return;
+
+			if (Children.Count > 1)
+				throw new NodeException("Return statement must have one child at most");
+
+			expr = Children.Count == 1 ? (ExprBase)Children[0] : null;
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		public override string ToString()
+		{
+			return keyReturn;
 		}
 	}
 }

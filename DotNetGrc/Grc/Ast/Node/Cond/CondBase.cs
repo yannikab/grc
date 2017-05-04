@@ -9,7 +9,7 @@ namespace Grc.Ast.Node.Cond
 {
 	public abstract class CondBase : NodeBase
 	{
-		public CondBase(string text) : base(text)
+		public CondBase()
 		{
 		}
 	}

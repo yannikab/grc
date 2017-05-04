@@ -9,8 +9,23 @@ namespace Grc.Ast.Node.Func
 {
 	public class VarIdentifierT : NodeBase
 	{
-		public VarIdentifierT(string text) : base(text)
+		private string id;
+
+		private int line;
+		private int pos;
+
+		public override string Text { get { return id; } }
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public VarIdentifierT(string id, int line, int pos)
 		{
+			this.id = id;
+
+			this.line = line;
+			this.pos = pos;
 		}
 
 		public override void Accept(IVisitor v)

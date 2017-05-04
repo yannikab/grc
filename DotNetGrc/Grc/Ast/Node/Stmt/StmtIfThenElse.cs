@@ -14,31 +14,74 @@ namespace Grc.Ast.Node.Stmt
 		private StmtBase stmtThen;
 		private StmtBase stmtElse;
 
-		public virtual CondBase Cond
+		private string keyIf;
+		private string keyThen;
+		private string keyElse;
+
+		private int line;
+		private int pos;
+
+		public CondBase Cond
 		{
-			get { return this.cond; }
-			set { this.cond = value; }
+			get { ProcessChildren(); return cond; }
 		}
 
-		public virtual StmtBase StmtThen
+		public StmtBase StmtThen
 		{
-			get { return this.stmtThen; }
-			set { this.stmtThen = value; }
+			get { ProcessChildren(); return stmtThen; }
 		}
 
-		public virtual StmtBase StmtElse
+		public StmtBase StmtElse
 		{
-			get { return this.stmtElse; }
-			set { this.stmtElse = value; }
+			get { ProcessChildren(); return stmtElse; }
 		}
 
-		public StmtIfThenElse(string text) : base(text)
+		public override string Text
 		{
+			get
+			{
+				ProcessChildren();
+
+				return string.Format("{0} {1} {2} {3} {4} {5}",
+					keyIf, cond.Text, keyThen, stmtThen.Text, keyElse, stmtElse.Text);
+			}
+		}
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public StmtIfThenElse(string keyIf, string keyThen, string keyElse, int line, int pos)
+		{
+			this.keyIf = keyIf;
+			this.keyThen = keyThen;
+			this.keyElse = keyElse;
+
+			this.line = line;
+			this.pos = pos;
+		}
+
+		protected override void ProcessChildren()
+		{
+			if (cond != null || stmtThen != null || stmtElse != null)
+				return;
+
+			if (Children.Count > 3)
+				throw new NodeException("If-then-else statement must have three children.");
+
+			cond = (CondBase)Children[0];
+			stmtThen = (StmtBase)Children[1];
+			stmtElse = (StmtBase)Children[2];
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0}-{1}-{2}", keyIf, keyThen, keyElse);
 		}
 	}
 }

@@ -13,25 +13,65 @@ namespace Grc.Ast.Node.Stmt
 		private CondBase cond;
 		private StmtBase stmt;
 
-		public virtual CondBase Cond
+		private string keyIf;
+		private string keyThen;
+
+		private int line;
+		private int pos;
+
+		public CondBase Cond
 		{
-			get { return this.cond; }
-			set { this.cond = value; }
+			get { ProcessChildren(); return cond; }
 		}
 
-		public virtual StmtBase Stmt
+		public StmtBase Stmt
 		{
-			get { return this.stmt; }
-			set { this.stmt = value; }
+			get { ProcessChildren(); return stmt; }
 		}
 
-		public StmtIfThen(string text) : base(text)
+		public override string Text
 		{
+			get
+			{
+				ProcessChildren();
+
+				return string.Format("{0} {1} {2} {3}", keyIf, cond.Text, keyThen, stmt.Text);
+			}
+		}
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public StmtIfThen(string keyIf, string keyThen, int line, int pos)
+		{
+			this.keyIf = keyIf;
+			this.keyThen = keyThen;
+
+			this.line = line;
+			this.pos = pos;
+		}
+
+		protected override void ProcessChildren()
+		{
+			if (cond != null || stmt != null)
+				return;
+
+			if (Children.Count > 2)
+				throw new NodeException("If-then statement must have two children.");
+
+			cond = (CondBase)Children[0];
+			stmt = (StmtBase)Children[1];
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0}-{1}", keyIf, keyThen);
 		}
 	}
 }

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Grc.Cst.Visitor.GraphViz
 {
@@ -13,7 +16,8 @@ namespace Grc.Cst.Visitor.GraphViz
 
 		private string data;
 
-		public GVNode(int id, string data) : this(id)
+		public GVNode(int id, string data)
+			: this(id)
 		{
 			this.data = data;
 		}
@@ -25,14 +29,14 @@ namespace Grc.Cst.Visitor.GraphViz
 			this.children = new List<GVNode>();
 		}
 
-		public virtual void addChild(GVNode child)
+		public void addChild(GVNode child)
 		{
 			child.parent = this;
 
 			this.children.Add(child);
 		}
 
-		public virtual void print()
+		public void print()
 		{
 			Console.WriteLine(this.id);
 			Console.WriteLine(this.data);
@@ -41,7 +45,7 @@ namespace Grc.Cst.Visitor.GraphViz
 				c.print();
 		}
 
-		public virtual void printRelations()
+		public void printRelations()
 		{
 			foreach (GVNode c in children)
 			{
@@ -51,7 +55,7 @@ namespace Grc.Cst.Visitor.GraphViz
 			}
 		}
 
-		public virtual void printGraphViz()
+		public void printGraphViz()
 		{
 			// pre
 			if (this.parent != null)
@@ -73,12 +77,12 @@ namespace Grc.Cst.Visitor.GraphViz
 			// post
 		}
 
-		public virtual string gvName()
+		public string gvName()
 		{
 			return string.Format("n{0:D4}", this.id);
 		}
 
-		public virtual string gvData()
+		public string gvData()
 		{
 			return data.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("[", "\\[").Replace("]", "\\]");
 		}

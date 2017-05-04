@@ -12,25 +12,63 @@ namespace Grc.Ast.Node.Cond
 		private CondBase left;
 		private CondBase right;
 
-		public virtual CondBase Left
+		private string operAnd;
+
+		public CondBase Left
 		{
-			get { return this.left; }
-			set { this.left = value; }
+			get { ProcessChildren(); return left; }
 		}
 
-		public virtual CondBase Right
+		public CondBase Right
 		{
-			get { return this.right; }
-			set { this.right = value; }
+			get { ProcessChildren(); return right; }
 		}
 
-		public CondAnd(string text) : base(text)
+		public override string Text
 		{
+			get
+			{
+				ProcessChildren();
+
+				return string.Format("({0} {1} {2})", left, operAnd, right);
+			}
+		}
+
+		public override int Line
+		{
+			get { ProcessChildren(); return left.Line; }
+		}
+
+		public override int Pos
+		{
+			get { ProcessChildren(); return left.Pos; }
+		}
+
+		public CondAnd(string operAnd)
+		{
+			this.operAnd = operAnd;
+		}
+
+		protected override void ProcessChildren()
+		{
+			if (left != null || right != null)
+				return;
+
+			if (Children.Count > 2)
+				throw new NodeException("Logical AND condition must have two children.");
+
+			left = (CondBase)Children[0];
+			right = (CondBase)Children[1];
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		public override string ToString()
+		{
+			return operAnd;
 		}
 	}
 }

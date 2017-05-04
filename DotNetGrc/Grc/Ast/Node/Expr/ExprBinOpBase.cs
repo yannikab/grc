@@ -12,25 +12,63 @@ namespace Grc.Ast.Node.Expr
 		private ExprBase left;
 		private ExprBase right;
 
-		public virtual ExprBase Left
+		private string oper;
+
+		public ExprBase Left
 		{
-			get { return this.left; }
-			set { this.left = value; }
+			get { ProcessChildren(); return left; }
 		}
 
-		public virtual ExprBase Right
+		public ExprBase Right
 		{
-			get { return this.right; }
-			set { this.right = value; }
+			get { ProcessChildren(); return right; }
 		}
 
-		public ExprBinOpBase(string text) : base(text)
+		public override string Text
 		{
+			get
+			{
+				ProcessChildren();
+
+				return string.Format("({0} {1} {2})", left.Text, oper, right.Text);
+			}
+		}
+
+		public override int Line
+		{
+			get { ProcessChildren(); return left.Line; }
+		}
+
+		public override int Pos
+		{
+			get { ProcessChildren(); return left.Pos; }
+		}
+
+		public ExprBinOpBase(string oper)
+		{
+			this.oper = oper;
+		}
+
+		protected override void ProcessChildren()
+		{
+			if (left != null || right != null)
+				return;
+
+			if (Children.Count > 2)
+				throw new NodeException("Binary operator expression must have two children.");
+
+			left = (ExprBase)Children[0];
+			right = (ExprBase)Children[1];
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		public override string ToString()
+		{
+			return oper;
 		}
 	}
 }

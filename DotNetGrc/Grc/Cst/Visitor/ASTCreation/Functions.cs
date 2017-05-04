@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Node;
-using Grc.Ast.Node.Cond;
-using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Helper;
-using Grc.Ast.Node.Stmt;
-using Grc.Ast.Node.Type;
 using k31.grc.cst.analysis;
 using k31.grc.cst.node;
 
@@ -21,7 +16,7 @@ namespace Grc.Cst.Visitor.ASTCreation
 		{
 			defaultIn(node);
 
-			PushNode(new HType());
+			PushNode(new HTypePar());
 		}
 
 		public override void outAFparType(AFparType node)
@@ -35,12 +30,18 @@ namespace Grc.Cst.Visitor.ASTCreation
 		{
 			defaultIn(node);
 
-			if (node.getKeyRef() != null)
-				PushNode(new HRef());
-			else
-				PushNode(new HVal());
+			Token keyRef = node.getKeyRef();
+			Token id = node.getIdentifier();
+			Token colon = node.getSepColon();
 
-			PushNode(new FParIdentifierT(node.getIdentifier().getText()));
+			bool byRef = keyRef != null;
+
+			int line = (byRef ? keyRef : id).getLine();
+			int pos = (byRef ? keyRef : id).getPos();
+
+			PushNode(new HPar(byRef ? keyRef.getText() : null, colon.getText(), line, pos));
+
+			PushNode(new ParIdentifierT(id.getText(), id.getLine(), id.getPos()));
 			PopNode();
 		}
 
@@ -55,7 +56,9 @@ namespace Grc.Cst.Visitor.ASTCreation
 		{
 			defaultIn(node);
 
-			PushNode(new FParIdentifierT(node.getIdentifier().getText()));
+			Token id = node.getIdentifier();
+
+			PushNode(new ParIdentifierT(id.getText(), id.getLine(), id.getPos()));
 		}
 
 		public override void outAParMore(AParMore node)
@@ -69,16 +72,18 @@ namespace Grc.Cst.Visitor.ASTCreation
 		{
 			defaultIn(node);
 
-			PushNode(new LocalFuncDecl(string.Format("{0}{1}{2}", node.getIdentifier().getText(), node.getSepLpar().getText(), node.getSepRpar().getText())));
+			Token keyFun = node.getKeyFun();
+			Token id = node.getIdentifier();
+			Token lpar = node.getSepLpar();
+			Token rpar = node.getSepRpar();
+			Token colon = node.getSepColon();
+
+			PushNode(new LocalFuncDecl(keyFun.getText(), id.getText(), lpar.getText(), rpar.getText(), colon.getText(), id.getLine(), id.getPos()));
 		}
 
 		public override void outAHeader(AHeader node)
 		{
 			defaultOut(node);
-
-			LocalFuncDecl n = (LocalFuncDecl)GetNode();
-
-			n.ProcessFuncDecl();
 
 			PopNode();
 		}
@@ -124,29 +129,7 @@ namespace Grc.Cst.Visitor.ASTCreation
 		{
 			defaultOut(node);
 
-			LocalFuncDef n = (LocalFuncDef)GetNode();
-
 			PopNode();
-
-			if (n.Children.Count < 2)
-				return;
-
-			if (!(n.Children[0] is LocalFuncDecl))
-				return;
-
-			for (int i = 1; i < n.Children.Count - 1; i++)
-				if (!(n.Children[i] is LocalBase))
-					return;
-
-			if (!(n.Children[n.Children.Count - 1] is StmtBlock))
-				return;
-
-			n.Header = (LocalFuncDecl)n.Children[0];
-
-			for (int j = 1; j < n.Children.Count - 1; j++)
-				n.AddLocal(n.Children[j] as LocalBase);
-
-			n.Block = (StmtBlock)n.Children[n.Children.Count - 1];
 		}
 
 		public override void inAFuncLocalDef(AFuncLocalDef node)

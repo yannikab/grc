@@ -124,17 +124,52 @@ namespace Grc.Ast.Visitor
 
 		}
 
-		public virtual void Visit(HRef n)
+		public virtual void Visit(LocalFuncDef n)
 		{
 
 		}
 
-		public virtual void Visit(HVal n)
+		public virtual void Visit(LocalFuncDecl n)
 		{
 
 		}
 
-		public virtual void Visit(FParIdentifierT n)
+		public virtual void Visit(HPar n)
+		{
+
+		}
+
+		public virtual void Visit(ParIdentifierT n)
+		{
+
+		}
+
+		public virtual void Visit(HTypePar n)
+		{
+
+		}
+
+		public virtual void Visit(TypeDataBase n)
+		{
+
+		}
+
+		public virtual void Visit(DimEmptyT n)
+		{
+
+		}
+
+		public virtual void Visit(DimIntegerT n)
+		{
+
+		}
+
+		public virtual void Visit(HTypeReturn n)
+		{
+
+		}
+
+		public virtual void Visit(TypeReturnNothingT n)
 		{
 
 		}
@@ -149,37 +184,7 @@ namespace Grc.Ast.Visitor
 
 		}
 
-		public virtual void Visit(HType n)
-		{
-
-		}
-
-		public virtual void Visit(LocalFuncDef n)
-		{
-
-		}
-
-		public virtual void Visit(LocalFuncDecl n)
-		{
-
-		}
-
-		public virtual void Visit(TypeDataBase n)
-		{
-
-		}
-
-		public virtual void Visit(TypeReturnNothingT n)
-		{
-
-		}
-
-		public virtual void Visit(DimEmptyT n)
-		{
-
-		}
-
-		public virtual void Visit(DimIntegerT n)
+		public virtual void Visit(HTypeVar n)
 		{
 
 		}

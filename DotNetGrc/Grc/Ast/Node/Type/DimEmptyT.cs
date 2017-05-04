@@ -9,8 +9,27 @@ namespace Grc.Ast.Node.Type
 {
 	public class DimEmptyT : NodeBase
 	{
-		public DimEmptyT(string text) : base(text)
+		private string lbrack;
+		private string rbrack;
+
+		private int line;
+		private int pos;
+
+		public override string Text
 		{
+			get { return string.Format("{0}{1}", lbrack, rbrack); }
+		}
+
+		public override int Line { get { return line; } }
+		public override int Pos { get { return pos; } }
+
+		public DimEmptyT(string lbrack, string rbrack, int line, int pos)
+		{
+			this.lbrack = lbrack;
+			this.rbrack = rbrack;
+
+			this.line = line;
+			this.pos = pos;
 		}
 
 		public override void Accept(IVisitor v)
