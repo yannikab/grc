@@ -13,50 +13,33 @@ namespace Grc.Ast.Node.Cond
 
 		private string operNot;
 
-		public CondBase Cond
-		{
-			get { ProcessChildren(); return cond; }
-		}
+		public CondBase Cond { get { return cond; } }
 
-		public override string Text
-		{
-			get
-			{
-				ProcessChildren();
+		public override int Line { get { return cond.Line; } }
 
-				return string.Format("({0} {1})", operNot, cond);
-			}
-		}
-
-		public override int Line
-		{
-			get { ProcessChildren(); return cond.Line; }
-		}
-
-		public override int Pos
-		{
-			get { ProcessChildren(); return cond.Pos; }
-		}
+		public override int Pos { get { return cond.Pos; } }
 
 		public CondNot(string operNot)
 		{
 			this.operNot = operNot;
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (cond != null)
-				return;
+			if (cond != null || (cond = c as CondBase) == null)
+				throw new NodeException();
 
-			if (Children.Count > 1)
-				throw new NodeException("Logical NOT condition must have one child.");
-
-			cond = (CondBase)Children[0];
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("({0} {1})", operNot, cond);
 		}
 
 		public override string ToString()

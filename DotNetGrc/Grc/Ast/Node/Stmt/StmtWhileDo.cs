@@ -19,25 +19,9 @@ namespace Grc.Ast.Node.Stmt
 		private int line;
 		private int pos;
 
-		public CondBase Cond
-		{
-			get { ProcessChildren(); return cond; }
-		}
+		public CondBase Cond { get { return cond; } }
 
-		public StmtBase Stmt
-		{
-			get { ProcessChildren(); return stmt; }
-		}
-
-		public override string Text
-		{
-			get
-			{
-				ProcessChildren();
-
-				return string.Format("{0} {1} {2} {3}", keyWhile, cond.Text, keyDo, stmt.Text);
-			}
-		}
+		public StmtBase Stmt { get { return stmt; } }
 
 		public override int Line { get { return line; } }
 
@@ -52,21 +36,38 @@ namespace Grc.Ast.Node.Stmt
 			this.pos = pos;
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (cond != null || stmt != null)
-				return;
+			if (cond == null)
+			{
+				if (c is CondBase)
+					cond = (CondBase)c;
+				else
+					throw new NodeException();
+			}
+			else if (stmt == null)
+			{
+				if (c is StmtBase)
+					stmt = (StmtBase)c;
+				else
+					throw new NodeException();
+			}
+			else
+			{
+				throw new NodeException();
+			}
 
-			if (Children.Count > 2)
-				throw new NodeException("While-do statement must have two children.");
-
-			cond = (CondBase)Children[0];
-			stmt = (StmtBase)Children[1];
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("{0} {1} {2} {3}", keyWhile, cond.Text, keyDo, stmt.Text);
 		}
 	}
 }

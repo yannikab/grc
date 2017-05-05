@@ -14,20 +14,10 @@ namespace Grc.Ast.Node.Stmt
 		private string lbrace;
 		private string rbrace;
 
-		private string text;
-
 		private int line;
 		private int pos;
 
-		public IReadOnlyList<StmtBase> Stmts
-		{
-			get { ProcessChildren(); return stmts; }
-		}
-
-		public override string Text
-		{
-			get { ProcessChildren(); return text; }
-		}
+		public IReadOnlyList<StmtBase> Stmts { get { return stmts; } }
 
 		public override int Line { get { return line; } }
 
@@ -40,35 +30,37 @@ namespace Grc.Ast.Node.Stmt
 
 			this.line = line;
 			this.pos = pos;
+
+			this.stmts = new List<StmtBase>();
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (this.stmts != null)
-				return;
+			if (!(c is StmtBase))
+				throw new NodeException();
 
-			this.stmts = new List<StmtBase>(Children.Cast<StmtBase>());
+			stmts.Add((StmtBase)c);
 
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(lbrace);
-
-			sb.Append(Environment.NewLine);
-
-			for (int i = 0; i < stmts.Count; i++)
-			{
-				sb.Append(stmts[i].Text);
-				sb.Append(Environment.NewLine);
-			}
-
-			sb.Append(rbrace);
-
-			this.text = sb.ToString();
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.AppendLine(lbrace);
+
+			foreach (StmtBase s in stmts)
+				sb.AppendLine(s.Text);
+
+			sb.Append(rbrace);
+
+			return sb.ToString();
 		}
 
 		public override string ToString()

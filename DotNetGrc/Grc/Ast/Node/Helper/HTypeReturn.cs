@@ -12,44 +12,32 @@ namespace Grc.Ast.Node.Helper
 	{
 		private TypeReturnBase returnType;
 
-		public TypeReturnBase ReturnType
-		{
-			get { ProcessChildren(); return returnType; }
-		}
+		public TypeReturnBase ReturnType { get { return returnType; } }
 
-		public override string Text
-		{
-			get { ProcessChildren(); return returnType.Text; }
-		}
+		public override int Line { get { return returnType.Line; } }
 
-		public override int Line
-		{
-			get { ProcessChildren(); return returnType.Line; }
-		}
-
-		public override int Pos
-		{
-			get { ProcessChildren(); return returnType.Pos; }
-		}
+		public override int Pos { get { return returnType.Pos; } }
 
 		public HTypeReturn()
 		{
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (returnType != null)
-				return;
+			if (returnType != null || (returnType = c as TypeReturnBase) == null)
+				throw new NodeException();
 
-			if (Children.Count > 1)
-				throw new NodeException("Return type must have one child.");
-
-			returnType = (TypeReturnBase)Children[0];
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return returnType.Text;
 		}
 	}
 }

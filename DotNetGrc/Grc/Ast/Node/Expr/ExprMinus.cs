@@ -16,20 +16,7 @@ namespace Grc.Ast.Node.Expr
 		private int line;
 		private int pos;
 
-		public ExprBase Expr
-		{
-			get { ProcessChildren(); return expr; }
-		}
-
-		public override string Text
-		{
-			get
-			{
-				ProcessChildren();
-
-				return string.Format("({0} {1})", operMinus, expr.Text);
-			}
-		}
+		public ExprBase Expr { get { return expr; } }
 
 		public override int Line { get { return line; } }
 
@@ -43,20 +30,22 @@ namespace Grc.Ast.Node.Expr
 			this.pos = pos;
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (expr != null)
-				return;
+			if (expr != null || (expr = c as ExprBase) == null)
+				throw new NodeException();
 
-			if (Children.Count > 1)
-				throw new NodeException("Unary minus expression must have one child.");
-
-			expr = (ExprBase)Children[0];
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("({0} {1})", operMinus, expr.Text);
 		}
 
 		public override string ToString()

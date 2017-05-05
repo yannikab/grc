@@ -14,8 +14,6 @@ namespace Grc.Ast.Node.Expr
 		private int line;
 		private int pos;
 
-		public override string Text { get { return str; } }
-
 		public override int Line { get { return line; } }
 
 		public override int Pos { get { return pos; } }
@@ -31,6 +29,11 @@ namespace Grc.Ast.Node.Expr
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return str;
 		}
 	}
 }

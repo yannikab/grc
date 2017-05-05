@@ -14,50 +14,25 @@ namespace Grc.Ast.Node.Stmt
 
 		private string semicolon;
 
-		public IReadOnlyList<ExprBase> Args
-		{
-			get { ProcessChildren(); return funCall.Args; }
-		}
+		public IReadOnlyList<ExprBase> Args { get { return funCall.Args; } }
 
-		public override string Text
-		{
-			get
-			{
-				ProcessChildren();
+		public string Name { get { return funCall.Name; } }
 
-				return string.Format("{0}{1}", funCall.Text, semicolon);
-			}
-		}
+		public override int Line { get { return funCall.Line; } }
 
-		public string Name
-		{
-			get { ProcessChildren(); return funCall.Name; }
-		}
-
-		public override int Line
-		{
-			get { ProcessChildren(); return funCall.Line; }
-		}
-
-		public override int Pos
-		{
-			get { ProcessChildren(); return funCall.Pos; }
-		}
+		public override int Pos { get { return funCall.Pos; } }
 
 		public StmtFuncCall(string semicolon)
 		{
 			this.semicolon = semicolon;
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (this.funCall != null)
-				return;
+			if (funCall != null || (funCall = c as ExprFuncCall) == null)
+				throw new NodeException();
 
-			if (Children.Count > 1)
-				throw new NodeException("Function call statement must have one child.");
-
-			this.funCall = (ExprFuncCall)Children[0];
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
@@ -65,10 +40,13 @@ namespace Grc.Ast.Node.Stmt
 			v.Visit(this);
 		}
 
+		protected override string GetText()
+		{
+			return string.Format("{0}{1}", funCall.Text, semicolon);
+		}
+
 		public override string ToString()
 		{
-			ProcessChildren();
-
 			return string.Format("{0}{1}", funCall.ToString(), semicolon);
 		}
 	}

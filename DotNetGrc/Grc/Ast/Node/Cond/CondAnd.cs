@@ -14,56 +14,42 @@ namespace Grc.Ast.Node.Cond
 
 		private string operAnd;
 
-		public CondBase Left
-		{
-			get { ProcessChildren(); return left; }
-		}
+		public CondBase Left { get { return left; } }
 
-		public CondBase Right
-		{
-			get { ProcessChildren(); return right; }
-		}
+		public CondBase Right { get { return right; } }
 
-		public override string Text
-		{
-			get
-			{
-				ProcessChildren();
+		public override int Line { get { return left.Line; } }
 
-				return string.Format("({0} {1} {2})", left, operAnd, right);
-			}
-		}
-
-		public override int Line
-		{
-			get { ProcessChildren(); return left.Line; }
-		}
-
-		public override int Pos
-		{
-			get { ProcessChildren(); return left.Pos; }
-		}
+		public override int Pos { get { return left.Pos; } }
 
 		public CondAnd(string operAnd)
 		{
 			this.operAnd = operAnd;
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (left != null || right != null)
-				return;
+			if (!(c is CondBase))
+				throw new NodeException();
 
-			if (Children.Count > 2)
-				throw new NodeException("Logical AND condition must have two children.");
+			if (left == null)
+				left = (CondBase)c;
+			else if (right == null)
+				right = (CondBase)c;
+			else
+				throw new NodeException();
 
-			left = (CondBase)Children[0];
-			right = (CondBase)Children[1];
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("({0} {1} {2})", left, operAnd, right);
 		}
 
 		public override string ToString()

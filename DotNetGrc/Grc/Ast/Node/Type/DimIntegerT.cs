@@ -22,11 +22,6 @@ namespace Grc.Ast.Node.Type
 		{
 		}
 
-		public override string Text
-		{
-			get { return string.Format("{0}{1}{2}", lbrack, integer, rbrack); }
-		}
-
 		public override int Line { get { return line; } }
 
 		public override int Pos { get { return pos; } }
@@ -44,6 +39,11 @@ namespace Grc.Ast.Node.Type
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("{0}{1}{2}", lbrack, integer, rbrack);
 		}
 	}
 }

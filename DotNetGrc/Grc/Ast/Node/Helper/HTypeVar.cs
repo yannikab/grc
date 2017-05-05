@@ -13,78 +13,54 @@ namespace Grc.Ast.Node.Helper
 		private TypeDataBase dataType;
 		private List<DimIntegerT> dims;
 
-		private string text;
+		public TypeDataBase DataType { get { return dataType; } }
 
-		public TypeDataBase DataType
-		{
-			get { ProcessChildren(); return dataType; }
-		}
+		public List<DimIntegerT> Dims { get { return dims; } }
 
-		public List<DimIntegerT> Dims
-		{
-			get { ProcessChildren(); return dims; }
-		}
+		public override int Line { get { return dataType.Line; } }
 
-		public override string Text
-		{
-			get { ProcessChildren(); return text; }
-		}
-
-		public override int Line
-		{
-			get { ProcessChildren(); return dataType.Line; }
-		}
-
-		public override int Pos
-		{
-			get { ProcessChildren(); return dataType.Pos; }
-		}
+		public override int Pos { get { return dataType.Pos; } }
 
 		public HTypeVar()
 		{
+			this.dims = new List<DimIntegerT>();
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (dataType != null || dims != null)
-				return;
-
-			dims = new List<DimIntegerT>();
-
-			for (int i = 0; i < Children.Count; i++)
+			if (dataType == null)
 			{
-				NodeBase c = Children[i];
-
 				if (c is TypeDataBase)
-				{
-					if (dataType != null)
-						throw new NodeException("Data type specified by two children.");
-
 					dataType = (TypeDataBase)c;
-				}
-				else if (c is DimIntegerT)
-				{
-					dims.Add((DimIntegerT)c);
-				}
 				else
-				{
-					throw new NodeException("Invalid child type.");
-				}
-
-				StringBuilder sb = new StringBuilder();
-
-				sb.Append(dataType.Text);
-
-				foreach (var d in dims)
-					sb.Append(d.Text);
-
-				this.text = sb.ToString();
+					throw new NodeException();
 			}
+			else
+			{
+				if (c is DimIntegerT)
+					dims.Add((DimIntegerT)c);
+				else
+					throw new NodeException();
+			}
+
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(dataType.Text);
+
+			foreach (var d in dims)
+				sb.Append(d.Text);
+
+			return sb.ToString();
 		}
 
 		public override string ToString()

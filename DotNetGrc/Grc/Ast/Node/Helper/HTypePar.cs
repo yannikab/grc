@@ -14,77 +14,57 @@ namespace Grc.Ast.Node.Helper
 		private DimEmptyT dimEmpty;
 		private List<DimIntegerT> dims;
 
-		private string text;
+		public TypeDataBase DataType { get { return dataType; } }
 
-		public TypeDataBase DataType
-		{
-			get { ProcessChildren(); return dataType; }
-		}
+		public DimEmptyT DimEmpty { get { return dimEmpty; } }
 
-		public DimEmptyT DimEmpty
-		{
-			get { ProcessChildren(); return dimEmpty; }
-		}
+		public IReadOnlyList<DimIntegerT> Dims { get { return dims; } }
 
-		public IReadOnlyList<DimIntegerT> Dims
-		{
-			get { ProcessChildren(); return dims; }
-		}
+		public override int Line { get { return dataType.Line; } }
 
-		public override string Text
-		{
-			get { ProcessChildren(); return text; }
-		}
-
-		public override int Line
-		{
-			get { ProcessChildren(); return dataType.Line; }
-		}
-
-		public override int Pos
-		{
-			get { ProcessChildren(); return dataType.Pos; }
-		}
+		public override int Pos { get { return dataType.Pos; } }
 
 		public HTypePar()
 		{
+			this.dims = new List<DimIntegerT>();
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (dataType != null || dimEmpty != null || dims != null)
-				return;
-
-			dims = new List<DimIntegerT>();
-
-			for (int i = 0; i < Children.Count; i++)
+			if (dataType == null)
 			{
-				NodeBase c = Children[i];
-
 				if (c is TypeDataBase)
-				{
-					if (dataType != null)
-						throw new NodeException("Data type specified by two children.");
-
 					dataType = (TypeDataBase)c;
-				}
-				else if (c is DimEmptyT)
-				{
-					if (dimEmpty != null)
-						throw new NodeException("Empty dimension specified by two children.");
-
-					dimEmpty = (DimEmptyT)c;
-				}
-				else if (c is DimIntegerT)
-				{
-					dims.Add((DimIntegerT)c);
-				}
 				else
-				{
-					throw new NodeException("Invalid child type.");
-				}
+					throw new NodeException();
+			}
+			else if (dimEmpty == null)
+			{
+				if (c is DimEmptyT && dims.Count == 0)
+					dimEmpty = (DimEmptyT)c;
+				else if (c is DimIntegerT)
+					dims.Add((DimIntegerT)c);
+				else
+					throw new NodeException();
+			}
+			else
+			{
+				if (c is DimIntegerT)
+					dims.Add((DimIntegerT)c);
+				else
+					throw new NodeException();
 			}
 
+			base.AddChild(c);
+		}
+
+		public override void Accept(IVisitor v)
+		{
+			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
 			StringBuilder sb = new StringBuilder();
 
 			sb.Append(dataType.Text);
@@ -95,12 +75,7 @@ namespace Grc.Ast.Node.Helper
 			foreach (var d in dims)
 				sb.Append(d.Text);
 
-			this.text = sb.ToString();
-		}
-
-		public override void Accept(IVisitor v)
-		{
-			v.Visit(this);
+			return sb.ToString();
 		}
 
 		public override string ToString()

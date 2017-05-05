@@ -15,71 +15,64 @@ namespace Grc.Ast.Node.Func
 		private List<LocalBase> locals;
 		private StmtBlock block;
 
-		private string text;
+		public LocalFuncDecl Header { get { return header; } }
 
-		public LocalFuncDecl Header
-		{
-			get { ProcessChildren(); return header; }
-		}
+		public IReadOnlyList<LocalBase> Locals { get { return locals; } }
 
-		public IReadOnlyList<LocalBase> Locals
-		{
-			get { ProcessChildren(); return locals; }
-		}
+		public StmtBlock Block { get { return block; } }
 
-		public StmtBlock Block
-		{
-			get { ProcessChildren(); return block; }
-		}
+		public override int Line { get { return header.Line; } }
 
-		public override string Text { get { ProcessChildren(); return text; } }
-
-		public override int Line
-		{
-			get { ProcessChildren(); return header.Line; }
-		}
-
-		public override int Pos
-		{
-			get { ProcessChildren(); return header.Pos; }
-		}
+		public override int Pos { get { return header.Pos; } }
 
 		public LocalFuncDef()
 		{
+			this.locals = new List<LocalBase>();
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (header != null || locals != null || block != null)
-				return;
-
-			this.locals = new List<LocalBase>();
-
-			StringBuilder sb = new StringBuilder();
-
-			header = (LocalFuncDecl)Children[0];
-
-			sb.Append(header.Text);
-			sb.Append(Environment.NewLine);
-
-			for (int i = 1; i < Children.Count - 1; i++)
+			if (header == null)
 			{
-				locals.Add((LocalBase)Children[i]);
-
-				sb.Append((Children[i] as LocalBase).Text);
-				sb.Append(Environment.NewLine);
+				if (c is LocalFuncDecl)
+					header = (LocalFuncDecl)c;
+				else
+					throw new NodeException();
+			}
+			else if (block == null)
+			{
+				if (c is LocalBase)
+					locals.Add(c as LocalBase);
+				else if (c is StmtBlock)
+					block = (StmtBlock)c;
+				else
+					throw new NodeException();
+			}
+			else
+			{
+				throw new NodeException();
 			}
 
-			block = (StmtBlock)Children[Children.Count - 1];
-
-			sb.Append(block.Text);
-
-			this.text = sb.ToString();
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.AppendLine(header.Text);
+
+			foreach (LocalBase l in locals)
+				sb.AppendLine(l.Text);
+
+			sb.Append(block.Text);
+
+			return sb.ToString();
 		}
 
 		public override string ToString()

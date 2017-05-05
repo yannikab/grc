@@ -18,23 +18,7 @@ namespace Grc.Ast.Node.Stmt
 		private int line;
 		private int pos;
 
-		public ExprBase Expr
-		{
-			get { ProcessChildren(); return expr; }
-		}
-
-		public override string Text
-		{
-			get
-			{
-				ProcessChildren();
-
-				if (expr != null)
-					return string.Format("{0} {1}{2}", keyReturn, expr.Text, semicolon);
-				else
-					return string.Format("{0}{1}", keyReturn, semicolon);
-			}
-		}
+		public ExprBase Expr { get { return expr; } }
 
 		public override int Line { get { return line; } }
 		public override int Pos { get { return pos; } }
@@ -48,20 +32,22 @@ namespace Grc.Ast.Node.Stmt
 			this.pos = pos;
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (expr != null)
-				return;
+			if (expr != null || (expr = c as ExprBase) == null)
+				throw new NodeException();
 
-			if (Children.Count > 1)
-				throw new NodeException("Return statement must have one child at most");
-
-			expr = Children.Count == 1 ? (ExprBase)Children[0] : null;
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("{0}{1}{2}", keyReturn, expr == null ? string.Empty : " " + expr.Text, semicolon);
 		}
 
 		public override string ToString()

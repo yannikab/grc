@@ -14,56 +14,42 @@ namespace Grc.Ast.Node.Expr
 
 		private string oper;
 
-		public ExprBase Left
-		{
-			get { ProcessChildren(); return left; }
-		}
+		public ExprBase Left { get { return left; } }
 
-		public ExprBase Right
-		{
-			get { ProcessChildren(); return right; }
-		}
+		public ExprBase Right { get { return right; } }
 
-		public override string Text
-		{
-			get
-			{
-				ProcessChildren();
+		public override int Line { get { return left.Line; } }
 
-				return string.Format("({0} {1} {2})", left.Text, oper, right.Text);
-			}
-		}
-
-		public override int Line
-		{
-			get { ProcessChildren(); return left.Line; }
-		}
-
-		public override int Pos
-		{
-			get { ProcessChildren(); return left.Pos; }
-		}
+		public override int Pos { get { return left.Pos; } }
 
 		public ExprBinOpBase(string oper)
 		{
 			this.oper = oper;
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (left != null || right != null)
-				return;
+			if (!(c is ExprBase))
+				throw new NodeException();
 
-			if (Children.Count > 2)
-				throw new NodeException("Binary operator expression must have two children.");
+			if (left == null)
+				left = (ExprBase)c;
+			else if (right == null)
+				right = (ExprBase)c;
+			else
+				throw new NodeException();
 
-			left = (ExprBase)Children[0];
-			right = (ExprBase)Children[1];
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("({0} {1} {2})", left.Text, oper, right.Text);
 		}
 
 		public override string ToString()

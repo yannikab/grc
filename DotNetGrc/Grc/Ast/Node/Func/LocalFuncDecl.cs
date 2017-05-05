@@ -13,7 +13,7 @@ namespace Grc.Ast.Node.Func
 	{
 		private List<HPar> hPars;
 		private HTypeReturn hTypeReturn;
-		
+
 		private List<Parameter> parameters;
 
 		private string keyFun;
@@ -22,32 +22,30 @@ namespace Grc.Ast.Node.Func
 		private string rpar;
 		private string colon;
 
-		private string text;
-
 		private int line;
 		private int pos;
 
-		public IReadOnlyList<HPar> HPars
-		{
-			get { ProcessChildren(); return hPars; }
-		}
+		public IReadOnlyList<HPar> HPars { get { return hPars; } }
 
-		public HTypeReturn HTypeReturn
-		{
-			get { ProcessChildren(); return hTypeReturn; }
-		}
+		public HTypeReturn HTypeReturn { get { return hTypeReturn; } }
 
-		public IReadOnlyList<Parameter> Params
+		public IReadOnlyList<Parameter> Parameters
 		{
-			get { ProcessChildren(); return parameters; }
+			get
+			{
+				if (parameters != null)
+					return parameters;
+
+				parameters = new List<Parameter>();
+
+				for (int i = 0; i < hPars.Count; i++)
+					parameters.AddRange(hPars[i].Parameters);
+
+				return parameters;
+			}
 		}
 
 		public string Name { get { return id; } }
-
-		public override string Text
-		{
-			get { ProcessChildren(); return text; }
-		}
 
 		public override int Line { get { return line; } }
 
@@ -63,36 +61,32 @@ namespace Grc.Ast.Node.Func
 
 			this.line = line;
 			this.pos = pos;
+
+			this.hPars = new List<HPar>();
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (hPars != null || hTypeReturn != null || parameters != null)
-				return;
+			if (hTypeReturn != null)
+				throw new NodeException();
 
-			hPars = new List<HPar>();
+			if (c is HPar)
+				hPars.Add((HPar)c);
+			else if (c is HTypeReturn)
+				hTypeReturn = (HTypeReturn)c;
+			else
+				throw new NodeException();
 
-			for (int i = 0; i < Children.Count; i++)
-			{
-				NodeBase c = Children[i];
+			base.AddChild(c);
+		}
 
-				if (c is HPar)
-				{
-					hPars.Add((HPar)c);
-				}
-				else if (c is HTypeReturn)
-				{
-					if (hTypeReturn != null)
-						throw new NodeException("Return type specified by two children.");
+		public override void Accept(IVisitor v)
+		{
+			v.Visit(this);
+		}
 
-					hTypeReturn = (HTypeReturn)c;
-				}
-				else
-				{
-					throw new NodeException("Invalid child type.");
-				}
-			}
-
+		protected override string GetText()
+		{
 			StringBuilder sb = new StringBuilder();
 
 			sb.Append(this.keyFun + " ");
@@ -119,12 +113,7 @@ namespace Grc.Ast.Node.Func
 
 			sb.Append(this.hTypeReturn.Text);
 
-			this.text = sb.ToString();
-		}
-
-		public override void Accept(IVisitor v)
-		{
-			v.Visit(this);
+			return sb.ToString();
 		}
 
 		public override string ToString()

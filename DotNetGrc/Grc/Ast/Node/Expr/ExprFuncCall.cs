@@ -15,19 +15,12 @@ namespace Grc.Ast.Node.Expr
 		private string lpar;
 		private string rpar;
 
-		private string text;
-
 		private int line;
 		private int pos;
 
-		public IReadOnlyList<ExprBase> Args { get { ProcessChildren(); return args; } }
+		public IReadOnlyList<ExprBase> Args { get { return args; } }
 
 		public string Name { get { return Text.Replace(lpar + rpar, string.Empty); } }
-
-		public override string Text
-		{
-			get { ProcessChildren(); return text; }
-		}
 
 		public override int Line { get { return line; } }
 
@@ -41,14 +34,29 @@ namespace Grc.Ast.Node.Expr
 
 			this.line = line;
 			this.pos = pos;
+
+			this.args = new List<ExprBase>();
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (this.args != null)
-				return;
+			if (!(c is ExprBase))
+				throw new NodeException();
 
-			this.args = new List<ExprBase>(Children.Cast<ExprBase>());
+			args.Add((ExprBase)c);
+
+			base.AddChild(c);
+		}
+
+		public override void Accept(IVisitor v)
+		{
+			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			if (args == null)
+				throw new NodeException("Children have not been properly set.");
 
 			StringBuilder sb = new StringBuilder();
 
@@ -59,18 +67,14 @@ namespace Grc.Ast.Node.Expr
 			for (int i = 0; i < args.Count; i++)
 			{
 				sb.Append(args[i].Text);
+
 				if (i < args.Count - 1)
 					sb.Append(", ");
 			}
 
 			sb.Append(rpar);
 
-			this.text = sb.ToString();
-		}
-
-		public override void Accept(IVisitor v)
-		{
-			v.Visit(this);
+			return sb.ToString();
 		}
 
 		public override string ToString()

@@ -12,38 +12,37 @@ namespace Grc.Ast.Node.Helper
 	{
 		private LocalFuncDef program;
 
-		public LocalFuncDef Program
-		{
-			get { ProcessChildren(); return program; }
-		}
+		public LocalFuncDef Program { get { return program; } }
 
-		public override string Text
-		{
-			get { ProcessChildren(); return program.ToString(); }
-		}
+		public override int Line { get { return program.Line; } }
 
-		public override int Line { get { ProcessChildren(); return program.Line; } }
-
-		public override int Pos { get { ProcessChildren(); return program.Pos; } }
+		public override int Pos { get { return program.Pos; } }
 
 		public Root()
 		{
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (program != null)
-				return;
+			if (program != null || (program = c as LocalFuncDef) == null)
+				throw new NodeException();
 
-			if (Children.Count > 1)
-				throw new NodeException("Root node must have one child.");
-
-			this.program = (LocalFuncDef)Children[0];
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return program.Text;
+		}
+
+		public override string ToString()
+		{
+			return "root";
 		}
 	}
 }

@@ -13,8 +13,6 @@ namespace Grc.Ast.Node.Type
 		private int line;
 		private int pos;
 
-		public override string Text { get { return keyword; } }
-
 		public override int Line { get { return line; } }
 
 		public override int Pos { get { return pos; } }
@@ -25,6 +23,11 @@ namespace Grc.Ast.Node.Type
 
 			this.line = line;
 			this.pos = pos;
+		}
+
+		protected override string GetText()
+		{
+			return keyword;
 		}
 	}
 }

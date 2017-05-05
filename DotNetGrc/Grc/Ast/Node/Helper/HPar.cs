@@ -19,29 +19,27 @@ namespace Grc.Ast.Node.Helper
 		private string keyRef;
 		private string colon;
 
-		private string text;
-
 		private int line;
 		private int pos;
 
-		public IReadOnlyList<ParIdentifierT> Identifiers
-		{
-			get { ProcessChildren(); return identifiers; }
-		}
+		public IReadOnlyList<ParIdentifierT> Identifiers { get { return identifiers; } }
 
-		public HTypePar HTypePar
-		{
-			get { ProcessChildren(); return hTypePar; }
-		}
+		public HTypePar HTypePar { get { return hTypePar; } }
 
 		public IReadOnlyList<Parameter> Parameters
 		{
-			get { ProcessChildren(); return parameters; }
-		}
+			get
+			{
+				if (parameters != null)
+					return parameters;
 
-		public override string Text
-		{
-			get { ProcessChildren(); return text; }
+				parameters = new List<Parameter>();
+
+				foreach (ParIdentifierT p in identifiers)
+					parameters.Add(new Parameter(p.Text, keyRef != null, hTypePar.DataType, hTypePar.DimEmpty != null, hTypePar.Dims.Select(d => d.Dim).ToList()));
+
+				return parameters;
+			}
 		}
 
 		public override int Line { get { return line; } }
@@ -55,48 +53,41 @@ namespace Grc.Ast.Node.Helper
 
 			this.line = line;
 			this.pos = pos;
+
+			this.identifiers = new List<ParIdentifierT>();
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (identifiers != null || hTypePar != null || parameters != null)
-				return;
+			if (hTypePar != null)
+				throw new NodeException();
 
-			identifiers = new List<ParIdentifierT>();
+			if (c is ParIdentifierT)
+				identifiers.Add((ParIdentifierT)c);
+			else if (c is HTypePar && identifiers.Count > 0)
+				hTypePar = (HTypePar)c;
+			else
+				throw new NodeException();
 
-			foreach (NodeBase c in Children)
-			{
-				if (c is ParIdentifierT)
-				{
-					identifiers.Add((ParIdentifierT)c);
-				}
-				else if (c is HTypePar)
-				{
-					if (hTypePar != null)
-						throw new NodeException("Parameter type specified by two children.");
+			base.AddChild(c);
+		}
 
-					hTypePar = (HTypePar)c;
-				}
-				else
-				{
-					throw new NodeException("Invalid child type.");
-				}
-			}
+		public override void Accept(IVisitor v)
+		{
+			v.Visit(this);
+		}
 
-			parameters = new List<Parameter>();
-
-			foreach (ParIdentifierT p in identifiers)
-				parameters.Add(new Parameter(p.Text, keyRef != null, hTypePar.DataType, hTypePar.DimEmpty != null, hTypePar.Dims.Select(d => d.Dim).ToList()));
-
+		protected override string GetText()
+		{
 			StringBuilder sb = new StringBuilder();
 
 			sb.Append(keyRef != null ? keyRef + " " : string.Empty);
 
-			for (int i = 0; i < parameters.Count; i++)
+			for (int i = 0; i < Parameters.Count; i++)
 			{
-				sb.Append(parameters[i].Name);
+				sb.Append(Parameters[i].Name);
 
-				if (i < parameters.Count - 1)
+				if (i < Parameters.Count - 1)
 					sb.Append(", ");
 			}
 
@@ -104,12 +95,7 @@ namespace Grc.Ast.Node.Helper
 
 			sb.Append(hTypePar.Text);
 
-			this.text = sb.ToString();
-		}
-
-		public override void Accept(IVisitor v)
-		{
-			v.Visit(this);
+			return sb.ToString();
 		}
 
 		public override string ToString()

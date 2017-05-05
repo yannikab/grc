@@ -16,35 +16,13 @@ namespace Grc.Ast.Node.Stmt
 		private string operAssign;
 		private string semicolon;
 
-		public ExprLValBase Lval
-		{
-			get { ProcessChildren(); return this.lval; }
-		}
+		public ExprLValBase Lval { get { return this.lval; } }
 
-		public ExprBase Expr
-		{
-			get { ProcessChildren(); return this.expr; }
-		}
+		public ExprBase Expr { get { return this.expr; } }
 
-		public override string Text
-		{
-			get
-			{
-				ProcessChildren();
+		public override int Line { get { return lval.Line; } }
 
-				return string.Format("{0} {1} {2}{3}", lval, operAssign, expr, semicolon);
-			}
-		}
-
-		public override int Line
-		{
-			get { ProcessChildren(); return lval.Line; }
-		}
-
-		public override int Pos
-		{
-			get { ProcessChildren(); return lval.Pos; }
-		}
+		public override int Pos { get { return lval.Pos; } }
 
 		public StmtAssign(string operAssign, string semicolon)
 		{
@@ -52,21 +30,38 @@ namespace Grc.Ast.Node.Stmt
 			this.semicolon = semicolon;
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (lval != null || expr != null)
-				return;
+			if (lval == null)
+			{
+				if (c is ExprLValBase)
+					lval = (ExprLValBase)c;
+				else
+					throw new NodeException();
+			}
+			else if (expr == null)
+			{
+				if (c is ExprBase)
+					expr = (ExprBase)c;
+				else
+					throw new NodeException();
+			}
+			else
+			{
+				throw new NodeException();
+			}
 
-			if (Children.Count > 2)
-				throw new NodeException("Assignment statement must have two children.");
-
-			lval = (ExprLValBase)Children[0];
-			expr = (ExprBase)Children[1];
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("{0} {1} {2}{3}", lval, operAssign, expr, semicolon);
 		}
 
 		public override string ToString()

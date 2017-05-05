@@ -44,7 +44,7 @@ namespace Grc.Ast.Visitor.Semantic
 		{
 			Pre(n);
 
-			foreach (var p in n.Header.Params)
+			foreach (var p in n.Header.Parameters)
 				st.Insert(new SymbolVar(p.Name));
 
 			foreach (LocalBase l in n.Locals)
@@ -59,7 +59,7 @@ namespace Grc.Ast.Visitor.Semantic
 		{
 			st.Insert(new SymbolFunc(n.Name));
 
-			foreach (var p in n.Params)
+			foreach (var p in n.Parameters)
 				st.Insert(new SymbolVar(p.Name));
 		}
 

@@ -20,29 +20,27 @@ namespace Grc.Ast.Node.Func
 		private string colon;
 		private string semicolon;
 
-		private string text;
-
 		private int line;
 		private int pos;
 
-		public IReadOnlyList<VarIdentifierT> Identifiers
-		{
-			get { ProcessChildren(); return identifiers; }
-		}
+		public IReadOnlyList<VarIdentifierT> Identifiers { get { return identifiers; } }
 
-		public HTypeVar HTypeVar
-		{
-			get { ProcessChildren(); return hTypeVar; }
-		}
+		public HTypeVar HTypeVar { get { return hTypeVar; } }
 
 		public IReadOnlyList<Variable> Variables
 		{
-			get { ProcessChildren(); return variables; }
-		}
+			get
+			{
+				if (variables != null)
+					return variables;
 
-		public override string Text
-		{
-			get { ProcessChildren(); return text; }
+				variables = new List<Variable>();
+
+				foreach (VarIdentifierT v in identifiers)
+					variables.Add(new Variable(v.Text, hTypeVar.DataType, hTypeVar.Dims.Select(d => d.Dim).ToList()));
+
+				return variables;
+			}
 		}
 
 		public override int Line { get { return line; } }
@@ -57,48 +55,41 @@ namespace Grc.Ast.Node.Func
 
 			this.line = line;
 			this.pos = pos;
+
+			this.identifiers = new List<VarIdentifierT>();
 		}
 
-		protected override void ProcessChildren()
+		public override void AddChild(NodeBase c)
 		{
-			if (identifiers != null || hTypeVar != null || variables != null)
-				return;
+			if (hTypeVar != null)
+				throw new NodeException();
 
-			identifiers = new List<VarIdentifierT>();
+			if (c is VarIdentifierT)
+				identifiers.Add((VarIdentifierT)c);
+			else if (c is HTypeVar && identifiers.Count > 0)
+				hTypeVar = (HTypeVar)c;
+			else
+				throw new NodeException();
 
-			foreach (NodeBase c in Children)
-			{
-				if (c is VarIdentifierT)
-				{
-					identifiers.Add((VarIdentifierT)c);
-				}
-				else if (c is HTypeVar)
-				{
-					if (hTypeVar != null)
-						throw new NodeException("Variable type specified by two children.");
+			base.AddChild(c);
+		}
 
-					hTypeVar = (HTypeVar)c;
-				}
-				else
-				{
-					throw new NodeException("Invalid child type.");
-				}
-			}
+		public override void Accept(IVisitor v)
+		{
+			v.Visit(this);
+		}
 
-			variables = new List<Variable>();
-
-			foreach (VarIdentifierT v in identifiers)
-				variables.Add(new Variable(v.Text, hTypeVar.DataType, hTypeVar.Dims.Select(d => d.Dim).ToList()));
-
+		protected override string GetText()
+		{
 			StringBuilder sb = new StringBuilder();
 
 			sb.Append(keyVar + " ");
 
-			for (int i = 0; i < variables.Count; i++)
+			for (int i = 0; i < Variables.Count; i++)
 			{
-				sb.Append(variables[i].Name);
+				sb.Append(Variables[i].Name);
 
-				if (i < variables.Count - 1)
+				if (i < Variables.Count - 1)
 					sb.Append(", ");
 			}
 
@@ -108,12 +99,7 @@ namespace Grc.Ast.Node.Func
 
 			sb.Append(semicolon);
 
-			this.text = sb.ToString();
-		}
-
-		public override void Accept(IVisitor v)
-		{
-			v.Visit(this);
+			return sb.ToString();
 		}
 
 		public override string ToString()
