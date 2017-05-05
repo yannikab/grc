@@ -9,30 +9,17 @@ namespace Grc.Ast.Node
 {
 	public class Variable
 	{
-		private string name;
+		private string id;
 		private TypeDataBase type;
-		private IList<int> dims;
+		private IReadOnlyList<int> dims;
 
-		public string Name
-		{
-			get { return name; }
-		}
+		public string Name { get { return id; } }
 
-		public Variable(string name, TypeDataBase type, IList<int> dims)
+		public Variable(string id, TypeDataBase type, IReadOnlyList<int> dims)
 		{
-			this.name = name;
+			this.id = id;
 			this.type = type;
 			this.dims = dims;
-		}
-
-		public override string ToString()
-		{
-			string t = name + "\n" + type.Text;
-
-			foreach (int i in dims)
-				t += "[" + i + "]";
-
-			return t;
 		}
 	}
 }

@@ -9,14 +9,31 @@ namespace Grc.Ast.Node.Expr
 {
 	public class ExprLValStringT : ExprLValBase
 	{
-		public ExprLValStringT(string text)
-			: base(text)
+		private string str;
+
+		private int line;
+		private int pos;
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public ExprLValStringT(string str, int line, int pos)
 		{
+			this.str = str;
+
+			this.line = line;
+			this.pos = pos;
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return str;
 		}
 	}
 }

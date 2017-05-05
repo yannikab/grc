@@ -8,8 +8,7 @@ namespace Grc.Ast.Node.Expr
 {
 	public abstract class ExprLValBase : ExprBase
 	{
-		public ExprLValBase(string text)
-			: base(text)
+		public ExprLValBase()
 		{
 		}
 	}

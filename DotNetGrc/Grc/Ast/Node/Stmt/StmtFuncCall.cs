@@ -10,29 +10,29 @@ namespace Grc.Ast.Node.Stmt
 {
 	public class StmtFuncCall : StmtBase
 	{
-		private string name;
-		private List<ExprBase> args;
+		private ExprFuncCall funCall;
 
-		public virtual string Name
+		private string semicolon;
+
+		public IReadOnlyList<ExprBase> Args { get { return funCall.Args; } }
+
+		public string Name { get { return funCall.Name; } }
+
+		public override int Line { get { return funCall.Line; } }
+
+		public override int Pos { get { return funCall.Pos; } }
+
+		public StmtFuncCall(string semicolon)
 		{
-			get { return this.name; }
-			set { this.name = value; }
+			this.semicolon = semicolon;
 		}
 
-		public virtual IReadOnlyList<ExprBase> Args
+		public override void AddChild(NodeBase c)
 		{
-			get { return this.args; }
-		}
+			if (funCall != null || (funCall = c as ExprFuncCall) == null)
+				throw new NodeException();
 
-		public StmtFuncCall()
-			: base("()")
-		{
-			this.args = new List<ExprBase>();
-		}
-
-		public virtual void AddArg(ExprBase arg)
-		{
-			this.args.Add(arg);
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
@@ -40,9 +40,14 @@ namespace Grc.Ast.Node.Stmt
 			v.Visit(this);
 		}
 
+		protected override string GetText()
+		{
+			return string.Format("{0}{1}", funCall.Text, semicolon);
+		}
+
 		public override string ToString()
 		{
-			return name;
+			return string.Format("{0}{1}", funCall.ToString(), semicolon);
 		}
 	}
 }

@@ -8,7 +8,8 @@ namespace Grc.Ast.Node.Expr
 {
 	class ExprSub : ExprBinOpBase
 	{
-		public ExprSub(string text) : base(text)
+		public ExprSub(string operSub)
+			: base(operSub)
 		{
 		}
 	}

@@ -3,25 +3,75 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Visitor;
-using Grc.Ast.Node.Type;
 using Grc.Ast.Node.Helper;
+using Grc.Ast.Node.Type;
+using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Func
 {
 	public class LocalVarDef : LocalBase
 	{
-		private List<Variable> vars;
+		private List<VarIdentifierT> identifiers;
+		private HTypeVar hTypeVar;
 
-		public virtual IReadOnlyList<Variable> Vars
+		private List<Variable> variables;
+
+		private string keyVar;
+		private string colon;
+		private string semicolon;
+
+		private int line;
+		private int pos;
+
+		public IReadOnlyList<VarIdentifierT> Identifiers { get { return identifiers; } }
+
+		public HTypeVar HTypeVar { get { return hTypeVar; } }
+
+		public IReadOnlyList<Variable> Variables
 		{
-			get { return this.vars; }
+			get
+			{
+				if (variables != null)
+					return variables;
+
+				variables = new List<Variable>();
+
+				foreach (VarIdentifierT v in identifiers)
+					variables.Add(new Variable(v.Text, hTypeVar.DataType, hTypeVar.Dims.Select(d => d.Dim).ToList()));
+
+				return variables;
+			}
 		}
 
-		public LocalVarDef(string text)
-			: base(text)
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public LocalVarDef(string keyVar, string colon, string semicolon, int line, int pos)
 		{
-			this.vars = new List<Variable>();
+			this.keyVar = keyVar;
+			this.colon = colon;
+			this.semicolon = semicolon;
+
+			this.line = line;
+			this.pos = pos;
+
+			this.identifiers = new List<VarIdentifierT>();
+		}
+
+		public override void AddChild(NodeBase c)
+		{
+			if (hTypeVar != null)
+				throw new NodeException();
+
+			if (c is VarIdentifierT)
+				identifiers.Add((VarIdentifierT)c);
+			else if (c is HTypeVar && identifiers.Count > 0)
+				hTypeVar = (HTypeVar)c;
+			else
+				throw new NodeException();
+
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
@@ -29,61 +79,32 @@ namespace Grc.Ast.Node.Func
 			v.Visit(this);
 		}
 
-		public void getVars()
+		protected override string GetText()
 		{
-			if (!(Parent is LocalFuncDef))
-				return;
+			StringBuilder sb = new StringBuilder();
 
-			IList<string> vars = new List<string>();
+			sb.Append(keyVar + " ");
 
-			for (int i = 0; i < Children.Count; i++)
+			for (int i = 0; i < Variables.Count; i++)
 			{
-				NodeBase p = Children[i];
+				sb.Append(Variables[i].Name);
 
-				if (p is VarIdentifierT)
-				{
-					vars.Add(((VarIdentifierT)p).Text);
-				}
-				else if (p is HType)
-				{
-					addVars(vars, (HType)p);
-				}
-				else
-				{
-					return;
-				}
+				if (i < Variables.Count - 1)
+					sb.Append(", ");
 			}
+
+			sb.Append(string.Format(" {0} ", colon));
+
+			sb.Append(hTypeVar.Text);
+
+			sb.Append(semicolon);
+
+			return sb.ToString();
 		}
 
-		private void addVars(IList<string> vars, HType t)
+		public override string ToString()
 		{
-			TypeDataBase type = null;
-
-			IList<int> dims = new List<int>();
-
-			for (int i = 0; i < t.Children.Count; i++)
-			{
-				NodeBase c = t.Children[i];
-
-				if (c is TypeDataBase)
-				{
-					type = (TypeDataBase)c;
-				}
-				else if (c is DimIntegerT)
-				{
-					dims.Add(((DimIntegerT)c).Dim);
-				}
-				else
-				{
-					return;
-				}
-			}
-
-			if (type == null)
-				return;
-
-			for (int i = 0; i < vars.Count; i++)
-				this.vars.Add(new Variable(vars[i], type, dims));
+			return keyVar;
 		}
 	}
 }

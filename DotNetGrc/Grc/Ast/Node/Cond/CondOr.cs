@@ -12,25 +12,49 @@ namespace Grc.Ast.Node.Cond
 		private CondBase left;
 		private CondBase right;
 
-		public virtual CondBase Left
+		private string operOr;
+
+		public CondBase Left { get { return left; } }
+
+		public CondBase Right { get { return right; } }
+
+		public override int Line { get { return left.Line; } }
+
+		public override int Pos { get { return left.Pos; } }
+
+		public CondOr(string operOr)
 		{
-			get { return this.left; }
-			set { this.left = value; }
+			this.operOr = operOr;
 		}
 
-		public virtual CondBase Right
+		public override void AddChild(NodeBase c)
 		{
-			get { return this.right; }
-			set { this.right = value; }
-		}
+			if (!(c is CondBase))
+				throw new NodeException();
 
-		public CondOr(string text) : base(text)
-		{
+			if (left == null)
+				left = (CondBase)c;
+			else if (right == null)
+				right = (CondBase)c;
+			else
+				throw new NodeException();
+
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("({0} {1} {2})", left, operOr, right);
+		}
+
+		public override string ToString()
+		{
+			return operOr;
 		}
 	}
 }

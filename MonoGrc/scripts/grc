@@ -2,4 +2,6 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-mono ${DIR}/../Grc/bin/Debug/Grc.exe $*
+GRC=${DIR}/../Grc/bin/Debug/Grc.exe
+
+test -x ${GRC} && ${GRC} $*

@@ -10,44 +10,35 @@ namespace Grc.Ast.Node
 	public abstract class NodeBase
 	{
 		private NodeBase parent;
-		private List<NodeBase> children;
+		private string text;
 
-		private String text;
+		public string Text { get { return text ?? (text = GetText()); } }
 
-		public NodeBase Parent
+		public abstract int Line { get; }
+
+		public abstract int Pos { get; }
+
+		public string Location
 		{
-			get { return parent; }
+			get { return string.Format("[{0}, {1}]", Line, Pos); }
 		}
 
-		public IReadOnlyList<NodeBase> Children
+		public NodeBase()
 		{
-			get { return children; }
 		}
 
-		public string Text
-		{
-			get { return text; }
-		}
-
-		public NodeBase(string text)
-		{
-			this.text = text;
-
-			this.children = new List<NodeBase>();
-		}
-
-		public void AddChild(NodeBase c)
+		public virtual void AddChild(NodeBase c)
 		{
 			c.parent = this;
-
-			children.Add(c);
 		}
 
 		public abstract void Accept(IVisitor v);
 
+		protected abstract string GetText();
+
 		public override string ToString()
 		{
-			return text;
+			return Text;
 		}
 	}
 }

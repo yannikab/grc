@@ -58,28 +58,30 @@ namespace Grc.Ast.Visitor
 
 		void Visit(StmtReturn n);
 
-		void Visit(HRef n);
+		void Visit(LocalFuncDef n);
 
-		void Visit(HVal n);
+		void Visit(LocalFuncDecl n);
 
-		void Visit(FParIdentifierT n);
+		void Visit(HPar n);
+
+		void Visit(ParIdentifierT n);
+
+		void Visit(HTypePar n);
+
+		void Visit(TypeDataBase n);
+
+		void Visit(DimEmptyT n);
+
+		void Visit(DimIntegerT n);
+
+		void Visit(HTypeReturn n);
+
+		void Visit(TypeReturnNothingT n);
 
 		void Visit(LocalVarDef n);
 
 		void Visit(VarIdentifierT n);
 
-		void Visit(HType n);
-
-		void Visit(LocalFuncDef n);
-
-		void Visit(LocalFuncDecl n);
-
-		void Visit(TypeDataBase n);
-
-		void Visit(TypeReturnNothingT n);
-
-		void Visit(DimEmptyT n);
-
-		void Visit(DimIntegerT n);
+		void Visit(HTypeVar n);
 	}
 }
