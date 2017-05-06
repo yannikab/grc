@@ -13,25 +13,61 @@ namespace Grc.Ast.Node.Stmt
 		private CondBase cond;
 		private StmtBase stmt;
 
-		public virtual CondBase Cond
+		private string keyWhile;
+		private string keyDo;
+
+		private int line;
+		private int pos;
+
+		public CondBase Cond { get { return cond; } }
+
+		public StmtBase Stmt { get { return stmt; } }
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public StmtWhileDo(string keyWhile, string keyDo, int line, int pos)
 		{
-			get { return this.cond; }
-			set { this.cond = value; }
+			this.keyWhile = keyWhile;
+			this.keyDo = keyDo;
+
+			this.line = line;
+			this.pos = pos;
 		}
 
-		public virtual StmtBase Stmt
+		public override void AddChild(NodeBase c)
 		{
-			get { return this.stmt; }
-			set { this.stmt = value; }
-		}
+			if (cond == null)
+			{
+				if (c is CondBase)
+					cond = (CondBase)c;
+				else
+					throw new NodeException();
+			}
+			else if (stmt == null)
+			{
+				if (c is StmtBase)
+					stmt = (StmtBase)c;
+				else
+					throw new NodeException();
+			}
+			else
+			{
+				throw new NodeException();
+			}
 
-		public StmtWhileDo(string text) : base(text)
-		{
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("{0} {1} {2} {3}", keyWhile, cond.Text, keyDo, stmt.Text);
 		}
 	}
 }

@@ -13,25 +13,49 @@ namespace Grc.Ast.Node.Cond
 		private ExprBase left;
 		private ExprBase right;
 
-		public virtual ExprBase Left
+		private string oper;
+
+		public ExprBase Left { get { return left; } }
+
+		public ExprBase Right { get { return right; } }
+
+		public override int Line { get { return left.Line; } }
+
+		public override int Pos { get { return left.Pos; } }
+
+		public CondRelOpBase(string oper)
 		{
-			get { return this.left; }
-			set { this.left = value; }
+			this.oper = oper;
 		}
 
-		public virtual ExprBase Right
+		public override void AddChild(NodeBase c)
 		{
-			get { return this.right; }
-			set { this.right = value; }
-		}
+			if (!(c is ExprBase))
+				throw new NodeException();
 
-		public CondRelOpBase(string text) : base(text)
-		{
+			if (left == null)
+				left = (ExprBase)c;
+			else if (right == null)
+				right = (ExprBase)c;
+			else
+				throw new NodeException();
+
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("({0} {1} {2})", left.Text, oper, right.Text);
+		}
+
+		public override string ToString()
+		{
+			return oper;
 		}
 	}
 }

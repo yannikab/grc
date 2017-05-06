@@ -9,13 +9,31 @@ namespace Grc.Ast.Node.Expr
 {
 	public class ExprCharacterT : ExprBase
 	{
-		public ExprCharacterT(string text) : base(text)
+		private string character;
+
+		private int line;
+		private int pos;
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public ExprCharacterT(string character, int line, int pos)
 		{
+			this.character = character;
+
+			this.line = line;
+			this.pos = pos;
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return character;
 		}
 	}
 }

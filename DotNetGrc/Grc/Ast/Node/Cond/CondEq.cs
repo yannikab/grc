@@ -9,7 +9,8 @@ namespace Grc.Ast.Node.Cond
 {
 	class CondEq : CondRelOpBase
 	{
-		public CondEq(string text) : base(text)
+		public CondEq(string operEq)
+			: base(operEq)
 		{
 		}
 	}

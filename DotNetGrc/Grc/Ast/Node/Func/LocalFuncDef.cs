@@ -1,11 +1,11 @@
-﻿using Grc.Ast.Node.Helper;
-using Grc.Ast.Node.Stmt;
-using Grc.Ast.Visitor;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Ast.Node.Helper;
+using Grc.Ast.Node.Stmt;
+using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Func
 {
@@ -15,32 +15,45 @@ namespace Grc.Ast.Node.Func
 		private List<LocalBase> locals;
 		private StmtBlock block;
 
-		public virtual LocalFuncDecl Header
-		{
-			get { return this.header; }
-			set { this.header = value; }
-		}
+		public LocalFuncDecl Header { get { return header; } }
 
-		public virtual IReadOnlyList<LocalBase> Locals
-		{
-			get { return this.locals; }
-		}
+		public IReadOnlyList<LocalBase> Locals { get { return locals; } }
 
-		public virtual StmtBlock Block
-		{
-			get { return this.block; }
-			set { this.block = value; }
-		}
+		public StmtBlock Block { get { return block; } }
 
-		public virtual IReadOnlyList<StmtBase> Stmts
-		{
-			get { return this.block != null ? this.block.Stmts : null; }
-		}
+		public override int Line { get { return header.Line; } }
+
+		public override int Pos { get { return header.Pos; } }
 
 		public LocalFuncDef()
-			: base("func-def")
 		{
 			this.locals = new List<LocalBase>();
+		}
+
+		public override void AddChild(NodeBase c)
+		{
+			if (header == null)
+			{
+				if (c is LocalFuncDecl)
+					header = (LocalFuncDecl)c;
+				else
+					throw new NodeException();
+			}
+			else if (block == null)
+			{
+				if (c is LocalBase)
+					locals.Add(c as LocalBase);
+				else if (c is StmtBlock)
+					block = (StmtBlock)c;
+				else
+					throw new NodeException();
+			}
+			else
+			{
+				throw new NodeException();
+			}
+
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
@@ -48,9 +61,23 @@ namespace Grc.Ast.Node.Func
 			v.Visit(this);
 		}
 
-		public virtual void AddLocal(LocalBase local)
+		protected override string GetText()
 		{
-			this.locals.Add(local);
+			StringBuilder sb = new StringBuilder();
+
+			sb.AppendLine(header.Text);
+
+			foreach (LocalBase l in locals)
+				sb.AppendLine(l.Text);
+
+			sb.Append(block.Text);
+
+			return sb.ToString();
+		}
+
+		public override string ToString()
+		{
+			return "func-def";
 		}
 	}
 }

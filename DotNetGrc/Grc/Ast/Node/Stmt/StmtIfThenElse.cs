@@ -14,31 +14,78 @@ namespace Grc.Ast.Node.Stmt
 		private StmtBase stmtThen;
 		private StmtBase stmtElse;
 
-		public virtual CondBase Cond
+		private string keyIf;
+		private string keyThen;
+		private string keyElse;
+
+		private int line;
+		private int pos;
+
+		public CondBase Cond { get { return cond; } }
+
+		public StmtBase StmtThen { get { return stmtThen; } }
+
+		public StmtBase StmtElse { get { return stmtElse; } }
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public StmtIfThenElse(string keyIf, string keyThen, string keyElse, int line, int pos)
 		{
-			get { return this.cond; }
-			set { this.cond = value; }
+			this.keyIf = keyIf;
+			this.keyThen = keyThen;
+			this.keyElse = keyElse;
+
+			this.line = line;
+			this.pos = pos;
 		}
 
-		public virtual StmtBase StmtThen
+		public override void AddChild(NodeBase c)
 		{
-			get { return this.stmtThen; }
-			set { this.stmtThen = value; }
-		}
+			if (cond == null)
+			{
+				if (c is CondBase)
+					cond = (CondBase)c;
+				else
+					throw new NodeException();
+			}
+			else if (stmtThen == null)
+			{
+				if (c is StmtBase)
+					stmtThen = (StmtBase)c;
+				else
+					throw new NodeException();
+			}
+			else if (stmtElse == null)
+			{
+				if (c is StmtBase)
+					stmtElse = (StmtBase)c;
+				else
+					throw new NodeException();
+			}
+			else
+			{
+				throw new NodeException();
+			}
 
-		public virtual StmtBase StmtElse
-		{
-			get { return this.stmtElse; }
-			set { this.stmtElse = value; }
-		}
-
-		public StmtIfThenElse(string text) : base(text)
-		{
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("{0} {1} {2} {3} {4} {5}",
+					keyIf, cond.Text, keyThen, stmtThen.Text, keyElse, stmtElse.Text);
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0}-{1}-{2}", keyIf, keyThen, keyElse);
 		}
 	}
 }

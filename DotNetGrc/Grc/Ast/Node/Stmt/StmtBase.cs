@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Stmt
 {
 	public abstract class StmtBase : NodeBase
 	{
-		public StmtBase(string text) : base(text)
+		public StmtBase()
 		{
 		}
 	}

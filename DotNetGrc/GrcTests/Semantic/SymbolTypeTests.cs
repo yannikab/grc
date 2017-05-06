@@ -1,16 +1,16 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Grc.Semantic.SymbolTable;
 using Grc.Semantic.SymbolTable.Symbol;
 using Grc.Semantic;
-using Grc.Semantic.SymbolTable.Exception;
+using Grc.Semantic.SymbolTable.Exceptions;
+using NUnit.Framework;
 
 namespace GrcTests.Semantic
 {
-	[TestClass]
+	[TestFixture]
 	public class SymbolTypeTests
 	{
-		[TestMethod]
+		[Test]
 		public void EnterInsertLookupSameType()
 		{
 			ISymbolTable ist = new StackSymbolTable();
@@ -19,17 +19,17 @@ namespace GrcTests.Semantic
 			Assert.AreEqual(ist.Lookup(new SymbolVar("test")), new SymbolVar("test"));
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(SymbolNotDefinedException))]
+		[Test]
 		public void EnterInsertLookupDiffType()
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
 			ist.Insert(new SymbolVar("test"));
-			ist.Lookup(new SymbolFunc("test"));
+
+			Assert.Throws<SymbolNotDefinedException>(() => ist.Lookup(new SymbolFunc("test")));
 		}
 
-		[TestMethod]
+		[Test]
 		public void EnterInsertDiffLookupBoth()
 		{
 			ISymbolTable ist = new StackSymbolTable();

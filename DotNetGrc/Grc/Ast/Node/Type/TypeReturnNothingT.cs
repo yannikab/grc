@@ -9,7 +9,8 @@ namespace Grc.Ast.Node.Type
 {
 	public class TypeReturnNothingT : TypeReturnBase
 	{
-		public TypeReturnNothingT(string text) : base(text)
+		public TypeReturnNothingT(string keyNothing, int line, int pos)
+			: base(keyNothing, line, pos)
 		{
 		}
 

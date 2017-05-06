@@ -8,7 +8,8 @@ namespace Grc.Ast.Node.Type
 {
 	class TypeDataIntT : TypeDataBase
 	{
-		public TypeDataIntT(string text) : base(text)
+		public TypeDataIntT(string keyInt, int line, int pos)
+			: base(keyInt, line, pos)
 		{
 		}
 	}

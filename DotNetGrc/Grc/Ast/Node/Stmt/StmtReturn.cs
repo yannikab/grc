@@ -12,19 +12,47 @@ namespace Grc.Ast.Node.Stmt
 	{
 		private ExprBase expr;
 
-		public virtual ExprBase Expr
+		private string keyReturn;
+		private string semicolon;
+
+		private int line;
+		private int pos;
+
+		public ExprBase Expr { get { return expr; } }
+
+		public override int Line { get { return line; } }
+		public override int Pos { get { return pos; } }
+
+		public StmtReturn(string keyReturn, String semicolon, int line, int pos)
 		{
-			get { return this.expr; }
-			set { this.expr = value; }
+			this.keyReturn = keyReturn;
+			this.semicolon = semicolon;
+
+			this.line = line;
+			this.pos = pos;
 		}
 
-		public StmtReturn(string text) : base(text)
+		public override void AddChild(NodeBase c)
 		{
+			if (expr != null || (expr = c as ExprBase) == null)
+				throw new NodeException();
+
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("{0}{1}{2}", keyReturn, expr == null ? string.Empty : " " + expr.Text, semicolon);
+		}
+
+		public override string ToString()
+		{
+			return keyReturn;
 		}
 	}
 }

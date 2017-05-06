@@ -11,19 +11,46 @@ namespace Grc.Ast.Node.Expr
 	{
 		private ExprBase expr;
 
-		public virtual ExprBase Expr
+		string operPlus;
+
+		private int line;
+		private int pos;
+
+		public ExprBase Expr { get { return expr; } }
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public ExprPlus(string operPlus, int line, int pos)
 		{
-			get { return expr; }
-			set { this.expr = value; }
+			this.operPlus = operPlus;
+
+			this.line = line;
+			this.pos = pos;
 		}
 
-		public ExprPlus(string text) : base(text)
+		public override void AddChild(NodeBase c)
 		{
+			if (expr != null || (expr = c as ExprBase) == null)
+				throw new NodeException();
+
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return string.Format("({0} {1})", operPlus, expr.Text);
+		}
+
+		public override string ToString()
+		{
+			return operPlus;
 		}
 	}
 }

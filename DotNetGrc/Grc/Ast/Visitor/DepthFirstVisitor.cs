@@ -1,15 +1,15 @@
-﻿using Grc.Ast.Node;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Grc.Ast.Node;
 using Grc.Ast.Node.Cond;
 using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
 using Grc.Ast.Node.Type;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Grc.Ast.Visitor
 {
@@ -37,8 +37,7 @@ namespace Grc.Ast.Visitor
 		{
 			Pre(n);
 
-			if (n.Children.Count == 1)
-				n.Children[0].Accept(this);
+			n.Program.Accept(this);
 
 			Post(n);
 		}
@@ -456,108 +455,6 @@ namespace Grc.Ast.Visitor
 			Post(n);
 		}
 
-		public virtual void Pre(HRef n)
-		{
-			DefaultPre(n);
-		}
-
-		public virtual void Post(HRef n)
-		{
-			DefaultPost(n);
-		}
-
-		public override void Visit(HRef n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public virtual void Pre(HVal n)
-		{
-			DefaultPre(n);
-		}
-
-		public virtual void Post(HVal n)
-		{
-			DefaultPost(n);
-		}
-
-		public override void Visit(HVal n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public virtual void Pre(FParIdentifierT n)
-		{
-			DefaultPre(n);
-		}
-
-		public virtual void Post(FParIdentifierT n)
-		{
-			DefaultPost(n);
-		}
-
-		public override void Visit(FParIdentifierT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public virtual void Pre(LocalVarDef n)
-		{
-			DefaultPre(n);
-		}
-
-		public virtual void Post(LocalVarDef n)
-		{
-			DefaultPost(n);
-		}
-
-		public override void Visit(LocalVarDef n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public virtual void Pre(VarIdentifierT n)
-		{
-			DefaultPre(n);
-		}
-
-		public virtual void Post(VarIdentifierT n)
-		{
-			DefaultPost(n);
-		}
-
-		public override void Visit(VarIdentifierT n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public virtual void Pre(HType n)
-		{
-			DefaultPre(n);
-		}
-
-		public virtual void Post(HType n)
-		{
-			DefaultPost(n);
-		}
-
-		public override void Visit(HType n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
 		public virtual void Pre(LocalFuncDef n)
 		{
 			DefaultPre(n);
@@ -596,7 +493,74 @@ namespace Grc.Ast.Visitor
 		{
 			Pre(n);
 
-			n.ReturnType.Accept(this);
+			foreach (HPar h in n.HPars)
+				h.Accept(this);
+
+			n.HTypeReturn.Accept(this);
+
+			Post(n);
+		}
+
+		public virtual void Pre(HPar n)
+		{
+			DefaultPre(n);
+		}
+
+		public virtual void Post(HPar n)
+		{
+			DefaultPost(n);
+		}
+
+		public override void Visit(HPar n)
+		{
+			Pre(n);
+
+			foreach (ParIdentifierT id in n.Identifiers)
+				id.Accept(this);
+
+			n.HTypePar.Accept(this);
+
+			Post(n);
+		}
+
+		public virtual void Pre(ParIdentifierT n)
+		{
+			DefaultPre(n);
+		}
+
+		public virtual void Post(ParIdentifierT n)
+		{
+			DefaultPost(n);
+		}
+
+		public override void Visit(ParIdentifierT n)
+		{
+			Pre(n);
+
+			Post(n);
+		}
+
+		public virtual void Pre(HTypePar n)
+		{
+			DefaultPre(n);
+		}
+
+		public virtual void Post(HTypePar n)
+		{
+			DefaultPost(n);
+		}
+
+		public override void Visit(HTypePar n)
+		{
+			Pre(n);
+
+			n.DataType.Accept(this);
+
+			if (n.DimEmpty != null)
+				n.DimEmpty.Accept(this);
+
+			foreach (DimIntegerT d in n.Dims)
+				d.Accept(this);
 
 			Post(n);
 		}
@@ -612,23 +576,6 @@ namespace Grc.Ast.Visitor
 		}
 
 		public override void Visit(TypeDataBase n)
-		{
-			Pre(n);
-
-			Post(n);
-		}
-
-		public virtual void Pre(TypeReturnNothingT n)
-		{
-			DefaultPre(n);
-		}
-
-		public virtual void Post(TypeReturnNothingT n)
-		{
-			DefaultPost(n);
-		}
-
-		public override void Visit(TypeReturnNothingT n)
 		{
 			Pre(n);
 
@@ -665,6 +612,101 @@ namespace Grc.Ast.Visitor
 		public override void Visit(DimIntegerT n)
 		{
 			Pre(n);
+
+			Post(n);
+		}
+
+		public virtual void Pre(LocalVarDef n)
+		{
+			DefaultPre(n);
+		}
+
+		public virtual void Post(LocalVarDef n)
+		{
+			DefaultPost(n);
+		}
+
+		public override void Visit(LocalVarDef n)
+		{
+			Pre(n);
+
+			foreach (VarIdentifierT id in n.Identifiers)
+				id.Accept(this);
+
+			n.HTypeVar.Accept(this);
+
+			Post(n);
+		}
+
+		public virtual void Pre(HTypeReturn n)
+		{
+			DefaultPre(n);
+		}
+
+		public virtual void Post(HTypeReturn n)
+		{
+			DefaultPost(n);
+		}
+
+		public override void Visit(HTypeReturn n)
+		{
+			Pre(n);
+
+			Post(n);
+		}
+
+		public virtual void Pre(TypeReturnNothingT n)
+		{
+			DefaultPre(n);
+		}
+
+		public virtual void Post(TypeReturnNothingT n)
+		{
+			DefaultPost(n);
+		}
+
+		public override void Visit(TypeReturnNothingT n)
+		{
+			Pre(n);
+
+			Post(n);
+		}
+
+		public virtual void Pre(VarIdentifierT n)
+		{
+			DefaultPre(n);
+		}
+
+		public virtual void Post(VarIdentifierT n)
+		{
+			DefaultPost(n);
+		}
+
+		public override void Visit(VarIdentifierT n)
+		{
+			Pre(n);
+
+			Post(n);
+		}
+
+		public virtual void Pre(HTypeVar n)
+		{
+			DefaultPre(n);
+		}
+
+		public virtual void Post(HTypeVar n)
+		{
+			DefaultPost(n);
+		}
+
+		public override void Visit(HTypeVar n)
+		{
+			Pre(n);
+
+			n.DataType.Accept(this);
+
+			foreach (DimIntegerT d in n.Dims)
+				d.Accept(this);
 
 			Post(n);
 		}

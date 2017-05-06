@@ -9,22 +9,33 @@ namespace Grc.Ast.Node.Expr
 {
 	public class ExprLValIdentifierT : ExprLValBase
 	{
-		private string name;
+		private string id;
 
-		public string Name
-		{
-			get { return name; }
-		}
+		private int line;
+		private int pos;
 
-		public ExprLValIdentifierT(string text)
-			: base(text)
+		public string Name { get { return id; } }
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public ExprLValIdentifierT(string id, int line, int pos)
 		{
-			this.name = text;
+			this.id = id;
+
+			this.line = line;
+			this.pos = pos;
 		}
 
 		public override void Accept(IVisitor v)
 		{
 			v.Visit(this);
+		}
+
+		protected override string GetText()
+		{
+			return id;
 		}
 	}
 }

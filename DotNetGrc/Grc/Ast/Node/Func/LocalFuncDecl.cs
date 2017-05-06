@@ -1,46 +1,83 @@
-﻿using Grc.Ast.Node.Helper;
-using Grc.Ast.Node.Type;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Ast.Node.Helper;
+using Grc.Ast.Node.Type;
 using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Func
 {
 	public class LocalFuncDecl : LocalBase
 	{
-		private string name;
-		private TypeReturnBase returnType;
-		private List<Parameter> parms;
+		private List<HPar> hPars;
+		private HTypeReturn hTypeReturn;
 
-		public virtual string Name
+		private List<Parameter> parameters;
+
+		private string keyFun;
+		private string id;
+		private string lpar;
+		private string rpar;
+		private string colon;
+
+		private int line;
+		private int pos;
+
+		public IReadOnlyList<HPar> HPars { get { return hPars; } }
+
+		public HTypeReturn HTypeReturn { get { return hTypeReturn; } }
+
+		public IReadOnlyList<Parameter> Parameters
 		{
-			get { return this.name; }
+			get
+			{
+				if (parameters != null)
+					return parameters;
+
+				parameters = new List<Parameter>();
+
+				for (int i = 0; i < hPars.Count; i++)
+					parameters.AddRange(hPars[i].Parameters);
+
+				return parameters;
+			}
 		}
 
-		public virtual TypeReturnBase ReturnType
+		public string Name { get { return id; } }
+
+		public override int Line { get { return line; } }
+
+		public override int Pos { get { return pos; } }
+
+		public LocalFuncDecl(string keyFun, string id, string lpar, string rpar, string colon, int line, int pos)
 		{
-			get { return this.returnType; }
-			set { this.returnType = value; }
+			this.keyFun = keyFun;
+			this.id = id;
+			this.lpar = lpar;
+			this.rpar = rpar;
+			this.colon = colon;
+
+			this.line = line;
+			this.pos = pos;
+
+			this.hPars = new List<HPar>();
 		}
 
-		public virtual IReadOnlyList<Parameter> Params
+		public override void AddChild(NodeBase c)
 		{
-			get { return this.parms; }
-		}
+			if (hTypeReturn != null)
+				throw new NodeException();
 
-		public LocalFuncDecl(string text)
-			: base(text)
-		{
-			this.name = text.Replace("()", "");
+			if (c is HPar)
+				hPars.Add((HPar)c);
+			else if (c is HTypeReturn)
+				hTypeReturn = (HTypeReturn)c;
+			else
+				throw new NodeException();
 
-			parms = new List<Parameter>();
-		}
-
-		public void AddParam(Parameter p)
-		{
-			this.parms.Add(p);
+			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
@@ -48,125 +85,40 @@ namespace Grc.Ast.Node.Func
 			v.Visit(this);
 		}
 
+		protected override string GetText()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(this.keyFun + " ");
+
+			sb.Append(this.id);
+
+			sb.Append(this.lpar);
+
+			parameters = new List<Parameter>();
+
+			for (int i = 0; i < hPars.Count; i++)
+			{
+				parameters.AddRange(hPars[i].Parameters);
+
+				sb.Append(hPars[i].Text);
+
+				if (i < hPars.Count - 1)
+					sb.Append("; ");
+			}
+
+			sb.Append(this.rpar);
+
+			sb.Append(string.Format(" {0} ", this.colon));
+
+			sb.Append(this.hTypeReturn.Text);
+
+			return sb.ToString();
+		}
+
 		public override string ToString()
 		{
-			string s = base.ToString();
-
-			// s += "\n: " + returnType.toString();
-
-			return s;
-		}
-
-		public void ProcessFuncDecl()
-		{
-			if (Children.Count < 1)
-				return;
-
-			for (int i = 0; i < Children.Count; i++)
-			{
-				NodeBase c = Children[i];
-
-				if (c is HRef)
-				{
-					getParams(c, true);
-				}
-				else if (c is HVal)
-				{
-					getParams(c, false);
-				}
-				else if (c is HType)
-				{
-					getReturnType((HType)c);
-				}
-				else
-				{
-					return;
-				}
-			}
-		}
-
-		private void getParams(NodeBase n, bool @ref)
-		{
-			if (!(n.Parent is LocalFuncDecl))
-				return;
-
-			IList<string> @params = new List<string>();
-
-			for (int i = 0; i < n.Children.Count; i++)
-			{
-				NodeBase p = n.Children[i];
-
-				if (p is FParIdentifierT)
-				{
-					@params.Add(((FParIdentifierT)p).Text);
-				}
-				else if (p is HType)
-				{
-					addParams(@ref, @params, (HType)p);
-				}
-				else
-				{
-					return;
-				}
-			}
-		}
-
-		private void addParams(bool @ref, IList<string> @params, HType t)
-		{
-			TypeDataBase type = null;
-
-			bool dimEmpty = false;
-
-			IList<int> dims = new List<int>();
-
-			for (int i = 0; i < t.Children.Count; i++)
-			{
-				NodeBase c = t.Children[i];
-
-				if (c is TypeDataBase)
-				{
-					type = (TypeDataBase)c;
-				}
-				else if (c is DimEmptyT)
-				{
-					if (dimEmpty)
-						return;
-
-					dimEmpty = true;
-				}
-				else if (c is DimIntegerT)
-				{
-					dims.Add(((DimIntegerT)c).Dim);
-				}
-				else
-				{
-					return;
-				}
-			}
-
-			if (type == null)
-				return;
-
-			for (int i = 0; i < @params.Count; i++)
-				AddParam(new Parameter(@params[i], @ref, type, dimEmpty, dims));
-		}
-
-		private void getReturnType(HType n)
-		{
-			if (!(n.Parent is LocalFuncDecl))
-				return;
-
-			LocalFuncDecl d = (LocalFuncDecl)n.Parent;
-
-			if (n.Children.Count != 1)
-				return;
-
-			NodeBase t = n.Children[0];
-
-			if (!(t is TypeReturnBase))
-				return;
-
-			d.ReturnType = (TypeReturnBase)t;
+			return string.Format("{0}{1}{2}", id, lpar, rpar);
 		}
 	}
 }

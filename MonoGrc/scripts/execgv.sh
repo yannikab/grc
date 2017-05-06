@@ -18,4 +18,4 @@ echo -n "${INFILE} -> " | sed s://:/:
 
 echo ${OUTFILE} | sed s://:/:
 
-${DIR}/grc ${MODULE} ${ACTION} $1 | dot -Tpng >${OUTFILE}
+${DIR}/grc ${MODULE} ${ACTION} $1 | cat | dot -Tpng >${OUTFILE}

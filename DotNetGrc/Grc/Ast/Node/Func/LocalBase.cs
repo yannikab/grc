@@ -8,7 +8,7 @@ namespace Grc.Ast.Node.Func
 {
 	public abstract class LocalBase : NodeBase
 	{
-		public LocalBase(string @string) : base(@string)
+		public LocalBase()
 		{
 		}
 	}

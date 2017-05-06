@@ -1,4 +1,4 @@
-﻿using Grc.Semantic.SymbolTable.Exception;
+﻿using Grc.Semantic.SymbolTable.Exceptions;
 using Grc.Semantic.SymbolTable.Symbol;
 using System;
 using System.Collections.Generic;
