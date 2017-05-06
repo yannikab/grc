@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Grc.Semantic.SymbolTable.Symbol
 {
-	public abstract class SymbolBase : ICloneable
+	public abstract class SymbolBase
 	{
-		readonly string name;
-		SymbolBase next;
+		private readonly string name;
+		private SymbolBase next;
 		private int scope;
 
 		public string Name
@@ -54,11 +54,6 @@ namespace Grc.Semantic.SymbolTable.Symbol
 		public override string ToString()
 		{
 			return string.Format("[ Name = {0} ]", this.name);
-		}
-
-		public object Clone()
-		{
-			return this.MemberwiseClone();
 		}
 	}
 }

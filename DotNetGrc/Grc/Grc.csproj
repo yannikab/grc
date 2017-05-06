@@ -232,16 +232,22 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ast\Visitor\IVisitor.cs" />
-    <Compile Include="Semantic\SymbolTable\Exceptions\SymbolNotDefinedException.cs" />
     <Compile Include="Semantic\SymbolTable\Exceptions\NoCurrentScopeException.cs" />
     <Compile Include="Semantic\SymbolTable\Exceptions\SymbolAlreadyInScopeException.cs" />
+    <Compile Include="Semantic\SymbolTable\Exceptions\SymbolNotInScopeException.cs" />
     <Compile Include="Semantic\SymbolTable\ISymbolTable.cs" />
     <Compile Include="Semantic\SymbolTable\Symbol\SymbolBase.cs" />
     <Compile Include="Semantic\SymbolTable\Symbol\SymbolFunc.cs" />
     <Compile Include="Semantic\SymbolTable\StackSymbolTable.cs" />
     <Compile Include="Semantic\SymbolTable\Exceptions\SymbolTableException.cs" />
     <Compile Include="Semantic\SymbolTable\Symbol\SymbolVar.cs" />
-    <Compile Include="Ast\Visitor\Semantic\SemanticVisitor.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\FunctionDefinitionMissing.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\FunctionAlreadyInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\FunctionNotInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\SemanticException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\VariableAlreadyInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\VariableNotInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\SemanticVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

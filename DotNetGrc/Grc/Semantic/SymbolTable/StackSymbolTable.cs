@@ -42,9 +42,9 @@ namespace Grc.Semantic.SymbolTable
 
 			for (int i = last; i >= first; i--)
 				if (symbol[i].GetHashCode() == s.GetHashCode() && symbol[i].Equals(s))
-					throw new SymbolAlreadyInScopeException(String.Format("SymbolBase already defined in current scope: {0}", symbol[i]));
+					throw new SymbolAlreadyInScopeException(scope.Count - 1, s);
 
-			symbol.Add((SymbolBase)s.Clone());
+			symbol.Add((SymbolBase)s);
 			symbol[symbol.Count - 1].Scope = scope.Count - 1;
 
 			scope[scope.Count - 1]++;
@@ -60,19 +60,19 @@ namespace Grc.Semantic.SymbolTable
 			}
 		}
 
-		public SymbolBase Lookup(SymbolBase s)
+		public T Lookup<T>(string name) where T : SymbolBase
 		{
 			if (scope.Count == 0)
 				throw new NoCurrentScopeException();
 
-			if (!symbolForName.ContainsKey(s.Name))
-				throw new SymbolNotDefinedException();
+			if (!symbolForName.ContainsKey(name))
+				throw new SymbolNotInScopeException(name);
 
-			for (SymbolBase t = symbolForName[s.Name]; t != null; t = t.Next)
-				if (object.Equals(t, s))
-					return (SymbolBase)t.Clone();
+			for (SymbolBase t = symbolForName[name]; t != null; t = t.Next)
+				if (t is T)
+					return (T)t;
 
-			throw new SymbolNotDefinedException();
+			throw new SymbolNotInScopeException(name);
 		}
 
 		public void Exit()

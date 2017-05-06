@@ -20,7 +20,7 @@ namespace Grc.Ast.Node.Expr
 
 		public IReadOnlyList<ExprBase> Args { get { return args; } }
 
-		public string Name { get { return Text.Replace(lpar + rpar, string.Empty); } }
+		public string Name { get { return id; } }
 
 		public override int Line { get { return line; } }
 

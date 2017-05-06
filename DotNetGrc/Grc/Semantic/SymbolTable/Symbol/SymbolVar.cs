@@ -25,9 +25,7 @@ namespace Grc.Semantic.SymbolTable.Symbol
 
 		public override int GetHashCode()
 		{
-			int hash = 17;
-			hash = 31 * hash + base.GetHashCode();
-			return hash;
+			return base.GetHashCode();
 		}
 	}
 }

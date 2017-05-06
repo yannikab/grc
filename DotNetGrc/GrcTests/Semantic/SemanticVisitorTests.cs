@@ -1,20 +1,22 @@
-﻿using Grc.Ast.Node;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Grc.Ast.Node;
 using Grc.Ast.Node.Helper;
-using Grc.Ast.Visitor.Semantic;
-using Grc.Cst.Visitor;
 using Grc.Cst.Visitor.ASTCreation;
-using Grc.Semantic;
-using Grc.Semantic.SymbolTable.Exceptions;
+using Grc.Semantic.Visitor;
+using Grc.Semantic.Visitor.Exceptions;
 using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.parser;
 using NUnit.Framework;
-using System;
 
 namespace GrcTests.Semantic
 {
 	[TestFixture]
-	public class SemanticTests
+	public class SemanticVisitorTests
 	{
 		private static void AcceptSemanticVisitor(string program)
 		{
@@ -47,14 +49,14 @@ fun program() : nothing
 
 fun program() : nothing
 
-var a : int;
-var a : char;
+	var a : int;
+	var a : char;
 
 {
 }
 
 ";
-			Assert.Throws<SymbolAlreadyInScopeException>
+			Assert.Throws<VariableAlreadyInScopeException>
 				(() => AcceptSemanticVisitor(program));
 		}
 
@@ -76,13 +78,13 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<SymbolAlreadyInScopeException>
+			Assert.Throws<VariableAlreadyInScopeException>
 				(() => AcceptSemanticVisitor(program));
 		}
 
 
 		[Test]
-		public void TestSameParPar()
+		public void TestSameParParDef()
 		{
 			string program = @"
 
@@ -95,7 +97,24 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<SymbolAlreadyInScopeException>
+			Assert.Throws<VariableAlreadyInScopeException>
+				(() => AcceptSemanticVisitor(program));
+		}
+
+
+		[Test]
+		public void TestSameParParDecl()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo(a : int; a : int) : nothing;
+{
+}
+
+";
+			Assert.Throws<VariableAlreadyInScopeException>
 				(() => AcceptSemanticVisitor(program));
 		}
 
@@ -107,7 +126,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-var foo : int;
+	var foo : int;
 	
 	fun foo() : nothing
 	{
@@ -131,7 +150,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<SymbolNotDefinedException>
+			Assert.Throws<VariableNotInScopeException>
 				(() => AcceptSemanticVisitor(program));
 		}
 
@@ -147,7 +166,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<SymbolNotDefinedException>
+			Assert.Throws<FunctionNotInScopeException>
 				(() => AcceptSemanticVisitor(program));
 		}
 
@@ -163,7 +182,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<SymbolNotDefinedException>
+			Assert.Throws<VariableNotInScopeException>
 					(() => AcceptSemanticVisitor(program));
 		}
 
@@ -175,7 +194,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-var a : int;
+	var a : int;
 
 {
 	a <- 5;
@@ -212,7 +231,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-var a : int;
+	var a : int;
 
 	fun foo() : int
 	{
@@ -220,6 +239,127 @@ var a : int;
 {
 	foo();
 	a <- foo();
+}
+
+";
+			AcceptSemanticVisitor(program);
+		}
+
+
+		[Test]
+		public void TestDeclaredFun()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : int;
+
+	fun foo() : int;
+{
+	foo();
+	a <- foo();
+}
+
+";
+			Assert.Throws<FunctionDefinitionMissingException>
+					(() => AcceptSemanticVisitor(program));
+		}
+
+
+		[Test]
+		public void TestSameFunDefFunDef()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo() : nothing
+	{
+	}
+
+	fun foo() : nothing
+	{
+	}
+{
+}
+
+";
+			Assert.Throws<FunctionAlreadyInScopeException>
+					(() => AcceptSemanticVisitor(program));
+		}
+
+
+		[Test]
+		public void TestSameFunDefFunDecl()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo() : nothing
+	{
+	}
+
+	fun foo() : nothing;
+{
+}
+
+";
+			Assert.Throws<FunctionAlreadyInScopeException>
+					(() => AcceptSemanticVisitor(program));
+		}
+
+
+		[Test]
+		public void TestSameFunDeclFunDecl()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo() : nothing;
+
+	fun foo() : nothing;
+{
+}
+
+";
+			Assert.Throws<FunctionAlreadyInScopeException>
+					(() => AcceptSemanticVisitor(program));
+		}
+
+		[Test]
+		public void TestFunDefMissing()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo() : nothing;
+{
+}
+
+";
+			Assert.Throws<FunctionDefinitionMissingException>
+					(() => AcceptSemanticVisitor(program));
+		}
+
+		[Test]
+		public void TestFunDeclFunDef()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo() : nothing;
+
+	var a, b : char[5];
+	
+	fun foo() : nothing
+	{
+	}
+{
 }
 
 ";

@@ -8,9 +8,18 @@ namespace Grc.Semantic.SymbolTable.Symbol
 {
 	public class SymbolFunc : SymbolBase
 	{
-		public SymbolFunc(string name)
+		private bool defined;
+
+		public bool Defined
+		{
+			get { return defined; }
+			set { defined = value; }
+		}
+
+		public SymbolFunc(string name, bool defined)
 			: base(name)
 		{
+			this.defined = defined;
 		}
 
 		public override bool Equals(object obj)
@@ -25,9 +34,7 @@ namespace Grc.Semantic.SymbolTable.Symbol
 
 		public override int GetHashCode()
 		{
-			int hash = 17;
-			hash = 31 * hash + base.GetHashCode();
-			return hash;
+			return base.GetHashCode();
 		}
 	}
 }

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Grc.Semantic.SymbolTable;
-using Grc.Semantic.SymbolTable.Symbol;
-using Grc.Semantic;
 using Grc.Semantic.SymbolTable.Exceptions;
+using Grc.Semantic.SymbolTable.Symbol;
 using NUnit.Framework;
 
 namespace GrcTests.Semantic
@@ -16,7 +19,7 @@ namespace GrcTests.Semantic
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
 			ist.Insert(new SymbolVar("test"));
-			Assert.AreEqual(ist.Lookup(new SymbolVar("test")), new SymbolVar("test"));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
 		}
 
 		[Test]
@@ -26,7 +29,7 @@ namespace GrcTests.Semantic
 			ist.Enter();
 			ist.Insert(new SymbolVar("test"));
 
-			Assert.Throws<SymbolNotDefinedException>(() => ist.Lookup(new SymbolFunc("test")));
+			Assert.Throws<SymbolNotInScopeException>(() => ist.Lookup<SymbolFunc>("test"));
 		}
 
 		[Test]
@@ -35,9 +38,9 @@ namespace GrcTests.Semantic
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
 			ist.Insert(new SymbolVar("test"));
-			ist.Insert(new SymbolFunc("test"));
-			Assert.AreEqual(ist.Lookup(new SymbolVar("test")), new SymbolVar("test"));
-			Assert.AreEqual(ist.Lookup(new SymbolFunc("test")), new SymbolFunc("test"));
+			ist.Insert(new SymbolFunc("test", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			Assert.AreEqual(ist.Lookup<SymbolFunc>("test"), new SymbolFunc("test", false));
 		}
 	}
 }

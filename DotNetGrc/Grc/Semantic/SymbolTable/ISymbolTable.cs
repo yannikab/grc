@@ -11,7 +11,7 @@ namespace Grc.Semantic.SymbolTable
 	{
 		void Enter();
 		void Insert(SymbolBase s);
-		SymbolBase Lookup(SymbolBase s);
+		T Lookup<T>(string name) where T : SymbolBase;
 		void Exit();
 
 		int Scopes { get; }
