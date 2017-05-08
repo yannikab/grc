@@ -14,7 +14,7 @@ namespace Grc.Semantic.SymbolTable
 		T Lookup<T>(string name) where T : SymbolBase;
 		void Exit();
 
-		int Scopes { get; }
+		int CurrentScopeId { get; }
 		int SymbolsInScope { get; }
 	}
 }

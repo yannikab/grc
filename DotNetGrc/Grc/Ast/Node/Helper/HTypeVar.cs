@@ -15,7 +15,7 @@ namespace Grc.Ast.Node.Helper
 
 		public TypeDataBase DataType { get { return dataType; } }
 
-		public List<DimIntegerT> Dims { get { return dims; } }
+		public IReadOnlyList<DimIntegerT> Dims { get { return dims; } }
 
 		public override int Line { get { return dataType.Line; } }
 

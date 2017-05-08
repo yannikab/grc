@@ -61,7 +61,7 @@ namespace Grc.Ast.Node.Stmt
 
 		protected override string GetText()
 		{
-			return string.Format("{0} {1} {2}{3}", lval, operAssign, expr, semicolon);
+			return string.Format("{0} {1} {2}{3}", lval.Text, operAssign, expr.Text, semicolon);
 		}
 
 		public override string ToString()

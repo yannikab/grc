@@ -14,6 +14,8 @@ namespace Grc.Ast.Node.Stmt
 
 		private string semicolon;
 
+		public ExprFuncCall FunCall { get { return funCall; } }
+
 		public IReadOnlyList<ExprBase> Args { get { return funCall.Args; } }
 
 		public string Name { get { return funCall.Name; } }

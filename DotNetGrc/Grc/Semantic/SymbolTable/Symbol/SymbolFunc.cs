@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Semantic.Types;
 
 namespace Grc.Semantic.SymbolTable.Symbol
 {
@@ -14,6 +15,12 @@ namespace Grc.Semantic.SymbolTable.Symbol
 		{
 			get { return defined; }
 			set { defined = value; }
+		}
+
+		public SymbolFunc(string name, bool defined, GTypeBase type)
+			: base(name, type)
+		{
+			this.defined = defined;
 		}
 
 		public SymbolFunc(string name, bool defined)

@@ -43,7 +43,7 @@ namespace GrcTests.Semantic
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
 
-			Assert.Throws<SymbolNotInScopeException>
+			Assert.Throws<SymbolNotInOpenScopesException>
 				(() => ist.Lookup<SymbolVar>("test"));
 		}
 
@@ -99,7 +99,6 @@ namespace GrcTests.Semantic
 			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1"));
 			Assert.AreEqual(ist.Lookup<SymbolVar>("test2"), new SymbolVar("test2"));
 			Assert.AreEqual(ist.Lookup<SymbolVar>("test3"), new SymbolVar(("test3")));
-			String s = ist.ToString();
 			ist.Exit();
 		}
 
@@ -124,7 +123,6 @@ namespace GrcTests.Semantic
 			ist.Enter();
 			ist.Insert(new SymbolVar("test"));
 			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
-			String s = ist.ToString();
 			ist.Exit();
 			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
 			ist.Exit();
@@ -141,10 +139,9 @@ namespace GrcTests.Semantic
 			ist.Insert(new SymbolVar("test2"));
 			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1"));
 			Assert.AreEqual(ist.Lookup<SymbolVar>("test2"), new SymbolVar("test2"));
-			String s = ist.ToString();
 			ist.Exit();
 			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1"));
-			Assert.Throws<SymbolNotInScopeException>
+			Assert.Throws<SymbolNotInOpenScopesException>
 				(() => ist.Lookup<SymbolVar>("test2"));
 		}
 
@@ -152,24 +149,21 @@ namespace GrcTests.Semantic
 		public void TestCount()
 		{
 			ISymbolTable ist = new StackSymbolTable();
-			Assert.AreEqual(0, ist.Scopes);
 			ist.Enter();
-			Assert.AreEqual(1, ist.Scopes);
+			Assert.AreEqual(0, ist.CurrentScopeId);
 			Assert.AreEqual(0, ist.SymbolsInScope);
 			ist.Insert(new SymbolVar("test"));
-			Assert.AreEqual(1, ist.Scopes);
+			Assert.AreEqual(0, ist.CurrentScopeId);
 			Assert.AreEqual(1, ist.SymbolsInScope);
 			ist.Insert(new SymbolVar("test2"));
-			Assert.AreEqual(1, ist.Scopes);
+			Assert.AreEqual(0, ist.CurrentScopeId);
 			Assert.AreEqual(2, ist.SymbolsInScope);
 			ist.Exit();
-			Assert.AreEqual(0, ist.Scopes);
 			ist.Enter();
 			ist.Insert(new SymbolVar("test"));
-			Assert.AreEqual(1, ist.Scopes);
+			Assert.AreEqual(0, ist.CurrentScopeId);
 			Assert.AreEqual(1, ist.SymbolsInScope);
 			ist.Exit();
-			Assert.AreEqual(0, ist.Scopes);
 		}
 	}
 }

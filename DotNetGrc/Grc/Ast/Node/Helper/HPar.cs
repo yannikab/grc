@@ -35,8 +35,13 @@ namespace Grc.Ast.Node.Helper
 
 				parameters = new List<Parameter>();
 
+				List<int> dims = hTypePar.Dims.Select(d => d.Dim).ToList();
+
+				if (hTypePar.DimEmpty != null)
+					dims.Insert(0, 0);
+
 				foreach (ParIdentifierT p in identifiers)
-					parameters.Add(new Parameter(p.Text, keyRef != null, hTypePar.DataType, hTypePar.DimEmpty != null, hTypePar.Dims.Select(d => d.Dim).ToList()));
+					parameters.Add(new Parameter(p.Text, keyRef != null, hTypePar.DataType, dims, line, pos));
 
 				return parameters;
 			}

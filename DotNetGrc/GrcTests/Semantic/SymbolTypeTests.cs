@@ -29,7 +29,7 @@ namespace GrcTests.Semantic
 			ist.Enter();
 			ist.Insert(new SymbolVar("test"));
 
-			Assert.Throws<SymbolNotInScopeException>(() => ist.Lookup<SymbolFunc>("test"));
+			Assert.Throws<SymbolNotInOpenScopesException>(() => ist.Lookup<SymbolFunc>("test"));
 		}
 
 		[Test]

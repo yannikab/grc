@@ -5,15 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node;
 using Grc.Ast.Node.Helper;
-using Grc.Ast.Visitor;
-using Grc.Cst.Visitor;
+using Grc.Ast.Visitor.GraphViz;
+using Grc.Cst.Visitor.ASTCreation;
+using Grc.Cst.Visitor.GraphViz;
 using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.node;
 using k31.grc.cst.parser;
-using Grc.Cst.Visitor.GraphViz;
-using Grc.Cst.Visitor.ASTCreation;
-using Grc.Ast.Visitor.GraphViz;
 
 namespace Grc
 {

@@ -9,7 +9,6 @@ namespace Grc.Ast.Node
 {
 	public abstract class NodeBase
 	{
-		private NodeBase parent;
 		private string text;
 
 		public string Text { get { return text ?? (text = GetText()); } }
@@ -29,7 +28,6 @@ namespace Grc.Ast.Node
 
 		public virtual void AddChild(NodeBase c)
 		{
-			c.parent = this;
 		}
 
 		public abstract void Accept(IVisitor v);

@@ -232,25 +232,74 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ast\Visitor\IVisitor.cs" />
+    <Compile Include="Semantic\GType\GTypeIndexed.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Semantic\GType\GTypeBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Semantic\GType\GTypeChar.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Semantic\GType\GTypeData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Semantic\Visitor\Exceptions\GType\MismatchedFunctionDefinitionException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\IndexedNotByReferenceException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionCallStatementWithoutNothingException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\VariableNotInSymbolTableException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\ParameterNotInSymbolTableException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionNotInSymbolTableException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionArgsMismatchException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidTypeAssignmentException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidTypeInNumericExpression.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\IndexingInvalidTypeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\GTypeException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Semantic\GType\GTypeFunction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Semantic\GType\GTypeInt.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Semantic\GType\GTypeNothing.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Semantic\GType\GTypeProduct.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Semantic\GType\GTypeReturn.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Semantic\SymbolTable\Exceptions\NoCurrentScopeException.cs" />
     <Compile Include="Semantic\SymbolTable\Exceptions\SymbolAlreadyInScopeException.cs" />
-    <Compile Include="Semantic\SymbolTable\Exceptions\SymbolNotInScopeException.cs" />
+    <Compile Include="Semantic\SymbolTable\Exceptions\SymbolNotInOpenScopesException.cs" />
     <Compile Include="Semantic\SymbolTable\ISymbolTable.cs" />
     <Compile Include="Semantic\SymbolTable\Symbol\SymbolBase.cs" />
     <Compile Include="Semantic\SymbolTable\Symbol\SymbolFunc.cs" />
     <Compile Include="Semantic\SymbolTable\StackSymbolTable.cs" />
     <Compile Include="Semantic\SymbolTable\Exceptions\SymbolTableException.cs" />
     <Compile Include="Semantic\SymbolTable\Symbol\SymbolVar.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\FunctionDefinitionMissing.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\FunctionAlreadyInScopeException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\FunctionNotInScopeException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\SemanticException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\VariableAlreadyInScopeException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\VariableNotInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\IndexNotIntegerException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\MainFunctionWithReturnValueException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\MainFunctionWithParametersException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionDefinitionMissing.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionAlreadyInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionNotInOpenScopesException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\SemanticException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableAlreadyInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableNotInOpenScopesException.cs" />
+    <Compile Include="Semantic\Visitor\TypeResolver.cs" />
+    <Compile Include="Semantic\Visitor\GTypeVisitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Semantic\Visitor\SemanticVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Ast\Node\Node.cd" />
+    <None Include="Semantic\GType\GType.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

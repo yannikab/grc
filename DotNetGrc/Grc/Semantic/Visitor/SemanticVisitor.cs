@@ -8,12 +8,13 @@ using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
+using Grc.Ast.Node.Type;
 using Grc.Ast.Visitor;
 using Grc.Semantic.SymbolTable;
 using Grc.Semantic.SymbolTable.Exceptions;
 using Grc.Semantic.SymbolTable.Symbol;
-using Grc.Ast.Node.Type;
-using Grc.Semantic.Visitor.Exceptions;
+using Grc.Semantic.Visitor.Exceptions.Semantic;
+
 
 namespace Grc.Semantic.Visitor
 {
@@ -25,14 +26,14 @@ namespace Grc.Semantic.Visitor
 
 		public override void Pre(Root n)
 		{
-			symbolTable.Enter();
+			SymbolTable.Enter();
 		}
 
 		public override void Post(Root n)
 		{
 			try
 			{
-				symbolTable.Exit();
+				SymbolTable.Exit();
 			}
 			catch (SymbolTableException e)
 			{
@@ -55,16 +56,8 @@ namespace Grc.Semantic.Visitor
 					return;
 				}
 			}
-			catch (SymbolNotInScopeException)
+			catch (SymbolNotInOpenScopesException)
 			{
-			}
-			catch (NoCurrentScopeException e)
-			{
-				throw new SemanticException(e);
-			}
-			catch (NullReferenceException e)
-			{
-				throw new SemanticException(e);
 			}
 
 			try
@@ -75,34 +68,24 @@ namespace Grc.Semantic.Visitor
 			{
 				throw new FunctionAlreadyInScopeException(n.Header, e);
 			}
-
-			symbolTable.Enter();
-		}
-
-		public override void Post(LocalFuncDef n)
-		{
-			try
-			{
-				symbolTable.Exit();
-			}
-			catch (SymbolTableException e)
-			{
-				throw new SemanticException(e);
-			}
 		}
 
 		public override void Visit(LocalFuncDef n)
 		{
 			Pre(n);
 
-			try
+			SymbolTable.Enter();
+
+			foreach (var p in n.Header.Parameters)
 			{
-				foreach (var p in n.Header.Parameters)
-					symbolTable.Insert(new SymbolVar(p.Name));
-			}
-			catch (SymbolAlreadyInScopeException e)
-			{
-				throw new VariableAlreadyInScopeException(n, e);
+				try
+				{
+					SymbolTable.Insert(new SymbolVar(p.Name));
+				}
+				catch (SymbolAlreadyInScopeException e)
+				{
+					throw new VariableAlreadyInScopeException(p, e);
+				}
 			}
 
 			foreach (LocalBase l in n.Locals)
@@ -112,22 +95,14 @@ namespace Grc.Semantic.Visitor
 			{
 				try
 				{
-					SymbolFunc sf = symbolTable.Lookup<SymbolFunc>(d.Name);
+					SymbolFunc sf = SymbolTable.Lookup<SymbolFunc>(d.Name);
 
 					if (!sf.Defined)
 						throw new FunctionDefinitionMissingException(d, sf);
 				}
-				catch (SymbolNotInScopeException e)
+				catch (SymbolNotInOpenScopesException e)
 				{
-					throw new FunctionNotInScopeException(d, e);
-				}
-				catch (NoCurrentScopeException e)
-				{
-					throw new SemanticException(e);
-				}
-				catch (NullReferenceException e)
-				{
-					throw new SemanticException(e);
+					throw new FunctionNotInOpenScopesException(d, e);
 				}
 			}
 
@@ -136,70 +111,54 @@ namespace Grc.Semantic.Visitor
 			Post(n);
 		}
 
+		public override void Post(LocalFuncDef n)
+		{
+			try
+			{
+				SymbolTable.Exit();
+			}
+			catch (NoCurrentScopeException e)
+			{
+				throw new SemanticException(e);
+			}
+		}
+
 		public override void Pre(LocalFuncDecl n)
 		{
 			try
 			{
-				symbolTable.Insert(new SymbolFunc(n.Name, false));
+				SymbolTable.Insert(new SymbolFunc(n.Name, false));
 			}
 			catch (SymbolAlreadyInScopeException e)
 			{
 				throw new FunctionAlreadyInScopeException(n, e);
 			}
 
-			try
+			foreach (Parameter p in n.Parameters)
 			{
-				foreach (var p in n.Parameters)
-					symbolTable.Insert(new SymbolVar(p.Name));
-			}
-			catch (SymbolAlreadyInScopeException e)
-			{
-				throw new VariableAlreadyInScopeException(n, e);
+				try
+				{
+					SymbolTable.Insert(new SymbolVar(p.Name));
+				}
+				catch (SymbolAlreadyInScopeException e)
+				{
+					throw new VariableAlreadyInScopeException(p, e);
+				}
 			}
 		}
 
 		public override void Pre(LocalVarDef n)
 		{
-			try
+			foreach (Variable v in n.Variables)
 			{
-				foreach (Variable v in n.Variables)
-					symbolTable.Insert(new SymbolVar(v.Name));
-			}
-			catch (SymbolAlreadyInScopeException e)
-			{
-				throw new VariableAlreadyInScopeException(n, e);
-			}
-		}
-
-		public override void Pre(ExprLValIdentifierT n)
-		{
-			try
-			{
-				symbolTable.Lookup<SymbolVar>(n.Name);
-			}
-			catch (SymbolNotInScopeException e)
-			{
-				throw new VariableNotInScopeException(n, e);
-			}
-			catch (NoCurrentScopeException e)
-			{
-				throw new SemanticException(e);
-			}
-		}
-
-		public override void Pre(StmtFuncCall n)
-		{
-			try
-			{
-				symbolTable.Lookup<SymbolFunc>(n.Name);
-			}
-			catch (SymbolNotInScopeException e)
-			{
-				throw new FunctionNotInScopeException(n, e);
-			}
-			catch (NoCurrentScopeException e)
-			{
-				throw new SemanticException(e);
+				try
+				{
+					SymbolTable.Insert(new SymbolVar(v.Name));
+				}
+				catch (SymbolAlreadyInScopeException e)
+				{
+					throw new VariableAlreadyInScopeException(v, e);
+				}
 			}
 		}
 
@@ -207,15 +166,35 @@ namespace Grc.Semantic.Visitor
 		{
 			try
 			{
-				symbolTable.Lookup<SymbolFunc>(n.Name);
+				SymbolTable.Lookup<SymbolFunc>(n.Name);
 			}
-			catch (SymbolNotInScopeException e)
+			catch (SymbolNotInOpenScopesException e)
 			{
-				throw new FunctionNotInScopeException(n, e);
+				throw new FunctionNotInOpenScopesException(n, e);
 			}
-			catch (NoCurrentScopeException e)
+		}
+
+		public override void Pre(ExprLValIdentifierT n)
+		{
+			try
 			{
-				throw new SemanticException(e);
+				SymbolTable.Lookup<SymbolVar>(n.Name);
+			}
+			catch (SymbolNotInOpenScopesException e)
+			{
+				throw new VariableNotInOpenScopesException(n, e);
+			}
+		}
+
+		public override void Pre(StmtFuncCall n)
+		{
+			try
+			{
+				SymbolTable.Lookup<SymbolFunc>(n.Name);
+			}
+			catch (SymbolNotInOpenScopesException e)
+			{
+				throw new FunctionNotInOpenScopesException(n, e);
 			}
 		}
 	}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Semantic.Types;
 
 namespace Grc.Semantic.SymbolTable.Symbol
 {
@@ -10,7 +11,8 @@ namespace Grc.Semantic.SymbolTable.Symbol
 	{
 		private readonly string name;
 		private SymbolBase next;
-		private int scope;
+		private int scopeId;
+		private GTypeBase type;
 
 		public string Name
 		{
@@ -23,10 +25,22 @@ namespace Grc.Semantic.SymbolTable.Symbol
 			set { next = value; }
 		}
 
-		public int Scope
+		public int ScopeId
 		{
-			get { return scope; }
-			set { scope = value; }
+			get { return scopeId; }
+			set { scopeId = value; }
+		}
+
+		public GTypeBase Type
+		{
+			get { return type; }
+			set { type = value; }
+		}
+
+		public SymbolBase(string name, GTypeBase type)
+			: this(name)
+		{
+			this.type = type;
 		}
 
 		public SymbolBase(string name)

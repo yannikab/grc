@@ -120,9 +120,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Semantic\SemanticTests.cs" />
     <Compile Include="Semantic\SymbolTableTests.cs" />
     <Compile Include="Semantic\SymbolTypeTests.cs" />
+    <Compile Include="Semantic\SemanticVisitorTests.cs" />
+    <Compile Include="Semantic\GTypeVisitorTests.cs" />
+    <Compile Include="Semantic\TypeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

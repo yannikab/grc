@@ -36,8 +36,10 @@ namespace Grc.Ast.Node.Func
 
 				variables = new List<Variable>();
 
+				List<int> dims = hTypeVar.Dims.Select(d => d.Dim).ToList();
+
 				foreach (VarIdentifierT v in identifiers)
-					variables.Add(new Variable(v.Text, hTypeVar.DataType, hTypeVar.Dims.Select(d => d.Dim).ToList()));
+					variables.Add(new Variable(v.Text, hTypeVar.DataType, dims, line, pos));
 
 				return variables;
 			}

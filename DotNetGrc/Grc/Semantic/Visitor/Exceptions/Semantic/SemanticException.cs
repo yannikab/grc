@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Grc.Semantic.SymbolTable.Exceptions;
 
-namespace Grc.Semantic.Visitor.Exceptions
+namespace Grc.Semantic.Visitor.Exceptions.Semantic
 {
 	public class SemanticException : ApplicationException
 	{

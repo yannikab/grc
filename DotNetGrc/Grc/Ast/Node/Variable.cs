@@ -13,13 +13,51 @@ namespace Grc.Ast.Node
 		private TypeDataBase type;
 		private IReadOnlyList<int> dims;
 
+		private int line;
+		private int pos;
+
 		public string Name { get { return id; } }
 
-		public Variable(string id, TypeDataBase type, IReadOnlyList<int> dims)
+		public TypeDataBase Type { get { return type; } }
+
+		public IReadOnlyList<int> Dims { get { return dims; } }
+
+		public string Text
+		{
+			get
+			{
+				StringBuilder sb = new StringBuilder();
+
+				sb.Append(Name);
+
+				sb.Append(" : ");
+
+				sb.Append(type.Text);
+
+				foreach (int d in Dims)
+					sb.Append(string.Format("[{0}]", d.ToString()));
+
+				return sb.ToString();
+			}
+		}
+
+		public int Line { get { return line; } }
+
+		public int Pos { get { return pos; } }
+
+		public string Location
+		{
+			get { return string.Format("[{0}, {1}]", line, pos); }
+		}
+
+		public Variable(string id, TypeDataBase type, IReadOnlyList<int> dims, int line, int pos)
 		{
 			this.id = id;
 			this.type = type;
 			this.dims = dims;
+
+			this.line = line;
+			this.pos = pos;
 		}
 	}
 }

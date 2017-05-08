@@ -7,14 +7,14 @@ using Grc.Semantic.SymbolTable.Symbol;
 
 namespace Grc.Semantic.SymbolTable.Exceptions
 {
-	public class SymbolNotInScopeException : SymbolTableException
+	public class SymbolNotInOpenScopesException : SymbolTableException
 	{
 		private string name;
 
 		public string Name { get { return name; } }
 
-		public SymbolNotInScopeException(string name)
-			: base(string.Format("Symbol not in scope: {0}", name))
+		public SymbolNotInOpenScopesException(string name)
+			: base(string.Format("Symbol not in open scopes: {0}", name))
 		{
 			this.name = name;
 		}

@@ -118,7 +118,7 @@ namespace Grc.Ast.Node.Func
 
 		public override string ToString()
 		{
-			return string.Format("{0}{1}{2}", id, lpar, rpar);
+			return string.Format("decl: {0}{1}{2}", id, lpar, rpar);
 		}
 	}
 }

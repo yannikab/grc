@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Grc.Semantic.Types.GTypeBase" Collapsed="true">
+    <Position X="6" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEgAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Semantic\GType\GTypeBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Semantic.Types.GTypeChar" Collapsed="true">
+    <Position X="9.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Semantic\GType\GTypeChar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Semantic.Types.GTypeData" Collapsed="true">
+    <Position X="10.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Semantic\GType\GTypeData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Semantic.Types.GTypeFunction" Collapsed="true">
+    <Position X="0.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAIAAAAAAAAAgAAAAAgAAAAIAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Semantic\GType\GTypeFunction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Semantic.Types.GTypeIndexed" Collapsed="true">
+    <Position X="2.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAIAAAACAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Semantic\GType\GTypeIndexed.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Semantic.Types.GTypeInt" Collapsed="true">
+    <Position X="11.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Semantic\GType\GTypeInt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Semantic.Types.GTypeNothing" Collapsed="true">
+    <Position X="7.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Semantic\GType\GTypeNothing.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Semantic.Types.GTypeProduct" Collapsed="true">
+    <Position X="5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAIAIAACACAAAAAgAA=</HashCode>
+      <FileName>Semantic\GType\GTypeProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Semantic.Types.GTypeReturn" Collapsed="true">
+    <Position X="9.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Semantic\GType\GTypeReturn.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

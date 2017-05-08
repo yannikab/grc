@@ -44,8 +44,8 @@ namespace Grc.Semantic.SymbolTable
 				if (symbol[i].GetHashCode() == s.GetHashCode() && symbol[i].Equals(s))
 					throw new SymbolAlreadyInScopeException(scope.Count - 1, s);
 
-			symbol.Add((SymbolBase)s);
-			symbol[symbol.Count - 1].Scope = scope.Count - 1;
+			symbol.Add(s);
+			symbol[symbol.Count - 1].ScopeId = scope.Count - 1;
 
 			scope[scope.Count - 1]++;
 
@@ -66,13 +66,13 @@ namespace Grc.Semantic.SymbolTable
 				throw new NoCurrentScopeException();
 
 			if (!symbolForName.ContainsKey(name))
-				throw new SymbolNotInScopeException(name);
+				throw new SymbolNotInOpenScopesException(name);
 
 			for (SymbolBase t = symbolForName[name]; t != null; t = t.Next)
 				if (t is T)
 					return (T)t;
 
-			throw new SymbolNotInScopeException(name);
+			throw new SymbolNotInOpenScopesException(name);
 		}
 
 		public void Exit()
@@ -99,7 +99,7 @@ namespace Grc.Semantic.SymbolTable
 		public override string ToString()
 		{
 			var q = from s in symbol
-					group s by s.Scope into g
+					group s by s.ScopeId into g
 					select g;
 
 			StringBuilder sb = new StringBuilder();
@@ -118,9 +118,15 @@ namespace Grc.Semantic.SymbolTable
 		}
 
 
-		public int Scopes
+		public int CurrentScopeId
 		{
-			get { return scope.Count; }
+			get
+			{
+				if (scope.Count == 0)
+					throw new NoCurrentScopeException();
+
+				return scope.Count - 1;
+			}
 		}
 
 		public int SymbolsInScope

@@ -7,7 +7,7 @@ using Grc.Ast.Node;
 using Grc.Ast.Node.Helper;
 using Grc.Cst.Visitor.ASTCreation;
 using Grc.Semantic.Visitor;
-using Grc.Semantic.Visitor.Exceptions;
+using Grc.Semantic.Visitor.Exceptions.Semantic;
 using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.parser;
@@ -150,7 +150,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<VariableNotInScopeException>
+			Assert.Throws<VariableNotInOpenScopesException>
 				(() => AcceptSemanticVisitor(program));
 		}
 
@@ -166,7 +166,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<FunctionNotInScopeException>
+			Assert.Throws<FunctionNotInOpenScopesException>
 				(() => AcceptSemanticVisitor(program));
 		}
 
@@ -182,7 +182,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<VariableNotInScopeException>
+			Assert.Throws<VariableNotInOpenScopesException>
 					(() => AcceptSemanticVisitor(program));
 		}
 
@@ -306,8 +306,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<FunctionAlreadyInScopeException>
-					(() => AcceptSemanticVisitor(program));
+			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptSemanticVisitor(program));
 		}
 
 
@@ -325,9 +324,9 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<FunctionAlreadyInScopeException>
-					(() => AcceptSemanticVisitor(program));
+			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptSemanticVisitor(program));
 		}
+
 
 		[Test]
 		public void TestFunDefMissing()
@@ -345,6 +344,7 @@ fun program() : nothing
 					(() => AcceptSemanticVisitor(program));
 		}
 
+
 		[Test]
 		public void TestFunDeclFunDef()
 		{
@@ -358,6 +358,105 @@ fun program() : nothing
 	
 	fun foo() : nothing
 	{
+	}
+{
+}
+
+";
+			AcceptSemanticVisitor(program);
+		}
+
+
+		[Test]
+		public void TestOuterDeclInnerDef()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo() : int;
+	
+	fun bar() : nothing
+	
+		fun foo() : int
+		{
+		}
+	{
+	}
+	
+	fun foo() : int
+	{
+	}
+{
+}
+
+";
+			AcceptSemanticVisitor(program);
+		}
+
+		[Test]
+		public void TestHanoi()
+		{
+			string program = @"
+
+fun solve () : nothing
+
+      fun puts(ref s : char[]) : nothing { }
+      fun writeString(ref s : char[]) : nothing { }
+      fun geti() : int { }
+
+      fun hanoi (rings : int; ref source, target, auxiliary : char[]) : nothing
+         fun move (ref source, target : char[]) : nothing
+         {
+            puts(""Moving from "");
+            puts(source);
+            puts("" to "");
+            puts(target);
+            puts("".\n"");
+         }
+      {
+         if rings >= 1 then {
+            hanoi(rings-1, source, auxiliary, target);
+            move(source, target);
+            hanoi(rings-1, auxiliary, target, source);
+         }
+      }
+
+      var NumberOfRings : int;
+{
+  writeString(""Rings: "");
+  NumberOfRings <- geti();
+  hanoi(NumberOfRings, ""left"", ""right"", ""middle"");
+}
+
+
+";
+			AcceptSemanticVisitor(program);
+		}
+
+
+		[Test]
+		public void TestFunny()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo() : int
+	{
+		return 0;
+	}
+
+	fun bar() : nothing
+	
+		var a : int;
+
+		fun foo() : int
+		{
+			return 5;
+		}
+	{
+		a <- foo();
 	}
 {
 }

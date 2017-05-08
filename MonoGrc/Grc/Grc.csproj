@@ -183,7 +183,6 @@
     <Compile Include="Semantic\SymbolTable\StackSymbolTable.cs" />
     <Compile Include="Semantic\SymbolTable\Exceptions\NoCurrentScopeException.cs" />
     <Compile Include="Semantic\SymbolTable\Exceptions\SymbolAlreadyInScopeException.cs" />
-    <Compile Include="Semantic\SymbolTable\Exceptions\SymbolNotDefinedException.cs" />
     <Compile Include="Semantic\SymbolTable\Exceptions\SymbolTableException.cs" />
     <Compile Include="Cst\Visitor\GraphViz\GraphVizVisitor.cs" />
     <Compile Include="Cst\Visitor\GraphViz\GraphVizVisitorTokens.cs" />
@@ -196,16 +195,51 @@
     <Compile Include="Cst\Visitor\ASTCreation\Statements.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Variables.cs" />
     <Compile Include="Ast\Visitor\GraphViz\GraphVizNodeDataVisitor.cs" />
-    <Compile Include="Ast\Visitor\Semantic\SemanticVisitor.cs" />
     <Compile Include="Ast\Node\NodeException.cs" />
     <Compile Include="Ast\Node\Helper\HPar.cs" />
     <Compile Include="Ast\Node\Helper\HTypePar.cs" />
     <Compile Include="Ast\Node\Helper\HTypeReturn.cs" />
     <Compile Include="Ast\Node\Helper\HTypeVar.cs" />
     <Compile Include="Ast\Node\Func\ParIdentifierT.cs" />
+    <Compile Include="Semantic\GType\GTypeBase.cs" />
+    <Compile Include="Semantic\GType\GTypeChar.cs" />
+    <Compile Include="Semantic\GType\GTypeData.cs" />
+    <Compile Include="Semantic\GType\GTypeFunction.cs" />
+    <Compile Include="Semantic\GType\GTypeIndexed.cs" />
+    <Compile Include="Semantic\GType\GTypeInt.cs" />
+    <Compile Include="Semantic\GType\GTypeNothing.cs" />
+    <Compile Include="Semantic\GType\GTypeProduct.cs" />
+    <Compile Include="Semantic\GType\GTypeReturn.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\GTypeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionAlreadyInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionDefinitionMissing.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionNotInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\SemanticException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableAlreadyInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableNotInScopeException.cs" />
+    <Compile Include="Semantic\Visitor\SemanticVisitor.cs" />
+    <Compile Include="Semantic\Visitor\TypeResolver.cs" />
+    <Compile Include="Semantic\SymbolTable\Exceptions\SymbolNotInOpenScopesException.cs" />
+    <Compile Include="Semantic\Visitor\GTypeVisitor.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionArgsMismatchException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionCallStatementWithoutNothingException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionNotInSymbolTableException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\IndexedNotByReferenceException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\IndexingInvalidTypeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\IndexNotIntegerException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidTypeAssignmentException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidTypeInNumericExpression.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\MainFunctionWithParametersException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\MainFunctionWithReturnValueException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\ParameterNotInSymbolTableException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\VariableNotInSymbolTableException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Semantic\Visitor\Exceptions\SemanticExceptions.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Ast\Visitor\Semantic\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

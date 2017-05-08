@@ -77,7 +77,7 @@ namespace Grc.Ast.Node.Func
 
 		public override string ToString()
 		{
-			return "func-def";
+			return "def: " + header.Name + "()";
 		}
 	}
 }
