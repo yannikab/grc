@@ -24,6 +24,11 @@ namespace Grc.Semantic.Visitor
 
 		protected ISymbolTable SymbolTable { get { return symbolTable; } }
 
+		public SemanticVisitor(ISymbolTable symbolTable)
+		{
+			this.symbolTable = symbolTable;
+		}
+
 		public override void Pre(Root n)
 		{
 			SymbolTable.Enter();
@@ -45,19 +50,24 @@ namespace Grc.Semantic.Visitor
 		{
 			try
 			{
-				SymbolFunc sf = symbolTable.Lookup<SymbolFunc>(n.Header.Name);
+				SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Header.Name);
 
-				if (!sf.Defined)
+				if (symbolFunc.ScopeId == SymbolTable.CurrentScopeId)
 				{
-					sf.Defined = true;
-
-					symbolTable.Enter();
-
-					return;
+					if (!symbolFunc.Defined)
+					{
+						symbolFunc.Defined = true;
+						return;
+					}
+					else
+					{
+						throw new FunctionAlreadyInScopeException(n.Header, n.Header.Name);
+					}
 				}
 			}
 			catch (SymbolNotInOpenScopesException)
 			{
+
 			}
 
 			try
@@ -132,18 +142,6 @@ namespace Grc.Semantic.Visitor
 			catch (SymbolAlreadyInScopeException e)
 			{
 				throw new FunctionAlreadyInScopeException(n, e);
-			}
-
-			foreach (Parameter p in n.Parameters)
-			{
-				try
-				{
-					SymbolTable.Insert(new SymbolVar(p.Name));
-				}
-				catch (SymbolAlreadyInScopeException e)
-				{
-					throw new VariableAlreadyInScopeException(p, e);
-				}
 			}
 		}
 

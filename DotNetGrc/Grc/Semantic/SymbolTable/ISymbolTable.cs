@@ -16,5 +16,6 @@ namespace Grc.Semantic.SymbolTable
 
 		int CurrentScopeId { get; }
 		int SymbolsInScope { get; }
+		int MaxSymbols { get; }
 	}
 }

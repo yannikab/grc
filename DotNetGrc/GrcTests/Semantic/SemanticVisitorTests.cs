@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Grc.Ast.Node;
 using Grc.Ast.Node.Helper;
 using Grc.Cst.Visitor.ASTCreation;
+using Grc.Semantic.SymbolTable;
 using Grc.Semantic.Visitor;
 using Grc.Semantic.Visitor.Exceptions.Semantic;
 using java.io;
@@ -18,13 +19,15 @@ namespace GrcTests.Semantic
 	[TestFixture]
 	public class SemanticVisitorTests
 	{
-		private static void AcceptSemanticVisitor(string program)
+		private static ISymbolTable AcceptSemanticVisitor(string program)
 		{
 			StringReader sr = new StringReader(program);
 			Parser parser = new Parser(new Lexer(new PushbackReader(sr, 4096)));
 			NodeBase root = new Root();
 			parser.parse().apply(new ASTCreationVisitor(root));
-			root.Accept(new SemanticVisitor());
+			ISymbolTable symbolTable = new StackSymbolTable();
+			root.Accept(new SemanticVisitor(symbolTable));
+			return symbolTable;
 		}
 
 
@@ -33,12 +36,13 @@ namespace GrcTests.Semantic
 		{
 			string program = @"
 
-fun program() : nothing
+fun program(ref a : char) : int
 {
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
+			Assert.AreEqual(2, symbolTable.MaxSymbols);
 		}
 
 
@@ -47,7 +51,7 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : char
 
 	var a : int;
 	var a : char;
@@ -56,8 +60,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<VariableAlreadyInScopeException>
-				(() => AcceptSemanticVisitor(program));
+			Assert.Throws<VariableAlreadyInScopeException>(() => AcceptSemanticVisitor(program));
 		}
 
 
@@ -66,11 +69,11 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : int
 
 	fun foo(a : int) : nothing
 	
-	var a : int;
+	var a : char;
 
 	{
 	}
@@ -78,8 +81,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<VariableAlreadyInScopeException>
-				(() => AcceptSemanticVisitor(program));
+			Assert.Throws<VariableAlreadyInScopeException>(() => AcceptSemanticVisitor(program));
 		}
 
 
@@ -88,17 +90,16 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : int
 
-	fun foo(a : int; a : int) : nothing
+	fun foo(a : int; a : char) : char
 	{
 	}
 {
 }
 
 ";
-			Assert.Throws<VariableAlreadyInScopeException>
-				(() => AcceptSemanticVisitor(program));
+			Assert.Throws<VariableAlreadyInScopeException>(() => AcceptSemanticVisitor(program));
 		}
 
 
@@ -109,13 +110,17 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo(a : int; a : int) : nothing;
+	fun foo(a : int; a : char) : int;
+	
+	fun foo(ref b : char [][5][4]) : char
+	{
+	}
 {
 }
 
 ";
-			Assert.Throws<VariableAlreadyInScopeException>
-				(() => AcceptSemanticVisitor(program));
+			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
+			Assert.AreEqual(3, symbolTable.MaxSymbols);
 		}
 
 
@@ -135,7 +140,8 @@ fun program() : nothing
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
+			Assert.AreEqual(3, symbolTable.MaxSymbols);
 		}
 
 
@@ -144,14 +150,13 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program(a, b, c : int [4][5][2]) : int
 {
 	foo <- 5;
 }
 
 ";
-			Assert.Throws<VariableNotInOpenScopesException>
-				(() => AcceptSemanticVisitor(program));
+			Assert.Throws<VariableNotInOpenScopesException>(() => AcceptSemanticVisitor(program));
 		}
 
 
@@ -160,14 +165,13 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : char
 {
 	foo();
 }
 
 ";
-			Assert.Throws<FunctionNotInOpenScopesException>
-				(() => AcceptSemanticVisitor(program));
+			Assert.Throws<FunctionNotInOpenScopesException>(() => AcceptSemanticVisitor(program));
 		}
 
 
@@ -176,14 +180,13 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : int
 {
 	foo <- bar();
 }
 
 ";
-			Assert.Throws<VariableNotInOpenScopesException>
-					(() => AcceptSemanticVisitor(program));
+			Assert.Throws<VariableNotInOpenScopesException>(() => AcceptSemanticVisitor(program));
 		}
 
 
@@ -229,7 +232,7 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : char
 
 	var a : int;
 
@@ -242,7 +245,8 @@ fun program() : nothing
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
+			Assert.AreEqual(3, symbolTable.MaxSymbols);
 		}
 
 
@@ -251,7 +255,7 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : char
 
 	var a : int;
 
@@ -262,8 +266,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<FunctionDefinitionMissingException>
-					(() => AcceptSemanticVisitor(program));
+			Assert.Throws<FunctionDefinitionMissingException>(() => AcceptSemanticVisitor(program));
 		}
 
 
@@ -272,21 +275,20 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : char
 
-	fun foo() : nothing
+	fun foo() : int
 	{
 	}
 
-	fun foo() : nothing
+	fun foo() : char
 	{
 	}
 {
 }
 
 ";
-			Assert.Throws<FunctionAlreadyInScopeException>
-					(() => AcceptSemanticVisitor(program));
+			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptSemanticVisitor(program));
 		}
 
 
@@ -295,13 +297,13 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : char
 
-	fun foo() : nothing
+	fun foo() : int
 	{
 	}
 
-	fun foo() : nothing;
+	fun foo() : char;
 {
 }
 
@@ -315,11 +317,11 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : char
 
-	fun foo() : nothing;
+	fun foo() : int;
 
-	fun foo() : nothing;
+	fun foo() : char;
 {
 }
 
@@ -333,26 +335,25 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : char
 
 	fun foo() : nothing;
 {
 }
 
 ";
-			Assert.Throws<FunctionDefinitionMissingException>
-					(() => AcceptSemanticVisitor(program));
+			Assert.Throws<FunctionDefinitionMissingException>(() => AcceptSemanticVisitor(program));
 		}
 
 
 		[Test]
-		public void TestFunDeclFunDef()
+		public void TestFunDeclFunDef1()
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : int
 
-	fun foo() : nothing;
+	fun foo() : char;
 
 	var a, b : char[5];
 	
@@ -363,7 +364,31 @@ fun program() : nothing
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
+			Assert.AreEqual(4, symbolTable.MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestFunDeclFunDef2()
+		{
+			string program = @"
+
+fun program() : char
+
+	fun foo(a : int []) : int;
+
+	var a : int;
+	
+	fun foo(a : char) : nothing
+	{
+	}
+{
+}
+
+";
+			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
+			Assert.AreEqual(4, symbolTable.MaxSymbols);
 		}
 
 
@@ -372,26 +397,27 @@ fun program() : nothing
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : char
 
 	fun foo() : int;
 	
 	fun bar() : nothing
 	
-		fun foo() : int
+		fun foo() : nothing
 		{
 		}
 	{
 	}
 	
-	fun foo() : int
+	fun foo() : char
 	{
 	}
 {
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
+			Assert.AreEqual(4, symbolTable.MaxSymbols);
 		}
 
 		[Test]
@@ -436,24 +462,50 @@ fun solve () : nothing
 
 
 		[Test]
-		public void TestFunny()
+		public void TestFunny1()
 		{
 			string program = @"
 
-fun program() : nothing
+fun program() : int
 
-	fun foo() : int
+	fun foo() : nothing
 	{
-		return 0;
 	}
 
 	fun bar() : nothing
 	
-		var a : int;
+		fun foo() : nothing
+		{
+		}
+	{
+		foo();
+	}
+{
+}
 
+";
+			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
+			Assert.AreEqual(4, symbolTable.MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestFunny2()
+		{
+			string program = @"
+
+fun program() : char
+
+	var a : int;
+
+	fun foo() : int
+	{
+	}
+
+	fun bar() : nothing
+	
 		fun foo() : int
 		{
-			return 5;
 		}
 	{
 		a <- foo();
@@ -462,7 +514,8 @@ fun program() : nothing
 }
 
 ";
-			AcceptSemanticVisitor(program);
+			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
+			Assert.AreEqual(5, symbolTable.MaxSymbols);
 		}
 	}
 }

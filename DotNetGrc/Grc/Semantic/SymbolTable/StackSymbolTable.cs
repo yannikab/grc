@@ -13,12 +13,14 @@ namespace Grc.Semantic.SymbolTable
 		private List<int> scope;
 		private List<SymbolBase> symbol;
 		private Dictionary<string, SymbolBase> symbolForName;
+		private int maxSymbols;
 
 		public StackSymbolTable()
 		{
 			this.scope = new List<int>();
 			this.symbol = new List<SymbolBase>();
 			this.symbolForName = new Dictionary<string, SymbolBase>();
+			this.maxSymbols = 0;
 		}
 
 		public void Enter()
@@ -58,6 +60,9 @@ namespace Grc.Semantic.SymbolTable
 				symbol[symbol.Count - 1].Next = symbolForName[s.Name];
 				symbolForName[s.Name] = symbol[symbol.Count - 1];
 			}
+
+			if (symbol.Count > maxSymbols)
+				maxSymbols = symbol.Count;
 		}
 
 		public T Lookup<T>(string name) where T : SymbolBase
@@ -139,5 +144,7 @@ namespace Grc.Semantic.SymbolTable
 				return scope.Count > 1 ? scope[scope.Count - 1] - scope[scope.Count - 2] : scope[scope.Count - 1];
 			}
 		}
+
+		public int MaxSymbols { get { return maxSymbols; } }
 	}
 }
