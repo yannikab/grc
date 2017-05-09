@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node;
+using Grc.Ast.Node.Cond;
 using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Helper;
+using Grc.Ast.Node.Stmt;
 using Grc.Semantic.SymbolTable;
 using Grc.Semantic.SymbolTable.Exceptions;
 using Grc.Semantic.SymbolTable.Symbol;
@@ -63,7 +65,39 @@ namespace Grc.Semantic.Visitor
 			return varType;
 		}
 
-		public GTypeBase GetType(ExprBase n)
+		public GTypeBase GetType(NodeBase n)
+		{
+			if (n is LocalBase)
+				return GetType(n as LocalBase);
+			if (n is ExprBase)
+				return GetType(n as ExprBase);
+			else if (n is CondBase)
+				return GetType(n as CondBase);
+			else
+				throw new GTypeException("Invalid node type.");
+		}
+
+		public GTypeFunction GetType(LocalBase n)
+		{
+			if (n is LocalFuncDecl)
+				return GetType(n as LocalFuncDecl);
+			else if (n is LocalFuncDef)
+				return GetType(n as LocalFuncDef);
+			else
+				throw new GTypeException("Invalid local type.");
+		}
+
+		public void CheckType(StmtBase n)
+		{
+			if (n is StmtAssign)
+				CheckType(n as StmtAssign);
+			else if (n is StmtFuncCall)
+				CheckType(n as StmtFuncCall);
+			else
+				throw new GTypeException("Invalid statement type.");
+		}
+
+		private GTypeBase GetType(ExprBase n)
 		{
 			if (n is ExprIntegerT)
 				return GetType(n as ExprIntegerT);
@@ -93,6 +127,57 @@ namespace Grc.Semantic.Visitor
 				return GetType(n as ExprLValIndexed);
 			else
 				throw new GTypeException("Invalid l-value type.");
+		}
+
+		private GTypeBase GetType(CondBase n)
+		{
+			if (n is CondAnd)
+				return GetType(n as CondAnd);
+			else if (n is CondOr)
+				return GetType(n as CondOr);
+			else if (n is CondNot)
+				return GetType(n as CondNot);
+			else if (n is CondRelOpBase)
+				return GetType(n as CondRelOpBase);
+			else
+				throw new GTypeException("Invalid condition type.");
+		}
+
+		private GTypeFunction GetType(LocalFuncDecl n)
+		{
+			GTypeBase fromType = GTypeNothing.Instance;
+
+			foreach (Parameter p in n.Parameters)
+			{
+				GTypeBase parType = GetType(p);
+
+				if (GTypeNothing.Instance.Equals(fromType))
+					fromType = parType;
+				else
+					fromType = new GTypeProduct(fromType, parType);
+			}
+
+			GTypeReturn toType = GetType(n.HTypeReturn);
+
+			return new GTypeFunction(fromType, toType);
+		}
+
+		private GTypeFunction GetType(LocalFuncDef n)
+		{
+			GTypeFunction funcDefType = GetType(n.Header);
+
+			if (symbolTable.CurrentScopeId == 0)
+			{
+				// type rule: main function can not have parameters
+				if (!funcDefType.From.Equals(GTypeNothing.Instance))
+					throw new MainFunctionWithParametersException(n.Header);
+
+				// type rule: main function must have nothing return type
+				if (!funcDefType.To.Equals(GTypeNothing.Instance))
+					throw new MainFunctionWithReturnValueException(n.Header);
+			}
+
+			return funcDefType;
 		}
 
 		private GTypeBase GetType(ExprIntegerT n)
@@ -142,7 +227,7 @@ namespace Grc.Semantic.Visitor
 			return typeExpr;
 		}
 
-		public GTypeBase GetTypeFrom(ExprFuncCall n)
+		private GTypeBase GetTypeFrom(ExprFuncCall n)
 		{
 			GTypeBase typeFrom = GTypeNothing.Instance;
 
@@ -157,7 +242,7 @@ namespace Grc.Semantic.Visitor
 			return typeFrom;
 		}
 
-		public GTypeBase GetTypeTo(ExprFuncCall n)
+		private GTypeBase GetTypeTo(ExprFuncCall n)
 		{
 			try
 			{
@@ -213,25 +298,6 @@ namespace Grc.Semantic.Visitor
 				throw new IndexingInvalidTypeException(n, lvalType);
 		}
 
-		public GTypeFunction GetType(LocalFuncDecl n)
-		{
-			GTypeBase fromType = GTypeNothing.Instance;
-
-			foreach (Parameter p in n.Parameters)
-			{
-				GTypeBase parType = GetType(p);
-
-				if (GTypeNothing.Instance.Equals(fromType))
-					fromType = parType;
-				else
-					fromType = new GTypeProduct(fromType, parType);
-			}
-
-			GTypeReturn toType = GetType(n.HTypeReturn);
-
-			return new GTypeFunction(fromType, toType);
-		}
-
 		private GTypeReturn GetType(HTypeReturn n)
 		{
 			GTypeReturn returnType;
@@ -248,14 +314,99 @@ namespace Grc.Semantic.Visitor
 			return returnType;
 		}
 
-		public GTypeFunction GetType(LocalFuncDef n)
+		private GTypeBase GetType(CondAnd n)
 		{
-			return GetType(n.Header);
+			GTypeBase typeLeft = GetType(n.Left);
+			GTypeBase typeRight = GetType(n.Right);
+
+			// type rule: conditions involve the boolean type only
+			if (!typeLeft.Equals(GTypeBoolean.Instance))
+				throw new InvalidTypeInConditionException(n.Left, typeLeft);
+
+			if (!typeRight.Equals(GTypeBoolean.Instance))
+				throw new InvalidTypeInConditionException(n.Right, typeRight);
+
+			return typeLeft;
 		}
 
-		public GTypeBase GetType(LocalVarDef n)
+		private GTypeBase GetType(CondOr n)
 		{
-			return null;
+			GTypeBase typeLeft = GetType(n.Left);
+			GTypeBase typeRight = GetType(n.Right);
+
+			// type rule: conditions involve the boolean type only
+			if (!typeLeft.Equals(GTypeBoolean.Instance))
+				throw new InvalidTypeInConditionException(n.Left, typeLeft);
+
+			if (!typeRight.Equals(GTypeBoolean.Instance))
+				throw new InvalidTypeInConditionException(n.Right, typeRight);
+
+			return typeLeft;
+		}
+
+		private GTypeBase GetType(CondNot n)
+		{
+			GTypeBase cond = GetType(n.Cond);
+
+			// type rule: conditions involve the boolean type only
+			if (!cond.Equals(GTypeBoolean.Instance))
+				throw new InvalidTypeInConditionException(n.Cond, cond);
+
+			return cond;
+		}
+
+		private GTypeBase GetType(CondRelOpBase n)
+		{
+			GTypeBase typeLeft = GetType(n.Left);
+			GTypeBase typeRight = GetType(n.Right);
+
+			// type rule: relational operators involve int or char types
+			if (!(typeLeft.Equals(GTypeInt.Instance) || typeLeft.Equals(GTypeChar.Instance)))
+				throw new InvalidRelationalOperationException(n.Left, typeLeft);
+
+			if (!(typeRight.Equals(GTypeInt.Instance) || typeRight.Equals(GTypeChar.Instance)))
+				throw new InvalidRelationalOperationException(n.Right, typeRight);
+
+			if (!object.Equals(typeLeft, typeRight))
+				throw new InvalidRelationalOperationException(n);
+
+			return GTypeBoolean.Instance;
+		}
+
+		private void CheckType(StmtAssign n)
+		{
+			GTypeBase lvalType = GetType(n.Lval);
+
+			GTypeBase exprType = GetType(n.Expr);
+
+			// type rule: right side expression type must match the l-value type
+			if (!object.Equals(lvalType, exprType))
+				throw new InvalidTypeAssignmentException(n, lvalType, exprType);
+		}
+
+		private void CheckType(StmtFuncCall n)
+		{
+			try
+			{
+				SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Name);
+
+				if (!(symbolFunc.Type is GTypeFunction))
+					throw new GTypeException("Function lookup in symbol table yielded symbol without function type.");
+
+				GTypeFunction functionType = (GTypeFunction)symbolFunc.Type;
+
+				// type rule: arguments must match parameters in type and number
+				if (!functionType.From.Equals(GetTypeFrom(n.FunCall)))
+					throw new FunctionArgsMismatchException(n.FunCall);
+
+				// type rule: functions in function call statements must return nothing
+				if (!functionType.To.Equals(GTypeNothing.Instance))
+					throw new FunctionCallStatementWithoutNothingException(n);
+			}
+			catch (SymbolNotInOpenScopesException e)
+			{
+				throw new FunctionNotInSymbolTableException(n, e);
+			}
 		}
 	}
 }

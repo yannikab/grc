@@ -26,7 +26,7 @@ namespace GrcTests.Semantic
 			NodeBase root = new Root();
 			parser.parse().apply(new ASTCreationVisitor(root));
 			ISymbolTable symbolTable = new StackSymbolTable();
-			root.Accept(new SemanticVisitor(symbolTable));
+			root.Accept(new SemanticVisitor(out symbolTable));
 			return symbolTable;
 		}
 

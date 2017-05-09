@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node.Type;
+using Grc.Ast.Node.Func;
 
 namespace Grc.Ast.Node
 {
 	public class Parameter
 	{
-		private string id;
+		private ParIdentifierT parIdentifier;
 		private bool byRef;
 		private TypeDataBase type;
 		private IReadOnlyList<int> dims;
@@ -17,7 +18,9 @@ namespace Grc.Ast.Node
 		private int line;
 		private int pos;
 
-		public string Name { get { return id; } }
+		public ParIdentifierT ParIdentifier { get { return parIdentifier; } }
+
+		public string Name { get { return parIdentifier.Text; } }
 
 		public bool ByRef { get { return byRef; } }
 
@@ -34,7 +37,7 @@ namespace Grc.Ast.Node
 				StringBuilder sb = new StringBuilder();
 
 				sb.Append(Name);
-				
+
 				sb.Append(" : ");
 
 				sb.Append(type.Text);
@@ -55,15 +58,20 @@ namespace Grc.Ast.Node
 			get { return string.Format("[{0}, {1}]", line, pos); }
 		}
 
-		public Parameter(string id, bool byRef, TypeDataBase type, IReadOnlyList<int> dims, int line, int pos)
+		public Parameter(ParIdentifierT parIdentifier, bool byRef, TypeDataBase type, IReadOnlyList<int> dims, int line, int pos)
 		{
-			this.id = id;
+			this.parIdentifier = parIdentifier;
 			this.byRef = byRef;
 			this.type = type;
 			this.dims = dims;
 
 			this.line = line;
 			this.pos = pos;
+		}
+
+		public override string ToString()
+		{
+			return Text;
 		}
 	}
 }

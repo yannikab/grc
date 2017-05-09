@@ -232,6 +232,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ast\Visitor\IVisitor.cs" />
+    <Compile Include="Semantic\GType\GTypeBoolean.cs" />
     <Compile Include="Semantic\GType\GTypeIndexed.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -244,6 +245,8 @@
     <Compile Include="Semantic\GType\GTypeData.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidRelationalOperationException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidTypeInConditionException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\MismatchedFunctionDefinitionException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\IndexedNotByReferenceException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionCallStatementWithoutNothingException.cs" />

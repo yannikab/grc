@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Semantic.Types;
 
 namespace Grc.Semantic.SymbolTable.Symbol
 {
 	public class SymbolVar : SymbolBase
 	{
+		public SymbolVar(string name, GTypeBase type)
+			: base(name, type)
+		{
+		}
+
 		public SymbolVar(string name)
 			: base(name)
 		{

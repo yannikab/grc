@@ -24,8 +24,10 @@ namespace Grc.Semantic.Visitor
 
 		protected ISymbolTable SymbolTable { get { return symbolTable; } }
 
-		public SemanticVisitor(ISymbolTable symbolTable)
+		public SemanticVisitor(out ISymbolTable symbolTable)
 		{
+			symbolTable = new StackSymbolTable();
+
 			this.symbolTable = symbolTable;
 		}
 

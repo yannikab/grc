@@ -213,10 +213,8 @@
     <Compile Include="Semantic\Visitor\Exceptions\GType\GTypeException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionAlreadyInScopeException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionDefinitionMissing.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionNotInScopeException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\Semantic\SemanticException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableAlreadyInScopeException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableNotInScopeException.cs" />
     <Compile Include="Semantic\Visitor\SemanticVisitor.cs" />
     <Compile Include="Semantic\Visitor\TypeResolver.cs" />
     <Compile Include="Semantic\SymbolTable\Exceptions\SymbolNotInOpenScopesException.cs" />
@@ -233,6 +231,12 @@
     <Compile Include="Semantic\Visitor\Exceptions\GType\MainFunctionWithReturnValueException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\ParameterNotInSymbolTableException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\VariableNotInSymbolTableException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidTypeInConditionException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\MismatchedFunctionDefinitionException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionNotInOpenScopesException.cs" />
+    <Compile Include="Semantic\GType\GTypeBoolean.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableNotInOpenScopesException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidRelationalOperationException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

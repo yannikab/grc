@@ -41,7 +41,7 @@ namespace Grc.Ast.Node.Helper
 					dims.Insert(0, 0);
 
 				foreach (ParIdentifierT p in identifiers)
-					parameters.Add(new Parameter(p.Text, keyRef != null, hTypePar.DataType, dims, line, pos));
+					parameters.Add(new Parameter(p, keyRef != null, hTypePar.DataType, dims, line, pos));
 
 				return parameters;
 			}

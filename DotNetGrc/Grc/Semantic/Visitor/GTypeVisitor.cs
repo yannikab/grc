@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using Grc.Ast.Node;
 using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
+using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
 using Grc.Semantic.SymbolTable.Exceptions;
 using Grc.Semantic.SymbolTable.Symbol;
 using Grc.Semantic.Types;
 using Grc.Semantic.Visitor.Exceptions.GType;
 using Grc.Semantic.Visitor.Exceptions.Semantic;
+using Grc.Semantic.SymbolTable;
+using Grc.Ast.Node.Cond;
 
 namespace Grc.Semantic.Visitor
 {
@@ -20,26 +23,30 @@ namespace Grc.Semantic.Visitor
 		private Dictionary<NodeBase, GTypeBase> typeForNode;
 		private TypeResolver typeResolver;
 
-		public GTypeVisitor()
+		public GTypeVisitor(out ISymbolTable symbolTable, out Dictionary<NodeBase, GTypeBase> typeForNode)
+			: base(out symbolTable)
 		{
-			this.typeForNode = new Dictionary<NodeBase, GTypeBase>();
+			typeForNode = new Dictionary<NodeBase, GTypeBase>();
+
+			this.typeForNode = typeForNode;
+
 			this.typeResolver = new TypeResolver(SymbolTable);
+		}
+
+		public override void Pre(Root n)
+		{
+			base.Pre(n);
+		}
+
+		public override void Post(Root n)
+		{
+			base.Post(n);
 		}
 
 		public override void Pre(LocalFuncDef n)
 		{
-			if (SymbolTable.CurrentScopeId == 0)
-			{
-				GTypeFunction headerType = typeResolver.GetType(n);
-
-				// type rule: main function can not have parameters
-				if (!GTypeNothing.Instance.Equals(headerType.From))
-					throw new MainFunctionWithParametersException(n.Header);
-
-				// type rule: main function must have nothing return type
-				if (!GTypeNothing.Instance.Equals(headerType.To))
-					throw new MainFunctionWithReturnValueException(n.Header);
-			}
+			GTypeFunction funcDefType = typeResolver.GetType(n);
+			typeForNode.Add(n, funcDefType);
 
 			try
 			{
@@ -47,68 +54,88 @@ namespace Grc.Semantic.Visitor
 
 				if (symbolFunc.ScopeId == SymbolTable.CurrentScopeId)
 				{
-					if (symbolFunc.Defined)
-						throw new FunctionAlreadyInScopeException(n, symbolFunc.Name);
-
-					if (symbolFunc.Type.Equals(typeResolver.GetType(n.Header)))
-						symbolFunc.Defined = true;
+					if (!symbolFunc.Defined)
+					{
+						if (symbolFunc.Type.Equals(funcDefType))
+						{
+							symbolFunc.Defined = true;
+							return;
+						}
+						else
+						{
+							throw new MismatchedFunctionDefinitionException(n.Header);
+						}
+					}
 					else
-						throw new MismatchedFunctionDefinitionException(n.Header);
+					{
+						throw new FunctionAlreadyInScopeException(n, symbolFunc.Name);
+					}
 				}
 			}
 			catch (SymbolNotInOpenScopesException)
 			{
-				try
-				{
-					SymbolTable.Insert(new SymbolFunc(n.Header.Name, true));
-				}
-				catch (SymbolAlreadyInScopeException e)
-				{
-					throw new FunctionAlreadyInScopeException(n.Header, e);
-				}
 			}
 
 			try
 			{
-				SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Header.Name);
+				SymbolFunc symbolFunc = new SymbolFunc(n.Header.Name, true, funcDefType);
 
-				if (symbolFunc.ScopeId != SymbolTable.CurrentScopeId || !symbolFunc.Defined)
-					throw new FunctionNotInSymbolTableException(n.Header);
-
-				symbolFunc.Type = typeResolver.GetType(n.Header);
+				SymbolTable.Insert(symbolFunc);
 			}
-			catch (SymbolNotInOpenScopesException e)
+			catch (SymbolAlreadyInScopeException e)
 			{
-				throw new FunctionNotInSymbolTableException(n.Header, e);
+				throw new FunctionAlreadyInScopeException(n.Header, e);
 			}
 		}
 
 		public override void Visit(LocalFuncDef n)
 		{
-			base.Visit(n);
+			Pre(n);
 
-			foreach (Parameter p in n.Header.Parameters)
+			SymbolTable.Enter();
+
+			foreach (var p in n.Header.Parameters)
 			{
 				try
 				{
-					SymbolVar symbolVar = SymbolTable.Lookup<SymbolVar>(p.Name);
+					SymbolVar symbolVar = new SymbolVar(p.Name, typeResolver.GetType(p));
 
-					if (symbolVar.ScopeId != SymbolTable.CurrentScopeId)
-						throw new ParameterNotInSymbolTableException(p);
+					SymbolTable.Insert(symbolVar);
 
-					symbolVar.Type = typeResolver.GetType(p);
+					typeForNode.Add(p.ParIdentifier, symbolVar.Type);
 				}
-				catch (SymbolNotInOpenScopesException e)
+				catch (SymbolAlreadyInScopeException e)
 				{
-					throw new ParameterNotInSymbolTableException(p, e);
+					throw new VariableAlreadyInScopeException(p, e);
 				}
 			}
 
-			base.Post(n);
+			foreach (LocalBase l in n.Locals)
+				l.Accept(this);
+
+			foreach (LocalFuncDecl d in n.Locals.OfType<LocalFuncDecl>())
+			{
+				try
+				{
+					SymbolFunc sf = SymbolTable.Lookup<SymbolFunc>(d.Name);
+
+					if (!sf.Defined)
+						throw new FunctionDefinitionMissingException(d, sf);
+				}
+				catch (SymbolNotInOpenScopesException e)
+				{
+					throw new FunctionNotInOpenScopesException(d, e);
+				}
+			}
+
+			n.Block.Accept(this);
+
+			Post(n);
 		}
 
 		public override void Post(LocalFuncDef n)
 		{
+			base.Post(n);
 		}
 
 		public override void Pre(LocalFuncDecl n)
@@ -126,25 +153,11 @@ namespace Grc.Semantic.Visitor
 					throw new GTypeException("Function should not be defined.");
 
 				symbolFunc.Type = typeResolver.GetType(n);
+				typeForNode.Add(n, symbolFunc.Type);
 			}
 			catch (SymbolNotInOpenScopesException e)
 			{
 				throw new FunctionNotInSymbolTableException(n, e);
-			}
-
-
-			foreach (Parameter p in n.Parameters)
-			{
-				try
-				{
-					SymbolVar symbolVar = SymbolTable.Lookup<SymbolVar>(p.Name);
-
-					symbolVar.Type = typeResolver.GetType(p);
-				}
-				catch (SymbolNotInOpenScopesException e)
-				{
-					throw new ParameterNotInSymbolTableException(p, e);
-				}
 			}
 		}
 
@@ -159,6 +172,8 @@ namespace Grc.Semantic.Visitor
 					SymbolVar symbolVar = SymbolTable.Lookup<SymbolVar>(v.Name);
 
 					symbolVar.Type = typeResolver.GetType(v);
+
+					typeForNode.Add(v.VarIdentifier, symbolVar.Type);
 				}
 				catch (SymbolNotInOpenScopesException e)
 				{
@@ -194,15 +209,11 @@ namespace Grc.Semantic.Visitor
 
 		public override void Pre(ExprFuncCall n)
 		{
-			base.Pre(n);
-
-			typeForNode.Add(n, typeResolver.GetTypeFrom(n));
+			typeForNode.Add(n, typeResolver.GetType(n));
 		}
 
 		public override void Pre(ExprLValIdentifierT n)
 		{
-			base.Pre(n);
-
 			typeForNode.Add(n, typeResolver.GetType(n));
 		}
 
@@ -216,37 +227,34 @@ namespace Grc.Semantic.Visitor
 			typeForNode.Add(n, typeResolver.GetType(n));
 		}
 
+		public override void Pre(CondAnd n)
+		{
+			typeForNode.Add(n, typeResolver.GetType(n));
+		}
+
+		public override void Pre(CondOr n)
+		{
+			typeForNode.Add(n, typeResolver.GetType(n));
+		}
+
+		public override void Pre(CondNot n)
+		{
+			typeForNode.Add(n, typeResolver.GetType(n));
+		}
+
+		public override void Pre(CondRelOpBase n)
+		{
+			typeForNode.Add(n, typeResolver.GetType(n));
+		}
+
 		public override void Pre(StmtAssign n)
 		{
-			GTypeBase lvalType = typeResolver.GetType(n.Lval);
-
-			GTypeBase exprType = typeResolver.GetType(n.Expr);
-
-			if (!object.Equals(lvalType, exprType))
-				throw new InvalidTypeAssignmentException(n, lvalType, exprType);
+			typeResolver.CheckType(n);
 		}
 
 		public override void Pre(StmtFuncCall n)
 		{
-			try
-			{
-				SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Name);
-
-				if (!(symbolFunc.Type is GTypeFunction))
-					throw new GTypeException("Function lookup in symbol table yielded symbol without function type.");
-
-				GTypeFunction functionType = (GTypeFunction)symbolFunc.Type;
-
-				if (!functionType.From.Equals(typeResolver.GetTypeFrom(n.FunCall)))
-					throw new FunctionArgsMismatchException(n.FunCall);
-
-				if (!functionType.To.Equals(GTypeNothing.Instance))
-					throw new FunctionCallStatementWithoutNothingException(n);
-			}
-			catch (SymbolNotInOpenScopesException e)
-			{
-				throw new FunctionNotInSymbolTableException(n, e);
-			}
+			typeResolver.CheckType(n);
 		}
 	}
 }

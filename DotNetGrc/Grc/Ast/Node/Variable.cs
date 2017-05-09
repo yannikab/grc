@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Type;
 
 namespace Grc.Ast.Node
 {
 	public class Variable
 	{
-		private string id;
+		private VarIdentifierT varIdentifier;
 		private TypeDataBase type;
 		private IReadOnlyList<int> dims;
 
 		private int line;
 		private int pos;
 
-		public string Name { get { return id; } }
+		public VarIdentifierT VarIdentifier { get { return varIdentifier; } }
+
+		public string Name { get { return varIdentifier.Text; } }
 
 		public TypeDataBase Type { get { return type; } }
 
@@ -50,14 +53,19 @@ namespace Grc.Ast.Node
 			get { return string.Format("[{0}, {1}]", line, pos); }
 		}
 
-		public Variable(string id, TypeDataBase type, IReadOnlyList<int> dims, int line, int pos)
+		public Variable(VarIdentifierT varIdentifier, TypeDataBase type, IReadOnlyList<int> dims, int line, int pos)
 		{
-			this.id = id;
+			this.varIdentifier = varIdentifier;
 			this.type = type;
 			this.dims = dims;
 
 			this.line = line;
 			this.pos = pos;
+		}
+
+		public override string ToString()
+		{
+			return Text;
 		}
 	}
 }

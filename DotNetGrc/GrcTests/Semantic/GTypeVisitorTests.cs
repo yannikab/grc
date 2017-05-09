@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Grc.Ast.Node;
 using Grc.Ast.Node.Helper;
 using Grc.Cst.Visitor.ASTCreation;
+using Grc.Semantic.SymbolTable;
+using Grc.Semantic.Types;
 using Grc.Semantic.Visitor;
 using Grc.Semantic.Visitor.Exceptions.GType;
 using java.io;
@@ -18,13 +20,13 @@ namespace GrcTests.Semantic
 	[TestFixture]
 	public class GTypeVisitorTests
 	{
-		private static void AcceptGTypeVisitor(string program)
+		private static void AcceptGTypeVisitor(string program, out ISymbolTable symbolTable, out Dictionary<NodeBase, GTypeBase> typeForNode)
 		{
 			StringReader sr = new StringReader(program);
 			Parser parser = new Parser(new Lexer(new PushbackReader(sr, 4096)));
 			NodeBase root = new Root();
 			parser.parse().apply(new ASTCreationVisitor(root));
-			root.Accept(new GTypeVisitor());
+			root.Accept(new GTypeVisitor(out symbolTable, out typeForNode));
 		}
 
 
@@ -38,7 +40,11 @@ fun program() : nothing
 }
 
 ";
-			AcceptGTypeVisitor(program);
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			Assert.AreEqual(1, symbolTable.MaxSymbols);
+			Assert.AreEqual(1, typeForNode.Count);
 		}
 
 
@@ -52,7 +58,9 @@ fun program(a : int) : nothing
 }
 
 ";
-			Assert.Throws<MainFunctionWithParametersException>(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<MainFunctionWithParametersException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
 
@@ -66,7 +74,9 @@ fun program() : int
 }
 
 ";
-			Assert.Throws<MainFunctionWithReturnValueException>(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<MainFunctionWithReturnValueException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
 
@@ -84,7 +94,10 @@ fun program() : nothing
 }
 
 ";
-			AcceptGTypeVisitor(program);
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			Assert.AreEqual(3, symbolTable.MaxSymbols);
 		}
 
 
@@ -102,7 +115,9 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<IndexedNotByReferenceException>(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<IndexedNotByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
 
@@ -119,7 +134,9 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<IndexingInvalidTypeException>(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<IndexingInvalidTypeException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
 
@@ -136,7 +153,9 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<IndexingInvalidTypeException>(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<IndexingInvalidTypeException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
 
@@ -153,7 +172,9 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<InvalidTypeAssignmentException>(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<InvalidTypeAssignmentException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
 
@@ -170,7 +191,55 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<InvalidTypeAssignmentException>(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<InvalidTypeAssignmentException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+		}
+
+
+		[Test]
+		public void TestAddNothing()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : int;
+
+	fun foo() : nothing
+	{
+	}
+{
+	a <- 5 + foo();
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+		}
+
+
+		[Test]
+		public void TestAssignNothing()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : int;
+
+	fun foo() : nothing
+	{
+	}
+{
+	a <- foo();
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<InvalidTypeAssignmentException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
 
@@ -191,7 +260,10 @@ fun program() : nothing
 }
 
 ";
-			AcceptGTypeVisitor(program);
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			Assert.AreEqual(4, symbolTable.MaxSymbols);
 		}
 
 
@@ -212,7 +284,10 @@ fun program() : nothing
 }
 
 ";
-			AcceptGTypeVisitor(program);
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			Assert.AreEqual(3, symbolTable.MaxSymbols);
 		}
 
 
@@ -233,7 +308,10 @@ fun program() : nothing
 }
 
 ";
-			AcceptGTypeVisitor(program);
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			Assert.AreEqual(6, symbolTable.MaxSymbols);
 		}
 
 
@@ -254,7 +332,9 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<FunctionArgsMismatchException>(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<FunctionArgsMismatchException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
 
@@ -275,7 +355,33 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<FunctionArgsMismatchException>(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<FunctionArgsMismatchException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+		}
+
+
+		[Test]
+		public void TestFunctionCallExprAdd()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : int;
+	
+	fun foo(c : char; i : int; ref a : char[5]) : int
+	{
+	}
+{
+	a <- foo('f', 34, ""hello"") + 5;
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			Assert.AreEqual(6, symbolTable.MaxSymbols);
 		}
 
 
@@ -294,7 +400,10 @@ fun program() : nothing
 }
 
 ";
-			AcceptGTypeVisitor(program);
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			Assert.AreEqual(2, symbolTable.MaxSymbols);
 		}
 
 		[Test]
@@ -312,11 +421,14 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<FunctionCallStatementWithoutNothingException>(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<FunctionCallStatementWithoutNothingException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
+
 		[Test]
-		public void TestIndexedExprInt()
+		public void TestIndexedExprChar()
 		{
 			string program = @"
 
@@ -330,7 +442,10 @@ fun program() : nothing
 }
 
 ";
-			AcceptGTypeVisitor(program);
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			Assert.AreEqual(3, symbolTable.MaxSymbols);
 		}
 
 
@@ -350,8 +465,9 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<MismatchedFunctionDefinitionException>
-					(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<MismatchedFunctionDefinitionException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
 
@@ -371,8 +487,219 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<MismatchedFunctionDefinitionException>
-					(() => AcceptGTypeVisitor(program));
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<MismatchedFunctionDefinitionException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+		}
+
+
+		[Test]
+		public void TestFunDeclFunDef()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo(a, b : char) : nothing;
+
+	var a, b : char[5];
+	
+	fun foo(a, b : char) : nothing
+	{
+	}
+{
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			Assert.AreEqual(6, symbolTable.MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestHanoi()
+		{
+			string program = @"
+
+fun solve () : nothing
+
+      fun puts(ref s : char[]) : nothing { }
+      fun writeString(ref s : char[]) : nothing { }
+      fun geti() : int { }
+
+      fun hanoi (rings : int; ref source, target, auxiliary : char[]) : nothing
+         fun move (ref source, target : char[]) : nothing
+         {
+            puts(""Moving from "");
+            puts(source);
+            puts("" to "");
+            puts(target);
+            puts("".\n"");
+         }
+      {
+         if rings >= 1 then {
+            hanoi(rings-1, source, auxiliary, target);
+            move(source, target);
+            hanoi(rings-1, auxiliary, target, source);
+         }
+      }
+
+      var NumberOfRings : int;
+{
+  writeString(""Rings: "");
+  NumberOfRings <- geti();
+  hanoi(NumberOfRings, ""left"", ""right"", ""middle"");
+}
+
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+		}
+
+
+		[Test]
+		public void TestPrimes()
+		{
+			string program = @"
+
+fun main () : nothing
+
+	fun puts(ref s : char[]) : nothing { }
+    fun puti(i : int) : nothing { }
+	fun geti() : int { }
+    
+	fun prime (n : int) : int
+      var i : int;
+    {
+      if n<0              then return prime(-1);
+      else if n<2         then return 0;
+      else if n=2         then return 1;
+      else if n mod 2 = 0 then return 0;
+      else {
+        i <- 3;
+        while i <= n div 2 do {
+          if n mod i = 0 then
+            return 0;
+          i <- i + 2;
+        }
+        return 1;
+      }
+    }
+
+    var limit, number, counter : int;
+
+{
+   puts(""Limit: "");
+   limit <- geti();
+   puts(""Primes:\n"");
+   counter <- 0;
+   if limit >= 2 then {
+      counter <- counter + 1;
+      puti(2);
+      puts(""\n"");
+   }
+   if limit >= 3 then {
+      counter <- counter + 1;
+      puti(3);
+      puts(""\n"");
+   }
+   number <- 6;
+   while number <= limit do {
+      if prime(number - 1) = 1 then {
+         counter <- counter + 1;
+         puti(number - 1);
+         puts(""\n"");
+      }
+      if number # limit and prime(number + 1) = 1 then {
+         counter <- counter + 1;
+         puti(number + 1);
+         puts(""\n"");
+      }
+      number <- number + 6;
+   }
+   puts(""\nTotal: "");
+   puti(counter);
+   puts(""\n"");
+}
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+		}
+
+
+		[Test]
+		public void TestBSort()
+		{
+			string program = @"
+
+fun main () : nothing
+
+   fun puts(ref s : char[]) : nothing { }
+   fun writeString(ref s : char[]) : nothing { }
+   fun puti(i : int) : nothing { }
+   
+   fun bsort (n : int; ref x : int[]) : nothing
+
+      fun swap (ref x, y : int) : nothing
+         var t : int;
+      {
+         t <- x;
+         x <- y;
+         y <- t;
+      }
+
+      var changed, i : int;
+   {
+      changed <- 1;
+      while changed > 0 do {
+        changed <- 0;
+        i <- 0;
+        while i < n-1 do {
+          if x[i] > x[i+1] then {
+            swap(x[i],x[i+1]);
+            changed <- 1;
+          }
+          i <- i+1;
+        }
+      }
+   }
+
+   fun putArray (ref msg : char[]; n : int; ref x : int[]) : nothing
+      var i : int;
+   {
+      puts(msg);
+      i <- 0;
+      while i < n do {
+        if i > 0 then writeString("", "");
+        puti(x[i]);
+        i <- i+1;
+      }
+      puts(""\n"");
+   }
+
+   var seed, i : int;
+   var x : int[16];
+{
+  seed <- 65;
+  i <- 0;
+  while i < 16 do {
+    seed <- (seed * 137 + 220 + i) mod 101;
+    x[i] <- seed;
+    i <- i+1;
+  }
+  putArray(""Initial array: "", 16, x);
+  bsort(16,x);
+  putArray(""Sorted array: "", 16, x);
+}
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
 		}
 	}
 }
