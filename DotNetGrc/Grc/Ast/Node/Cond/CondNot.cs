@@ -19,17 +19,11 @@ namespace Grc.Ast.Node.Cond
 
 		public override int Pos { get { return cond.Pos; } }
 
-		public CondNot(string operNot)
+		public CondNot(CondBase cond, string operNot)
 		{
+			this.cond = cond;
+
 			this.operNot = operNot;
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (cond != null || (cond = c as CondBase) == null)
-				throw new NodeException();
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)

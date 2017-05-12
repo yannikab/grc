@@ -22,24 +22,12 @@ namespace Grc.Ast.Node.Cond
 
 		public override int Pos { get { return left.Pos; } }
 
-		public CondAnd(string operAnd)
+		public CondAnd(CondBase left, CondBase right, string operAnd)
 		{
+			this.left = left;
+			this.right = right;
+
 			this.operAnd = operAnd;
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (!(c is CondBase))
-				throw new NodeException();
-
-			if (left == null)
-				left = (CondBase)c;
-			else if (right == null)
-				right = (CondBase)c;
-			else
-				throw new NodeException();
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)

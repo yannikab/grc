@@ -8,8 +8,8 @@ namespace Grc.Ast.Node.Expr
 {
 	class ExprDiv : ExprBinOpBase
 	{
-		public ExprDiv(string operDiv)
-			: base(operDiv)
+		public ExprDiv(ExprBase left, ExprBase right, string operDiv)
+			: base(left, right, operDiv)
 		{
 		}
 	}

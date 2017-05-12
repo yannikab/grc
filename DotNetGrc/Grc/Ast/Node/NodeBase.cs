@@ -26,10 +26,6 @@ namespace Grc.Ast.Node
 		{
 		}
 
-		public virtual void AddChild(NodeBase c)
-		{
-		}
-
 		public abstract void Accept(IVisitor v);
 
 		protected abstract string GetText();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node.Cond;
+using Grc.Ast.Node.Expr;
 using k31.grc.cst.analysis;
 using k31.grc.cst.node;
 
@@ -13,128 +14,136 @@ namespace Grc.Cst.Visitor.ASTCreation
 	{
 		public override void inAOrOpExpressionL(AOrOpExpressionL node)
 		{
-			defaultIn(node);
-
-			PushNode(new CondOr(node.getOperOr().getText()));
+			helper.Pre();
 		}
 
 		public override void outAOrOpExpressionL(AOrOpExpressionL node)
 		{
-			defaultOut(node);
+			string operOr = node.getOperOr().getText();
 
-			PopNode();
+			CondBase left = (CondBase)helper[0];
+			CondBase right = (CondBase)helper[1];
+
+			helper.Post(new CondOr(left, right, operOr));
 		}
 
 		public override void inAAndOpTermL(AAndOpTermL node)
 		{
-			defaultIn(node);
-
-			PushNode(new CondAnd(node.getOperAnd().getText()));
+			helper.Pre();
 		}
 
 		public override void outAAndOpTermL(AAndOpTermL node)
 		{
-			defaultOut(node);
+			string operAnd = node.getOperAnd().getText();
 
-			PopNode();
+			CondBase left = (CondBase)helper[0];
+			CondBase right = (CondBase)helper[1];
+
+			helper.Post(new CondAnd(left, right, operAnd));
 		}
 
 		public override void inANotOpFactorL(ANotOpFactorL node)
 		{
-			defaultIn(node);
-
-			PushNode(new CondNot(node.getOperNot().getText()));
+			helper.Pre();
 		}
 
 		public override void outANotOpFactorL(ANotOpFactorL node)
 		{
-			defaultOut(node);
+			string operNot = node.getOperNot().getText();
 
-			PopNode();
+			CondBase cond = (CondBase)helper[0];
+
+			helper.Post(new CondNot(cond, operNot));
 		}
 
 		public override void inAEqualFactorL(AEqualFactorL node)
 		{
-			defaultIn(node);
-
-			PushNode(new CondEq(node.getOperEq().getText()));
+			helper.Pre();
 		}
 
 		public override void outAEqualFactorL(AEqualFactorL node)
 		{
-			defaultOut(node);
+			string operEq = node.getOperEq().getText();
 
-			PopNode();
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
+
+			helper.Post(new CondEq(left, right, operEq));
 		}
 
 		public override void inANotEqualFactorL(ANotEqualFactorL node)
 		{
-			defaultIn(node);
-
-			PushNode(new CondNe(node.getOperNe().getText()));
+			helper.Pre();
 		}
 
 		public override void outANotEqualFactorL(ANotEqualFactorL node)
 		{
-			defaultOut(node);
+			string operNe = node.getOperNe().getText();
 
-			PopNode();
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
+
+			helper.Post(new CondNe(left, right, operNe));
 		}
 
 		public override void inAGreaterThanFactorL(AGreaterThanFactorL node)
 		{
-			defaultIn(node);
-
-			PushNode(new CondGt(node.getOperGt().getText()));
+			helper.Pre();
 		}
 
 		public override void outAGreaterThanFactorL(AGreaterThanFactorL node)
 		{
-			defaultOut(node);
+			string operGt = node.getOperGt().getText();
 
-			PopNode();
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
+
+			helper.Post(new CondGt(left, right, operGt));
 		}
 
 		public override void inALessThanFactorL(ALessThanFactorL node)
 		{
-			defaultIn(node);
-
-			PushNode(new CondLt(node.getOperLt().getText()));
+			helper.Pre();
 		}
 
 		public override void outALessThanFactorL(ALessThanFactorL node)
 		{
-			defaultOut(node);
+			string operLt = node.getOperLt().getText();
 
-			PopNode();
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
+
+			helper.Post(new CondLt(left, right, operLt));
 		}
 
 		public override void inAGreaterEqualFactorL(AGreaterEqualFactorL node)
 		{
-			defaultIn(node);
-
-			PushNode(new CondGe(node.getOperGe().getText()));
+			helper.Pre();
 		}
 
 		public override void outAGreaterEqualFactorL(AGreaterEqualFactorL node)
 		{
-			defaultOut(node);
+			string operGe = node.getOperGe().getText();
 
-			PopNode();
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
+
+			helper.Post(new CondGe(left, right, operGe));
 		}
 
 		public override void inALessEqualFactorL(ALessEqualFactorL node)
 		{
-			defaultIn(node);
-
-			PushNode(new CondLe(node.getOperLe().getText()));
+			helper.Pre();
 		}
 
 		public override void outALessEqualFactorL(ALessEqualFactorL node)
 		{
-			defaultOut(node);
+			string operLe = node.getOperLe().getText();
 
-			PopNode();
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
+
+			helper.Post(new CondLe(left, right, operLe));
 		}
 	}
 }

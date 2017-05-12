@@ -24,34 +24,13 @@ namespace Grc.Ast.Node.Stmt
 
 		public override int Pos { get { return lval.Pos; } }
 
-		public StmtAssign(string operAssign, string semicolon)
+		public StmtAssign(ExprLValBase lval, ExprBase expr, string operAssign, string semicolon)
 		{
+			this.lval = lval;
+			this.expr = expr;
+
 			this.operAssign = operAssign;
 			this.semicolon = semicolon;
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (lval == null)
-			{
-				if (c is ExprLValBase)
-					lval = (ExprLValBase)c;
-				else
-					throw new NodeException();
-			}
-			else if (expr == null)
-			{
-				if (c is ExprBase)
-					expr = (ExprBase)c;
-				else
-					throw new NodeException();
-			}
-			else
-			{
-				throw new NodeException();
-			}
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)

@@ -26,55 +26,32 @@ namespace Grc.Ast.Node.Helper
 
 		public HTypePar HTypePar { get { return hTypePar; } }
 
-		public IReadOnlyList<Parameter> Parameters
-		{
-			get
-			{
-				if (parameters != null)
-					return parameters;
-
-				parameters = new List<Parameter>();
-
-				List<int> dims = hTypePar.Dims.Select(d => d.Dim).ToList();
-
-				if (hTypePar.DimEmpty != null)
-					dims.Insert(0, 0);
-
-				foreach (ParIdentifierT p in identifiers)
-					parameters.Add(new Parameter(p, keyRef != null, hTypePar.DataType, dims, line, pos));
-
-				return parameters;
-			}
-		}
+		public IReadOnlyList<Parameter> Parameters { get { return parameters; } }
 
 		public override int Line { get { return line; } }
 
 		public override int Pos { get { return pos; } }
 
-		public HPar(string keyRef, string colon, int line, int pos)
+		public HPar(List<ParIdentifierT> identifiers, HTypePar hTypePar, string keyRef, string colon, int line, int pos)
 		{
+			this.identifiers = identifiers;
+			this.hTypePar = hTypePar;
+
 			this.keyRef = keyRef;
 			this.colon = colon;
 
 			this.line = line;
 			this.pos = pos;
 
-			this.identifiers = new List<ParIdentifierT>();
-		}
+			this.parameters = new List<Parameter>();
 
-		public override void AddChild(NodeBase c)
-		{
-			if (hTypePar != null)
-				throw new NodeException();
+			List<int> dims = hTypePar.Dims.Select(d => d.Dim).ToList();
 
-			if (c is ParIdentifierT)
-				identifiers.Add((ParIdentifierT)c);
-			else if (c is HTypePar && identifiers.Count > 0)
-				hTypePar = (HTypePar)c;
-			else
-				throw new NodeException();
+			if (hTypePar.DimEmpty != null)
+				dims.Insert(0, 0);
 
-			base.AddChild(c);
+			foreach (ParIdentifierT p in identifiers)
+				this.parameters.Add(new Parameter(p, keyRef != null, hTypePar.DataType, dims, line, pos));
 		}
 
 		public override void Accept(IVisitor v)

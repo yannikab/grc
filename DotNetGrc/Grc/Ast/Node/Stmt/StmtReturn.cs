@@ -23,21 +23,15 @@ namespace Grc.Ast.Node.Stmt
 		public override int Line { get { return line; } }
 		public override int Pos { get { return pos; } }
 
-		public StmtReturn(string keyReturn, String semicolon, int line, int pos)
+		public StmtReturn(ExprBase expr, string keyReturn, String semicolon, int line, int pos)
 		{
+			this.expr = expr;
+
 			this.keyReturn = keyReturn;
 			this.semicolon = semicolon;
 
 			this.line = line;
 			this.pos = pos;
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (expr != null || (expr = c as ExprBase) == null)
-				throw new NodeException();
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)

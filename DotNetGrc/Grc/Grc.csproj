@@ -222,6 +222,7 @@
     <Compile Include="Cst\Visitor\ASTCreation\Functions.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Common.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Conditions.cs" />
+    <Compile Include="Cst\Visitor\ASTCreation\BottomUpHelper.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Variables.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\DataTypes.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Expressions.cs" />

@@ -12,7 +12,11 @@ namespace Grc.Ast.Node.Helper
 	{
 		private LocalFuncDef program;
 
-		public LocalFuncDef Program { get { return program; } }
+		public LocalFuncDef Program
+		{
+			get { return program; }
+			set { program = value; }
+		}
 
 		public override int Line { get { return program.Line; } }
 
@@ -20,14 +24,6 @@ namespace Grc.Ast.Node.Helper
 
 		public Root()
 		{
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (program != null || (program = c as LocalFuncDef) == null)
-				throw new NodeException();
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)

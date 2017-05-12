@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Node;
-using Grc.Ast.Node.Cond;
-using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Helper;
-using Grc.Ast.Node.Stmt;
-using Grc.Ast.Node.Type;
 using k31.grc.cst.analysis;
 using k31.grc.cst.node;
 
@@ -19,40 +14,40 @@ namespace Grc.Cst.Visitor.ASTCreation
 	{
 		public override void inAVarDef(AVarDef node)
 		{
-			defaultIn(node);
+			helper.Pre();
+		}
 
+		public override void outAVarDef(AVarDef node)
+		{
 			Token keyVar = node.getKeyVar();
 			Token id = node.getIdentifier();
 			Token colon = node.getSepColon();
 			Token semicolon = node.getSepSemi();
 
-			PushNode(new LocalVarDef(keyVar.getText(), colon.getText(), semicolon.getText(), keyVar.getLine(), keyVar.getPos()));
+			HTypeVar hTypeVar = (HTypeVar)helper[helper.Count - 1];
 
-			PushNode(new VarIdentifierT(id.getText(), id.getLine(), id.getPos()));
-			PopNode();
-		}
+			List<VarIdentifierT> identifiers = new List<VarIdentifierT>();
 
-		public override void outAVarDef(AVarDef node)
-		{
-			defaultOut(node);
+			identifiers.Add(new VarIdentifierT(id.getText(), id.getLine(), id.getPos()));
 
-			PopNode();
+			for (int i = 0; i < helper.Count - 1; i++)
+				identifiers.Add((VarIdentifierT)helper[i]);
+
+			LocalVarDef localVarDef = new LocalVarDef(identifiers, hTypeVar, keyVar.getText(), colon.getText(), semicolon.getText(), keyVar.getLine(), keyVar.getPos());
+
+			helper.Post(localVarDef);
 		}
 
 		public override void inAVarMore(AVarMore node)
 		{
-			defaultIn(node);
-
-			Token id = node.getIdentifier();
-
-			PushNode(new VarIdentifierT(id.getText(), id.getLine(), id.getPos()));
+			helper.Pre();
 		}
 
 		public override void outAVarMore(AVarMore node)
 		{
-			defaultOut(node);
+			Token id = node.getIdentifier();
 
-			PopNode();
+			helper.Post(new VarIdentifierT(id.getText(), id.getLine(), id.getPos()));
 		}
 
 		public override void inAVarLocalDef(AVarLocalDef node)

@@ -18,16 +18,9 @@ namespace Grc.Ast.Node.Helper
 
 		public override int Pos { get { return returnType.Pos; } }
 
-		public HTypeReturn()
+		public HTypeReturn(TypeReturnBase returnType)
 		{
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (returnType != null || (returnType = c as TypeReturnBase) == null)
-				throw new NodeException();
-
-			base.AddChild(c);
+			this.returnType = returnType;
 		}
 
 		public override void Accept(IVisitor v)

@@ -27,30 +27,17 @@ namespace Grc.Ast.Node.Func
 
 		public HTypeVar HTypeVar { get { return hTypeVar; } }
 
-		public IReadOnlyList<Variable> Variables
-		{
-			get
-			{
-				if (variables != null)
-					return variables;
-
-				variables = new List<Variable>();
-
-				List<int> dims = hTypeVar.Dims.Select(d => d.Dim).ToList();
-
-				foreach (VarIdentifierT v in identifiers)
-					variables.Add(new Variable(v, hTypeVar.DataType, dims, line, pos));
-
-				return variables;
-			}
-		}
+		public IReadOnlyList<Variable> Variables { get { return variables; } }
 
 		public override int Line { get { return line; } }
 
 		public override int Pos { get { return pos; } }
 
-		public LocalVarDef(string keyVar, string colon, string semicolon, int line, int pos)
+		public LocalVarDef(List<VarIdentifierT> identifiers, HTypeVar hTypeVar, string keyVar, string colon, string semicolon, int line, int pos)
 		{
+			this.identifiers = identifiers;
+			this.hTypeVar = hTypeVar;
+
 			this.keyVar = keyVar;
 			this.colon = colon;
 			this.semicolon = semicolon;
@@ -58,22 +45,12 @@ namespace Grc.Ast.Node.Func
 			this.line = line;
 			this.pos = pos;
 
-			this.identifiers = new List<VarIdentifierT>();
-		}
+			this.variables = new List<Variable>();
 
-		public override void AddChild(NodeBase c)
-		{
-			if (hTypeVar != null)
-				throw new NodeException();
+			List<int> dims = hTypeVar.Dims.Select(d => d.Dim).ToList();
 
-			if (c is VarIdentifierT)
-				identifiers.Add((VarIdentifierT)c);
-			else if (c is HTypeVar && identifiers.Count > 0)
-				hTypeVar = (HTypeVar)c;
-			else
-				throw new NodeException();
-
-			base.AddChild(c);
+			foreach (VarIdentifierT v in identifiers)
+				this.variables.Add(new Variable(v, hTypeVar.DataType, dims, line, pos));
 		}
 
 		public override void Accept(IVisitor v)

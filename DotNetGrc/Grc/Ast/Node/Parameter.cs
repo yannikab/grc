@@ -13,7 +13,7 @@ namespace Grc.Ast.Node
 		private ParIdentifierT parIdentifier;
 		private bool byRef;
 		private TypeDataBase type;
-		private IReadOnlyList<int> dims;
+		private List<int> dims;
 
 		private int line;
 		private int pos;
@@ -58,7 +58,7 @@ namespace Grc.Ast.Node
 			get { return string.Format("[{0}, {1}]", line, pos); }
 		}
 
-		public Parameter(ParIdentifierT parIdentifier, bool byRef, TypeDataBase type, IReadOnlyList<int> dims, int line, int pos)
+		public Parameter(ParIdentifierT parIdentifier, bool byRef, TypeDataBase type, List<int> dims, int line, int pos)
 		{
 			this.parIdentifier = parIdentifier;
 			this.byRef = byRef;

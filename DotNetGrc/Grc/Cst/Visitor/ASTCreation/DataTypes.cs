@@ -14,116 +14,94 @@ namespace Grc.Cst.Visitor.ASTCreation
 	{
 		public override void inACharDataType(ACharDataType node)
 		{
-			defaultIn(node);
-
-			Token t = node.getKeyChar();
-
-			PushNode(new TypeDataCharT(t.getText(), t.getLine(), t.getPos()));
+			helper.Pre();
 		}
 
 		public override void outACharDataType(ACharDataType node)
 		{
-			defaultOut(node);
+			Token t = node.getKeyChar();
 
-			PopNode();
+			helper.Post(new TypeDataCharT(t.getText(), t.getLine(), t.getPos()));
 		}
 
 		public override void inAIntDataType(AIntDataType node)
 		{
-			defaultIn(node);
-
-			Token t = node.getKeyInt();
-
-			PushNode(new TypeDataIntT(t.getText(), t.getLine(), t.getPos()));
+			helper.Pre();
 		}
 
 		public override void outAIntDataType(AIntDataType node)
 		{
-			defaultOut(node);
+			Token t = node.getKeyInt();
 
-			PopNode();
+			helper.Post(new TypeDataIntT(t.getText(), t.getLine(), t.getPos()));
 		}
 
 		public override void inADataReturnType(ADataReturnType node)
 		{
-			defaultIn(node);
-
-			PushNode(new HTypeReturn());
+			helper.Pre();
 		}
 
 		public override void outADataReturnType(ADataReturnType node)
 		{
-			defaultOut(node);
+			TypeReturnBase returnType = (TypeReturnBase)helper[0];
 
-			PopNode();
+			helper.Post(new HTypeReturn(returnType));
 		}
 
 		public override void inANothingReturnType(ANothingReturnType node)
 		{
-			defaultIn(node);
-
-			PushNode(new HTypeReturn());
-
-			Token t = node.getKeyNothing();
-
-			PushNode(new TypeReturnNothingT(t.getText(), t.getLine(), t.getPos()));
-			PopNode();
+			helper.Pre();
 		}
 
 		public override void outANothingReturnType(ANothingReturnType node)
 		{
-			defaultOut(node);
+			Token t = node.getKeyNothing();
 
-			PopNode();
+			helper.Post(new HTypeReturn(new TypeReturnNothingT(t.getText(), t.getLine(), t.getPos())));
 		}
 
 		public override void inAArrayNoDim(AArrayNoDim node)
 		{
-			defaultIn(node);
-
-			Token t1 = node.getSepLbrack();
-			Token t2 = node.getSepRbrack();
-
-			PushNode(new DimEmptyT(t1.getText(), t2.getText(), t1.getLine(), t2.getPos()));
+			helper.Pre();
 		}
 
 		public override void outAArrayNoDim(AArrayNoDim node)
 		{
-			defaultOut(node);
+			Token t1 = node.getSepLbrack();
+			Token t2 = node.getSepRbrack();
 
-			PopNode();
+			helper.Post(new DimEmptyT(t1.getText(), t2.getText(), t1.getLine(), t2.getPos()));
 		}
 
 		public override void inAArrayDim(AArrayDim node)
 		{
-			defaultIn(node);
-
-			Token t1 = node.getInteger();
-			Token t2 = node.getSepLbrack();
-			Token t3 = node.getSepRbrack();
-
-			PushNode(new DimIntegerT(t1.getText(), t2.getText(), t3.getText(), t2.getLine(), t2.getPos()));
+			helper.Pre();
 		}
 
 		public override void outAArrayDim(AArrayDim node)
 		{
-			defaultOut(node);
+			Token t1 = node.getInteger();
+			Token t2 = node.getSepLbrack();
+			Token t3 = node.getSepRbrack();
 
-			PopNode();
+			helper.Post(new DimIntegerT(t1.getText(), t2.getText(), t3.getText(), t2.getLine(), t2.getPos()));
 		}
 
 		public override void inAType(AType node)
 		{
-			defaultIn(node);
-
-			PushNode(new HTypeVar());
+			helper.Pre();
 		}
 
 		public override void outAType(AType node)
 		{
-			defaultOut(node);
+			TypeDataBase dataType = (TypeDataBase)helper[0];
 
-			PopNode();
+			List<DimIntegerT> dims = new List<DimIntegerT>();
+
+			for (int i = 1; i < helper.Count; i++)
+				dims.Add((DimIntegerT)helper[i]);
+
+			helper.Post(new HTypeVar(dataType, dims));
 		}
 	}
 }

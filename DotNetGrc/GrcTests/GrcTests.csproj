@@ -171,6 +171,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Cst\BottomUpHelperTests.cs" />
     <Compile Include="Semantic\TypeTests.cs" />
     <Compile Include="Semantic\GTypeVisitorTests.cs">
       <SubType>Code</SubType>

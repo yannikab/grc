@@ -23,7 +23,7 @@ namespace GrcTests.Semantic
 		{
 			StringReader sr = new StringReader(program);
 			Parser parser = new Parser(new Lexer(new PushbackReader(sr, 4096)));
-			NodeBase root = new Root();
+			Root root = new Root();
 			parser.parse().apply(new ASTCreationVisitor(root));
 			ISymbolTable symbolTable = new StackSymbolTable();
 			root.Accept(new SemanticVisitor(out symbolTable));

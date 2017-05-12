@@ -237,6 +237,7 @@
     <Compile Include="Semantic\GType\GTypeBoolean.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableNotInOpenScopesException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidRelationalOperationException.cs" />
+    <Compile Include="Cst\Visitor\ASTCreation\BottomUpHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

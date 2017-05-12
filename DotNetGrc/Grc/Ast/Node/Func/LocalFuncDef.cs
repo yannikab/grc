@@ -13,47 +13,23 @@ namespace Grc.Ast.Node.Func
 	{
 		private LocalFuncDecl header;
 		private List<LocalBase> locals;
-		private StmtBlock block;
+		private StmtBlock stmtBlock;
 
 		public LocalFuncDecl Header { get { return header; } }
 
 		public IReadOnlyList<LocalBase> Locals { get { return locals; } }
 
-		public StmtBlock Block { get { return block; } }
+		public StmtBlock Block { get { return stmtBlock; } }
 
 		public override int Line { get { return header.Line; } }
 
 		public override int Pos { get { return header.Pos; } }
 
-		public LocalFuncDef()
+		public LocalFuncDef(LocalFuncDecl header, List<LocalBase> locals, StmtBlock stmtBlock)
 		{
-			this.locals = new List<LocalBase>();
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (header == null)
-			{
-				if (c is LocalFuncDecl)
-					header = (LocalFuncDecl)c;
-				else
-					throw new NodeException();
-			}
-			else if (block == null)
-			{
-				if (c is LocalBase)
-					locals.Add(c as LocalBase);
-				else if (c is StmtBlock)
-					block = (StmtBlock)c;
-				else
-					throw new NodeException();
-			}
-			else
-			{
-				throw new NodeException();
-			}
-
-			base.AddChild(c);
+			this.header = header;
+			this.locals = locals;
+			this.stmtBlock = stmtBlock;
 		}
 
 		public override void Accept(IVisitor v)
@@ -70,7 +46,7 @@ namespace Grc.Ast.Node.Func
 			foreach (LocalBase l in locals)
 				sb.AppendLine(l.Text);
 
-			sb.Append(block.Text);
+			sb.Append(stmtBlock.Text);
 
 			return sb.ToString();
 		}

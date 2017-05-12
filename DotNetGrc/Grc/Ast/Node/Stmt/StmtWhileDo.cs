@@ -27,37 +27,16 @@ namespace Grc.Ast.Node.Stmt
 
 		public override int Pos { get { return pos; } }
 
-		public StmtWhileDo(string keyWhile, string keyDo, int line, int pos)
+		public StmtWhileDo(CondBase cond, StmtBase stmt, string keyWhile, string keyDo, int line, int pos)
 		{
+			this.cond = cond;
+			this.stmt = stmt;
+
 			this.keyWhile = keyWhile;
 			this.keyDo = keyDo;
 
 			this.line = line;
 			this.pos = pos;
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (cond == null)
-			{
-				if (c is CondBase)
-					cond = (CondBase)c;
-				else
-					throw new NodeException();
-			}
-			else if (stmt == null)
-			{
-				if (c is StmtBase)
-					stmt = (StmtBase)c;
-				else
-					throw new NodeException();
-			}
-			else
-			{
-				throw new NodeException();
-			}
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)
@@ -68,6 +47,11 @@ namespace Grc.Ast.Node.Stmt
 		protected override string GetText()
 		{
 			return string.Format("{0} {1} {2} {3}", keyWhile, cond.Text, keyDo, stmt.Text);
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0}-{1}", keyWhile, keyDo);
 		}
 	}
 }

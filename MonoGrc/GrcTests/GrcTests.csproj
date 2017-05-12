@@ -125,6 +125,7 @@
     <Compile Include="Semantic\SemanticVisitorTests.cs" />
     <Compile Include="Semantic\GTypeVisitorTests.cs" />
     <Compile Include="Semantic\TypeTests.cs" />
+    <Compile Include="Cst\BottomUpHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -134,6 +135,9 @@
       <Project>{9E129899-F68B-4D30-848F-973705F34C98}</Project>
       <Name>Grc</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Cst\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -24,7 +24,7 @@ namespace GrcTests.Semantic
 		{
 			StringReader sr = new StringReader(program);
 			Parser parser = new Parser(new Lexer(new PushbackReader(sr, 4096)));
-			NodeBase root = new Root();
+			Root root = new Root();
 			parser.parse().apply(new ASTCreationVisitor(root));
 			root.Accept(new GTypeVisitor(out symbolTable, out typeForNode));
 		}

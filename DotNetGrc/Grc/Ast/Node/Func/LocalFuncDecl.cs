@@ -29,21 +29,7 @@ namespace Grc.Ast.Node.Func
 
 		public HTypeReturn HTypeReturn { get { return hTypeReturn; } }
 
-		public IReadOnlyList<Parameter> Parameters
-		{
-			get
-			{
-				if (parameters != null)
-					return parameters;
-
-				parameters = new List<Parameter>();
-
-				for (int i = 0; i < hPars.Count; i++)
-					parameters.AddRange(hPars[i].Parameters);
-
-				return parameters;
-			}
-		}
+		public IReadOnlyList<Parameter> Parameters { get { return parameters; } }
 
 		public string Name { get { return id; } }
 
@@ -51,8 +37,11 @@ namespace Grc.Ast.Node.Func
 
 		public override int Pos { get { return pos; } }
 
-		public LocalFuncDecl(string keyFun, string id, string lpar, string rpar, string colon, int line, int pos)
+		public LocalFuncDecl(List<HPar> hPars, HTypeReturn hTypeReturn, string keyFun, string id, string lpar, string rpar, string colon, int line, int pos)
 		{
+			this.hPars = hPars;
+			this.hTypeReturn = hTypeReturn;
+
 			this.keyFun = keyFun;
 			this.id = id;
 			this.lpar = lpar;
@@ -62,22 +51,10 @@ namespace Grc.Ast.Node.Func
 			this.line = line;
 			this.pos = pos;
 
-			this.hPars = new List<HPar>();
-		}
+			this.parameters = new List<Parameter>();
 
-		public override void AddChild(NodeBase c)
-		{
-			if (hTypeReturn != null)
-				throw new NodeException();
-
-			if (c is HPar)
-				hPars.Add((HPar)c);
-			else if (c is HTypeReturn)
-				hTypeReturn = (HTypeReturn)c;
-			else
-				throw new NodeException();
-
-			base.AddChild(c);
+			for (int i = 0; i < hPars.Count; i++)
+				this.parameters.AddRange(hPars[i].Parameters);
 		}
 
 		public override void Accept(IVisitor v)
@@ -95,12 +72,8 @@ namespace Grc.Ast.Node.Func
 
 			sb.Append(this.lpar);
 
-			parameters = new List<Parameter>();
-
 			for (int i = 0; i < hPars.Count; i++)
 			{
-				parameters.AddRange(hPars[i].Parameters);
-
 				sb.Append(hPars[i].Text);
 
 				if (i < hPars.Count - 1)

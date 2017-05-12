@@ -22,20 +22,14 @@ namespace Grc.Ast.Node.Expr
 
 		public override int Pos { get { return pos; } }
 
-		public ExprMinus(string operMinus, int line, int pos)
+		public ExprMinus(ExprBase expr, string operMinus, int line, int pos)
 		{
+			this.expr = expr;
+
 			this.operMinus = operMinus;
 
 			this.line = line;
 			this.pos = pos;
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (expr != null || (expr = c as ExprBase) == null)
-				throw new NodeException();
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)

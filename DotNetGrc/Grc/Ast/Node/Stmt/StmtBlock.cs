@@ -23,25 +23,15 @@ namespace Grc.Ast.Node.Stmt
 
 		public override int Pos { get { return pos; } }
 
-		public StmtBlock(string lbrace, string rbrace, int line, int pos)
+		public StmtBlock(List<StmtBase> stmts, string lbrace, string rbrace, int line, int pos)
 		{
+			this.stmts = stmts;
+
 			this.lbrace = lbrace;
 			this.rbrace = rbrace;
 
 			this.line = line;
 			this.pos = pos;
-
-			this.stmts = new List<StmtBase>();
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (!(c is StmtBase))
-				throw new NodeException();
-
-			stmts.Add((StmtBase)c);
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)

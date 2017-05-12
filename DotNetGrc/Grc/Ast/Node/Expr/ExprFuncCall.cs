@@ -26,26 +26,16 @@ namespace Grc.Ast.Node.Expr
 
 		public override int Pos { get { return pos; } }
 
-		public ExprFuncCall(string id, string lpar, string rpar, int line, int pos)
+		public ExprFuncCall(List<ExprBase> args, string id, string lpar, string rpar, int line, int pos)
 		{
+			this.args = args;
+
 			this.id = id;
 			this.lpar = lpar;
 			this.rpar = rpar;
 
 			this.line = line;
 			this.pos = pos;
-
-			this.args = new List<ExprBase>();
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (!(c is ExprBase))
-				throw new NodeException();
-
-			args.Add((ExprBase)c);
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)

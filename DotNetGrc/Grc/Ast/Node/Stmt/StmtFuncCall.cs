@@ -24,17 +24,11 @@ namespace Grc.Ast.Node.Stmt
 
 		public override int Pos { get { return funCall.Pos; } }
 
-		public StmtFuncCall(string semicolon)
+		public StmtFuncCall(ExprFuncCall funCall, string semicolon)
 		{
+			this.funCall = funCall;
+
 			this.semicolon = semicolon;
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (funCall != null || (funCall = c as ExprFuncCall) == null)
-				throw new NodeException();
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)

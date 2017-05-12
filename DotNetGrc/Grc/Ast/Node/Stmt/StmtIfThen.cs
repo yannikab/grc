@@ -27,37 +27,16 @@ namespace Grc.Ast.Node.Stmt
 
 		public override int Pos { get { return pos; } }
 
-		public StmtIfThen(string keyIf, string keyThen, int line, int pos)
+		public StmtIfThen(CondBase cond, StmtBase stmt, string keyIf, string keyThen, int line, int pos)
 		{
+			this.cond = cond;
+			this.stmt = stmt;
+
 			this.keyIf = keyIf;
 			this.keyThen = keyThen;
 
 			this.line = line;
 			this.pos = pos;
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (cond == null)
-			{
-				if (c is CondBase)
-					cond = (CondBase)c;
-				else
-					throw new NodeException();
-			}
-			else if (stmt == null)
-			{
-				if (c is StmtBase)
-					stmt = (StmtBase)c;
-				else
-					throw new NodeException();
-			}
-			else
-			{
-				throw new NodeException();
-			}
-
-			base.AddChild(c);
 		}
 
 		public override void Accept(IVisitor v)

@@ -53,7 +53,7 @@ namespace Grc.Ast.Node
 			get { return string.Format("[{0}, {1}]", line, pos); }
 		}
 
-		public Variable(VarIdentifierT varIdentifier, TypeDataBase type, IReadOnlyList<int> dims, int line, int pos)
+		public Variable(VarIdentifierT varIdentifier, TypeDataBase type, List<int> dims, int line, int pos)
 		{
 			this.varIdentifier = varIdentifier;
 			this.type = type;

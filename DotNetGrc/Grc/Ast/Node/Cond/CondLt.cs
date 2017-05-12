@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Visitor;
+using Grc.Ast.Node.Expr;
 
 namespace Grc.Ast.Node.Cond
 {
 	class CondLt : CondRelOpBase
 	{
-		public CondLt(string operLt)
-			: base(operLt)
+		public CondLt(ExprBase left, ExprBase right, string operLt)
+			: base(left, right, operLt)
 		{
 		}
 	}

@@ -13,203 +13,180 @@ namespace Grc.Cst.Visitor.ASTCreation
 	{
 		public override void inAAdditionExpression(AAdditionExpression node)
 		{
-			defaultIn(node);
-
-			PushNode(new ExprAdd(node.getOperPlus().getText()));
+			helper.Pre();
 		}
 
 		public override void outAAdditionExpression(AAdditionExpression node)
 		{
-			defaultOut(node);
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
 
-			PopNode();
+			helper.Post(new ExprAdd(left, right, node.getOperPlus().getText()));
 		}
 
 		public override void inASubtractionExpression(ASubtractionExpression node)
 		{
-			defaultIn(node);
-
-			PushNode(new ExprSub(node.getOperMinus().getText()));
+			helper.Pre();
 		}
 
 		public override void outASubtractionExpression(ASubtractionExpression node)
 		{
-			defaultOut(node);
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
 
-			PopNode();
+			helper.Post(new ExprSub(left, right, node.getOperMinus().getText()));
 		}
 
 		public override void inAMultiplyTerm(AMultiplyTerm node)
 		{
-			defaultIn(node);
-
-			PushNode(new ExprMul(node.getOperMul().getText()));
+			helper.Pre();
 		}
 
 		public override void outAMultiplyTerm(AMultiplyTerm node)
 		{
-			defaultOut(node);
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
 
-			PopNode();
+			helper.Post(new ExprMul(left, right, node.getOperMul().getText()));
 		}
 
 		public override void inADivTerm(ADivTerm node)
 		{
-			defaultIn(node);
-
-			PushNode(new ExprDiv(node.getOperDiv().getText()));
+			helper.Pre();
 		}
 
 		public override void outADivTerm(ADivTerm node)
 		{
-			defaultOut(node);
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
 
-			PopNode();
+			helper.Post(new ExprDiv(left, right, node.getOperDiv().getText()));
 		}
 
 		public override void inAModTerm(AModTerm node)
 		{
-			defaultIn(node);
-
-			PushNode(new ExprMod(node.getOperMod().getText()));
+			helper.Pre();
 		}
 
 		public override void outAModTerm(AModTerm node)
 		{
-			defaultOut(node);
+			ExprBase left = (ExprBase)helper[0];
+			ExprBase right = (ExprBase)helper[1];
 
-			PopNode();
+			helper.Post(new ExprMod(left, right, node.getOperMod().getText()));
 		}
 
 		public override void inAIntegerFactor(AIntegerFactor node)
 		{
-			defaultIn(node);
-
-			Token t = node.getInteger();
-
-			PushNode(new ExprIntegerT(t.getText(), t.getLine(), t.getPos()));
+			helper.Pre();
 		}
 
 		public override void outAIntegerFactor(AIntegerFactor node)
 		{
-			defaultOut(node);
+			Token t = node.getInteger();
 
-			PopNode();
+			helper.Post(new ExprIntegerT(t.getText(), t.getLine(), t.getPos()));
 		}
 
 		public override void inACharacterFactor(ACharacterFactor node)
 		{
-			defaultIn(node);
-
-			Token t = node.getCharacter();
-
-			PushNode(new ExprCharacterT(t.getText(), t.getLine(), t.getPos()));
+			helper.Pre();
 		}
 
 		public override void outACharacterFactor(ACharacterFactor node)
 		{
-			defaultOut(node);
+			Token t = node.getCharacter();
 
-			PopNode();
+			helper.Post(new ExprCharacterT(t.getText(), t.getLine(), t.getPos()));
 		}
 
 		public override void inAPlusFactor(APlusFactor node)
 		{
-			defaultIn(node);
-
-			Token t = node.getOperPlus();
-
-			PushNode(new ExprPlus(t.getText(), t.getLine(), t.getPos()));
+			helper.Pre();
 		}
 
 		public override void outAPlusFactor(APlusFactor node)
 		{
-			defaultOut(node);
+			Token t = node.getOperPlus();
 
-			PopNode();
+			ExprBase expr = (ExprBase)helper[0];
+
+			helper.Post(new ExprPlus(expr, t.getText(), t.getLine(), t.getPos()));
 		}
 
 		public override void inAMinusFactor(AMinusFactor node)
 		{
-			defaultIn(node);
-
-			Token t = node.getOperMinus();
-
-			PushNode(new ExprPlus(t.getText(), t.getLine(), t.getPos()));
+			helper.Pre();
 		}
 
 		public override void outAMinusFactor(AMinusFactor node)
 		{
-			defaultOut(node);
+			Token t = node.getOperMinus();
 
-			PopNode();
+			ExprBase expr = (ExprBase)helper[0];
+
+			helper.Post(new ExprMinus(expr, t.getText(), t.getLine(), t.getPos()));
 		}
 
 		public override void inAIndexedLValue(AIndexedLValue node)
 		{
-			defaultIn(node);
-
-			Token lbrack = node.getSepLbrack();
-			Token rbrack = node.getSepRbrack();
-
-			PushNode(new ExprLValIndexed(lbrack.getText(), rbrack.getText()));
+			helper.Pre();
 		}
 
 		public override void outAIndexedLValue(AIndexedLValue node)
 		{
-			defaultOut(node);
+			Token lbrack = node.getSepLbrack();
+			Token rbrack = node.getSepRbrack();
 
-			PopNode();
+			ExprLValBase lval = (ExprLValBase)helper[0];
+			ExprBase expr = (ExprBase)helper[1];
+
+			helper.Post(new ExprLValIndexed(lval, expr, lbrack.getText(), rbrack.getText()));
 		}
 
 		public override void inAStringLValue(AStringLValue node)
 		{
-			defaultIn(node);
-
-			Token t = node.getString();
-
-			PushNode(new ExprLValStringT(t.getText(), t.getLine(), t.getPos()));
+			helper.Pre();
 		}
 
 		public override void outAStringLValue(AStringLValue node)
 		{
-			defaultOut(node);
+			Token t = node.getString();
 
-			PopNode();
+			helper.Post(new ExprLValStringT(t.getText(), t.getLine(), t.getPos()));
 		}
 
 		public override void inAIdentifierLValue(AIdentifierLValue node)
 		{
-			defaultIn(node);
-
-			Token id = node.getIdentifier();
-
-			PushNode(new ExprLValIdentifierT(id.getText(), id.getLine(), id.getPos()));
+			helper.Pre();
 		}
 
 		public override void outAIdentifierLValue(AIdentifierLValue node)
 		{
-			defaultOut(node);
+			Token id = node.getIdentifier();
 
-			PopNode();
+			helper.Post(new ExprLValIdentifierT(id.getText(), id.getLine(), id.getPos()));
 		}
 
 		public override void inAFunctionCall(AFunctionCall node)
 		{
-			defaultIn(node);
-
-			Token id = node.getIdentifier();
-			Token lpar = node.getSepLpar();
-			Token rpar = node.getSepRpar();
-
-			PushNode(new ExprFuncCall(id.getText(), lpar.getText(), rpar.getText(), id.getLine(), id.getPos()));
+			helper.Pre();
 		}
 
 		public override void outAFunctionCall(AFunctionCall node)
 		{
-			defaultOut(node);
+			Token id = node.getIdentifier();
+			Token lpar = node.getSepLpar();
+			Token rpar = node.getSepRpar();
 
-			PopNode();
+			List<ExprBase> args = new List<ExprBase>();
+
+			for (int i = 0; i < helper.Count; i++)
+				args.Add((ExprBase)helper[i]);
+
+			ExprFuncCall exprFuncCall = new ExprFuncCall(args, id.getText(), lpar.getText(), rpar.getText(), id.getLine(), id.getPos());
+
+			helper.Post(exprFuncCall);
 		}
 	}
 }

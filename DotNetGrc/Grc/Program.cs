@@ -360,7 +360,7 @@ namespace Grc
 
 			try
 			{
-				NodeBase root = new Root();
+				Root root = new Root();
 
 				parser.parse().apply(new ASTCreationVisitor(root));
 

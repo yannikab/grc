@@ -4,42 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node;
+using Grc.Ast.Node.Helper;
 using k31.grc.cst.analysis;
 using k31.grc.cst.node;
+using Grc.Ast.Node.Func;
 
 namespace Grc.Cst.Visitor.ASTCreation
 {
 	public partial class ASTCreationVisitor : DepthFirstAdapter
 	{
-		private Stack<NodeBase> stack;
+		private BottomUpHelper<NodeBase> helper;
+		private Root root;
 
-		public ASTCreationVisitor(NodeBase root)
+		public ASTCreationVisitor(Root root)
 		{
-			stack = new Stack<NodeBase>();
-
-			stack.Push(root);
-		}
-
-		private void PushNode(NodeBase node)
-		{
-			stack.Peek().AddChild(node);
-
-			stack.Push(node);
-		}
-
-		private void PopNode()
-		{
-			stack.Pop();
+			this.helper = new BottomUpHelper<NodeBase>();
+			this.root = root;
 		}
 
 		public override void inStart(Start node)
 		{
-			defaultIn(node);
+			helper.Pre();
 		}
 
 		public override void outStart(Start node)
 		{
-			defaultOut(node);
+			root.Program = (LocalFuncDef)helper[0];
+
+			helper.Clear();
 		}
 
 		public override void defaultIn(Node node)

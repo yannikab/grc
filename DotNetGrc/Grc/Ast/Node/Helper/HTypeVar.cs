@@ -21,29 +21,10 @@ namespace Grc.Ast.Node.Helper
 
 		public override int Pos { get { return dataType.Pos; } }
 
-		public HTypeVar()
+		public HTypeVar(TypeDataBase dataType, List<DimIntegerT> dims)
 		{
-			this.dims = new List<DimIntegerT>();
-		}
-
-		public override void AddChild(NodeBase c)
-		{
-			if (dataType == null)
-			{
-				if (c is TypeDataBase)
-					dataType = (TypeDataBase)c;
-				else
-					throw new NodeException();
-			}
-			else
-			{
-				if (c is DimIntegerT)
-					dims.Add((DimIntegerT)c);
-				else
-					throw new NodeException();
-			}
-
-			base.AddChild(c);
+			this.dataType = dataType;
+			this.dims = dims;
 		}
 
 		public override void Accept(IVisitor v)
