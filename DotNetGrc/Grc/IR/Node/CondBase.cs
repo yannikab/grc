@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.IR.Quads;
 
 namespace Grc.Ast.Node.Cond
 {
 	public abstract partial class CondBase : NodeBase
 	{
-		public CondBase()
-		{
-		}
+		public List<Quad> TrueList { get; set; }
+		public List<Quad> FalseList { get; set; }
 	}
 }

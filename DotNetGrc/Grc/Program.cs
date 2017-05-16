@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node;
 using Grc.Ast.Node.Helper;
-using Grc.Ast.Visitor.GraphViz;
 using Grc.Cst.Visitor.ASTCreation;
 using Grc.Cst.Visitor.GraphViz;
+using Grc.IR.Visitor;
+using Grc.Semantic.SymbolTable;
+using Grc.Semantic.Types;
 using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.node;
@@ -365,7 +367,12 @@ namespace Grc
 				parser.parse().apply(new ASTCreationVisitor(root));
 
 				// root.accept(new GraphVizChildrenVisitor());
-				root.Accept(new GraphVizNodeDataVisitor());
+				//root.Accept(new GraphVizNodeDataVisitor());
+
+				ISymbolTable symbolTable;
+				Dictionary<NodeBase, GTypeBase> typeForNode;
+
+				root.Accept(new IRVisitor(out symbolTable, out typeForNode));
 			}
 			catch (ParserException e)
 			{
