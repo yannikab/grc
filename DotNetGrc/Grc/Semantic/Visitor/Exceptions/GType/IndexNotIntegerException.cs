@@ -12,7 +12,7 @@ namespace Grc.Semantic.Visitor.Exceptions.GType
 	public class IndexNotIntegerException : GTypeException
 	{
 		public IndexNotIntegerException(ExprLValIndexed n, GTypeBase t)
-			: base(string.Format("{0} Indexed expression must have an index of {1} type instead of {2} type: {3}", n.Expr.Location, GTypeInt.Instance, t, n.Text))
+			: base(string.Format("{0} Indexed expression must have an index of {1} type instead of {2} type: {3}", n.Expr.Location, new GTypeInt(false), t, n.Text))
 		{
 		}
 	}

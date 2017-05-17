@@ -8,5 +8,9 @@ namespace Grc.Semantic.Types
 {
 	public abstract class GTypeReturn : GTypeBase
 	{
+		public GTypeReturn(bool byRef)
+			: base(byRef)
+		{
+		}
 	}
 }

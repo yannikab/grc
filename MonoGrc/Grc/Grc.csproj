@@ -238,10 +238,37 @@
     <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableNotInOpenScopesException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidRelationalOperationException.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\BottomUpHelper.cs" />
+    <Compile Include="IR\Exceptions\IRException.cs" />
+    <Compile Include="IR\Node\CondBase.cs" />
+    <Compile Include="IR\Node\ExprBase.cs" />
+    <Compile Include="IR\Node\StmtBase.cs" />
+    <Compile Include="IR\Op\OpAdd.cs" />
+    <Compile Include="IR\Op\OpAssign.cs" />
+    <Compile Include="IR\Op\OpBase.cs" />
+    <Compile Include="IR\Op\OpDiv.cs" />
+    <Compile Include="IR\Op\OpEq.cs" />
+    <Compile Include="IR\Op\OpGe.cs" />
+    <Compile Include="IR\Op\OpGoto.cs" />
+    <Compile Include="IR\Op\OpGt.cs" />
+    <Compile Include="IR\Op\OpLe.cs" />
+    <Compile Include="IR\Op\OpLt.cs" />
+    <Compile Include="IR\Op\OpMod.cs" />
+    <Compile Include="IR\Op\OpMul.cs" />
+    <Compile Include="IR\Op\OpNe.cs" />
+    <Compile Include="IR\Op\OpNoOp.cs" />
+    <Compile Include="IR\Op\OpPar.cs" />
+    <Compile Include="IR\Op\OpSub.cs" />
+    <Compile Include="IR\Quads\Addr.cs" />
+    <Compile Include="IR\Quads\Quad.cs" />
+    <Compile Include="IR\Quads\QuadList.cs" />
+    <Compile Include="IR\Visitor\IRVisitor.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidArrayDimensionException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidSymbolTypeException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\RValuePassedByReferenceException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\IntegerLiteralOverflowException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Semantic\Visitor\Exceptions\SemanticExceptions.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Ast\Visitor\Semantic\" />

@@ -185,6 +185,15 @@ namespace Grc.Semantic.Visitor
 		public override void Pre(ExprIntegerT n)
 		{
 			typeForNode.Add(n, typeResolver.GetType(n));
+
+			try
+			{
+				int.Parse(n.Integer);
+			}
+			catch (OverflowException e)
+			{
+				throw new IntegerLiteralOverflowException(n, e);
+			}
 		}
 
 		public override void Pre(ExprCharacterT n)
@@ -249,12 +258,12 @@ namespace Grc.Semantic.Visitor
 
 		public override void Pre(StmtAssign n)
 		{
-			typeResolver.CheckType(n);
+			typeForNode.Add(n, typeResolver.GetType(n));
 		}
 
 		public override void Pre(StmtFuncCall n)
 		{
-			typeResolver.CheckType(n);
+			typeForNode.Add(n, typeResolver.GetType(n));
 		}
 	}
 }

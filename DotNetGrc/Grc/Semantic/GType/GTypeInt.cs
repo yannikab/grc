@@ -8,21 +8,27 @@ namespace Grc.Semantic.Types
 {
 	public class GTypeInt : GTypeData
 	{
-		private static GTypeInt instance;
-
-		public static GTypeInt Instance
+		public GTypeInt(bool byRef)
+			: base(byRef)
 		{
-			get
-			{
-				if (instance == null)
-					instance = new GTypeInt();
-
-				return instance;
-			}
 		}
 
-		private GTypeInt()
+		public override bool MatchesRef(GTypeBase obj)
 		{
+			GTypeInt that = obj as GTypeInt;
+
+			if (that == null)
+				return false;
+
+			if (!that.ByRef)
+				return true;
+
+			return ByRef;
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0}{1}", ByRef ? "ref " : string.Empty, "int");
 		}
 	}
 }

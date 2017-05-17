@@ -122,6 +122,72 @@ fun program() : nothing
 
 
 		[Test]
+		public void TestIntLiteralPassedByReference()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo(ref a : int) : nothing
+	{
+	}
+{
+	foo(5);
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<RValuePassedByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+		}
+
+
+		[Test]
+		public void TestCharLiteralPassedByReference()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo(ref a : char) : nothing
+	{
+	}
+{
+	foo('t');
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<RValuePassedByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+		}
+
+
+		[Test]
+		public void TestArrayPassedByReference()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var arr : char[5];
+
+	fun foo(ref a : char []) : nothing
+	{
+	}
+{
+	foo(arr);
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			Assert.AreEqual(4, symbolTable.MaxSymbols);
+		}
+
+
+		[Test]
 		public void TestLValueNotIndexed1()
 		{
 			string program = @"
@@ -369,7 +435,7 @@ fun program() : nothing
 fun program() : nothing
 
 	var a : int;
-	
+
 	fun foo(c : char; i : int; ref a : char[5]) : int
 	{
 	}
@@ -405,6 +471,7 @@ fun program() : nothing
 			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
 			Assert.AreEqual(2, symbolTable.MaxSymbols);
 		}
+
 
 		[Test]
 		public void TestFunctionCallStmtSomething()
@@ -480,7 +547,7 @@ fun program() : nothing
 
 	fun foo() : nothing;
 	
-	fun foo(ref a, b : char[][3]) : nothing
+	fun foo(ref a, b : char[][3][5]) : nothing
 	{
 	}
 {
@@ -515,6 +582,102 @@ fun program() : nothing
 			Dictionary<NodeBase, GTypeBase> typeForNode;
 			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
 			Assert.AreEqual(6, symbolTable.MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestAddChar()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a, b : char;
+{
+	a <- a + b;
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+		}
+
+
+		[Test]
+		public void TestAddIntChar()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : int;
+	var b : char;
+{
+	a <- a + b;
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+		}
+
+
+		[Test]
+		public void TestArraySizeZero()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char[0];
+{
+	a[0] <- 'c';
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<InvalidArrayDimensionException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+		}
+
+
+		[Test]
+		public void TestArraySizeOverflow()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char[3534534803854490548903408949805390045093094340538045838048531];
+{
+	a[0] <- 'c';
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<InvalidArrayDimensionException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+		}
+
+
+		[Test]
+		public void TestIntOverflow()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : int;
+{
+	a <- 3534534803854490548903408949805390045093094340538045838048531;
+}
+
+";
+			ISymbolTable symbolTable;
+			Dictionary<NodeBase, GTypeBase> typeForNode;
+			Assert.Throws<IntegerLiteralOverflowException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
 		}
 
 

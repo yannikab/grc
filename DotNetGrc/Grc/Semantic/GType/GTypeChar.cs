@@ -8,21 +8,27 @@ namespace Grc.Semantic.Types
 {
 	public class GTypeChar : GTypeData
 	{
-		private static GTypeChar instance;
-
-		public static GTypeChar Instance
+		public GTypeChar(bool byRef)
+			: base(byRef)
 		{
-			get
-			{
-				if (instance == null)
-					instance = new GTypeChar();
-
-				return instance;
-			}
 		}
 
-		private GTypeChar()
+		public override bool MatchesRef(GTypeBase obj)
 		{
+			GTypeChar that = obj as GTypeChar;
+
+			if (that == null)
+				return false;
+
+			if (!that.ByRef)
+				return true;
+
+			return ByRef;
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0}{1}", ByRef ? "ref " : string.Empty, "char");
 		}
 	}
 }

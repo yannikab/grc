@@ -32,14 +32,39 @@ namespace Grc.Semantic.Visitor
 			GTypeBase parType = null;
 
 			if (p.Type is Grc.Ast.Node.Type.TypeDataIntT)
-				parType = GTypeInt.Instance;
+				parType = new GTypeInt(p.Indexed ? true : p.ByRef);
 			else if (p.Type is Grc.Ast.Node.Type.TypeDataCharT)
-				parType = GTypeChar.Instance;
+				parType = new GTypeChar(p.Indexed ? true : p.ByRef);
 			else
 				throw new GTypeException("Invalid parameter type.");
 
 			for (int i = p.Dims.Count - 1; i >= 0; i--)
-				parType = new GTypeIndexed(parType);
+			{
+				try
+				{
+					int dim = int.Parse(p.Dims[i].Integer);
+
+					if (!(dim > 0))
+						throw new InvalidArrayDimensionException(p.Dims[i]);
+
+					parType = new GTypeIndexed(parType, dim);
+				}
+				catch (ArgumentNullException e)
+				{
+					throw new InvalidArrayDimensionException(p.Dims[i], e);
+				}
+				catch (FormatException e)
+				{
+					throw new InvalidArrayDimensionException(p.Dims[i], e);
+				}
+				catch (OverflowException e)
+				{
+					throw new InvalidArrayDimensionException(p.Dims[i], e);
+				}
+			}
+
+			if (p.DimEmpty != null)
+				parType = new GTypeIndexed(parType, 0);
 
 			// type rule: arrays must be passed by reference
 			if (parType is GTypeIndexed && !p.ByRef)
@@ -53,14 +78,36 @@ namespace Grc.Semantic.Visitor
 			GTypeBase varType = null;
 
 			if (v.Type is Grc.Ast.Node.Type.TypeDataIntT)
-				varType = GTypeInt.Instance;
+				varType = new GTypeInt(v.Indexed);
 			else if (v.Type is Grc.Ast.Node.Type.TypeDataCharT)
-				varType = GTypeChar.Instance;
+				varType = new GTypeChar(v.Indexed);
 			else
 				throw new GTypeException("Invalid variable type.");
 
 			for (int i = v.Dims.Count - 1; i >= 0; i--)
-				varType = new GTypeIndexed(varType);
+			{
+				try
+				{
+					int dim = int.Parse(v.Dims[i].Integer);
+
+					if (!(dim > 0))
+						throw new InvalidArrayDimensionException(v.Dims[i]);
+
+					varType = new GTypeIndexed(varType, dim);
+				}
+				catch (ArgumentNullException e)
+				{
+					throw new InvalidArrayDimensionException(v.Dims[i], e);
+				}
+				catch (FormatException e)
+				{
+					throw new InvalidArrayDimensionException(v.Dims[i], e);
+				}
+				catch (OverflowException e)
+				{
+					throw new InvalidArrayDimensionException(v.Dims[i], e);
+				}
+			}
 
 			return varType;
 		}
@@ -85,16 +132,6 @@ namespace Grc.Semantic.Visitor
 				return GetType(n as LocalFuncDef);
 			else
 				throw new GTypeException("Invalid local type.");
-		}
-
-		public void CheckType(StmtBase n)
-		{
-			if (n is StmtAssign)
-				CheckType(n as StmtAssign);
-			else if (n is StmtFuncCall)
-				CheckType(n as StmtFuncCall);
-			else
-				throw new GTypeException("Invalid statement type.");
 		}
 
 		private GTypeBase GetType(ExprBase n)
@@ -182,12 +219,12 @@ namespace Grc.Semantic.Visitor
 
 		private GTypeBase GetType(ExprIntegerT n)
 		{
-			return GTypeInt.Instance;
+			return new GTypeInt(false);
 		}
 
 		private GTypeBase GetType(ExprCharacterT n)
 		{
-			return GTypeChar.Instance;
+			return new GTypeChar(false);
 		}
 
 		private GTypeBase GetType(ExprBinOpBase n)
@@ -196,10 +233,10 @@ namespace Grc.Semantic.Visitor
 			GTypeBase typeRight = GetType(n.Right);
 
 			// type rule: arithmetic involves the integer type only
-			if (!typeLeft.Equals(GTypeInt.Instance))
+			if (!(typeLeft is GTypeInt))
 				throw new InvalidTypeInNumericExpression(n.Left, typeLeft);
 
-			if (!typeRight.Equals(GTypeInt.Instance))
+			if (!(typeRight is GTypeInt))
 				throw new InvalidTypeInNumericExpression(n.Right, typeRight);
 
 			return typeLeft;
@@ -210,7 +247,7 @@ namespace Grc.Semantic.Visitor
 			GTypeBase typeExpr = GetType(n.Expr);
 
 			// type rule: arithmetic involves the integer type only
-			if (!typeExpr.Equals(GTypeInt.Instance))
+			if (!(typeExpr is GTypeInt))
 				throw new InvalidTypeInNumericExpression(n.Expr, typeExpr);
 
 			return typeExpr;
@@ -221,7 +258,7 @@ namespace Grc.Semantic.Visitor
 			GTypeBase typeExpr = GetType(n.Expr);
 
 			// type rule: arithmetic involves the integer type only
-			if (!typeExpr.Equals(GTypeInt.Instance))
+			if (!(typeExpr is GTypeInt))
 				throw new InvalidTypeInNumericExpression(n.Expr, typeExpr);
 
 			return typeExpr;
@@ -246,16 +283,22 @@ namespace Grc.Semantic.Visitor
 		{
 			try
 			{
-				GTypeFunction functionType = symbolTable.Lookup<SymbolFunc>(n.Name).Type as GTypeFunction;
+				GTypeFunction declType = symbolTable.Lookup<SymbolFunc>(n.Name).Type as GTypeFunction;
 
-				if (functionType == null)
-					throw new GTypeException("Function lookup in symbol table yielded symbol without function type.");
+				if (declType == null)
+					throw new InvalidSymbolTypeException(n.Name);
+
+				GTypeBase callType = GetTypeFrom(n);
 
 				// type rule: function arguments must match declaration in number and type
-				if (!functionType.From.Equals(GetTypeFrom(n)))
-					throw new FunctionArgsMismatchException(n);
+				if (!callType.Equals(declType.From))
+					throw new FunctionArgsMismatchException(n, callType, declType);
 
-				return functionType.To;
+				// type rule: only l-value arguments allowed for parameters passed by reference
+				if (!callType.MatchesRef(declType.From))
+					throw new RValuePassedByReferenceException(n, callType, declType);
+
+				return declType.To;
 			}
 			catch (SymbolNotInOpenScopesException e)
 			{
@@ -278,7 +321,7 @@ namespace Grc.Semantic.Visitor
 		private GTypeBase GetType(ExprLValStringT n)
 		{
 			// type rule: string literals are of type char []
-			return new GTypeIndexed(GTypeChar.Instance);
+			return new GTypeIndexed(new GTypeChar(true), n.Text.Length - 1);
 		}
 
 		private GTypeBase GetType(ExprLValIndexed n)
@@ -286,7 +329,7 @@ namespace Grc.Semantic.Visitor
 			GTypeBase exprType = GetType(n.Expr);
 
 			// type rule: index expression must be of type int
-			if (!GTypeInt.Instance.Equals(exprType))
+			if (!(exprType is GTypeInt))
 				throw new IndexNotIntegerException(n, exprType);
 
 			GTypeBase lvalType = GetType(n.Lval);
@@ -305,9 +348,9 @@ namespace Grc.Semantic.Visitor
 			if (n.ReturnType is Grc.Ast.Node.Type.TypeReturnNothingT)
 				returnType = GTypeNothing.Instance;
 			else if (n.ReturnType is Grc.Ast.Node.Type.TypeDataIntT)
-				returnType = GTypeInt.Instance;
+				returnType = new GTypeInt(false);
 			else if (n.ReturnType is Grc.Ast.Node.Type.TypeDataCharT)
-				returnType = GTypeChar.Instance;
+				returnType = new GTypeChar(false);
 			else
 				throw new GTypeException("Invalid return type.");
 
@@ -361,10 +404,10 @@ namespace Grc.Semantic.Visitor
 			GTypeBase typeRight = GetType(n.Right);
 
 			// type rule: relational operators involve int or char types
-			if (!(typeLeft.Equals(GTypeInt.Instance) || typeLeft.Equals(GTypeChar.Instance)))
+			if (!(typeLeft is GTypeInt || typeLeft is GTypeChar))
 				throw new InvalidRelationalOperationException(n.Left, typeLeft);
 
-			if (!(typeRight.Equals(GTypeInt.Instance) || typeRight.Equals(GTypeChar.Instance)))
+			if (!(typeRight is GTypeInt || typeRight is GTypeChar))
 				throw new InvalidRelationalOperationException(n.Right, typeRight);
 
 			if (!object.Equals(typeLeft, typeRight))
@@ -373,7 +416,7 @@ namespace Grc.Semantic.Visitor
 			return GTypeBoolean.Instance;
 		}
 
-		private void CheckType(StmtAssign n)
+		public GTypeBase GetType(StmtAssign n)
 		{
 			GTypeBase lvalType = GetType(n.Lval);
 
@@ -382,26 +425,36 @@ namespace Grc.Semantic.Visitor
 			// type rule: right side expression type must match the l-value type
 			if (!object.Equals(lvalType, exprType))
 				throw new InvalidTypeAssignmentException(n, lvalType, exprType);
+
+			return lvalType;
 		}
 
-		private void CheckType(StmtFuncCall n)
+		public GTypeFunction GetType(StmtFuncCall n)
 		{
 			try
 			{
 				SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Name);
 
 				if (!(symbolFunc.Type is GTypeFunction))
-					throw new GTypeException("Function lookup in symbol table yielded symbol without function type.");
+					throw new InvalidSymbolTypeException(n.Name);
 
-				GTypeFunction functionType = (GTypeFunction)symbolFunc.Type;
-
-				// type rule: arguments must match parameters in type and number
-				if (!functionType.From.Equals(GetTypeFrom(n.FunCall)))
-					throw new FunctionArgsMismatchException(n.FunCall);
+				GTypeFunction funDeclType = (GTypeFunction)symbolFunc.Type;
 
 				// type rule: functions in function call statements must return nothing
-				if (!functionType.To.Equals(GTypeNothing.Instance))
+				if (!funDeclType.To.Equals(GTypeNothing.Instance))
 					throw new FunctionCallStatementWithoutNothingException(n);
+
+				GTypeBase funCallType = GetTypeFrom(n.FunCall);
+
+				// type rule: arguments must match parameters in type and number
+				if (!funCallType.Equals(funDeclType.From))
+					throw new FunctionArgsMismatchException(n.FunCall, funCallType, funDeclType);
+
+				// type rule: only l-value arguments allowed for parameters passed by reference
+				if (!funCallType.MatchesRef(funDeclType.From))
+					throw new RValuePassedByReferenceException(n.FunCall, funCallType, funDeclType);
+
+				return funDeclType;
 			}
 			catch (SymbolNotInOpenScopesException e)
 			{

@@ -270,11 +270,15 @@
     <Compile Include="IR\Quads\Quad.cs" />
     <Compile Include="IR\Quads\QuadList.cs" />
     <Compile Include="IR\Visitor\IRVisitor.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\IntegerLiteralOverflowException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidArrayDimensionException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidRelationalOperationException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidSymbolTypeException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidTypeInConditionException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\MismatchedFunctionDefinitionException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\IndexedNotByReferenceException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionCallStatementWithoutNothingException.cs" />
+    <Compile Include="Semantic\Visitor\Exceptions\GType\RValuePassedByReferenceException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\VariableNotInSymbolTableException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\ParameterNotInSymbolTableException.cs" />
     <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionNotInSymbolTableException.cs" />

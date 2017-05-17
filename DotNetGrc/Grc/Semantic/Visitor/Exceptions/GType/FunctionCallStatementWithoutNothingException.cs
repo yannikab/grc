@@ -10,7 +10,7 @@ namespace Grc.Semantic.Visitor.Exceptions.GType
 	public class FunctionCallStatementWithoutNothingException : GTypeException
 	{
 		public FunctionCallStatementWithoutNothingException(StmtFuncCall n)
-			: base(string.Format("{0} Function call statement should return nothing: {1}", n.Location, n.Text))
+			: base(string.Format("{0} Statement function call must return nothing: {1}", n.Location, n.Text))
 		{
 		}
 	}

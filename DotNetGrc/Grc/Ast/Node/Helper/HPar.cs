@@ -45,13 +45,8 @@ namespace Grc.Ast.Node.Helper
 
 			this.parameters = new List<Parameter>();
 
-			List<int> dims = hTypePar.Dims.Select(d => d.Dim).ToList();
-
-			if (hTypePar.DimEmpty != null)
-				dims.Insert(0, 0);
-
 			foreach (ParIdentifierT p in identifiers)
-				this.parameters.Add(new Parameter(p, keyRef != null, hTypePar.DataType, dims, line, pos));
+				this.parameters.Add(new Parameter(p, keyRef != null, hTypePar.DataType, hTypePar.DimEmpty, hTypePar.Dims, p.Line, p.Pos));
 		}
 
 		public override void Accept(IVisitor v)

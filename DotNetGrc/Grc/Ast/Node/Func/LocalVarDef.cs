@@ -47,10 +47,8 @@ namespace Grc.Ast.Node.Func
 
 			this.variables = new List<Variable>();
 
-			List<int> dims = hTypeVar.Dims.Select(d => d.Dim).ToList();
-
 			foreach (VarIdentifierT v in identifiers)
-				this.variables.Add(new Variable(v, hTypeVar.DataType, dims, line, pos));
+				this.variables.Add(new Variable(v, hTypeVar.DataType, hTypeVar.Dims, v.Line, v.Pos));
 		}
 
 		public override void Accept(IVisitor v)

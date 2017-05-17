@@ -10,13 +10,14 @@ namespace Grc.Ast.Node.Type
 	public class DimIntegerT : NodeBase
 	{
 		private string integer;
+
 		private string lbrack;
 		private string rbrack;
 
+		public string Integer { get { return integer; } }
+
 		private int line;
 		private int pos;
-
-		public int Dim { get { return int.Parse(integer); } }
 
 		public DimIntegerT(string text)
 		{

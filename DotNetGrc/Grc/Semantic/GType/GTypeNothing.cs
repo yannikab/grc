@@ -22,7 +22,23 @@ namespace Grc.Semantic.Types
 		}
 
 		private GTypeNothing()
+			: base(false)
 		{
+		}
+
+		public override bool MatchesRef(GTypeBase obj)
+		{
+			GTypeNothing that = obj as GTypeNothing;
+
+			if (that == null)
+				return false;
+
+			return true;
+		}
+
+		public override string ToString()
+		{
+			return "nothing";
 		}
 	}
 }

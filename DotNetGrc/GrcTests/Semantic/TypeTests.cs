@@ -15,8 +15,8 @@ namespace GrcTests.Semantic
 		[Test]
 		public void TestGTypeIndexedEqual()
 		{
-			GTypeIndexed ti1 = new GTypeIndexed(GTypeInt.Instance);
-			GTypeIndexed ti2 = new GTypeIndexed(GTypeInt.Instance);
+			GTypeIndexed ti1 = new GTypeIndexed(new GTypeInt(false), 0);
+			GTypeIndexed ti2 = new GTypeIndexed(new GTypeInt(false), 5);
 
 			Assert.AreEqual(ti1, ti2);
 		}
@@ -25,8 +25,8 @@ namespace GrcTests.Semantic
 		[Test]
 		public void TestGTypeIndexedNotEqual()
 		{
-			GTypeIndexed ti1 = new GTypeIndexed(GTypeInt.Instance);
-			GTypeIndexed ti2 = new GTypeIndexed(GTypeChar.Instance);
+			GTypeIndexed ti1 = new GTypeIndexed(new GTypeInt(false), 4);
+			GTypeIndexed ti2 = new GTypeIndexed(new GTypeChar(false), 4);
 
 			Assert.AreNotEqual(ti1, ti2);
 		}
@@ -35,8 +35,8 @@ namespace GrcTests.Semantic
 		[Test]
 		public void TestGTypeProductEqual()
 		{
-			GTypeProduct tp1 = new GTypeProduct(GTypeInt.Instance, GTypeChar.Instance);
-			GTypeProduct tp2 = new GTypeProduct(GTypeInt.Instance, GTypeChar.Instance);
+			GTypeProduct tp1 = new GTypeProduct(new GTypeInt(false), new GTypeChar(false));
+			GTypeProduct tp2 = new GTypeProduct(new GTypeInt(false), new GTypeChar(false));
 
 			Assert.AreEqual(tp1, tp2);
 		}
@@ -45,8 +45,8 @@ namespace GrcTests.Semantic
 		[Test]
 		public void TestGTypeProductNotEqual()
 		{
-			GTypeProduct tp1 = new GTypeProduct(GTypeInt.Instance, GTypeChar.Instance);
-			GTypeProduct tp2 = new GTypeProduct(GTypeInt.Instance, GTypeInt.Instance);
+			GTypeProduct tp1 = new GTypeProduct(new GTypeInt(false), new GTypeChar(false));
+			GTypeProduct tp2 = new GTypeProduct(new GTypeInt(false), new GTypeInt(false));
 
 			Assert.AreNotEqual(tp1, tp2);
 		}
@@ -55,12 +55,12 @@ namespace GrcTests.Semantic
 		[Test]
 		public void TestGTypeFunctionEqual()
 		{
-			GTypeProduct from1 = new GTypeProduct(GTypeInt.Instance, GTypeChar.Instance);
+			GTypeProduct from1 = new GTypeProduct(new GTypeInt(false), new GTypeChar(false));
 
-			GTypeProduct from2 = new GTypeProduct(GTypeInt.Instance, GTypeChar.Instance);
+			GTypeProduct from2 = new GTypeProduct(new GTypeInt(false), new GTypeChar(false));
 
-			GTypeInt to1 = GTypeInt.Instance;
-			GTypeInt to2 = GTypeInt.Instance;
+			GTypeInt to1 = new GTypeInt(false);
+			GTypeInt to2 = new GTypeInt(false);
 
 			GTypeFunction tf1 = new GTypeFunction(from1, to1);
 			GTypeFunction tf2 = new GTypeFunction(from2, to2);
@@ -71,12 +71,12 @@ namespace GrcTests.Semantic
 		[Test]
 		public void TestGTypeFunctionNotEqualFrom()
 		{
-			GTypeProduct from1 = new GTypeProduct(GTypeInt.Instance, GTypeChar.Instance);
+			GTypeProduct from1 = new GTypeProduct(new GTypeInt(false), new GTypeChar(false));
 
-			GTypeProduct from2 = new GTypeProduct(GTypeInt.Instance, GTypeInt.Instance);
+			GTypeProduct from2 = new GTypeProduct(new GTypeInt(false), new GTypeInt(false));
 
-			GTypeInt to1 = GTypeInt.Instance;
-			GTypeInt to2 = GTypeInt.Instance;
+			GTypeInt to1 = new GTypeInt(false);
+			GTypeInt to2 = new GTypeInt(false);
 
 			GTypeFunction tf1 = new GTypeFunction(from1, to1);
 			GTypeFunction tf2 = new GTypeFunction(from2, to2);
@@ -88,12 +88,12 @@ namespace GrcTests.Semantic
 		[Test]
 		public void TestGTypeFunctionNotEqualTo()
 		{
-			GTypeProduct from1 = new GTypeProduct(GTypeInt.Instance, GTypeChar.Instance);
+			GTypeProduct from1 = new GTypeProduct(new GTypeInt(false), new GTypeChar(false));
 
-			GTypeProduct from2 = new GTypeProduct(GTypeInt.Instance, GTypeInt.Instance);
+			GTypeProduct from2 = new GTypeProduct(new GTypeInt(false), new GTypeInt(false));
 
-			GTypeInt to1 = GTypeInt.Instance;
-			GTypeChar to2 = GTypeChar.Instance;
+			GTypeInt to1 = new GTypeInt(false);
+			GTypeChar to2 = new GTypeChar(false);
 
 			GTypeFunction tf1 = new GTypeFunction(from1, to1);
 			GTypeFunction tf2 = new GTypeFunction(from2, to2);

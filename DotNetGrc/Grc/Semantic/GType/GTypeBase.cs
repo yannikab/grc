@@ -8,6 +8,15 @@ namespace Grc.Semantic.Types
 {
 	public abstract class GTypeBase
 	{
+		private bool byRef;
+
+		public bool ByRef { get { return byRef; } }
+
+		public GTypeBase(bool byRef)
+		{
+			this.byRef = byRef;
+		}
+
 		public override bool Equals(object obj)
 		{
 			if (obj == null)
@@ -25,5 +34,7 @@ namespace Grc.Semantic.Types
 		{
 			return GetType().Name;
 		}
+
+		public abstract bool MatchesRef(GTypeBase obj);
 	}
 }

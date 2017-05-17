@@ -7,15 +7,10 @@ using Grc.Semantic.Visitor.Exceptions.Semantic;
 
 namespace Grc.Semantic.Visitor.Exceptions.GType
 {
-	public class GTypeException : SemanticException
+	public class InvalidSymbolTypeException : GTypeException
 	{
-		public GTypeException(string message, Exception e)
-			: base(message, e)
-		{
-		}
-
-		public GTypeException(string message)
-			: base(message)
+		public InvalidSymbolTypeException(string name)
+			: base(string.Format("Lookup in symbol table returned symbol with incorrect type: ", name))
 		{
 		}
 	}

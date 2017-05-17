@@ -16,6 +16,7 @@ namespace Grc.Semantic.Types
 		public GTypeBase To { get { return to; } }
 
 		public GTypeFunction(GTypeBase from, GTypeBase to)
+			: base(false)
 		{
 			this.from = from;
 			this.to = to;
@@ -34,6 +35,24 @@ namespace Grc.Semantic.Types
 		public override int GetHashCode()
 		{
 			return base.GetHashCode() + (from != null ? from.GetHashCode() : 0) + (to != null ? to.GetHashCode() : 0);
+		}
+
+		public override bool MatchesRef(GTypeBase obj)
+		{
+			GTypeFunction that = obj as GTypeFunction;
+
+			if (that == null)
+				return false;
+
+			if (!object.Equals(this, that))
+				return false;
+
+			return this.From.MatchesRef(that.From);
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0} <- {1}", to, from);
 		}
 	}
 }

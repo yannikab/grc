@@ -13,7 +13,9 @@ namespace Grc.Ast.Node
 		private ParIdentifierT parIdentifier;
 		private bool byRef;
 		private TypeDataBase type;
-		private List<int> dims;
+		private DimEmptyT dimEmpty;
+
+		private IReadOnlyList<DimIntegerT> dims;
 
 		private int line;
 		private int pos;
@@ -26,9 +28,11 @@ namespace Grc.Ast.Node
 
 		public TypeDataBase Type { get { return type; } }
 
-		public bool Nodim { get { return dims.Count > 0 && dims[0] == 0; } }
+		public DimEmptyT DimEmpty { get { return dimEmpty; } }
 
-		public IReadOnlyList<int> Dims { get { return dims; } }
+		public IReadOnlyList<DimIntegerT> Dims { get { return dims; } }
+
+		public bool Indexed { get { return dimEmpty != null || dims.Count > 0; } }
 
 		public string Text
 		{
@@ -36,14 +40,20 @@ namespace Grc.Ast.Node
 			{
 				StringBuilder sb = new StringBuilder();
 
+				if (byRef)
+					sb.Append("ref ");
+
 				sb.Append(Name);
 
 				sb.Append(" : ");
 
 				sb.Append(type.Text);
 
-				foreach (int d in Dims)
-					sb.Append(string.Format("[{0}]", d != 0 ? d.ToString() : string.Empty));
+				if (dimEmpty != null)
+					sb.Append("[]");
+
+				foreach (DimIntegerT d in Dims)
+					sb.Append(string.Format("[{0}]", d.Integer));
 
 				return sb.ToString();
 			}
@@ -58,11 +68,12 @@ namespace Grc.Ast.Node
 			get { return string.Format("[{0}, {1}]", line, pos); }
 		}
 
-		public Parameter(ParIdentifierT parIdentifier, bool byRef, TypeDataBase type, List<int> dims, int line, int pos)
+		public Parameter(ParIdentifierT parIdentifier, bool byRef, TypeDataBase type, DimEmptyT dimEmpty, IReadOnlyList<DimIntegerT> dims, int line, int pos)
 		{
 			this.parIdentifier = parIdentifier;
 			this.byRef = byRef;
 			this.type = type;
+			this.dimEmpty = dimEmpty;
 			this.dims = dims;
 
 			this.line = line;

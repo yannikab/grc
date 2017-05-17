@@ -15,14 +15,28 @@ namespace Grc.Semantic.Types
 			get
 			{
 				if (instance == null)
-					instance = new GTypeBoolean();
+					instance = new GTypeBoolean(false);
 
 				return instance;
 			}
 		}
 
-		private GTypeBoolean()
+		private GTypeBoolean(bool byRef)
+			: base(byRef)
 		{
+		}
+
+		public override bool MatchesRef(GTypeBase obj)
+		{
+			GTypeBoolean that = obj as GTypeBoolean;
+
+			if (that == null)
+				return false;
+
+			if (!that.ByRef)
+				return true;
+
+			return ByRef;
 		}
 	}
 }

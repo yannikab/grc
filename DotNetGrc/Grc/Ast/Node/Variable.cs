@@ -12,7 +12,7 @@ namespace Grc.Ast.Node
 	{
 		private VarIdentifierT varIdentifier;
 		private TypeDataBase type;
-		private IReadOnlyList<int> dims;
+		private IReadOnlyList<DimIntegerT> dims;
 
 		private int line;
 		private int pos;
@@ -23,7 +23,9 @@ namespace Grc.Ast.Node
 
 		public TypeDataBase Type { get { return type; } }
 
-		public IReadOnlyList<int> Dims { get { return dims; } }
+		public IReadOnlyList<DimIntegerT> Dims { get { return dims; } }
+
+		public bool Indexed { get { return dims.Count > 0; } }
 
 		public string Text
 		{
@@ -37,8 +39,8 @@ namespace Grc.Ast.Node
 
 				sb.Append(type.Text);
 
-				foreach (int d in Dims)
-					sb.Append(string.Format("[{0}]", d.ToString()));
+				foreach (DimIntegerT d in Dims)
+					sb.Append(string.Format("[{0}]", d.Integer));
 
 				return sb.ToString();
 			}
@@ -53,7 +55,7 @@ namespace Grc.Ast.Node
 			get { return string.Format("[{0}, {1}]", line, pos); }
 		}
 
-		public Variable(VarIdentifierT varIdentifier, TypeDataBase type, List<int> dims, int line, int pos)
+		public Variable(VarIdentifierT varIdentifier, TypeDataBase type, IReadOnlyList<DimIntegerT> dims, int line, int pos)
 		{
 			this.varIdentifier = varIdentifier;
 			this.type = type;
