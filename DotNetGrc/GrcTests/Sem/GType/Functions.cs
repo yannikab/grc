@@ -64,7 +64,7 @@ fun program() : nothing
 			ISymbolTable symbolTable;
 			Dictionary<NodeBase, GTypeBase> typeForNode;
 			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
-			Assert.AreEqual(2, symbolTable.MaxSymbols);
+			Assert.AreEqual(LibrarySymbols + 2, symbolTable.MaxSymbols);
 		}
 
 
@@ -154,7 +154,7 @@ fun program() : nothing
 			ISymbolTable symbolTable;
 			Dictionary<NodeBase, GTypeBase> typeForNode;
 			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
-			Assert.AreEqual(6, symbolTable.MaxSymbols);
+			Assert.AreEqual(LibrarySymbols + 6, symbolTable.MaxSymbols);
 		}
 		[Test]
 		public void TestIndexedPassedByReference()
@@ -173,7 +173,7 @@ fun program() : nothing
 			ISymbolTable symbolTable;
 			Dictionary<NodeBase, GTypeBase> typeForNode;
 			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
-			Assert.AreEqual(3, symbolTable.MaxSymbols);
+			Assert.AreEqual(LibrarySymbols + 3, symbolTable.MaxSymbols);
 		}
 
 

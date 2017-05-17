@@ -1,11 +1,4 @@
 fun solve () : nothing
-
-	fun puts(ref s : char[]) : nothing { }
-	fun puti(i : int) : nothing { }
-	fun geti() : int { }
-	fun writeString(ref s : char[]) : nothing { }
-	fun strlen(ref s : char[]) : int { }
-	
       fun hanoi (rings : int; ref source, target, auxiliary : char[]) : nothing
          fun move (ref source, target : char[]) : nothing
          {
@@ -25,7 +18,7 @@ fun solve () : nothing
 
       var NumberOfRings : int;
 {
-  writeString("Rings: ");
+  puts("Rings: ");
   NumberOfRings <- geti();
   hanoi(NumberOfRings, "left", "right", "middle");
 }

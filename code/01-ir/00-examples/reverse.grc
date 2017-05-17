@@ -1,11 +1,4 @@
 fun main () : nothing
-
-	fun puts(ref s : char[]) : nothing { }
-	fun puti(i : int) : nothing { }
-	fun geti() : int { }
-	fun writeString(ref s : char[]) : nothing { }
-	fun strlen(ref s : char[]) : int { }
-	
   var r : char[32];
 
   fun reverse (ref s : char[]) : nothing

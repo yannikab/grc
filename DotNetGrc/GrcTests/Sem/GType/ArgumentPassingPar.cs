@@ -35,7 +35,7 @@ fun program() : nothing
 			ISymbolTable symbolTable;
 			Dictionary<NodeBase, GTypeBase> typeForNode;
 			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
-			Assert.AreEqual(4, symbolTable.MaxSymbols);
+			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
 		}
 
 
@@ -61,7 +61,7 @@ fun program() : nothing
 			ISymbolTable symbolTable;
 			Dictionary<NodeBase, GTypeBase> typeForNode;
 			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
-			Assert.AreEqual(4, symbolTable.MaxSymbols);
+			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
 		}
 
 
@@ -87,7 +87,7 @@ fun program() : nothing
 			ISymbolTable symbolTable;
 			Dictionary<NodeBase, GTypeBase> typeForNode;
 			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
-			Assert.AreEqual(4, symbolTable.MaxSymbols);
+			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
 		}
 
 
@@ -113,7 +113,7 @@ fun program() : nothing
 			ISymbolTable symbolTable;
 			Dictionary<NodeBase, GTypeBase> typeForNode;
 			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
-			Assert.AreEqual(4, symbolTable.MaxSymbols);
+			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
 		}
 	}
 }

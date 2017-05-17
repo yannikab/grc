@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node;
+using Grc.Ast.Node.Cond;
 using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
+using Grc.Sem.SymbolTable;
 using Grc.Sem.SymbolTable.Exceptions;
 using Grc.Sem.SymbolTable.Symbol;
 using Grc.Sem.Types;
 using Grc.Sem.Visitor.Exceptions.GType;
 using Grc.Sem.Visitor.Exceptions.Sem;
-using Grc.Sem.SymbolTable;
-using Grc.Ast.Node.Cond;
 
 namespace Grc.Sem.Visitor
 {
@@ -38,6 +38,28 @@ namespace Grc.Sem.Visitor
 		public override void Pre(Root n)
 		{
 			base.Pre(n);
+
+			InjectLibraryFunctions();
+		}
+
+		private void InjectLibraryFunctions()
+		{
+			SymbolTable.Insert(new SymbolFunc("puti", true, new GTypeFunction(new GTypeInt(false), GTypeNothing.Instance)));
+			SymbolTable.Insert(new SymbolFunc("putc", true, new GTypeFunction(new GTypeChar(false), GTypeNothing.Instance)));
+			SymbolTable.Insert(new SymbolFunc("puts", true, new GTypeFunction(new GTypeIndexed(new GTypeChar(true), 0), GTypeNothing.Instance)));
+
+			SymbolTable.Insert(new SymbolFunc("geti", true, new GTypeFunction(GTypeNothing.Instance, new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("getc", true, new GTypeFunction(GTypeNothing.Instance, new GTypeChar(false))));
+			SymbolTable.Insert(new SymbolFunc("gets", true, new GTypeFunction(new GTypeProduct(new GTypeInt(false), new GTypeIndexed(new GTypeChar(true), 0)), GTypeNothing.Instance)));
+
+			SymbolTable.Insert(new SymbolFunc("abs", true, new GTypeFunction(new GTypeInt(false), new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("ord", true, new GTypeFunction(new GTypeChar(false), new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("chr", true, new GTypeFunction(new GTypeInt(false), new GTypeChar(false))));
+
+			SymbolTable.Insert(new SymbolFunc("strlen", true, new GTypeFunction(new GTypeIndexed(new GTypeChar(true), 0), new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("strcmp", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(new GTypeChar(true), 0), new GTypeIndexed(new GTypeChar(true), 0)), new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("strcpy", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(new GTypeChar(true), 0), new GTypeIndexed(new GTypeChar(true), 0)), GTypeNothing.Instance)));
+			SymbolTable.Insert(new SymbolFunc("strcat", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(new GTypeChar(true), 0), new GTypeIndexed(new GTypeChar(true), 0)), GTypeNothing.Instance)));
 		}
 
 		public override void Post(Root n)

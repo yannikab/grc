@@ -20,6 +20,8 @@ namespace GrcTests.Sem
 	[TestFixture]
 	public partial class GTypeVisitorTests
 	{
+		private const int LibrarySymbols = 13;
+
 		private static void AcceptGTypeVisitor(string program, out ISymbolTable symbolTable, out Dictionary<NodeBase, GTypeBase> typeForNode)
 		{
 			StringReader sr = new StringReader(program);
@@ -42,7 +44,7 @@ fun program() : nothing
 			ISymbolTable symbolTable;
 			Dictionary<NodeBase, GTypeBase> typeForNode;
 			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
-			Assert.AreEqual(1, symbolTable.MaxSymbols);
+			Assert.AreEqual(LibrarySymbols + 1, symbolTable.MaxSymbols);
 			Assert.AreEqual(1, typeForNode.Count);
 		}
 
