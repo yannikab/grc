@@ -28,10 +28,10 @@ namespace Grc.IR.Op
 			else throw new IRException("Invalid relational operator.");
 		}
 
-		public static OpBase GetOp(ExprBinOpBase n)
+		public static OpBase GetOp(ExprBase n)
 		{
 			if (n is ExprAdd)
-				return OpPar.Instance;
+				return OpAdd.Instance;
 			else if (n is ExprSub)
 				return OpSub.Instance;
 			else if (n is ExprMul)
@@ -40,6 +40,11 @@ namespace Grc.IR.Op
 				return OpDiv.Instance;
 			else if (n is ExprMod)
 				return OpMod.Instance;
+			else if (n is ExprPlus)
+				return OpAdd.Instance;
+			else if (n is ExprMinus)
+				return OpSub.Instance;
+
 			else throw new IRException("Invalid binary operator.");
 		}
 	}

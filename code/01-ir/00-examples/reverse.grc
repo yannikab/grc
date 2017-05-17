@@ -1,0 +1,26 @@
+fun main () : nothing
+
+	fun puts(ref s : char[]) : nothing { }
+	fun puti(i : int) : nothing { }
+	fun geti() : int { }
+	fun writeString(ref s : char[]) : nothing { }
+	fun strlen(ref s : char[]) : int { }
+	
+  var r : char[32];
+
+  fun reverse (ref s : char[]) : nothing
+    var i, l : int;
+  {
+    l <- strlen(s);
+    i <- 0;
+    while i < l do {
+      r[i] <- s[l-i-1];
+      i <- i+1;
+    }
+    r[i] <- '\0';
+  }
+
+{
+  reverse("\n!dlrow olleH");
+  puts(r);
+}

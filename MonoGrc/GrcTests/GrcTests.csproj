@@ -120,18 +120,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Semantic\SymbolTableTests.cs" />
-    <Compile Include="Semantic\SymbolTypeTests.cs" />
-    <Compile Include="Semantic\SemanticVisitorTests.cs" />
-    <Compile Include="Semantic\TypeTests.cs" />
     <Compile Include="Cst\BottomUpHelperTests.cs" />
-    <Compile Include="Semantic\GType\ArgumentPassingPar.cs" />
-    <Compile Include="Semantic\GType\ArgumentPassingVar.cs" />
-    <Compile Include="Semantic\GType\Assignment.cs" />
-    <Compile Include="Semantic\GType\Examples.cs" />
-    <Compile Include="Semantic\GType\Expressions.cs" />
-    <Compile Include="Semantic\GType\Functions.cs" />
-    <Compile Include="Semantic\GType\GTypeVisitorTests.cs" />
+    <Compile Include="Sem\GType\ArgumentPassingPar.cs" />
+    <Compile Include="Sem\GType\ArgumentPassingVar.cs" />
+    <Compile Include="Sem\GType\Assignment.cs" />
+    <Compile Include="Sem\GType\Examples.cs" />
+    <Compile Include="Sem\GType\Expressions.cs" />
+    <Compile Include="Sem\GType\Functions.cs" />
+    <Compile Include="Sem\GType\GTypeVisitorTests.cs" />
+    <Compile Include="Sem\SemanticVisitorTests.cs" />
+    <Compile Include="Sem\SymbolTableTests.cs" />
+    <Compile Include="Sem\SymbolTypeTests.cs" />
+    <Compile Include="Sem\TypeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

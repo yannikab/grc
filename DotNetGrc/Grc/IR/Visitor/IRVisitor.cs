@@ -9,9 +9,9 @@ using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Stmt;
 using Grc.IR.Op;
 using Grc.IR.Quads;
-using Grc.Semantic.SymbolTable;
-using Grc.Semantic.Types;
-using Grc.Semantic.Visitor;
+using Grc.Sem.SymbolTable;
+using Grc.Sem.Types;
+using Grc.Sem.Visitor;
 
 namespace Grc.IR.Visitor
 {
@@ -27,12 +27,20 @@ namespace Grc.IR.Visitor
 
 		public override void Visit(ExprIntegerT n)
 		{
+			Pre(n);
+
 			n.Addr = new Addr(n.Integer);
+
+			Post(n);
 		}
 
 		public override void Visit(ExprCharacterT n)
 		{
+			Pre(n);
+
 			n.Addr = new Addr(n.Character);
+
+			Post(n);
 		}
 
 		public override void Visit(ExprBinOpBase n)
@@ -45,9 +53,64 @@ namespace Grc.IR.Visitor
 			ir[q.Addr] = q;
 		}
 
+		public override void Visit(ExprPlus n)
+		{
+			base.Visit(n);
+
+			n.Addr = n.Expr.Addr;
+		}
+
+		public override void Visit(ExprMinus n)
+		{
+			base.Visit(n);
+
+			n.Addr = new Addr();
+
+			Quad q = Quad.GenQuad(OpBase.GetOp(n), new Addr(0), n.Expr.Addr, n.Addr);
+			ir[q.Addr] = q;
+		}
+
 		public override void Visit(ExprLValIdentifierT n)
 		{
+			Pre(n);
+
 			n.Addr = new Addr(n.Name);
+
+			Post(n);
+		}
+
+		public override void Visit(ExprLValStringT n)
+		{
+			Pre(n);
+
+			n.Addr = new Addr(n.Text);
+
+			Post(n);
+		}
+
+		public override void Visit(ExprFuncCall n)
+		{
+			Pre(n);
+
+			foreach (ExprBase e in n.Args)
+			{
+				e.Accept(this);
+
+				GTypeBase type = TypeForNode[e];
+
+				Quad q1 = Quad.GenQuad(OpPar.Instance, e.Addr, type.ByRef ? Addr.ByRef : Addr.ByVal, Addr.Empty);
+				ir[q1.Addr] = q1;
+			}
+
+			n.Addr = new Addr();
+
+			Quad q2 = Quad.GenQuad(OpPar.Instance, Addr.Ret, n.Addr, Addr.Empty);
+			ir[q2.Addr] = q2;
+
+			Quad q3 = Quad.GenQuad(OpCall.Instance, Addr.Empty, Addr.Empty, new Addr(n.Name));
+			ir[q3.Addr] = q3;
+
+			Post(n);
 		}
 
 		public override void Visit(CondAnd n)
@@ -115,7 +178,11 @@ namespace Grc.IR.Visitor
 
 		public override void Visit(StmtNoOpT n)
 		{
+			Pre(n);
+
 			n.NextList = QuadList.Empty();
+
+			Post(n);
 		}
 
 		public override void Visit(StmtIfThen n)
@@ -189,7 +256,7 @@ namespace Grc.IR.Visitor
 				s.NextList.BackPatch(Quad.NextQuad.Addr);
 			}
 
-			n.NextList = n.Stmts[n.Stmts.Count - 1].NextList;
+			n.NextList = n.Stmts.Count > 0 ? n.Stmts[n.Stmts.Count - 1].NextList : QuadList.Empty();
 
 			Post(n);
 		}
@@ -208,14 +275,41 @@ namespace Grc.IR.Visitor
 		{
 			Pre(n);
 
-			//int i = 1;
-			base.Visit(n);
 			foreach (ExprBase e in n.Args)
 			{
 				e.Accept(this);
 
-				//Quad q = Quad.GenQuad(OpPar.Instance, e.Addr, n.Args[i].
+				GTypeBase type = TypeForNode[e];
+
+				Quad q1 = Quad.GenQuad(OpPar.Instance, e.Addr, type.ByRef ? Addr.ByRef : Addr.ByVal, Addr.Empty);
+				ir[q1.Addr] = q1;
 			}
+
+			if (!((GTypeFunction)TypeForNode[n]).To.Equals(GTypeNothing.Instance))
+			{
+				Quad q2 = Quad.GenQuad(OpPar.Instance, Addr.Ret, n.FunCall.Addr, Addr.Empty);
+				ir[q2.Addr] = q2;
+			}
+
+			Quad q3 = Quad.GenQuad(OpCall.Instance, Addr.Empty, Addr.Empty, new Addr(n.FunCall.Name));
+			ir[q3.Addr] = q3;
+
+			n.NextList = QuadList.Empty();
+
+			Post(n);
+		}
+
+		public override void Visit(StmtReturn n)
+		{
+			Pre(n);
+
+			if (n.Expr != null)
+				n.Expr.Accept(this);
+
+			Quad q = Quad.GenQuad(OpRet.Instance, Addr.Empty, Addr.Empty, Addr.Empty);
+			ir[q.Addr] = q;
+
+			n.NextList = QuadList.Empty();
 
 			Post(n);
 		}

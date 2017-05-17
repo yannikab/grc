@@ -233,10 +233,12 @@
     <Compile Include="IR\Node\CondBase.cs" />
     <Compile Include="IR\Node\ExprBase.cs" />
     <Compile Include="IR\Node\StmtBase.cs" />
+    <Compile Include="IR\Op\OpCall.cs" />
     <Compile Include="IR\Op\OpPar.cs" />
     <Compile Include="IR\Op\OpMod.cs" />
     <Compile Include="IR\Op\OpDiv.cs" />
     <Compile Include="IR\Op\OpMul.cs" />
+    <Compile Include="IR\Op\OpRet.cs" />
     <Compile Include="IR\Op\OpSub.cs" />
     <Compile Include="IR\Op\OpAdd.cs" />
     <Compile Include="IR\Op\OpAssign.cs" />
@@ -245,19 +247,6 @@
     <Compile Include="Ast\Visitor\IVisitor.cs" />
     <Compile Include="IR\Quads\Addr.cs" />
     <Compile Include="IR\Exceptions\IRException.cs" />
-    <Compile Include="Semantic\GType\GTypeBoolean.cs" />
-    <Compile Include="Semantic\GType\GTypeIndexed.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Semantic\GType\GTypeBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Semantic\GType\GTypeChar.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Semantic\GType\GTypeData.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IR\Op\OpNoOp.cs" />
     <Compile Include="IR\Op\OpGoto.cs" />
     <Compile Include="IR\Op\OpLe.cs" />
@@ -270,69 +259,60 @@
     <Compile Include="IR\Quads\Quad.cs" />
     <Compile Include="IR\Quads\QuadList.cs" />
     <Compile Include="IR\Visitor\IRVisitor.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\IntegerLiteralOverflowException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidArrayDimensionException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidRelationalOperationException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidSymbolTypeException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidTypeInConditionException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\MismatchedFunctionDefinitionException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\IndexedNotByReferenceException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionCallStatementWithoutNothingException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\RValuePassedByReferenceException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\VariableNotInSymbolTableException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\ParameterNotInSymbolTableException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionNotInSymbolTableException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\FunctionArgsMismatchException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidTypeAssignmentException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\InvalidTypeInNumericExpression.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\IndexingInvalidTypeException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\GTypeException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Semantic\GType\GTypeFunction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Semantic\GType\GTypeInt.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Semantic\GType\GTypeNothing.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Semantic\GType\GTypeProduct.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Semantic\GType\GTypeReturn.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Semantic\SymbolTable\Exceptions\NoCurrentScopeException.cs" />
-    <Compile Include="Semantic\SymbolTable\Exceptions\SymbolAlreadyInScopeException.cs" />
-    <Compile Include="Semantic\SymbolTable\Exceptions\SymbolNotInOpenScopesException.cs" />
-    <Compile Include="Semantic\SymbolTable\ISymbolTable.cs" />
-    <Compile Include="Semantic\SymbolTable\Symbol\SymbolBase.cs" />
-    <Compile Include="Semantic\SymbolTable\Symbol\SymbolFunc.cs" />
-    <Compile Include="Semantic\SymbolTable\StackSymbolTable.cs" />
-    <Compile Include="Semantic\SymbolTable\Exceptions\SymbolTableException.cs" />
-    <Compile Include="Semantic\SymbolTable\Symbol\SymbolVar.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\IndexNotIntegerException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\MainFunctionWithReturnValueException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\GType\MainFunctionWithParametersException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionDefinitionMissing.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionAlreadyInScopeException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\Semantic\FunctionNotInOpenScopesException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\Semantic\SemanticException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableAlreadyInScopeException.cs" />
-    <Compile Include="Semantic\Visitor\Exceptions\Semantic\VariableNotInOpenScopesException.cs" />
-    <Compile Include="Semantic\Visitor\TypeResolver.cs" />
-    <Compile Include="Semantic\Visitor\GTypeVisitor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Semantic\Visitor\SemanticVisitor.cs" />
+    <Compile Include="Sem\GType\GTypeBase.cs" />
+    <Compile Include="Sem\GType\GTypeBoolean.cs" />
+    <Compile Include="Sem\GType\GTypeChar.cs" />
+    <Compile Include="Sem\GType\GTypeData.cs" />
+    <Compile Include="Sem\GType\GTypeFunction.cs" />
+    <Compile Include="Sem\GType\GTypeIndexed.cs" />
+    <Compile Include="Sem\GType\GTypeInt.cs" />
+    <Compile Include="Sem\GType\GTypeNothing.cs" />
+    <Compile Include="Sem\GType\GTypeProduct.cs" />
+    <Compile Include="Sem\GType\GTypeReturn.cs" />
+    <Compile Include="Sem\SymbolTable\Exceptions\NoCurrentScopeException.cs" />
+    <Compile Include="Sem\SymbolTable\Exceptions\SymbolAlreadyInScopeException.cs" />
+    <Compile Include="Sem\SymbolTable\Exceptions\SymbolNotInOpenScopesException.cs" />
+    <Compile Include="Sem\SymbolTable\Exceptions\SymbolTableException.cs" />
+    <Compile Include="Sem\SymbolTable\ISymbolTable.cs" />
+    <Compile Include="Sem\SymbolTable\StackSymbolTable.cs" />
+    <Compile Include="Sem\SymbolTable\Symbol\SymbolBase.cs" />
+    <Compile Include="Sem\SymbolTable\Symbol\SymbolFunc.cs" />
+    <Compile Include="Sem\SymbolTable\Symbol\SymbolVar.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\FunctionArgsMismatchException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\FunctionCallStatementWithoutNothingException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\FunctionNotInSymbolTableException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\GTypeException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\IndexedNotByReferenceException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\IndexingInvalidTypeException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\IndexNotIntegerException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\IntegerLiteralOverflowException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\InvalidArrayDimensionException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\InvalidRelationalOperationException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\InvalidSymbolTypeException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\InvalidTypeAssignmentException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\InvalidTypeInConditionException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\InvalidTypeInNumericExpression.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\MainFunctionWithParametersException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\MainFunctionWithReturnValueException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\MismatchedFunctionDefinitionException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\ParameterNotInSymbolTableException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\RValuePassedByReferenceException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\VariableNotInSymbolTableException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionAlreadyInScopeException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionDefinitionMissing.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionNotInOpenScopesException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\SemanticException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\VariableAlreadyInScopeException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\VariableNotInOpenScopesException.cs" />
+    <Compile Include="Sem\Visitor\GTypeVisitor.cs" />
+    <Compile Include="Sem\Visitor\SemanticVisitor.cs" />
+    <Compile Include="Sem\Visitor\TypeResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Ast\Node\Node.cd" />
-    <None Include="Semantic\GType\GType.cd" />
     <None Include="packages.config" />
+    <None Include="Sem\GType\GType.cd" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

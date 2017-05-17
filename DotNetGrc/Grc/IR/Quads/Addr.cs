@@ -12,6 +12,9 @@ namespace Grc.IR.Quads
 
 		public static readonly Addr Empty;
 		public static readonly Addr Star;
+		public static readonly Addr ByRef;
+		public static readonly Addr ByVal;
+		public static readonly Addr Ret;
 
 		static Addr()
 		{
@@ -19,6 +22,9 @@ namespace Grc.IR.Quads
 
 			Empty = new Addr(" ");
 			Star = new Addr("*");
+			ByRef = new Addr("R");
+			ByVal = new Addr("V");
+			Ret = new Addr("RET");
 		}
 
 		private string val;

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Grc.Ast.Node;
 using Grc.Ast.Node.Helper;
 using Grc.Cst.Visitor.ASTCreation;
-using Grc.Semantic.SymbolTable;
-using Grc.Semantic.Types;
-using Grc.Semantic.Visitor;
-using Grc.Semantic.Visitor.Exceptions.GType;
+using Grc.Sem.SymbolTable;
+using Grc.Sem.Types;
+using Grc.Sem.Visitor;
+using Grc.Sem.Visitor.Exceptions.GType;
 using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.parser;
@@ -18,7 +18,7 @@ using Grc.Ast.Node.Cond;
 using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Expr;
 
-namespace GrcTests.Semantic
+namespace GrcTests.Cst
 {
 	[TestFixture]
 	public class BottomUpHelperTests : BottomUpHelper<NodeBase>
