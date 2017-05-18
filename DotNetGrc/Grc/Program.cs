@@ -370,9 +370,8 @@ namespace Grc
 				//root.Accept(new GraphVizNodeDataVisitor());
 
 				ISymbolTable symbolTable;
-				Dictionary<NodeBase, GTypeBase> typeForNode;
 
-				root.Accept(new IRVisitor(out symbolTable, out typeForNode));
+				root.Accept(new IRVisitor(out symbolTable));
 			}
 			catch (ParserException e)
 			{

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Node;
 using Grc.Sem.SymbolTable;
-using Grc.Sem.Types;
 using Grc.Sem.Visitor.Exceptions.GType;
 using NUnit.Framework;
 
@@ -25,8 +23,7 @@ fun program(a : int) : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<MainFunctionWithParametersException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<MainFunctionWithParametersException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -41,8 +38,7 @@ fun program() : int
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<MainFunctionWithReturnValueException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<MainFunctionWithReturnValueException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -62,8 +58,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			AcceptGTypeVisitor(program, out symbolTable);
 			Assert.AreEqual(LibrarySymbols + 2, symbolTable.MaxSymbols);
 		}
 
@@ -84,8 +79,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<FunctionCallStatementWithoutNothingException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<FunctionCallStatementWithoutNothingException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -106,8 +100,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<MismatchedFunctionDefinitionException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<MismatchedFunctionDefinitionException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -128,8 +121,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<MismatchedFunctionDefinitionException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<MismatchedFunctionDefinitionException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -152,8 +144,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			AcceptGTypeVisitor(program, out symbolTable);
 			Assert.AreEqual(LibrarySymbols + 6, symbolTable.MaxSymbols);
 		}
 		[Test]
@@ -171,8 +162,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			AcceptGTypeVisitor(program, out symbolTable);
 			Assert.AreEqual(LibrarySymbols + 3, symbolTable.MaxSymbols);
 		}
 
@@ -192,8 +182,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<IndexedNotByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<IndexedNotByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 	}
 }

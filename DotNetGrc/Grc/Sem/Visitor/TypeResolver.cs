@@ -47,7 +47,7 @@ namespace Grc.Sem.Visitor
 					if (!(dim > 0))
 						throw new InvalidArrayDimensionException(p.Dims[i]);
 
-					parType = new GTypeIndexed(parType, dim);
+					parType = new GTypeIndexed(dim, parType);
 				}
 				catch (ArgumentNullException e)
 				{
@@ -64,7 +64,7 @@ namespace Grc.Sem.Visitor
 			}
 
 			if (p.DimEmpty != null)
-				parType = new GTypeIndexed(parType, 0);
+				parType = new GTypeIndexed(0, parType);
 
 			// type rule: arrays must be passed by reference
 			if (parType is GTypeIndexed && !p.ByRef)
@@ -93,7 +93,7 @@ namespace Grc.Sem.Visitor
 					if (!(dim > 0))
 						throw new InvalidArrayDimensionException(v.Dims[i]);
 
-					varType = new GTypeIndexed(varType, dim);
+					varType = new GTypeIndexed(dim, varType);
 				}
 				catch (ArgumentNullException e)
 				{
@@ -321,7 +321,7 @@ namespace Grc.Sem.Visitor
 		private GTypeBase GetType(ExprLValStringT n)
 		{
 			// type rule: string literals are of type char []
-			return new GTypeIndexed(new GTypeChar(true), n.Text.Length - 1);
+			return new GTypeIndexed(n.Text.Length - 1, new GTypeChar(true));
 		}
 
 		private GTypeBase GetType(ExprLValIndexed n)

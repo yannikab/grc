@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Node;
 using Grc.Ast.Node.Helper;
 using Grc.Cst.Visitor.ASTCreation;
 using Grc.Sem.SymbolTable;
-using Grc.Sem.Types;
 using Grc.Sem.Visitor;
 using Grc.Sem.Visitor.Exceptions.GType;
 using java.io;
@@ -22,13 +20,13 @@ namespace GrcTests.Sem
 	{
 		private const int LibrarySymbols = 13;
 
-		private static void AcceptGTypeVisitor(string program, out ISymbolTable symbolTable, out Dictionary<NodeBase, GTypeBase> typeForNode)
+		private static void AcceptGTypeVisitor(string program, out ISymbolTable symbolTable)
 		{
 			StringReader sr = new StringReader(program);
 			Parser parser = new Parser(new Lexer(new PushbackReader(sr, 4096)));
 			Root root = new Root();
 			parser.parse().apply(new ASTCreationVisitor(root));
-			root.Accept(new GTypeVisitor(out symbolTable, out typeForNode));
+			root.Accept(new GTypeVisitor(out symbolTable));
 		}
 
 		[Test]
@@ -42,10 +40,8 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			AcceptGTypeVisitor(program, out symbolTable);
 			Assert.AreEqual(LibrarySymbols + 1, symbolTable.MaxSymbols);
-			Assert.AreEqual(1, typeForNode.Count);
 		}
 
 
@@ -63,8 +59,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<InvalidArrayDimensionException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<InvalidArrayDimensionException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -82,8 +77,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<InvalidArrayDimensionException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<InvalidArrayDimensionException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -101,8 +95,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<IntegerLiteralOverflowException>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<IntegerLiteralOverflowException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 	}
 }

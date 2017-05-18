@@ -257,17 +257,21 @@
     <Compile Include="Sem\Visitor\Exceptions\GType\ParameterNotInSymbolTableException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\RValuePassedByReferenceException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\VariableNotInSymbolTableException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\Semantic\FunctionAlreadyInScopeException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\Semantic\FunctionDefinitionMissing.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\Semantic\FunctionNotInOpenScopesException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\Semantic\SemanticException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\Semantic\VariableAlreadyInScopeException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\Semantic\VariableNotInOpenScopesException.cs" />
     <Compile Include="Sem\Visitor\GTypeVisitor.cs" />
     <Compile Include="Sem\Visitor\SemanticVisitor.cs" />
     <Compile Include="Sem\Visitor\TypeResolver.cs" />
     <Compile Include="IR\Op\OpCall.cs" />
     <Compile Include="IR\Op\OpRet.cs" />
+    <Compile Include="Sem\Node\NodeBase.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionAlreadyInScopeException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionDefinitionMissing.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionNotInOpenScopesException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\SemanticException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\VariableAlreadyInScopeException.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\VariableNotInOpenScopesException.cs" />
+    <Compile Include="IR\Op\OpArray.cs" />
+    <Compile Include="IR\Op\OpEndu.cs" />
+    <Compile Include="IR\Op\OpUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

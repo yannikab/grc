@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 using Grc.Ast.Node;
 using Grc.Ast.Node.Cond;
 using Grc.Ast.Node.Expr;
+using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Stmt;
+using Grc.IR.Exceptions;
 using Grc.IR.Op;
 using Grc.IR.Quads;
 using Grc.Sem.SymbolTable;
+using Grc.Sem.SymbolTable.Exceptions;
+using Grc.Sem.SymbolTable.Symbol;
 using Grc.Sem.Types;
 using Grc.Sem.Visitor;
 
@@ -19,10 +23,53 @@ namespace Grc.IR.Visitor
 	{
 		private Dictionary<Addr, Quad> ir;
 
-		public IRVisitor(out ISymbolTable symbolTable, out Dictionary<NodeBase, GTypeBase> typeForNode)
-			: base(out symbolTable, out typeForNode)
+		public IRVisitor(out ISymbolTable symbolTable)
+			: base(out symbolTable)
 		{
 			this.ir = new Dictionary<Addr, Quad>();
+		}
+
+		public override void Pre(LocalFuncDef n)
+		{
+			base.Pre(n);
+
+			try
+			{
+				SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Header.Name);
+
+				if (symbolFunc.ScopeId != SymbolTable.CurrentScopeId)
+					throw new IRException("Unit name not in current scope.");
+
+				Quad q = Quad.GenQuad(OpUnit.Instance, new Addr(symbolFunc.Name), Addr.Empty, Addr.Empty);
+				ir[q.Addr] = q;
+			}
+			catch (SymbolNotInOpenScopesException)
+			{
+				throw new IRException("Unit name not found in symbol table.");
+			}
+		}
+
+		public override void Post(LocalFuncDef n)
+		{
+			base.Post(n);
+
+			try
+			{
+				SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Header.Name);
+
+				if (symbolFunc.ScopeId != SymbolTable.CurrentScopeId)
+					throw new IRException("Unit name not in current scope.");
+
+				if (n.Block.Stmts.Count > 0)
+					n.Block.Stmts[n.Block.Stmts.Count - 1].NextList.BackPatch(Quad.NextQuad.Addr);
+
+				Quad q = Quad.GenQuad(OpEndu.Instance, new Addr(symbolFunc.Name), Addr.Empty, Addr.Empty);
+				ir[q.Addr] = q;
+			}
+			catch (SymbolNotInOpenScopesException)
+			{
+				throw new IRException("Unit name not found in symbol table.");
+			}
 		}
 
 		public override void Visit(ExprIntegerT n)
@@ -96,7 +143,7 @@ namespace Grc.IR.Visitor
 			{
 				e.Accept(this);
 
-				GTypeBase type = TypeForNode[e];
+				GTypeBase type = e.Type;
 
 				Quad q1 = Quad.GenQuad(OpPar.Instance, e.Addr, type.ByRef ? Addr.ByRef : Addr.ByVal, Addr.Empty);
 				ir[q1.Addr] = q1;
@@ -249,14 +296,18 @@ namespace Grc.IR.Visitor
 		{
 			Pre(n);
 
+			List<Quad> l = QuadList.Empty();
+
 			foreach (StmtBase s in n.Stmts)
 			{
+				l.BackPatch(Quad.NextQuad.Addr);
+
 				s.Accept(this);
 
-				s.NextList.BackPatch(Quad.NextQuad.Addr);
+				l = s.NextList;
 			}
 
-			n.NextList = n.Stmts.Count > 0 ? n.Stmts[n.Stmts.Count - 1].NextList : QuadList.Empty();
+			n.NextList = l;
 
 			Post(n);
 		}
@@ -279,13 +330,13 @@ namespace Grc.IR.Visitor
 			{
 				e.Accept(this);
 
-				GTypeBase type = TypeForNode[e];
+				GTypeBase type = e.Type;
 
 				Quad q1 = Quad.GenQuad(OpPar.Instance, e.Addr, type.ByRef ? Addr.ByRef : Addr.ByVal, Addr.Empty);
 				ir[q1.Addr] = q1;
 			}
 
-			if (!((GTypeFunction)TypeForNode[n]).To.Equals(GTypeNothing.Instance))
+			if (!((GTypeFunction)n.Type).To.Equals(GTypeNothing.Instance))
 			{
 				Quad q2 = Quad.GenQuad(OpPar.Instance, Addr.Ret, n.FunCall.Addr, Addr.Empty);
 				ir[q2.Addr] = q2;
@@ -310,6 +361,72 @@ namespace Grc.IR.Visitor
 			ir[q.Addr] = q;
 
 			n.NextList = QuadList.Empty();
+
+			Post(n);
+		}
+
+		private string name;
+		private GTypeIndexed type;
+
+		public override void Visit(ExprLValIndexed n)
+		{
+			Pre(n);
+
+			n.Lval.Accept(this);
+
+			n.Expr.Accept(this);
+
+			if (n.Lval is ExprLValIndexed)
+			{
+				Addr t = new Addr();
+
+				n.Addr = new Addr();
+
+				type = (GTypeIndexed)type.IndexedType;
+
+				Quad q1 = Quad.GenQuad(OpMul.Instance, n.Lval.Addr, new Addr(type.Dim), t);
+				ir[q1.Addr] = q1;
+
+				Quad q2 = Quad.GenQuad(OpAdd.Instance, t, n.Expr.Addr, n.Addr);
+				ir[q2.Addr] = q2;
+			}
+			else
+			{
+				if (n.Lval is ExprLValIdentifierT)
+				{
+					ExprLValIdentifierT t = (ExprLValIdentifierT)n.Lval;
+					name = t.Name;
+
+					SymbolVar sv = SymbolTable.Lookup<SymbolVar>(t.Name);
+					type = (GTypeIndexed)sv.Type;
+				}
+				else if (n.Lval is ExprLValStringT)
+				{
+					ExprLValStringT t = (ExprLValStringT)n.Lval;
+					name = t.Text;
+
+					type = (GTypeIndexed)n.Lval.Type;
+				}
+
+				n.Addr = new Addr();
+
+				Quad q3 = Quad.GenQuad(OpAssign.Instance, n.Expr.Addr, Addr.Empty, n.Addr);
+				ir[q3.Addr] = q3;
+			}
+
+			if (!(type.IndexedType is GTypeIndexed))
+			{
+				Addr a = new Addr();
+
+				Quad q3 = Quad.GenQuad(OpArray.Instance, new Addr(name), n.Addr, a);
+				ir[q3.Addr] = q3;
+
+				q3 = Quad.GenQuad(OpAssign.Instance, new Addr("[" + a + "]"), Addr.Empty, n.Addr);
+				ir[q3.Addr] = q3;
+
+				this.name = null;
+				this.type = null;
+			}
 
 			Post(n);
 		}

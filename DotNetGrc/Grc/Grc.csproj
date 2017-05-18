@@ -233,6 +233,9 @@
     <Compile Include="IR\Node\CondBase.cs" />
     <Compile Include="IR\Node\ExprBase.cs" />
     <Compile Include="IR\Node\StmtBase.cs" />
+    <Compile Include="IR\Op\OpArray.cs" />
+    <Compile Include="IR\Op\OpEndu.cs" />
+    <Compile Include="IR\Op\OpUnit.cs" />
     <Compile Include="IR\Op\OpCall.cs" />
     <Compile Include="IR\Op\OpPar.cs" />
     <Compile Include="IR\Op\OpMod.cs" />
@@ -269,6 +272,7 @@
     <Compile Include="Sem\GType\GTypeNothing.cs" />
     <Compile Include="Sem\GType\GTypeProduct.cs" />
     <Compile Include="Sem\GType\GTypeReturn.cs" />
+    <Compile Include="Sem\Node\NodeBase.cs" />
     <Compile Include="Sem\SymbolTable\Exceptions\NoCurrentScopeException.cs" />
     <Compile Include="Sem\SymbolTable\Exceptions\SymbolAlreadyInScopeException.cs" />
     <Compile Include="Sem\SymbolTable\Exceptions\SymbolNotInOpenScopesException.cs" />

@@ -15,7 +15,7 @@ namespace Grc.Sem.Types
 
 		public int Dim { get { return dim; } }
 
-		public GTypeIndexed(GTypeBase indexedType, int dim)
+		public GTypeIndexed(int dim, GTypeBase indexedType)
 			: base(true)
 		{
 			this.indexedType = indexedType;
@@ -72,7 +72,7 @@ namespace Grc.Sem.Types
 
 			TypeString(out type, out dims);
 
-			return string.Format("ref {0} {1}", type, dims);
+			return string.Format("{0} {1}", type, dims);
 		}
 	}
 }

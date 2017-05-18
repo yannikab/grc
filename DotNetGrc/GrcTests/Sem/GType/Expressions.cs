@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Node;
 using Grc.Sem.SymbolTable;
-using Grc.Sem.Types;
 using Grc.Sem.Visitor.Exceptions.GType;
 using NUnit.Framework;
 
@@ -32,8 +30,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -55,8 +52,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			AcceptGTypeVisitor(program, out symbolTable);
 			Assert.AreEqual(LibrarySymbols + 6, symbolTable.MaxSymbols);
 		}
 
@@ -75,8 +71,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -95,8 +90,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable, out typeForNode));
+			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 	}
 }

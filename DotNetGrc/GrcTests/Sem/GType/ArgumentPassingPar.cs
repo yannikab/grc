@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Node;
 using Grc.Sem.SymbolTable;
-using Grc.Sem.Types;
 using NUnit.Framework;
 
 namespace GrcTests.Sem
@@ -33,8 +31,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			AcceptGTypeVisitor(program, out symbolTable);
 			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
 		}
 
@@ -59,8 +56,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			AcceptGTypeVisitor(program, out symbolTable);
 			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
 		}
 
@@ -85,8 +81,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			AcceptGTypeVisitor(program, out symbolTable);
 			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
 		}
 
@@ -111,8 +106,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Dictionary<NodeBase, GTypeBase> typeForNode;
-			AcceptGTypeVisitor(program, out symbolTable, out typeForNode);
+			AcceptGTypeVisitor(program, out symbolTable);
 			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
 		}
 	}

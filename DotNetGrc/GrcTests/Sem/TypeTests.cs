@@ -15,8 +15,8 @@ namespace GrcTests.Sem
 		[Test]
 		public void TestGTypeIndexedEqual()
 		{
-			GTypeIndexed ti1 = new GTypeIndexed(new GTypeInt(false), 0);
-			GTypeIndexed ti2 = new GTypeIndexed(new GTypeInt(false), 5);
+			GTypeIndexed ti1 = new GTypeIndexed(0, new GTypeInt(false));
+			GTypeIndexed ti2 = new GTypeIndexed(5, new GTypeInt(false));
 
 			Assert.AreEqual(ti1, ti2);
 		}
@@ -25,8 +25,28 @@ namespace GrcTests.Sem
 		[Test]
 		public void TestGTypeIndexedNotEqual()
 		{
-			GTypeIndexed ti1 = new GTypeIndexed(new GTypeInt(false), 4);
-			GTypeIndexed ti2 = new GTypeIndexed(new GTypeChar(false), 4);
+			GTypeIndexed ti1 = new GTypeIndexed(4, new GTypeInt(false));
+			GTypeIndexed ti2 = new GTypeIndexed(4, new GTypeChar(false));
+
+			Assert.AreNotEqual(ti1, ti2);
+		}
+
+
+		[Test]
+		public void TestGTypeIndexedDoubleEqual()
+		{
+			GTypeIndexed ti1 = new GTypeIndexed(5, new GTypeIndexed(4, new GTypeInt(true)));
+			GTypeIndexed ti2 = new GTypeIndexed(5, new GTypeIndexed(4, new GTypeInt(false)));
+
+			Assert.AreEqual(ti1, ti2);
+		}
+
+
+		[Test]
+		public void TestGTypeIndexedDoubleNotEqual()
+		{
+			GTypeIndexed ti1 = new GTypeIndexed(5, new GTypeIndexed(4, new GTypeInt(true)));
+			GTypeIndexed ti2 = new GTypeIndexed(5, new GTypeIndexed(4, new GTypeChar(false)));
 
 			Assert.AreNotEqual(ti1, ti2);
 		}

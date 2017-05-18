@@ -20,18 +20,11 @@ namespace Grc.Sem.Visitor
 {
 	public class GTypeVisitor : SemanticVisitor
 	{
-		private Dictionary<NodeBase, GTypeBase> typeForNode;
 		private TypeResolver typeResolver;
 
-		protected Dictionary<NodeBase, GTypeBase> TypeForNode { get { return typeForNode; } }
-
-		public GTypeVisitor(out ISymbolTable symbolTable, out Dictionary<NodeBase, GTypeBase> typeForNode)
+		public GTypeVisitor(out ISymbolTable symbolTable)
 			: base(out symbolTable)
 		{
-			typeForNode = new Dictionary<NodeBase, GTypeBase>();
-
-			this.typeForNode = typeForNode;
-
 			this.typeResolver = new TypeResolver(SymbolTable);
 		}
 
@@ -46,20 +39,20 @@ namespace Grc.Sem.Visitor
 		{
 			SymbolTable.Insert(new SymbolFunc("puti", true, new GTypeFunction(new GTypeInt(false), GTypeNothing.Instance)));
 			SymbolTable.Insert(new SymbolFunc("putc", true, new GTypeFunction(new GTypeChar(false), GTypeNothing.Instance)));
-			SymbolTable.Insert(new SymbolFunc("puts", true, new GTypeFunction(new GTypeIndexed(new GTypeChar(true), 0), GTypeNothing.Instance)));
+			SymbolTable.Insert(new SymbolFunc("puts", true, new GTypeFunction(new GTypeIndexed(0, new GTypeChar(true)), GTypeNothing.Instance)));
 
 			SymbolTable.Insert(new SymbolFunc("geti", true, new GTypeFunction(GTypeNothing.Instance, new GTypeInt(false))));
 			SymbolTable.Insert(new SymbolFunc("getc", true, new GTypeFunction(GTypeNothing.Instance, new GTypeChar(false))));
-			SymbolTable.Insert(new SymbolFunc("gets", true, new GTypeFunction(new GTypeProduct(new GTypeInt(false), new GTypeIndexed(new GTypeChar(true), 0)), GTypeNothing.Instance)));
+			SymbolTable.Insert(new SymbolFunc("gets", true, new GTypeFunction(new GTypeProduct(new GTypeInt(false), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance)));
 
 			SymbolTable.Insert(new SymbolFunc("abs", true, new GTypeFunction(new GTypeInt(false), new GTypeInt(false))));
 			SymbolTable.Insert(new SymbolFunc("ord", true, new GTypeFunction(new GTypeChar(false), new GTypeInt(false))));
 			SymbolTable.Insert(new SymbolFunc("chr", true, new GTypeFunction(new GTypeInt(false), new GTypeChar(false))));
 
-			SymbolTable.Insert(new SymbolFunc("strlen", true, new GTypeFunction(new GTypeIndexed(new GTypeChar(true), 0), new GTypeInt(false))));
-			SymbolTable.Insert(new SymbolFunc("strcmp", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(new GTypeChar(true), 0), new GTypeIndexed(new GTypeChar(true), 0)), new GTypeInt(false))));
-			SymbolTable.Insert(new SymbolFunc("strcpy", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(new GTypeChar(true), 0), new GTypeIndexed(new GTypeChar(true), 0)), GTypeNothing.Instance)));
-			SymbolTable.Insert(new SymbolFunc("strcat", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(new GTypeChar(true), 0), new GTypeIndexed(new GTypeChar(true), 0)), GTypeNothing.Instance)));
+			SymbolTable.Insert(new SymbolFunc("strlen", true, new GTypeFunction(new GTypeIndexed(0, new GTypeChar(true)), new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("strcmp", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("strcpy", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance)));
+			SymbolTable.Insert(new SymbolFunc("strcat", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance)));
 		}
 
 		public override void Post(Root n)
@@ -70,7 +63,7 @@ namespace Grc.Sem.Visitor
 		public override void Pre(LocalFuncDef n)
 		{
 			GTypeFunction funcDefType = typeResolver.GetType(n);
-			typeForNode.Add(n, funcDefType);
+			n.Type = funcDefType;
 
 			try
 			{
@@ -126,7 +119,7 @@ namespace Grc.Sem.Visitor
 
 					SymbolTable.Insert(symbolVar);
 
-					typeForNode.Add(p.ParIdentifier, symbolVar.Type);
+					p.ParIdentifier.Type = symbolVar.Type;
 				}
 				catch (SymbolAlreadyInScopeException e)
 				{
@@ -177,7 +170,7 @@ namespace Grc.Sem.Visitor
 					throw new GTypeException("Function should not be defined.");
 
 				symbolFunc.Type = typeResolver.GetType(n);
-				typeForNode.Add(n, symbolFunc.Type);
+				n.Type = symbolFunc.Type;
 			}
 			catch (SymbolNotInOpenScopesException e)
 			{
@@ -197,7 +190,7 @@ namespace Grc.Sem.Visitor
 
 					symbolVar.Type = typeResolver.GetType(v);
 
-					typeForNode.Add(v.VarIdentifier, symbolVar.Type);
+					v.VarIdentifier.Type = symbolVar.Type;
 				}
 				catch (SymbolNotInOpenScopesException e)
 				{
@@ -208,7 +201,7 @@ namespace Grc.Sem.Visitor
 
 		public override void Pre(ExprIntegerT n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 
 			try
 			{
@@ -222,72 +215,72 @@ namespace Grc.Sem.Visitor
 
 		public override void Pre(ExprCharacterT n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(ExprBinOpBase n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(ExprPlus n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(ExprMinus n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(ExprFuncCall n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(ExprLValIdentifierT n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(ExprLValStringT n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(ExprLValIndexed n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(CondAnd n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(CondOr n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(CondNot n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(CondRelOpBase n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(StmtAssign n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 
 		public override void Pre(StmtFuncCall n)
 		{
-			typeForNode.Add(n, typeResolver.GetType(n));
+			n.Type = typeResolver.GetType(n);
 		}
 	}
 }

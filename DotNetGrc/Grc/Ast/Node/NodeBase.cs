@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node
 {
-	public abstract class NodeBase
+	public abstract partial class NodeBase
 	{
 		private string text;
 
