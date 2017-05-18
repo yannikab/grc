@@ -10,7 +10,7 @@ namespace Grc.Ast.Node
 {
 	public class Parameter
 	{
-		private ParIdentifierT parIdentifier;
+		private string name;
 		private bool byRef;
 		private TypeDataBase type;
 		private DimEmptyT dimEmpty;
@@ -20,9 +20,7 @@ namespace Grc.Ast.Node
 		private int line;
 		private int pos;
 
-		public ParIdentifierT ParIdentifier { get { return parIdentifier; } }
-
-		public string Name { get { return parIdentifier.Text; } }
+		public string Name { get { return name; } }
 
 		public bool ByRef { get { return byRef; } }
 
@@ -68,9 +66,9 @@ namespace Grc.Ast.Node
 			get { return string.Format("[{0}, {1}]", line, pos); }
 		}
 
-		public Parameter(ParIdentifierT parIdentifier, bool byRef, TypeDataBase type, DimEmptyT dimEmpty, IReadOnlyList<DimIntegerT> dims, int line, int pos)
+		public Parameter(string name, bool byRef, TypeDataBase type, DimEmptyT dimEmpty, IReadOnlyList<DimIntegerT> dims, int line, int pos)
 		{
-			this.parIdentifier = parIdentifier;
+			this.name = name;
 			this.byRef = byRef;
 			this.type = type;
 			this.dimEmpty = dimEmpty;

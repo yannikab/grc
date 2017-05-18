@@ -46,7 +46,7 @@ namespace Grc.Ast.Node.Helper
 			this.parameters = new List<Parameter>();
 
 			foreach (ParIdentifierT p in identifiers)
-				this.parameters.Add(new Parameter(p, keyRef != null, hTypePar.DataType, hTypePar.DimEmpty, hTypePar.Dims, p.Line, p.Pos));
+				this.parameters.Add(new Parameter(p.Text, keyRef != null, hTypePar.DataType, hTypePar.DimEmpty, hTypePar.Dims, p.Line, p.Pos));
 		}
 
 		public override void Accept(IVisitor v)

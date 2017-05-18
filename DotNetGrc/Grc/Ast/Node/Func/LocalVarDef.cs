@@ -48,7 +48,7 @@ namespace Grc.Ast.Node.Func
 			this.variables = new List<Variable>();
 
 			foreach (VarIdentifierT v in identifiers)
-				this.variables.Add(new Variable(v, hTypeVar.DataType, hTypeVar.Dims, v.Line, v.Pos));
+				this.variables.Add(new Variable(v.Text, hTypeVar.DataType, hTypeVar.Dims, v.Line, v.Pos));
 		}
 
 		public override void Accept(IVisitor v)

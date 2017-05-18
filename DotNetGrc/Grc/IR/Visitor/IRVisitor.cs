@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Node;
 using Grc.Ast.Node.Cond;
 using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
@@ -33,43 +32,19 @@ namespace Grc.IR.Visitor
 		{
 			base.Pre(n);
 
-			try
-			{
-				SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Header.Name);
-
-				if (symbolFunc.ScopeId != SymbolTable.CurrentScopeId)
-					throw new IRException("Unit name not in current scope.");
-
-				Quad q = Quad.GenQuad(OpUnit.Instance, new Addr(symbolFunc.Name), Addr.Empty, Addr.Empty);
-				ir[q.Addr] = q;
-			}
-			catch (SymbolNotInOpenScopesException)
-			{
-				throw new IRException("Unit name not found in symbol table.");
-			}
+			Quad q = Quad.GenQuad(OpUnit.Instance, new Addr(n.Header.Name), Addr.Empty, Addr.Empty);
+			ir[q.Addr] = q;
 		}
 
 		public override void Post(LocalFuncDef n)
 		{
 			base.Post(n);
 
-			try
-			{
-				SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Header.Name);
+			if (n.Block.Stmts.Count > 0)
+				n.Block.Stmts[n.Block.Stmts.Count - 1].NextList.BackPatch(Quad.NextQuad.Addr);
 
-				if (symbolFunc.ScopeId != SymbolTable.CurrentScopeId)
-					throw new IRException("Unit name not in current scope.");
-
-				if (n.Block.Stmts.Count > 0)
-					n.Block.Stmts[n.Block.Stmts.Count - 1].NextList.BackPatch(Quad.NextQuad.Addr);
-
-				Quad q = Quad.GenQuad(OpEndu.Instance, new Addr(symbolFunc.Name), Addr.Empty, Addr.Empty);
-				ir[q.Addr] = q;
-			}
-			catch (SymbolNotInOpenScopesException)
-			{
-				throw new IRException("Unit name not found in symbol table.");
-			}
+			Quad q = Quad.GenQuad(OpEndu.Instance, new Addr(n.Header.Name), Addr.Empty, Addr.Empty);
+			ir[q.Addr] = q;
 		}
 
 		public override void Visit(ExprIntegerT n)
@@ -149,15 +124,23 @@ namespace Grc.IR.Visitor
 				ir[q1.Addr] = q1;
 			}
 
-			n.Addr = new Addr();
+			Post(n);
+		}
 
-			Quad q2 = Quad.GenQuad(OpPar.Instance, Addr.Ret, n.Addr, Addr.Empty);
-			ir[q2.Addr] = q2;
+		public override void Post(ExprFuncCall n)
+		{
+			base.Post(n);
+
+			if (!(n.Type.Equals(GTypeNothing.Instance)))
+			{
+				n.Addr = new Addr();
+
+				Quad q2 = Quad.GenQuad(OpPar.Instance, Addr.Ret, n.Addr, Addr.Empty);
+				ir[q2.Addr] = q2;
+			}
 
 			Quad q3 = Quad.GenQuad(OpCall.Instance, Addr.Empty, Addr.Empty, new Addr(n.Name));
 			ir[q3.Addr] = q3;
-
-			Post(n);
 		}
 
 		public override void Visit(CondAnd n)
@@ -326,24 +309,7 @@ namespace Grc.IR.Visitor
 		{
 			Pre(n);
 
-			foreach (ExprBase e in n.Args)
-			{
-				e.Accept(this);
-
-				GTypeBase type = e.Type;
-
-				Quad q1 = Quad.GenQuad(OpPar.Instance, e.Addr, type.ByRef ? Addr.ByRef : Addr.ByVal, Addr.Empty);
-				ir[q1.Addr] = q1;
-			}
-
-			if (!((GTypeFunction)n.Type).To.Equals(GTypeNothing.Instance))
-			{
-				Quad q2 = Quad.GenQuad(OpPar.Instance, Addr.Ret, n.FunCall.Addr, Addr.Empty);
-				ir[q2.Addr] = q2;
-			}
-
-			Quad q3 = Quad.GenQuad(OpCall.Instance, Addr.Empty, Addr.Empty, new Addr(n.FunCall.Name));
-			ir[q3.Addr] = q3;
+			n.FunCall.Accept(this);
 
 			n.NextList = QuadList.Empty();
 

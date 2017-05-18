@@ -10,16 +10,14 @@ namespace Grc.Ast.Node
 {
 	public class Variable
 	{
-		private VarIdentifierT varIdentifier;
+		private string name;
 		private TypeDataBase type;
 		private IReadOnlyList<DimIntegerT> dims;
 
 		private int line;
 		private int pos;
 
-		public VarIdentifierT VarIdentifier { get { return varIdentifier; } }
-
-		public string Name { get { return varIdentifier.Text; } }
+		public string Name { get { return name; } }
 
 		public TypeDataBase Type { get { return type; } }
 
@@ -55,9 +53,9 @@ namespace Grc.Ast.Node
 			get { return string.Format("[{0}, {1}]", line, pos); }
 		}
 
-		public Variable(VarIdentifierT varIdentifier, TypeDataBase type, IReadOnlyList<DimIntegerT> dims, int line, int pos)
+		public Variable(string name, TypeDataBase type, IReadOnlyList<DimIntegerT> dims, int line, int pos)
 		{
-			this.varIdentifier = varIdentifier;
+			this.name = name;
 			this.type = type;
 			this.dims = dims;
 

@@ -9,6 +9,7 @@ using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
+using Grc.Ast.Visitor;
 using Grc.Sem.SymbolTable;
 using Grc.Sem.SymbolTable.Exceptions;
 using Grc.Sem.SymbolTable.Symbol;
@@ -18,19 +19,25 @@ using Grc.Sem.Visitor.Exceptions.Sem;
 
 namespace Grc.Sem.Visitor
 {
-	public class GTypeVisitor : SemanticVisitor
+	public class GTypeVisitor : DepthFirstVisitor
 	{
+		private ISymbolTable symbolTable;
 		private TypeResolver typeResolver;
 
+		protected ISymbolTable SymbolTable { get { return symbolTable; } }
+
 		public GTypeVisitor(out ISymbolTable symbolTable)
-			: base(out symbolTable)
 		{
-			this.typeResolver = new TypeResolver(SymbolTable);
+			symbolTable = new StackSymbolTable();
+
+			this.symbolTable = symbolTable;
+
+			this.typeResolver = new TypeResolver();
 		}
 
 		public override void Pre(Root n)
 		{
-			base.Pre(n);
+			symbolTable.Enter();
 
 			InjectLibraryFunctions();
 		}
@@ -57,12 +64,31 @@ namespace Grc.Sem.Visitor
 
 		public override void Post(Root n)
 		{
-			base.Post(n);
+			try
+			{
+				symbolTable.Exit();
+			}
+			catch (SymbolTableException e)
+			{
+				throw new SemanticException(e);
+			}
 		}
 
 		public override void Pre(LocalFuncDef n)
 		{
-			GTypeFunction funcDefType = typeResolver.GetType(n);
+			GTypeFunction funcDefType = typeResolver.GetType(n.Header);
+
+			if (symbolTable.CurrentScopeId == 0)
+			{
+				// type rule: main function can not have parameters
+				if (!funcDefType.From.Equals(GTypeNothing.Instance))
+					throw new MainFunctionWithParametersException(n.Header);
+
+				// type rule: main function must have nothing return type
+				if (!funcDefType.To.Equals(GTypeNothing.Instance))
+					throw new MainFunctionWithReturnValueException(n.Header);
+			}
+
 			n.Type = funcDefType;
 
 			try
@@ -73,7 +99,7 @@ namespace Grc.Sem.Visitor
 				{
 					if (!symbolFunc.Defined)
 					{
-						if (symbolFunc.Type.Equals(funcDefType))
+						if (symbolFunc.Type.Equals(n.Type))
 						{
 							symbolFunc.Defined = true;
 							return;
@@ -95,7 +121,7 @@ namespace Grc.Sem.Visitor
 
 			try
 			{
-				SymbolFunc symbolFunc = new SymbolFunc(n.Header.Name, true, funcDefType);
+				SymbolFunc symbolFunc = new SymbolFunc(n.Header.Name, true, n.Type);
 
 				SymbolTable.Insert(symbolFunc);
 			}
@@ -118,8 +144,6 @@ namespace Grc.Sem.Visitor
 					SymbolVar symbolVar = new SymbolVar(p.Name, typeResolver.GetType(p));
 
 					SymbolTable.Insert(symbolVar);
-
-					p.ParIdentifier.Type = symbolVar.Type;
 				}
 				catch (SymbolAlreadyInScopeException e)
 				{
@@ -152,54 +176,46 @@ namespace Grc.Sem.Visitor
 
 		public override void Post(LocalFuncDef n)
 		{
-			base.Post(n);
+			try
+			{
+				symbolTable.Exit();
+			}
+			catch (NoCurrentScopeException e)
+			{
+				throw new SemanticException(e);
+			}
 		}
 
 		public override void Pre(LocalFuncDecl n)
 		{
-			base.Pre(n);
-
 			try
 			{
-				SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Name);
-
-				if (symbolFunc.ScopeId != SymbolTable.CurrentScopeId)
-					throw new GTypeException("Function should be in current scope.");
-
-				if (symbolFunc.Defined)
-					throw new GTypeException("Function should not be defined.");
-
-				symbolFunc.Type = typeResolver.GetType(n);
-				n.Type = symbolFunc.Type;
+				symbolTable.Insert(new SymbolFunc(n.Name, false, (n.Type = typeResolver.GetType(n))));
 			}
-			catch (SymbolNotInOpenScopesException e)
+			catch (SymbolAlreadyInScopeException e)
 			{
-				throw new FunctionNotInSymbolTableException(n, e);
+				throw new FunctionAlreadyInScopeException(n, e);
 			}
 		}
 
 		public override void Pre(LocalVarDef n)
 		{
-			base.Pre(n);
+			//n.Type = typeResolver.GetType(n);
 
 			foreach (Variable v in n.Variables)
 			{
 				try
 				{
-					SymbolVar symbolVar = SymbolTable.Lookup<SymbolVar>(v.Name);
-
-					symbolVar.Type = typeResolver.GetType(v);
-
-					v.VarIdentifier.Type = symbolVar.Type;
+					symbolTable.Insert(new SymbolVar(v.Name, typeResolver.GetType(v)));
 				}
-				catch (SymbolNotInOpenScopesException e)
+				catch (SymbolAlreadyInScopeException e)
 				{
-					throw new VariableNotInSymbolTableException(v, e);
+					throw new VariableAlreadyInScopeException(v, e);
 				}
 			}
 		}
 
-		public override void Pre(ExprIntegerT n)
+		public override void Post(ExprIntegerT n)
 		{
 			n.Type = typeResolver.GetType(n);
 
@@ -213,74 +229,179 @@ namespace Grc.Sem.Visitor
 			}
 		}
 
-		public override void Pre(ExprCharacterT n)
+		public override void Post(ExprCharacterT n)
 		{
 			n.Type = typeResolver.GetType(n);
 		}
 
-		public override void Pre(ExprBinOpBase n)
+		public override void Post(ExprBinOpBase n)
 		{
-			n.Type = typeResolver.GetType(n);
+			// type rule: arithmetic involves the integer type only
+			if (!(n.Left.Type is GTypeInt))
+				throw new InvalidTypeInNumericExpression(n.Left);
+
+			if (!(n.Right.Type is GTypeInt))
+				throw new InvalidTypeInNumericExpression(n.Right);
+
+			n.Type = n.Left.Type;
 		}
 
-		public override void Pre(ExprPlus n)
+		public override void Post(ExprPlus n)
 		{
-			n.Type = typeResolver.GetType(n);
+			// type rule: arithmetic involves the integer type only
+			if (!(n.Expr.Type is GTypeInt))
+				throw new InvalidTypeInNumericExpression(n.Expr);
+
+			n.Type = n.Expr.Type;
 		}
 
-		public override void Pre(ExprMinus n)
+		public override void Post(ExprMinus n)
 		{
-			n.Type = typeResolver.GetType(n);
+			// type rule: arithmetic involves the integer type only
+			if (!(n.Expr.Type is GTypeInt))
+				throw new InvalidTypeInNumericExpression(n.Expr);
+
+			n.Type = n.Expr.Type;
 		}
 
-		public override void Pre(ExprFuncCall n)
+		public override void Post(ExprFuncCall n)
 		{
-			n.Type = typeResolver.GetType(n);
+			try
+			{
+				GTypeFunction declType = symbolTable.Lookup<SymbolFunc>(n.Name).Type as GTypeFunction;
+
+				if (declType == null)
+					throw new InvalidSymbolTypeException(n.Name);
+
+				GTypeBase typeFrom = typeResolver.GetTypeFrom(n);
+
+				// type rule: function arguments must match declaration in number and type
+				if (!typeFrom.Equals(declType.From))
+					throw new FunctionArgsMismatchException(n, typeFrom, declType);
+
+				// type rule: only l-value arguments allowed for parameters passed by reference
+				if (!typeFrom.MatchesRef(declType.From))
+					throw new RValuePassedByReferenceException(n, typeFrom, declType);
+
+				n.Type = declType.To;
+			}
+			catch (SymbolNotInOpenScopesException e)
+			{
+				throw new FunctionNotInSymbolTableException(n, e);
+			}
 		}
 
-		public override void Pre(ExprLValIdentifierT n)
+		public override void Post(ExprLValIdentifierT n)
 		{
-			n.Type = typeResolver.GetType(n);
+			try
+			{
+				n.Type = symbolTable.Lookup<SymbolVar>(n.Name).Type;
+			}
+			catch (SymbolNotInOpenScopesException e)
+			{
+				throw new VariableNotInOpenScopesException(n, e);
+			}
 		}
 
-		public override void Pre(ExprLValStringT n)
+		public override void Post(ExprLValStringT n)
 		{
-			n.Type = typeResolver.GetType(n);
+			// type rule: string literals are of type char []
+			n.Type = new GTypeIndexed(n.Text.Length - 1, new GTypeChar(true));
 		}
 
-		public override void Pre(ExprLValIndexed n)
+		public override void Post(ExprLValIndexed n)
 		{
-			n.Type = typeResolver.GetType(n);
+			GTypeBase exprType = n.Expr.Type;
+
+			// type rule: index expression must be of type int
+			if (!(exprType is GTypeInt))
+				throw new IndexNotIntegerException(n, exprType);
+
+			GTypeBase lvalType = n.Lval.Type;
+
+			// type rule: indexed expression must have corresponding type
+			if (lvalType is GTypeIndexed)
+				n.Type = (lvalType as GTypeIndexed).IndexedType;
+			else
+				throw new IndexingInvalidTypeException(n, lvalType);
 		}
 
-		public override void Pre(CondAnd n)
+		public override void Post(CondAnd n)
 		{
-			n.Type = typeResolver.GetType(n);
+			// type rule: conditions involve the boolean type only
+			if (!n.Left.Type.Equals(GTypeBoolean.Instance))
+				throw new InvalidTypeInConditionException(n.Left);
+
+			if (!n.Right.Type.Equals(GTypeBoolean.Instance))
+				throw new InvalidTypeInConditionException(n.Right);
+
+			n.Type = n.Left.Type;
 		}
 
-		public override void Pre(CondOr n)
+		public override void Post(CondOr n)
 		{
-			n.Type = typeResolver.GetType(n);
+			// type rule: conditions involve the boolean type only
+			if (!n.Left.Type.Equals(GTypeBoolean.Instance))
+				throw new InvalidTypeInConditionException(n.Left);
+
+			if (!n.Right.Type.Equals(GTypeBoolean.Instance))
+				throw new InvalidTypeInConditionException(n.Right);
+
+			n.Type = n.Left.Type;
 		}
 
-		public override void Pre(CondNot n)
+		public override void Post(CondNot n)
 		{
-			n.Type = typeResolver.GetType(n);
+			// type rule: conditions involve the boolean type only
+			if (!n.Cond.Type.Equals(GTypeBoolean.Instance))
+				throw new InvalidTypeInConditionException(n.Cond);
+
+			n.Type = n.Cond.Type;
 		}
 
-		public override void Pre(CondRelOpBase n)
+		public override void Post(CondRelOpBase n)
 		{
-			n.Type = typeResolver.GetType(n);
+			// type rule: relational operators involve int or char types
+			if (!(n.Left.Type is GTypeInt || n.Left.Type is GTypeChar))
+				throw new InvalidRelationalOperationException(n.Left, n.Left.Type);
+
+			if (!(n.Right.Type is GTypeInt || n.Right.Type is GTypeChar))
+				throw new InvalidRelationalOperationException(n.Right, n.Right.Type);
+
+			if (!object.Equals(n.Left.Type, n.Right.Type))
+				throw new InvalidRelationalOperationException(n);
+
+			n.Type = GTypeBoolean.Instance;
 		}
 
-		public override void Pre(StmtAssign n)
+		public override void Post(StmtAssign n)
 		{
-			n.Type = typeResolver.GetType(n);
+			// type rule: right side expression type must match the l-value type
+			if (!object.Equals(n.Lval.Type, n.Expr.Type))
+				throw new InvalidTypeAssignmentException(n, n.Lval.Type, n.Expr.Type);
 		}
 
-		public override void Pre(StmtFuncCall n)
+		public override void Post(StmtFuncCall n)
 		{
-			n.Type = typeResolver.GetType(n);
+			try
+			{
+				SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Name);
+
+				if (!(symbolFunc.Type is GTypeFunction))
+					throw new InvalidSymbolTypeException(n.Name);
+
+				GTypeFunction funDeclType = (GTypeFunction)symbolFunc.Type;
+
+				// type rule: functions in function call statements must return nothing
+				if (!funDeclType.To.Equals(GTypeNothing.Instance))
+					throw new FunctionCallStatementWithoutNothingException(n);
+
+				n.Type = n.FunCall.Type;
+			}
+			catch (SymbolNotInOpenScopesException e)
+			{
+				throw new FunctionNotInSymbolTableException(n, e);
+			}
 		}
 	}
 }

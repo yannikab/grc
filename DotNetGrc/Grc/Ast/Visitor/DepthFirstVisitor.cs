@@ -429,8 +429,7 @@ namespace Grc.Ast.Visitor
 		{
 			Pre(n);
 
-			foreach (ExprBase e in n.Args)
-				e.Accept(this);
+			n.FunCall.Accept(this);
 
 			Post(n);
 		}
