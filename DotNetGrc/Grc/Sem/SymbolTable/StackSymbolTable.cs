@@ -71,13 +71,33 @@ namespace Grc.Sem.SymbolTable
 				throw new NoCurrentScopeException();
 
 			if (!symbolForName.ContainsKey(name))
-				throw new SymbolNotInOpenScopesException(name);
+				return null;
 
 			for (SymbolBase t = symbolForName[name]; t != null; t = t.Next)
 				if (t is T)
 					return (T)t;
 
-			throw new SymbolNotInOpenScopesException(name);
+			return null;
+		}
+
+		public T Lookup<T>(int level) where T : SymbolBase
+		{
+			if (scope.Count == 0)
+				throw new NoCurrentScopeException();
+
+			if (level < 0 || !(scope.Count - level > 0))
+				throw new NoOuterScopeException(level);
+
+			int outerScope = scope.Count - level - 1;
+
+			int firstSymbol = outerScope > 0 ? scope[outerScope - 1] : 0;
+			int lastSymbol = scope[outerScope] - 1;
+
+			for (int i = lastSymbol; i >= firstSymbol; i--)
+				if (symbol[i] is T)
+					return (T)symbol[i];
+
+			return null;
 		}
 
 		public void Exit()

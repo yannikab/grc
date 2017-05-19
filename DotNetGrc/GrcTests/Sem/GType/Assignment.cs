@@ -13,7 +13,7 @@ namespace GrcTests.Sem
 	public partial class GTypeVisitorTests
 	{
 		[Test]
-		public void TestLValueNotIndexed1()
+		public void TestAssignLValueNotIndexed1()
 		{
 			string program = @"
 
@@ -26,12 +26,12 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<IndexingInvalidTypeException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<LValueNotIndexedTypeException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
 		[Test]
-		public void TestLValueNotIndexed2()
+		public void TestAssignLValueNotIndexed2()
 		{
 			string program = @"
 
@@ -44,7 +44,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<IndexingInvalidTypeException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<LValueNotIndexedTypeException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -62,7 +62,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<InvalidTypeAssignmentException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<InvalidTypeInAssignmentException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -80,7 +80,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<InvalidTypeAssignmentException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<InvalidTypeInAssignmentException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -102,7 +102,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<InvalidTypeAssignmentException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<InvalidTypeInAssignmentException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
@@ -140,6 +140,7 @@ fun program() : nothing
 	
 	fun foo() : int
 	{
+		return 0;
 	}
 {
 	a <- foo();
@@ -153,7 +154,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestFunctionCallArgs()
+		public void TestAssignFunctionCallArgs()
 		{
 			string program = @"
 
@@ -163,6 +164,7 @@ fun program() : nothing
 	
 	fun foo(c : char; i : int; ref a : char[5]) : int
 	{
+		return 0;
 	}
 {
 	a <- foo('f', 34, ""hello"");
@@ -176,7 +178,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestAssignedIndexedChar()
+		public void TestAssignIndexedChar()
 		{
 			string program = @"
 

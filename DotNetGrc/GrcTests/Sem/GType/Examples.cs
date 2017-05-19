@@ -12,16 +12,11 @@ namespace GrcTests.Sem
 	public partial class GTypeVisitorTests
 	{
 		[Test]
-		public void TestHanoi()
+		public void TestExampleHanoi()
 		{
 			string program = @"
 
 fun solve () : nothing
-
-      fun puts(ref s : char[]) : nothing { }
-      fun writeString(ref s : char[]) : nothing { }
-      fun geti() : int { }
-
       fun hanoi (rings : int; ref source, target, auxiliary : char[]) : nothing
          fun move (ref source, target : char[]) : nothing
          {
@@ -41,11 +36,10 @@ fun solve () : nothing
 
       var NumberOfRings : int;
 {
-  writeString(""Rings: "");
+  puts(""Rings: "");
   NumberOfRings <- geti();
   hanoi(NumberOfRings, ""left"", ""right"", ""middle"");
 }
-
 
 ";
 			ISymbolTable symbolTable;
@@ -54,17 +48,12 @@ fun solve () : nothing
 
 
 		[Test]
-		public void TestPrimes()
+		public void TestExamplePrimes()
 		{
 			string program = @"
 
 fun main () : nothing
-
-	fun puts(ref s : char[]) : nothing { }
-    fun puti(i : int) : nothing { }
-	fun geti() : int { }
-    
-	fun prime (n : int) : int
+    fun prime (n : int) : int
       var i : int;
     {
       if n<0              then return prime(-1);
@@ -117,6 +106,7 @@ fun main () : nothing
    puti(counter);
    puts(""\n"");
 }
+
 ";
 			ISymbolTable symbolTable;
 			AcceptGTypeVisitor(program, out symbolTable);
@@ -124,7 +114,7 @@ fun main () : nothing
 
 
 		[Test]
-		public void TestBSort()
+		public void TestExampleBSort()
 		{
 			string program = @"
 

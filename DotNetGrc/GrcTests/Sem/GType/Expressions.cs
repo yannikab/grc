@@ -13,7 +13,7 @@ namespace GrcTests.Sem
 	public partial class GTypeVisitorTests
 	{
 		[Test]
-		public void TestAddNothing()
+		public void TestExprAddNothing()
 		{
 			string program = @"
 
@@ -35,7 +35,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestFunctionCallExprAdd()
+		public void TestExprFunctionCallExprAdd()
 		{
 			string program = @"
 
@@ -45,6 +45,7 @@ fun program() : nothing
 
 	fun foo(c : char; i : int; ref a : char[5]) : int
 	{
+		return 0;
 	}
 {
 	a <- foo('f', 34, ""hello"") + 5;
@@ -58,7 +59,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestAddChar()
+		public void TestExprAddChar()
 		{
 			string program = @"
 
@@ -76,7 +77,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestAddIntChar()
+		public void TestExprAddIntChar()
 		{
 			string program = @"
 
@@ -91,6 +92,70 @@ fun program() : nothing
 ";
 			ISymbolTable symbolTable;
 			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable));
+		}
+
+
+		[Test]
+		public void TestExprIndexNotInteger()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char[5];
+	var b : char;
+	
+{
+	b <- a['c'];	
+}
+
+";
+
+			ISymbolTable symbolTable;
+			Assert.Throws<ArrayIndexNotIntegerException>(() => AcceptGTypeVisitor(program, out symbolTable));
+		}
+
+
+		[Test]
+		public void TestExprRelOpInvalidType()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char[3][4];
+{
+
+	if (""hello"" < a) then
+		;
+}
+
+";
+
+			ISymbolTable symbolTable;
+			Assert.Throws<InvalidTypeInRelOpException>(() => AcceptGTypeVisitor(program, out symbolTable));
+		}
+
+
+		[Test]
+		public void TestExprRelOpDifferentType()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char;
+	var b : int;
+{
+
+	if (a < 5 + b) then
+		;
+}
+
+";
+
+			ISymbolTable symbolTable;
+			Assert.Throws<InvalidTypeInRelOpException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 	}
 }

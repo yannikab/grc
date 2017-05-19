@@ -8,10 +8,10 @@ using Grc.Sem.SymbolTable.Exceptions;
 
 namespace Grc.Sem.Visitor.Exceptions.GType
 {
-	public class VariableNotInSymbolTableException : GTypeException
+	public class SymbolTableMissingVariableException : GTypeException
 	{
-		public VariableNotInSymbolTableException(Variable v, SymbolTableException e)
-			: base(string.Format("{0} Function not found in symbol table: {1}", v.Location, v.Name), e)
+		public SymbolTableMissingVariableException(Variable v, SymbolTableException e)
+			: base(string.Format("{0} Variable not found in symbol table: {1}", v.Location, v.Name), e)
 		{
 		}
 	}

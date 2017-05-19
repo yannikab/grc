@@ -12,6 +12,7 @@ namespace Grc.Sem.SymbolTable
 		void Enter();
 		void Insert(SymbolBase s);
 		T Lookup<T>(string name) where T : SymbolBase;
+		T Lookup<T>(int level) where T : SymbolBase;
 		void Exit();
 
 		int CurrentScopeId { get; }

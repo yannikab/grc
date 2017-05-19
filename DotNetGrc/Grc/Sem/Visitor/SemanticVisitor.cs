@@ -48,35 +48,25 @@ namespace Grc.Sem.Visitor
 
 		public override void Pre(LocalFuncDef n)
 		{
-			try
-			{
-				SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Header.Name);
+			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Header.Name);
 
-				if (symbolFunc.ScopeId == symbolTable.CurrentScopeId)
+			if (symbolFunc == null || symbolFunc.ScopeId != symbolTable.CurrentScopeId)
+			{
+				try
 				{
-					if (!symbolFunc.Defined)
-					{
-						symbolFunc.Defined = true;
-						return;
-					}
-					else
-					{
-						throw new FunctionAlreadyInScopeException(n.Header, n.Header.Name);
-					}
+					symbolTable.Insert(new SymbolFunc(n.Header.Name, true));
+				}
+				catch (SymbolAlreadyInScopeException e)
+				{
+					throw new FunctionAlreadyInScopeException(n.Header, e);
 				}
 			}
-			catch (SymbolNotInOpenScopesException)
+			else
 			{
+				if (symbolFunc.Defined)
+					throw new FunctionAlreadyInScopeException(n.Header, n.Header.Name);
 
-			}
-
-			try
-			{
-				symbolTable.Insert(new SymbolFunc(n.Header.Name, true));
-			}
-			catch (SymbolAlreadyInScopeException e)
-			{
-				throw new FunctionAlreadyInScopeException(n.Header, e);
+				symbolFunc.Defined = true;
 			}
 		}
 
@@ -103,17 +93,13 @@ namespace Grc.Sem.Visitor
 
 			foreach (LocalFuncDecl d in n.Locals.OfType<LocalFuncDecl>())
 			{
-				try
-				{
-					SymbolFunc sf = symbolTable.Lookup<SymbolFunc>(d.Name);
+				SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(d.Name);
 
-					if (!sf.Defined)
-						throw new FunctionDefinitionMissingException(d, sf);
-				}
-				catch (SymbolNotInOpenScopesException e)
-				{
-					throw new FunctionNotInOpenScopesException(d, e);
-				}
+				if (symbolFunc == null)
+					throw new FunctionNotInOpenScopesException(d, d.Name);
+
+				if (!symbolFunc.Defined)
+					throw new FunctionDefinitionMissingException(d, symbolFunc);
 			}
 
 			n.Block.Accept(this);
@@ -162,38 +148,20 @@ namespace Grc.Sem.Visitor
 
 		public override void Pre(ExprFuncCall n)
 		{
-			try
-			{
-				symbolTable.Lookup<SymbolFunc>(n.Name);
-			}
-			catch (SymbolNotInOpenScopesException e)
-			{
-				throw new FunctionNotInOpenScopesException(n, e);
-			}
+			if (symbolTable.Lookup<SymbolFunc>(n.Name) == null)
+				throw new FunctionNotInOpenScopesException(n, n.Name);
 		}
 
 		public override void Pre(ExprLValIdentifierT n)
 		{
-			try
-			{
-				symbolTable.Lookup<SymbolVar>(n.Name);
-			}
-			catch (SymbolNotInOpenScopesException e)
-			{
-				throw new VariableNotInOpenScopesException(n, e);
-			}
+			if (symbolTable.Lookup<SymbolVar>(n.Name) == null)
+				throw new VariableNotInOpenScopesException(n, n.Name);
 		}
 
 		public override void Pre(StmtFuncCall n)
 		{
-			try
-			{
-				symbolTable.Lookup<SymbolFunc>(n.Name);
-			}
-			catch (SymbolNotInOpenScopesException e)
-			{
-				throw new FunctionNotInOpenScopesException(n, e);
-			}
+			if (symbolTable.Lookup<SymbolFunc>(n.Name) == null)
+				throw new FunctionNotInOpenScopesException(n, n.Name);
 		}
 	}
 }

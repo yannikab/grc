@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Grc.Sem.Visitor.Exceptions.GType
 {
-	public class InvalidSymbolTypeException : GTypeException
+	public class SymbolInvalidTypeException : GTypeException
 	{
-		public InvalidSymbolTypeException(string name)
+		public SymbolInvalidTypeException(string name)
 			: base(string.Format("Lookup in symbol table returned symbol with incorrect type: ", name))
 		{
 		}

@@ -46,7 +46,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestArraySizeZero()
+		public void TestSimpleArraySizeZero()
 		{
 			string program = @"
 
@@ -59,12 +59,12 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<InvalidArrayDimensionException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<ArrayInvalidDimensionException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
 		[Test]
-		public void TestArraySizeOverflow()
+		public void TestSimpleArraySizeOverflow()
 		{
 			string program = @"
 
@@ -77,12 +77,12 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<InvalidArrayDimensionException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<ArrayInvalidDimensionException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
 		[Test]
-		public void TestIntLiteralOverflow()
+		public void TestSimpleIntLiteralOverflow()
 		{
 			string program = @"
 
@@ -95,7 +95,7 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<IntegerLiteralOverflowException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<OverflowInIntegerLiteralException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 	}
 }

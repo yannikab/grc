@@ -7,14 +7,14 @@ using Grc.Ast.Node.Type;
 
 namespace Grc.Sem.Visitor.Exceptions.GType
 {
-	public class InvalidArrayDimensionException : GTypeException
+	public class ArrayInvalidDimensionException : GTypeException
 	{
-		public InvalidArrayDimensionException(DimIntegerT d, SystemException e)
+		public ArrayInvalidDimensionException(DimIntegerT d, SystemException e)
 			: base(string.Format("{0} Invalid array dimension: {1}", d.Location, d.Integer), e)
 		{
 		}
 
-		public InvalidArrayDimensionException(DimIntegerT d)
+		public ArrayInvalidDimensionException(DimIntegerT d)
 			: base(string.Format("{0} Invalid array dimension: {1}", d.Location, d.Integer))
 		{
 		}

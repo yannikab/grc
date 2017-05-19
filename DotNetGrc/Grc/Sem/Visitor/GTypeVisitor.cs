@@ -91,43 +91,30 @@ namespace Grc.Sem.Visitor
 
 			n.Type = funcDefType;
 
-			try
-			{
-				SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Header.Name);
+			SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Header.Name);
 
-				if (symbolFunc.ScopeId == SymbolTable.CurrentScopeId)
+			if (symbolFunc == null || symbolFunc.ScopeId != SymbolTable.CurrentScopeId)
+			{
+				try
 				{
-					if (!symbolFunc.Defined)
-					{
-						if (symbolFunc.Type.Equals(n.Type))
-						{
-							symbolFunc.Defined = true;
-							return;
-						}
-						else
-						{
-							throw new MismatchedFunctionDefinitionException(n.Header);
-						}
-					}
-					else
-					{
-						throw new FunctionAlreadyInScopeException(n, symbolFunc.Name);
-					}
+					symbolFunc = new SymbolFunc(n.Header.Name, true, funcDefType);
+
+					SymbolTable.Insert(symbolFunc);
+				}
+				catch (SymbolAlreadyInScopeException e)
+				{
+					throw new FunctionAlreadyInScopeException(n.Header, e);
 				}
 			}
-			catch (SymbolNotInOpenScopesException)
+			else
 			{
-			}
+				if (symbolFunc.Defined)
+					throw new FunctionAlreadyInScopeException(n, symbolFunc.Name);
 
-			try
-			{
-				SymbolFunc symbolFunc = new SymbolFunc(n.Header.Name, true, n.Type);
+				if (!symbolFunc.Type.Equals(n.Type))
+					throw new FunctionMismatchedDefinitionException(n.Header);
 
-				SymbolTable.Insert(symbolFunc);
-			}
-			catch (SymbolAlreadyInScopeException e)
-			{
-				throw new FunctionAlreadyInScopeException(n.Header, e);
+				symbolFunc.Defined = true;
 			}
 		}
 
@@ -156,18 +143,15 @@ namespace Grc.Sem.Visitor
 
 			foreach (LocalFuncDecl d in n.Locals.OfType<LocalFuncDecl>())
 			{
-				try
-				{
-					SymbolFunc sf = SymbolTable.Lookup<SymbolFunc>(d.Name);
+				SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(d.Name);
 
-					if (!sf.Defined)
-						throw new FunctionDefinitionMissingException(d, sf);
-				}
-				catch (SymbolNotInOpenScopesException e)
-				{
-					throw new FunctionNotInOpenScopesException(d, e);
-				}
+				if (symbolFunc == null)
+					throw new FunctionNotInOpenScopesException(d, d.Name);
+
+				if (!symbolFunc.Defined)
+					throw new FunctionDefinitionMissingException(d, symbolFunc);
 			}
+
 
 			n.Block.Accept(this);
 
@@ -184,13 +168,28 @@ namespace Grc.Sem.Visitor
 			{
 				throw new SemanticException(e);
 			}
+
+			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(0);
+
+			if (symbolFunc == null)
+				throw new FunctionNotInSymbolTableException(n);
+
+			if (!(symbolFunc.Type is GTypeFunction))
+				throw new SymbolInvalidTypeException(symbolFunc.Name);
+
+			GTypeFunction typeFunc = (GTypeFunction)symbolFunc.Type;
+
+			if (!(typeFunc.To is GTypeNothing) && !symbolFunc.Returned)
+				throw new ReturnMissingInFunctionBodyException(n, symbolFunc.Name, typeFunc);
 		}
 
 		public override void Pre(LocalFuncDecl n)
 		{
 			try
 			{
-				symbolTable.Insert(new SymbolFunc(n.Name, false, (n.Type = typeResolver.GetType(n))));
+				SymbolFunc symbolFunc = new SymbolFunc(n.Name, false, typeResolver.GetType(n));
+				symbolTable.Insert(symbolFunc);
+				n.Type = symbolFunc.Type;
 			}
 			catch (SymbolAlreadyInScopeException e)
 			{
@@ -225,7 +224,7 @@ namespace Grc.Sem.Visitor
 			}
 			catch (OverflowException e)
 			{
-				throw new IntegerLiteralOverflowException(n, e);
+				throw new OverflowInIntegerLiteralException(n, e);
 			}
 		}
 
@@ -238,10 +237,10 @@ namespace Grc.Sem.Visitor
 		{
 			// type rule: arithmetic involves the integer type only
 			if (!(n.Left.Type is GTypeInt))
-				throw new InvalidTypeInNumericExpression(n.Left);
+				throw new InvalidTypeInNumericExpression(n, n.Left);
 
 			if (!(n.Right.Type is GTypeInt))
-				throw new InvalidTypeInNumericExpression(n.Right);
+				throw new InvalidTypeInNumericExpression(n, n.Right);
 
 			n.Type = n.Left.Type;
 		}
@@ -250,7 +249,7 @@ namespace Grc.Sem.Visitor
 		{
 			// type rule: arithmetic involves the integer type only
 			if (!(n.Expr.Type is GTypeInt))
-				throw new InvalidTypeInNumericExpression(n.Expr);
+				throw new InvalidTypeInNumericExpression(n, n.Expr);
 
 			n.Type = n.Expr.Type;
 		}
@@ -259,48 +258,44 @@ namespace Grc.Sem.Visitor
 		{
 			// type rule: arithmetic involves the integer type only
 			if (!(n.Expr.Type is GTypeInt))
-				throw new InvalidTypeInNumericExpression(n.Expr);
+				throw new InvalidTypeInNumericExpression(n, n.Expr);
 
 			n.Type = n.Expr.Type;
 		}
 
 		public override void Post(ExprFuncCall n)
 		{
-			try
-			{
-				GTypeFunction declType = symbolTable.Lookup<SymbolFunc>(n.Name).Type as GTypeFunction;
+			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Name);
 
-				if (declType == null)
-					throw new InvalidSymbolTypeException(n.Name);
+			if (symbolFunc == null)
+				throw new FunctionNotInSymbolTableException(n);
 
-				GTypeBase typeFrom = typeResolver.GetTypeFrom(n);
+			GTypeFunction declType = symbolFunc.Type as GTypeFunction;
 
-				// type rule: function arguments must match declaration in number and type
-				if (!typeFrom.Equals(declType.From))
-					throw new FunctionArgsMismatchException(n, typeFrom, declType);
+			if (declType == null)
+				throw new SymbolInvalidTypeException(n.Name);
 
-				// type rule: only l-value arguments allowed for parameters passed by reference
-				if (!typeFrom.MatchesRef(declType.From))
-					throw new RValuePassedByReferenceException(n, typeFrom, declType);
+			GTypeBase typeFrom = typeResolver.GetTypeFrom(n);
 
-				n.Type = declType.To;
-			}
-			catch (SymbolNotInOpenScopesException e)
-			{
-				throw new FunctionNotInSymbolTableException(n, e);
-			}
+			// type rule: function arguments must match declaration in number and type
+			if (!typeFrom.Equals(declType.From))
+				throw new FunctionCallArgsMismatchException(n, typeFrom, declType.From);
+
+			// type rule: only l-value arguments allowed for parameters passed by reference
+			if (!typeFrom.MatchesRef(declType.From))
+				throw new FunctionCallRValueByReferenceException(n, typeFrom, declType.From);
+
+			n.Type = declType.To;
 		}
 
 		public override void Post(ExprLValIdentifierT n)
 		{
-			try
-			{
-				n.Type = symbolTable.Lookup<SymbolVar>(n.Name).Type;
-			}
-			catch (SymbolNotInOpenScopesException e)
-			{
-				throw new VariableNotInOpenScopesException(n, e);
-			}
+			SymbolVar symbolVar = symbolTable.Lookup<SymbolVar>(n.Name);
+
+			if (symbolVar == null)
+				throw new VariableNotInOpenScopesException(n, n.Name);
+
+			n.Type = symbolVar.Type;
 		}
 
 		public override void Post(ExprLValStringT n)
@@ -315,7 +310,7 @@ namespace Grc.Sem.Visitor
 
 			// type rule: index expression must be of type int
 			if (!(exprType is GTypeInt))
-				throw new IndexNotIntegerException(n, exprType);
+				throw new ArrayIndexNotIntegerException(n);
 
 			GTypeBase lvalType = n.Lval.Type;
 
@@ -323,7 +318,7 @@ namespace Grc.Sem.Visitor
 			if (lvalType is GTypeIndexed)
 				n.Type = (lvalType as GTypeIndexed).IndexedType;
 			else
-				throw new IndexingInvalidTypeException(n, lvalType);
+				throw new LValueNotIndexedTypeException(n);
 		}
 
 		public override void Post(CondAnd n)
@@ -363,13 +358,13 @@ namespace Grc.Sem.Visitor
 		{
 			// type rule: relational operators involve int or char types
 			if (!(n.Left.Type is GTypeInt || n.Left.Type is GTypeChar))
-				throw new InvalidRelationalOperationException(n.Left, n.Left.Type);
+				throw new InvalidTypeInRelOpException(n, n.Left);
 
 			if (!(n.Right.Type is GTypeInt || n.Right.Type is GTypeChar))
-				throw new InvalidRelationalOperationException(n.Right, n.Right.Type);
+				throw new InvalidTypeInRelOpException(n, n.Right);
 
 			if (!object.Equals(n.Left.Type, n.Right.Type))
-				throw new InvalidRelationalOperationException(n);
+				throw new InvalidTypeInRelOpException(n);
 
 			n.Type = GTypeBoolean.Instance;
 		}
@@ -378,29 +373,54 @@ namespace Grc.Sem.Visitor
 		{
 			// type rule: right side expression type must match the l-value type
 			if (!object.Equals(n.Lval.Type, n.Expr.Type))
-				throw new InvalidTypeAssignmentException(n, n.Lval.Type, n.Expr.Type);
+				throw new InvalidTypeInAssignmentException(n);
 		}
 
 		public override void Post(StmtFuncCall n)
 		{
-			try
+			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Name);
+
+			if (symbolFunc == null)
+				throw new FunctionNotInSymbolTableException(n);
+
+			if (!(symbolFunc.Type is GTypeFunction))
+				throw new SymbolInvalidTypeException(n.Name);
+
+			GTypeFunction funDeclType = (GTypeFunction)symbolFunc.Type;
+
+			// type rule: functions in function call statements must return nothing
+			if (!funDeclType.To.Equals(GTypeNothing.Instance))
+				throw new FunctionCallStatementWithoutNothingException(n);
+
+			n.Type = n.FunCall.Type;
+		}
+
+		public override void Post(StmtReturn n)
+		{
+			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(1);
+
+			if (symbolFunc == null)
+				throw new FunctionNotInSymbolTableException(n);
+
+			if (!(symbolFunc.Type is GTypeFunction))
+				throw new SymbolInvalidTypeException(symbolFunc.Name);
+
+			GTypeFunction typeFunc = (GTypeFunction)symbolFunc.Type;
+
+			if (typeFunc.To is GTypeNothing)
 			{
-				SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Name);
-
-				if (!(symbolFunc.Type is GTypeFunction))
-					throw new InvalidSymbolTypeException(n.Name);
-
-				GTypeFunction funDeclType = (GTypeFunction)symbolFunc.Type;
-
-				// type rule: functions in function call statements must return nothing
-				if (!funDeclType.To.Equals(GTypeNothing.Instance))
-					throw new FunctionCallStatementWithoutNothingException(n);
-
-				n.Type = n.FunCall.Type;
+				if (n.Expr != null)
+					throw new ReturnValueNotAllowedException(n, symbolFunc.Name, typeFunc, n.Expr);
 			}
-			catch (SymbolNotInOpenScopesException e)
+			else
 			{
-				throw new FunctionNotInSymbolTableException(n, e);
+				if (n.Expr == null)
+					throw new ReturnWithoutExpressionException(n, symbolFunc.Name, typeFunc);
+
+				if (!object.Equals(n.Expr.Type, typeFunc.To))
+					throw new ReturnDifferentTypeException(n, symbolFunc.Name, typeFunc, n.Expr);
+
+				symbolFunc.Returned = true;
 			}
 		}
 	}

@@ -10,8 +10,8 @@ namespace Grc.Sem.Visitor.Exceptions.Sem
 {
 	public class FunctionNotInOpenScopesException : SemanticException
 	{
-		public FunctionNotInOpenScopesException(NodeBase n, SymbolNotInOpenScopesException e)
-			: base(string.Format("{0} Undefined function: {1}", n.Location, e.Name), e)
+		public FunctionNotInOpenScopesException(NodeBase n, string name)
+			: base(string.Format("{0} Undefined function: {1}", n.Location, name))
 		{
 		}
 	}

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grc.Sem.SymbolTable;
-using Grc.Sem.SymbolTable.Exceptions;
 using Grc.Sem.SymbolTable.Symbol;
 using NUnit.Framework;
 
@@ -29,7 +28,7 @@ namespace GrcTests.Sem
 			ist.Enter();
 			ist.Insert(new SymbolVar("test"));
 
-			Assert.Throws<SymbolNotInOpenScopesException>(() => ist.Lookup<SymbolFunc>("test"));
+			Assert.IsNull(ist.Lookup<SymbolFunc>("test"));
 		}
 
 		[Test]

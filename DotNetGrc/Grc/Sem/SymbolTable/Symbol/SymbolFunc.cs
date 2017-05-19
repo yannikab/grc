@@ -10,6 +10,7 @@ namespace Grc.Sem.SymbolTable.Symbol
 	public class SymbolFunc : SymbolBase
 	{
 		private bool defined;
+		private bool returned;
 
 		public bool Defined
 		{
@@ -17,10 +18,17 @@ namespace Grc.Sem.SymbolTable.Symbol
 			set { defined = value; }
 		}
 
+		public bool Returned
+		{
+			get { return returned; }
+			set { returned = value; }
+		}
+
 		public SymbolFunc(string name, bool defined, GTypeBase type)
 			: base(name, type)
 		{
 			this.defined = defined;
+			this.returned = false;
 		}
 
 		public SymbolFunc(string name, bool defined)

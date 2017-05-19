@@ -72,21 +72,21 @@ namespace Grc.Sem.Visitor
 					int dim = int.Parse(p.Dims[i].Integer);
 
 					if (!(dim > 0))
-						throw new InvalidArrayDimensionException(p.Dims[i]);
+						throw new ArrayInvalidDimensionException(p.Dims[i]);
 
 					parType = new GTypeIndexed(dim, parType);
 				}
 				catch (ArgumentNullException e)
 				{
-					throw new InvalidArrayDimensionException(p.Dims[i], e);
+					throw new ArrayInvalidDimensionException(p.Dims[i], e);
 				}
 				catch (FormatException e)
 				{
-					throw new InvalidArrayDimensionException(p.Dims[i], e);
+					throw new ArrayInvalidDimensionException(p.Dims[i], e);
 				}
 				catch (OverflowException e)
 				{
-					throw new InvalidArrayDimensionException(p.Dims[i], e);
+					throw new ArrayInvalidDimensionException(p.Dims[i], e);
 				}
 			}
 
@@ -95,7 +95,7 @@ namespace Grc.Sem.Visitor
 
 			// type rule: arrays must be passed by reference
 			if (parType is GTypeIndexed && !p.ByRef)
-				throw new IndexedNotByReferenceException(p);
+				throw new ArrayNotPassedByReferenceException(p);
 
 			return parType;
 		}
@@ -118,21 +118,21 @@ namespace Grc.Sem.Visitor
 					int dim = int.Parse(v.Dims[i].Integer);
 
 					if (!(dim > 0))
-						throw new InvalidArrayDimensionException(v.Dims[i]);
+						throw new ArrayInvalidDimensionException(v.Dims[i]);
 
 					varType = new GTypeIndexed(dim, varType);
 				}
 				catch (ArgumentNullException e)
 				{
-					throw new InvalidArrayDimensionException(v.Dims[i], e);
+					throw new ArrayInvalidDimensionException(v.Dims[i], e);
 				}
 				catch (FormatException e)
 				{
-					throw new InvalidArrayDimensionException(v.Dims[i], e);
+					throw new ArrayInvalidDimensionException(v.Dims[i], e);
 				}
 				catch (OverflowException e)
 				{
-					throw new InvalidArrayDimensionException(v.Dims[i], e);
+					throw new ArrayInvalidDimensionException(v.Dims[i], e);
 				}
 			}
 

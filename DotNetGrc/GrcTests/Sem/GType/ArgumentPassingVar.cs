@@ -13,7 +13,7 @@ namespace GrcTests.Sem
 	public partial class GTypeVisitorTests
 	{
 		[Test]
-		public void TestFunctionCallExprWrongNumberArguments()
+		public void TestPassingVarFunctionCallExprWrongNumberArguments()
 		{
 			string program = @"
 
@@ -23,6 +23,7 @@ fun program() : nothing
 	
 	fun foo(p : char) : int
 	{
+		return 0;
 	}
 {
 	a <- foo(3, 'a');
@@ -30,12 +31,12 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<FunctionArgsMismatchException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionCallArgsMismatchException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
 		[Test]
-		public void TestFunctionCallExprWrongTypeArguments()
+		public void TestPassingVarFunctionCallExprWrongTypeArguments()
 		{
 			string program = @"
 
@@ -45,6 +46,7 @@ fun program() : nothing
 	
 	fun foo(p : char; i : int) : int
 	{
+		return 0;
 	}
 {
 	a <- foo('b', 'c');
@@ -52,12 +54,12 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<FunctionArgsMismatchException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionCallArgsMismatchException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
 		[Test]
-		public void TestIntLiteralPassedByReference()
+		public void TestPassingVarIntLiteralByReference()
 		{
 			string program = @"
 
@@ -72,12 +74,12 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<RValuePassedByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
 		[Test]
-		public void TestCharLiteralPassedByReference()
+		public void TestPassingVarCharLiteralByReference()
 		{
 			string program = @"
 
@@ -92,12 +94,12 @@ fun program() : nothing
 
 ";
 			ISymbolTable symbolTable;
-			Assert.Throws<RValuePassedByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable));
 		}
 
 
 		[Test]
-		public void TestArrayCharElementPassedByReference()
+		public void TestPassingVarArrayCharElementByReference()
 		{
 			string program = @"
 
@@ -119,7 +121,7 @@ fun program() : nothing
 		}
 
 		[Test]
-		public void TestStringCharElementPassedByReference()
+		public void TestPassingVarStringCharElementByReference()
 		{
 			string program = @"
 
@@ -140,7 +142,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestArrayArrayCharElementPassedByReference()
+		public void TestPassingVarArrayArrayCharElementByReference()
 		{
 			string program = @"
 
@@ -163,7 +165,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestArrayPassedByReference()
+		public void TestPassingVarArrayByReference()
 		{
 			string program = @"
 
@@ -186,7 +188,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestArrayElementPassedByReference()
+		public void TestPassingVarArrayElementByReference()
 		{
 			string program = @"
 

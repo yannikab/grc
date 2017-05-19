@@ -12,7 +12,7 @@ namespace GrcTests.Sem
 	public partial class GTypeVisitorTests
 	{
 		[Test]
-		public void TestArrayCharElementPassedByReferencePar()
+		public void TestPassingParArrayCharElementByReference()
 		{
 			string program = @"
 
@@ -37,7 +37,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestArrayArrayCharElementPassedByReferencePar()
+		public void TestPassingParArrayArrayCharElementByReference()
 		{
 			string program = @"
 
@@ -62,7 +62,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestArrayPassedByReferencePar()
+		public void TestPassingParArrayByReferencePar()
 		{
 			string program = @"
 
@@ -87,7 +87,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestArrayElementPassedByReferencePar()
+		public void TestPassingParArrayElementByReferencePar()
 		{
 			string program = @"
 
