@@ -119,7 +119,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ast\Node\Expr\ExprAdd.cs" />
     <Compile Include="Ast\Node\Expr\ExprBase.cs" />
@@ -277,6 +276,22 @@
     <Compile Include="Sem\Visitor\Exceptions\GType\SymbolTableMissingParameterException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\SymbolTableMissingVariableException.cs" />
     <Compile Include="Sem\SymbolTable\Exceptions\NoOuterScopeException.cs" />
+    <Compile Include="Drv\ArgumentContext.cs" />
+    <Compile Include="Drv\Program.cs" />
+    <Compile Include="Drv\StateBase.cs" />
+    <Compile Include="Drv\StateCode.cs" />
+    <Compile Include="Drv\StateCodeIR.cs" />
+    <Compile Include="Drv\StateExitFailure.cs" />
+    <Compile Include="Drv\StateExitSuccess.cs" />
+    <Compile Include="Drv\StateGraphViz.cs" />
+    <Compile Include="Drv\StateGraphVizAst.cs" />
+    <Compile Include="Drv\StateGraphVizCst.cs" />
+    <Compile Include="Drv\StateLex.cs" />
+    <Compile Include="Drv\StateModule.cs" />
+    <Compile Include="Drv\StateParse.cs" />
+    <Compile Include="Drv\StateParseAst.cs" />
+    <Compile Include="Drv\StateParseCst.cs" />
+    <Compile Include="Drv\StateType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

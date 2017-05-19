@@ -199,8 +199,6 @@ namespace Grc.Sem.Visitor
 
 		public override void Pre(LocalVarDef n)
 		{
-			//n.Type = typeResolver.GetType(n);
-
 			foreach (Variable v in n.Variables)
 			{
 				try

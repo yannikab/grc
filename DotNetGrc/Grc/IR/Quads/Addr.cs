@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Grc.IR.Quads
 {
-	public class Addr
+	public class Addr : IComparable
 	{
 		private static int nextTemp;
 
@@ -20,29 +20,32 @@ namespace Grc.IR.Quads
 		{
 			nextTemp = 0;
 
-			Empty = new Addr(" ");
+			Empty = new Addr("-");
 			Star = new Addr("*");
 			ByRef = new Addr("R");
 			ByVal = new Addr("V");
 			Ret = new Addr("RET");
 		}
 
-		private string val;
+		private int id;
 
-		public string Val { get { return val; } }
+		private string addr;
+
+		public string Value { get { return addr; } }
 
 		public Addr(string addr)
 		{
-			this.val = addr;
+			this.addr = addr;
 		}
 
-		public Addr(int addr)
-			: this(addr.ToString())
+		public Addr(int id)
+			: this(id.ToString())
 		{
+			this.id = id;
 		}
 
 		public Addr()
-			: this(string.Format("_t{0}", (nextTemp++).ToString()))
+			: this(string.Format("${0}", (nextTemp++).ToString()))
 		{
 		}
 
@@ -52,17 +55,32 @@ namespace Grc.IR.Quads
 			if (that == null)
 				return false;
 
-			return object.Equals(this.val, that.val);
+			return object.Equals(this.addr, that.addr);
 		}
 
 		public override int GetHashCode()
 		{
-			return val.GetHashCode();
+			return addr.GetHashCode();
 		}
 
 		public override string ToString()
 		{
-			return val;
+			return addr;
+		}
+
+		public int CompareTo(object obj)
+		{
+			Addr that = obj as Addr;
+
+			if (that == null)
+				return -1;
+
+			if (this.id > that.id)
+				return 1;
+			else if (this.id < that.id)
+				return -1;
+			else
+				return 0;
 		}
 	}
 }

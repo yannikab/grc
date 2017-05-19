@@ -2,9 +2,9 @@
 
 namespace Grc.Cst.Visitor.GraphViz
 {
-	public class GraphVizTraversalTokens : GraphVizTraversal
+	public class GraphVizVisitorTokens : GraphVizVisitor
 	{
-		public GraphVizTraversalTokens(GVNode root) : base(root)
+		public GraphVizVisitorTokens(GVNode root) : base(root)
 		{
 		}
 

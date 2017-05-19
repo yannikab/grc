@@ -22,10 +22,11 @@ namespace Grc.IR.Visitor
 	{
 		private Dictionary<Addr, Quad> ir;
 
-		public IRVisitor(out ISymbolTable symbolTable)
+		public IRVisitor(out ISymbolTable symbolTable, out Dictionary<Addr, Quad> ir)
 			: base(out symbolTable)
 		{
-			this.ir = new Dictionary<Addr, Quad>();
+			ir = new Dictionary<Addr, Quad>();
+			this.ir = ir;
 		}
 
 		public override void Pre(LocalFuncDef n)

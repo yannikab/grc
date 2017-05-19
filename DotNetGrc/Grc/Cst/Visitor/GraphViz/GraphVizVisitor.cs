@@ -8,13 +8,13 @@ using k31.grc.cst.node;
 
 namespace Grc.Cst.Visitor.GraphViz
 {
-	public class GraphVizTraversal : DepthFirstAdapter
+	public class GraphVizVisitor : DepthFirstAdapter
 	{
 		private static int nodeNumber = 0;
 
 		private Stack<GVNode> stack;
 
-		public GraphVizTraversal(GVNode root)
+		public GraphVizVisitor(GVNode root)
 		{
 			stack = new Stack<GVNode>();
 
