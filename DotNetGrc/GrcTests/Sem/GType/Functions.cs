@@ -147,7 +147,7 @@ fun program() : nothing
 ";
 			ISymbolTable symbolTable;
 			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 7, symbolTable.MaxSymbols);
+			Assert.AreEqual(LibrarySymbols + 8, symbolTable.MaxSymbols);
 		}
 
 

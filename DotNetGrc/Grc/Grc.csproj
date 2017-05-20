@@ -318,9 +318,7 @@
     <Compile Include="Sem\Visitor\Exceptions\GType\MainFunctionWithParametersException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\MainFunctionWithReturnValueException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\FunctionMismatchedDefinitionException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\GType\SymbolTableMissingParameterException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\FunctionCallRValueByReferenceException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\GType\SymbolTableMissingVariableException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionAlreadyInScopeException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionDefinitionMissing.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionNotInOpenScopesException.cs" />

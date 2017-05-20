@@ -273,8 +273,6 @@
     <Compile Include="Sem\Visitor\Exceptions\GType\ReturnValueNotAllowedException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\ReturnWithoutExpressionException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\SymbolInvalidTypeException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\GType\SymbolTableMissingParameterException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\GType\SymbolTableMissingVariableException.cs" />
     <Compile Include="Sem\SymbolTable\Exceptions\NoOuterScopeException.cs" />
     <Compile Include="Drv\ArgumentContext.cs" />
     <Compile Include="Drv\Program.cs" />

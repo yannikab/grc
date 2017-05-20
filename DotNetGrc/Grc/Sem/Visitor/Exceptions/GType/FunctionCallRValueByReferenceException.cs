@@ -11,7 +11,7 @@ namespace Grc.Sem.Visitor.Exceptions.GType
 	public class FunctionCallRValueByReferenceException : GTypeException
 	{
 		public FunctionCallRValueByReferenceException(ExprFuncCall n, GTypeBase callType, GTypeBase declType)
-			: base(string.Format("{0} Non l-value expression {{{1}}} passed by reference: [ {2} -> {3} ]", n.Location, n.Text, callType, declType))
+			: base(string.Format("{0} Non l-value expression passed by reference in function call {{{1}}}: [ {2} -> {3} ]", n.Location, n.Text, callType, declType))
 		{
 		}
 	}

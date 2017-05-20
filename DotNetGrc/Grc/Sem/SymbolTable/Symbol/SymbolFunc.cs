@@ -15,7 +15,6 @@ namespace Grc.Sem.SymbolTable.Symbol
 		public bool Defined
 		{
 			get { return defined; }
-			set { defined = value; }
 		}
 
 		public bool Returned
@@ -44,7 +43,7 @@ namespace Grc.Sem.SymbolTable.Symbol
 
 			SymbolFunc that = (SymbolFunc)obj;
 
-			return base.Equals(that);
+			return base.Equals(that) && this.defined == that.defined;
 		}
 
 		public override int GetHashCode()

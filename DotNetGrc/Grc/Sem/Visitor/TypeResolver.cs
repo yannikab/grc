@@ -105,9 +105,9 @@ namespace Grc.Sem.Visitor
 			GTypeBase varType = null;
 
 			if (v.Type is Grc.Ast.Node.Type.TypeDataIntT)
-				varType = new GTypeInt(v.Indexed);
+				varType = new GTypeInt(true);
 			else if (v.Type is Grc.Ast.Node.Type.TypeDataCharT)
-				varType = new GTypeChar(v.Indexed);
+				varType = new GTypeChar(true);
 			else
 				throw new GTypeException("Invalid variable type.");
 

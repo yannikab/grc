@@ -175,6 +175,7 @@
     <Compile Include="Sem\GType\ArgumentPassingVar.cs" />
     <Compile Include="Sem\GType\Assignment.cs" />
     <Compile Include="Sem\GType\ArgumentPassingPar.cs" />
+    <Compile Include="Sem\GType\Semantic.cs" />
     <Compile Include="Sem\GType\ShadowFunc.cs" />
     <Compile Include="Sem\GType\ShadowVar.cs" />
     <Compile Include="Sem\GType\Functions.cs" />

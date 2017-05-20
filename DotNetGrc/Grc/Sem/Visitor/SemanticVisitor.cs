@@ -18,9 +18,7 @@ namespace Grc.Sem.Visitor
 {
 	public class SemanticVisitor : DepthFirstVisitor
 	{
-		private ISymbolTable symbolTable = new StackSymbolTable();
-
-		protected ISymbolTable SymbolTable { get { return symbolTable; } }
+		private ISymbolTable symbolTable;
 
 		public SemanticVisitor(out ISymbolTable symbolTable)
 		{
@@ -66,7 +64,7 @@ namespace Grc.Sem.Visitor
 				if (symbolFunc.Defined)
 					throw new FunctionAlreadyInScopeException(n.Header, n.Header.Name);
 
-				symbolFunc.Defined = true;
+				symbolTable.Insert(new SymbolFunc(n.Header.Name, true));
 			}
 		}
 
@@ -121,6 +119,11 @@ namespace Grc.Sem.Visitor
 
 		public override void Pre(LocalFuncDecl n)
 		{
+			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Name);
+
+			if (symbolFunc != null && symbolFunc.ScopeId == symbolTable.CurrentScopeId)
+				throw new FunctionAlreadyInScopeException(n, n.Name);
+
 			try
 			{
 				symbolTable.Insert(new SymbolFunc(n.Name, false));

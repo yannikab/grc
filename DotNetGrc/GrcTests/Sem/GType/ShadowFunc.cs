@@ -125,6 +125,8 @@ fun program() : nothing
 		bar();
 
 		a <- foo();		$ fun foo() : int;
+
+		return 0;
 	}
 
 {
@@ -169,5 +171,35 @@ fun program() : nothing
 			AcceptGTypeVisitor(program, out symbolTable);
 			Assert.AreEqual(LibrarySymbols + 5, symbolTable.MaxSymbols);
 		}
+
+
+		[Test]
+		public void TestShadowChild()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : int;
+
+	fun foo() : int
+
+		fun foo() : char
+		{
+			return 'c';
+		}
+
+	{
+		return 0;
+	}
+{
+}
+
+";
+			ISymbolTable symbolTable;
+			AcceptGTypeVisitor(program, out symbolTable);
+			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
+		}
+
 	}
 }

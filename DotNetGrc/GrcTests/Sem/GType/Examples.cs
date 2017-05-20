@@ -120,10 +120,6 @@ fun main () : nothing
 
 fun main () : nothing
 
-   fun puts(ref s : char[]) : nothing { }
-   fun writeString(ref s : char[]) : nothing { }
-   fun puti(i : int) : nothing { }
-   
    fun bsort (n : int; ref x : int[]) : nothing
 
       fun swap (ref x, y : int) : nothing
@@ -156,7 +152,7 @@ fun main () : nothing
       puts(msg);
       i <- 0;
       while i < n do {
-        if i > 0 then writeString("", "");
+        if i > 0 then puts("", "");
         puti(x[i]);
         i <- i+1;
       }
