@@ -10,8 +10,10 @@ using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
 using Grc.IR.Op;
 using Grc.IR.Quads;
+using Grc.Sem.SymbolTable.Symbol;
 using Grc.Sem.Types;
 using Grc.Sem.Visitor;
+using Grc.Sem.Visitor.Exceptions.GType;
 
 namespace Grc.IR.Visitor
 {
@@ -120,8 +122,30 @@ namespace Grc.IR.Visitor
 			foreach (ExprBase e in n.Args)
 				e.Accept(this);
 
+			SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Name);
+
+			if (symbolFunc == null)
+				throw new FunctionNotInSymbolTableException(n);
+
+			GTypeFunction declType = symbolFunc.Type as GTypeFunction;
+
+			if (declType == null)
+				throw new SymbolInvalidTypeException(n.Name, symbolFunc.Type);
+
+			Stack<bool> passingModes = new Stack<bool>();
+
+			GTypeBase current = declType.From;
+
+			while (current is GTypeProduct)
+			{
+				passingModes.Push((current as GTypeProduct).Right.ByRef);
+				current = (current as GTypeProduct).Left;
+			}
+
+			passingModes.Push(current.ByRef);
+
 			foreach (ExprBase e in n.Args)
-				n.AddQuad(Quad.GenQuad(OpPar.Instance, e.Addr, e.Type.ByRef ? Addr.ByRef : Addr.ByVal, Addr.Empty));
+				n.AddQuad(Quad.GenQuad(OpPar.Instance, e.Addr, passingModes.Pop() ? Addr.ByRef : Addr.ByVal, Addr.Empty));
 
 			Post(n);
 		}

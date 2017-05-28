@@ -84,7 +84,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingParArrayElementByReferencePar()
+		public void TestPassingParArrayElementByReference()
 		{
 			string program = @"
 
@@ -97,6 +97,30 @@ fun program() : nothing
 	fun bar(ref c : char[][10]) : nothing
 	{
 		foo(c[0]);
+	}
+{
+}		
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestPassingParByValToByRef()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo(ref i : int) : nothing
+	{
+	}
+
+	fun bar(a : int) : nothing
+	{
+		foo(a);
 	}
 {
 }		

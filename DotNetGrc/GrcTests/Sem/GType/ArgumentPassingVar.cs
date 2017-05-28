@@ -95,6 +95,90 @@ fun program() : nothing
 
 
 		[Test]
+		public void TestPassingVarIntExprByReference1()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var i : int;
+
+	fun foo(ref a : int) : nothing
+	{
+	}
+{
+	foo(i + 1);
+}
+
+";
+			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestPassingVarIntExprByReference2()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var i : int;
+
+	fun foo(ref a : int) : nothing
+	{
+	}
+{
+	foo(1 + i);
+}
+
+";
+			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestPassingVarIntExprByReference3()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var i : int;
+
+	fun foo(ref a : int) : nothing
+	{
+	}
+{
+	foo(+ i);
+}
+
+";
+			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestPassingVarIntExprByReference4()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var i : int;
+
+	fun foo(ref a : int) : nothing
+	{
+	}
+{
+	foo(- i);
+}
+
+";
+			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
 		public void TestPassingVarArrayCharElementByReference()
 		{
 			string program = @"
@@ -114,6 +198,7 @@ fun program() : nothing
 			AcceptGTypeVisitor(program);
 			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
 		}
+
 
 		[Test]
 		public void TestPassingVarStringCharElementByReference()
@@ -198,6 +283,55 @@ fun program() : nothing
 ";
 			AcceptGTypeVisitor(program);
 			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestPassingFunctionCallByVal()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo(a : char) : nothing
+	{
+	}
+
+	fun bar() : char
+	{
+		return 'c';
+	}
+{
+	foo(bar());
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestPassingFunctionCallByRef()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun foo(ref a : char) : nothing
+	{
+	}
+
+	fun bar() : char
+	{
+		return 'c';
+	}
+{
+	foo(bar());
+}
+
+";
+			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program));
 		}
 	}
 }

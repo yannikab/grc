@@ -223,7 +223,7 @@ namespace Grc.Sem.Visitor
 
 		public override void Post(ExprIntegerT n)
 		{
-			n.Type = typeResolver.GetType(n);
+			n.Type = new GTypeInt(false);
 
 			try
 			{
@@ -237,7 +237,7 @@ namespace Grc.Sem.Visitor
 
 		public override void Post(ExprCharacterT n)
 		{
-			n.Type = typeResolver.GetType(n);
+			n.Type = new GTypeChar(false);
 		}
 
 		public override void Post(ExprBinOpBase n)
@@ -249,7 +249,7 @@ namespace Grc.Sem.Visitor
 			if (!(n.Right.Type is GTypeInt))
 				throw new InvalidTypeInNumericExpression(n, n.Right);
 
-			n.Type = n.Left.Type;
+			n.Type = new GTypeInt(false);
 		}
 
 		public override void Post(ExprPlus n)
@@ -258,7 +258,7 @@ namespace Grc.Sem.Visitor
 			if (!(n.Expr.Type is GTypeInt))
 				throw new InvalidTypeInNumericExpression(n, n.Expr);
 
-			n.Type = n.Expr.Type;
+			n.Type = new GTypeInt(false);
 		}
 
 		public override void Post(ExprMinus n)
@@ -267,7 +267,7 @@ namespace Grc.Sem.Visitor
 			if (!(n.Expr.Type is GTypeInt))
 				throw new InvalidTypeInNumericExpression(n, n.Expr);
 
-			n.Type = n.Expr.Type;
+			n.Type = new GTypeInt(false);
 		}
 
 		public override void Post(ExprFuncCall n)
@@ -302,7 +302,13 @@ namespace Grc.Sem.Visitor
 			if (symbolVar == null)
 				throw new VariableNotInOpenScopesException(n, n.Name);
 
-			n.Type = symbolVar.Type;
+			// quick solution, a better one would be to clone the type
+			if (symbolVar.Type is GTypeInt)
+				n.Type = new GTypeInt(true);
+			else if (symbolVar.Type is GTypeChar)
+				n.Type = new GTypeChar(true);
+			else
+				n.Type = symbolVar.Type;
 		}
 
 		public override void Post(ExprLValStringT n)
@@ -313,30 +319,26 @@ namespace Grc.Sem.Visitor
 
 		public override void Post(ExprLValIndexed n)
 		{
-			GTypeBase exprType = n.Expr.Type;
-
 			// type rule: index expression must be of type int
-			if (!(exprType is GTypeInt))
+			if (!(n.Expr.Type is GTypeInt))
 				throw new ArrayIndexNotIntegerException(n);
 
-			GTypeBase lvalType = n.Lval.Type;
-
 			// type rule: indexed expression must have corresponding type
-			if (!(lvalType is GTypeIndexed))
+			if (!(n.Lval.Type is GTypeIndexed))
 				throw new LValueNotIndexedTypeException(n);
 
-			GTypeIndexed type = (GTypeIndexed)lvalType;
+			GTypeIndexed lvalType = (GTypeIndexed)n.Lval.Type;
 
-			n.Type = type.IndexedType;
+			n.Type = lvalType.IndexedType;
 
 			// type rule: integer indices that are known at compile time must be within array bounds
 			try
 			{
-				if (n.Expr.StaticInt.HasValue && type.Dim > 0)
+				if (n.Expr.StaticInt.HasValue && lvalType.Dim > 0)
 				{
 					int v = n.Expr.StaticInt.Value;
 
-					if (v < 0 || v >= type.Dim)
+					if (v < 0 || v >= lvalType.Dim)
 						throw new ArrayInvalidDimensionException(n, n.Expr);
 				}
 			}
@@ -416,8 +418,6 @@ namespace Grc.Sem.Visitor
 			// type rule: functions in function call statements must return nothing
 			if (!funDeclType.To.Equals(GTypeNothing.Instance))
 				throw new FunctionCallStatementWithoutNothingException(n);
-
-			n.Type = n.FunCall.Type;
 		}
 
 		public override void Post(StmtReturn n)

@@ -25,9 +25,9 @@ namespace Grc.Sem.Types
 
 		public override bool Equals(object obj)
 		{
-			GTypeIndexed that;
+			GTypeIndexed that = obj as GTypeIndexed;
 
-			if ((that = obj as GTypeIndexed) == null)
+			if (that == null)
 				return false;
 
 			return object.Equals(this.indexedType, that.indexedType);
@@ -41,6 +41,7 @@ namespace Grc.Sem.Types
 		public override bool MatchesRef(GTypeBase obj)
 		{
 			GTypeIndexed that = obj as GTypeIndexed;
+
 			if (that == null)
 				return false;
 

@@ -154,15 +154,5 @@ namespace Grc.Sem.Visitor
 
 			return returnType;
 		}
-
-		public GTypeBase GetType(ExprIntegerT n)
-		{
-			return new GTypeInt(false);
-		}
-
-		public GTypeBase GetType(ExprCharacterT n)
-		{
-			return new GTypeChar(false);
-		}
 	}
 }
