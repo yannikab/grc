@@ -5,17 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node.Helper;
 using Grc.Cst.Visitor.ASTCreation;
-using Grc.IR.Quads;
-using Grc.IR.Visitor;
-using Grc.Sem.SymbolTable;
 using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.parser;
 
-
 namespace Grc.Drv
 {
-	class StateCodeIR : StateBase
+	class StateParseSource : StateBase
 	{
 		public override void HandleArgument(ArgumentContext context, string arg)
 		{
@@ -36,13 +32,7 @@ namespace Grc.Drv
 
 				parser.parse().apply(new ASTCreationVisitor(root));
 
-				ISymbolTable symbolTable;
-				Dictionary<Addr, Quad> ir;
-
-				root.Accept(new IRVisitor(out symbolTable, out ir));
-
-				foreach (var q in ir.OrderBy(e => e.Key))
-					System.Console.WriteLine(q.Value);
+				System.Console.WriteLine(root.Text);
 
 				context.State = new StateExitSuccess();
 
@@ -61,13 +51,9 @@ namespace Grc.Drv
 				e.printStackTrace();
 			}
 
-			context.State = new StateExitFailure();
-		}
+			System.Console.WriteLine("Source parsing failure");
 
-		private void ShowActions()
-		{
-			System.Console.WriteLine("Usage: grc [module] [action] [filename]");
-			System.Console.Write("Available actions for module code: ir, help");
+			context.State = new StateExitFailure();
 		}
 	}
 }

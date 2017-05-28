@@ -12,17 +12,29 @@ namespace Grc.Drv
 		{
 			switch (arg)
 			{
-				case "ir":
+				case "source":
 
-					context.State = new StateCodeIR();
+					context.State = new StateParseSource();
+
+					break;
+
+				case "tac":
+
+					context.State = new StateCodeTAC();
 
 					break;
 
 				case "help":
 
+					ShowHelp();
+
+					context.State = new StateExitSuccess();
+
+					break;
+
 				default:
 
-					ShowActions();
+					ShowUsage();
 
 					context.State = new StateExitFailure();
 
@@ -30,10 +42,17 @@ namespace Grc.Drv
 			}
 		}
 
-		private void ShowActions()
+		private void ShowHelp()
+		{
+			Console.WriteLine("Available actions for module 'code':");
+			Console.WriteLine("source - output reconstructed source code from abstract syntax tree"); 
+			Console.WriteLine("tac - output intermediate representation of input in three address code");
+		}
+
+		private void ShowUsage()
 		{
 			Console.WriteLine("Usage: grc [module] [action] [filename]");
-			Console.Write("Available actions for module code: ir, help");
+			Console.WriteLine("Available actions for module 'code': source, tac, help");
 		}
 	}
 }

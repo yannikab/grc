@@ -24,7 +24,7 @@ namespace Grc.IR.Quads
 
 		public static List<Quad> Merge(this List<Quad> a, List<Quad> b)
 		{
-			return a.Union(b).ToList();
+			return a.Concat(b).ToList();
 		}
 
 		public static void BackPatch(this List<Quad> l, Addr a)

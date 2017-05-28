@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Grc.Ast.Node.Expr
 {
-	class ExprMod : ExprBinOpBase
+	public partial class ExprMod : ExprBinOpBase
 	{
 		public ExprMod(ExprBase left, ExprBase right, string operMod)
 			: base(left, right, operMod)

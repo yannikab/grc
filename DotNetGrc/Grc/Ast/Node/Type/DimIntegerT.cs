@@ -19,10 +19,6 @@ namespace Grc.Ast.Node.Type
 		private int line;
 		private int pos;
 
-		public DimIntegerT(string text)
-		{
-		}
-
 		public override int Line { get { return line; } }
 
 		public override int Pos { get { return pos; } }

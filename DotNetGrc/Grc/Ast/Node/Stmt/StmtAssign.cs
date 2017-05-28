@@ -8,7 +8,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Stmt
 {
-	public class StmtAssign : StmtBase
+	public partial class StmtAssign : StmtBase
 	{
 		private ExprLValBase lval;
 		private ExprBase expr;

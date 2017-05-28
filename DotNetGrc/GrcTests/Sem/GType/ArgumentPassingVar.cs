@@ -30,8 +30,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<FunctionCallArgsMismatchException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionCallArgsMismatchException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -53,8 +52,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<FunctionCallArgsMismatchException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionCallArgsMismatchException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -73,8 +71,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -93,8 +90,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -115,9 +111,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
 		}
 
 		[Test]
@@ -135,9 +130,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 3, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
 		}
 
 
@@ -158,9 +152,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
 		}
 
 
@@ -181,9 +174,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
 		}
 
 
@@ -204,9 +196,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
 		}
 	}
 }

@@ -28,9 +28,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 3, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
 		}
 
 
@@ -54,8 +53,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -76,8 +74,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -95,8 +92,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -134,9 +130,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 5, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 5, MaxSymbols);
 		}
 
 
@@ -167,9 +162,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 5, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 5, MaxSymbols);
 		}
 
 
@@ -196,10 +190,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 4, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
 		}
-
 	}
 }

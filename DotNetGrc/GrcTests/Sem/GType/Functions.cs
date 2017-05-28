@@ -22,8 +22,7 @@ fun program(a : int) : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<MainFunctionWithParametersException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<MainFunctionWithParametersException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -37,8 +36,7 @@ fun program() : int
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<MainFunctionWithReturnValueException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<MainFunctionWithReturnValueException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -57,9 +55,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 2, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 2, MaxSymbols);
 		}
 
 
@@ -79,8 +76,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<FunctionCallStatementWithoutNothingException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionCallStatementWithoutNothingException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -100,8 +96,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<FunctionMismatchedDefinitionException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionMismatchedDefinitionException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -121,8 +116,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<FunctionMismatchedDefinitionException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<FunctionMismatchedDefinitionException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -145,9 +139,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 8, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 8, MaxSymbols);
 		}
 
 
@@ -165,9 +158,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 3, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
 		}
 
 
@@ -185,8 +177,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<ArrayNotPassedByReferenceException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<ArrayNotPassedByReferenceException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -205,8 +196,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<ReturnValueNotAllowedException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<ReturnValueNotAllowedException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -225,8 +215,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<ReturnDifferentTypeException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<ReturnDifferentTypeException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -245,8 +234,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<ReturnWithoutExpressionException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<ReturnWithoutExpressionException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -265,8 +253,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<ReturnMissingInFunctionBodyException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<ReturnMissingInFunctionBodyException>(() => AcceptGTypeVisitor(program));
 		}
 	}
 }

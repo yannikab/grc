@@ -34,9 +34,7 @@ namespace Grc.Drv
 
 				parser.parse().apply(new ASTCreationVisitor(root));
 
-				ISymbolTable symbolTable;
-
-				root.Accept(new GTypeVisitor(out symbolTable));
+				root.Accept(new GTypeVisitor());
 
 				System.Console.WriteLine("Type checking success");
 

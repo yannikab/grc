@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Expr
 {
-	public class ExprIntegerT : ExprBase
+	public partial class ExprIntegerT : ExprBase
 	{
 		private string integer;
 

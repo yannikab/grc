@@ -29,8 +29,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -52,9 +51,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
-			Assert.AreEqual(LibrarySymbols + 6, symbolTable.MaxSymbols);
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 6, MaxSymbols);
 		}
 
 
@@ -71,8 +69,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -90,8 +87,7 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<InvalidTypeInNumericExpression>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -110,9 +106,7 @@ fun program() : nothing
 }
 
 ";
-
-			ISymbolTable symbolTable;
-			Assert.Throws<ArrayIndexNotIntegerException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<ArrayIndexNotIntegerException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -131,9 +125,7 @@ fun program() : nothing
 }
 
 ";
-
-			ISymbolTable symbolTable;
-			Assert.Throws<InvalidTypeInRelOpException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<InvalidTypeInRelOpException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -153,9 +145,7 @@ fun program() : nothing
 }
 
 ";
-
-			ISymbolTable symbolTable;
-			Assert.Throws<InvalidTypeInRelOpException>(() => AcceptGTypeVisitor(program, out symbolTable));
+			Assert.Throws<InvalidTypeInRelOpException>(() => AcceptGTypeVisitor(program));
 		}
 	}
 }

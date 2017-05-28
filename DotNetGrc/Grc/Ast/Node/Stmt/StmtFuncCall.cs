@@ -8,7 +8,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Stmt
 {
-	public class StmtFuncCall : StmtBase
+	public partial class StmtFuncCall : StmtBase
 	{
 		private ExprFuncCall funCall;
 

@@ -32,9 +32,15 @@ namespace Grc.Drv
 
 				case "help":
 
+					ShowHelp();
+
+					context.State = new StateExitSuccess();
+
+					break;
+
 				default:
 
-					ShowActions();
+					ShowUsage();
 
 					context.State = new StateExitFailure();
 
@@ -42,10 +48,18 @@ namespace Grc.Drv
 			}
 		}
 
-		private void ShowActions()
+		private void ShowHelp()
+		{
+			Console.WriteLine("Available actions for module 'graphviz':");
+			Console.WriteLine("cstsimple - output graphviz code for concrete syntax tree without tokens by parsing input");
+			Console.WriteLine("cst - output graphviz code for concrete syntax tree including tokens by parsing input");
+			Console.WriteLine("ast - output graphviz code for abstract syntax tree");
+		}
+
+		private void ShowUsage()
 		{
 			Console.WriteLine("Usage: grc [module] [action] [filename]");
-			Console.Write("Available actions for module graphviz: cstsimple, cst, ast, help");
+			Console.WriteLine("Available actions for module 'graphviz': cstsimple, cst, ast, help");
 		}
 	}
 }

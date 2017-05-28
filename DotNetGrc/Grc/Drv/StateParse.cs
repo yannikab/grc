@@ -26,9 +26,15 @@ namespace Grc.Drv
 
 				case "help":
 
+					ShowHelp();
+
+					context.State = new StateExitSuccess();
+
+					break;
+
 				default:
 
-					ShowActions();
+					ShowUsage();
 
 					context.State = new StateExitFailure();
 
@@ -36,10 +42,17 @@ namespace Grc.Drv
 			}
 		}
 
-		private void ShowActions()
+		private void ShowHelp()
+		{
+			Console.WriteLine("Available actions for module 'parse':");
+			Console.WriteLine("cst - construct concrete syntax tree by parsing input");
+			Console.WriteLine("ast - construct abstract syntax tree from concrete syntax tree");
+		}
+
+		private void ShowUsage()
 		{
 			Console.WriteLine("Usage: grc [module] [action] [filename]");
-			Console.Write("Available actions for module parse: cst, ast, help");
+			Console.WriteLine("Available actions for module 'parse': cst, ast, help");
 		}
 	}
 }

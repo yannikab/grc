@@ -9,8 +9,8 @@ namespace Grc.Sem.Visitor.Exceptions.GType
 {
 	public class OverflowInIntegerLiteralException : GTypeException
 	{
-		public OverflowInIntegerLiteralException(ExprIntegerT n, SystemException e)
-			: base(string.Format("{0} Integer literal out of bounds: {1}", n.Location, n.Integer), e)
+		public OverflowInIntegerLiteralException(ExprBase n, SystemException e)
+			: base(string.Format("{0} Integer literal out of bounds: {1}", n.Location, n.Text), e)
 		{
 		}
 	}

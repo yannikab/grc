@@ -43,9 +43,16 @@ namespace Grc.Drv
 					break;
 
 				case "help":
+
+					ShowHelp();
+
+					context.State = new StateExitSuccess();
+
+					break;
+
 				default:
 
-					ShowModules();
+					ShowUsage();
 
 					context.State = new StateExitFailure();
 
@@ -53,10 +60,20 @@ namespace Grc.Drv
 			}
 		}
 
-		private void ShowModules()
+		private void ShowHelp()
+		{
+			Console.WriteLine("Available modules:");
+			Console.WriteLine("lex - lexical analysis of input");
+			Console.WriteLine("parse - syntax analysis after lexical analysis");
+			Console.WriteLine("graphviz - output graphviz code for concrete and abstract syntax trees");
+			Console.WriteLine("type - type checking after syntax analysis and semantic checking");
+			Console.WriteLine("code - code generation after type checking");
+		}
+
+		private void ShowUsage()
 		{
 			Console.WriteLine("Usage: grc [module] [action] [filename]");
-			Console.Write("Available modules: lex, parse, graphviz, type, help");
+			Console.WriteLine("Available modules: lex, parse, graphviz, type, code, help");
 		}
 	}
 }

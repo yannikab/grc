@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Cond
 {
-	public class CondNot : CondBase
+	public partial class CondNot : CondBase
 	{
 		private CondBase cond;
 

@@ -15,16 +15,18 @@ namespace Grc.IR.Quads
 		public static readonly Addr ByRef;
 		public static readonly Addr ByVal;
 		public static readonly Addr Ret;
+		public static readonly Addr RetVal;
 
 		static Addr()
 		{
 			nextTemp = 0;
 
-			Empty = new Addr("-");
+			Empty = new Addr("_");
 			Star = new Addr("*");
 			ByRef = new Addr("R");
 			ByVal = new Addr("V");
 			Ret = new Addr("RET");
+			RetVal = new Addr("$$");
 		}
 
 		private int id;

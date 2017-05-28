@@ -27,7 +27,7 @@ namespace Grc.IR.Op
 
 		public override string ToString()
 		{
-			return "%";
+			return "mod";
 		}
 	}
 }

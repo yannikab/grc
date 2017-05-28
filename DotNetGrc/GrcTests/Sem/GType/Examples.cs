@@ -42,8 +42,7 @@ fun solve () : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
+			AcceptGTypeVisitor(program);
 		}
 
 
@@ -108,8 +107,7 @@ fun main () : nothing
 }
 
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
+			AcceptGTypeVisitor(program);
 		}
 
 
@@ -174,8 +172,7 @@ fun main () : nothing
   putArray(""Sorted array: "", 16, x);
 }
 ";
-			ISymbolTable symbolTable;
-			AcceptGTypeVisitor(program, out symbolTable);
+			AcceptGTypeVisitor(program);
 		}
 	}
 }

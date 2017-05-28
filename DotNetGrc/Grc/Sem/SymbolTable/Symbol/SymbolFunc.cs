@@ -48,7 +48,7 @@ namespace Grc.Sem.SymbolTable.Symbol
 
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();
+			return base.GetHashCode() + this.defined.GetHashCode();
 		}
 	}
 }

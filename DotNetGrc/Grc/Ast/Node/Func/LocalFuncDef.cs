@@ -9,7 +9,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Func
 {
-	public class LocalFuncDef : LocalBase
+	public partial class LocalFuncDef : LocalBase
 	{
 		private LocalFuncDecl header;
 		private List<LocalBase> locals;

@@ -18,7 +18,9 @@ namespace GrcTests.Sem
 	[TestFixture]
 	public class SemanticVisitorTests
 	{
-		private static ISymbolTable AcceptSemanticVisitor(string program)
+		private static int MaxSymbols;
+
+		private static void AcceptSemanticVisitor(string program)
 		{
 			StringReader sr = new StringReader(program);
 			Parser parser = new Parser(new Lexer(new PushbackReader(sr, 4096)));
@@ -26,7 +28,7 @@ namespace GrcTests.Sem
 			parser.parse().apply(new ASTCreationVisitor(root));
 			ISymbolTable symbolTable = new StackSymbolTable();
 			root.Accept(new SemanticVisitor(out symbolTable));
-			return symbolTable;
+			MaxSymbols = symbolTable.MaxSymbols;
 		}
 
 
@@ -40,8 +42,8 @@ fun program(ref a : char) : int
 }
 
 ";
-			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
-			Assert.AreEqual(2, symbolTable.MaxSymbols);
+			AcceptSemanticVisitor(program);
+			Assert.AreEqual(2, MaxSymbols);
 		}
 
 
@@ -118,8 +120,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
-			Assert.AreEqual(4, symbolTable.MaxSymbols);
+			AcceptSemanticVisitor(program);
+			Assert.AreEqual(4, MaxSymbols);
 		}
 
 
@@ -139,8 +141,8 @@ fun program() : nothing
 }
 
 ";
-			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
-			Assert.AreEqual(3, symbolTable.MaxSymbols);
+			AcceptSemanticVisitor(program);
+			Assert.AreEqual(3, MaxSymbols);
 		}
 
 
@@ -244,8 +246,8 @@ fun program() : char
 }
 
 ";
-			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
-			Assert.AreEqual(3, symbolTable.MaxSymbols);
+			AcceptSemanticVisitor(program);
+			Assert.AreEqual(3, MaxSymbols);
 		}
 
 
@@ -363,8 +365,8 @@ fun program() : int
 }
 
 ";
-			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
-			Assert.AreEqual(5, symbolTable.MaxSymbols);
+			AcceptSemanticVisitor(program);
+			Assert.AreEqual(5, MaxSymbols);
 		}
 
 
@@ -386,8 +388,8 @@ fun program() : char
 }
 
 ";
-			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
-			Assert.AreEqual(5, symbolTable.MaxSymbols);
+			AcceptSemanticVisitor(program);
+			Assert.AreEqual(5, MaxSymbols);
 		}
 
 
@@ -415,8 +417,8 @@ fun program() : char
 }
 
 ";
-			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
-			Assert.AreEqual(4, symbolTable.MaxSymbols);
+			AcceptSemanticVisitor(program);
+			Assert.AreEqual(4, MaxSymbols);
 		}
 
 		[Test]
@@ -483,8 +485,8 @@ fun program() : int
 }
 
 ";
-			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
-			Assert.AreEqual(4, symbolTable.MaxSymbols);
+			AcceptSemanticVisitor(program);
+			Assert.AreEqual(4, MaxSymbols);
 		}
 
 
@@ -513,8 +515,8 @@ fun program() : char
 }
 
 ";
-			ISymbolTable symbolTable = AcceptSemanticVisitor(program);
-			Assert.AreEqual(5, symbolTable.MaxSymbols);
+			AcceptSemanticVisitor(program);
+			Assert.AreEqual(5, MaxSymbols);
 		}
 	}
 }

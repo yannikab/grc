@@ -24,13 +24,11 @@ namespace Grc.Sem.Visitor
 		private ISymbolTable symbolTable;
 		private TypeResolver typeResolver;
 
-		protected ISymbolTable SymbolTable { get { return symbolTable; } }
+		public ISymbolTable SymbolTable { get { return symbolTable; } }
 
-		public GTypeVisitor(out ISymbolTable symbolTable)
+		public GTypeVisitor()
 		{
-			symbolTable = new StackSymbolTable();
-
-			this.symbolTable = symbolTable;
+			this.symbolTable = new StackSymbolTable();
 
 			this.typeResolver = new TypeResolver();
 		}
@@ -78,6 +76,8 @@ namespace Grc.Sem.Visitor
 		{
 			GTypeFunction funcDefType = typeResolver.GetType(n.Header);
 
+			n.Type = funcDefType;
+
 			if (symbolTable.CurrentScopeId == 0)
 			{
 				// type rule: main function can not have parameters
@@ -88,8 +88,6 @@ namespace Grc.Sem.Visitor
 				if (!funcDefType.To.Equals(GTypeNothing.Instance))
 					throw new MainFunctionWithReturnValueException(n.Header);
 			}
-
-			n.Type = funcDefType;
 
 			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Header.Name);
 
@@ -109,10 +107,17 @@ namespace Grc.Sem.Visitor
 				if (symbolFunc.Defined)
 					throw new FunctionAlreadyInScopeException(n, symbolFunc.Name);
 
-				if (!symbolFunc.Type.Equals(n.Type))
+				if (!symbolFunc.Type.Equals(funcDefType))
 					throw new FunctionMismatchedDefinitionException(n.Header);
 
-				symbolTable.Insert(new SymbolFunc(n.Header.Name, true, funcDefType));
+				try
+				{
+					symbolTable.Insert(new SymbolFunc(n.Header.Name, true, funcDefType));
+				}
+				catch (SymbolAlreadyInScopeException e)
+				{
+					throw new FunctionAlreadyInScopeException(n.Header, e);
+				}
 			}
 		}
 
@@ -168,11 +173,11 @@ namespace Grc.Sem.Visitor
 
 			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(0);
 
-			if (symbolFunc == null)
+			if (symbolFunc == null || !symbolFunc.Name.Equals(n.Header.Name))
 				throw new FunctionNotInSymbolTableException(n);
 
 			if (!(symbolFunc.Type is GTypeFunction))
-				throw new SymbolInvalidTypeException(symbolFunc.Name);
+				throw new SymbolInvalidTypeException(symbolFunc.Name, symbolFunc.Type);
 
 			GTypeFunction typeFunc = (GTypeFunction)symbolFunc.Type;
 
@@ -222,7 +227,7 @@ namespace Grc.Sem.Visitor
 
 			try
 			{
-				int.Parse(n.Integer);
+				int? i = n.StaticInt;
 			}
 			catch (OverflowException e)
 			{
@@ -275,7 +280,7 @@ namespace Grc.Sem.Visitor
 			GTypeFunction declType = symbolFunc.Type as GTypeFunction;
 
 			if (declType == null)
-				throw new SymbolInvalidTypeException(n.Name);
+				throw new SymbolInvalidTypeException(n.Name, symbolFunc.Type);
 
 			GTypeBase typeFrom = typeResolver.GetTypeFrom(n);
 
@@ -317,10 +322,28 @@ namespace Grc.Sem.Visitor
 			GTypeBase lvalType = n.Lval.Type;
 
 			// type rule: indexed expression must have corresponding type
-			if (lvalType is GTypeIndexed)
-				n.Type = (lvalType as GTypeIndexed).IndexedType;
-			else
+			if (!(lvalType is GTypeIndexed))
 				throw new LValueNotIndexedTypeException(n);
+
+			GTypeIndexed type = (GTypeIndexed)lvalType;
+
+			n.Type = type.IndexedType;
+
+			// type rule: integer indices that are known at compile time must be within array bounds
+			try
+			{
+				if (n.Expr.StaticInt.HasValue && type.Dim > 0)
+				{
+					int v = n.Expr.StaticInt.Value;
+
+					if (v < 0 || v >= type.Dim)
+						throw new ArrayInvalidDimensionException(n, n.Expr);
+				}
+			}
+			catch (OverflowException e)
+			{
+				throw new ArrayInvalidDimensionException(n, n.Expr, e);
+			}
 		}
 
 		public override void Post(CondAnd n)
@@ -386,7 +409,7 @@ namespace Grc.Sem.Visitor
 				throw new FunctionNotInSymbolTableException(n);
 
 			if (!(symbolFunc.Type is GTypeFunction))
-				throw new SymbolInvalidTypeException(n.Name);
+				throw new SymbolInvalidTypeException(n.Name, symbolFunc.Type);
 
 			GTypeFunction funDeclType = (GTypeFunction)symbolFunc.Type;
 
@@ -405,7 +428,7 @@ namespace Grc.Sem.Visitor
 				throw new FunctionNotInSymbolTableException(n);
 
 			if (!(symbolFunc.Type is GTypeFunction))
-				throw new SymbolInvalidTypeException(symbolFunc.Name);
+				throw new SymbolInvalidTypeException(symbolFunc.Name, symbolFunc.Type);
 
 			GTypeFunction typeFunc = (GTypeFunction)symbolFunc.Type;
 

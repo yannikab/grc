@@ -7,7 +7,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Stmt
 {
-	public class StmtBlock : StmtBase
+	public partial class StmtBlock : StmtBase
 	{
 		private List<StmtBase> stmts;
 
