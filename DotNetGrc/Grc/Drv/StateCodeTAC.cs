@@ -5,13 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node.Helper;
 using Grc.Cst.Visitor.ASTCreation;
-using Grc.IR.Quads;
 using Grc.IR.Visitor;
-using Grc.Sem.SymbolTable;
 using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.parser;
-
 
 namespace Grc.Drv
 {

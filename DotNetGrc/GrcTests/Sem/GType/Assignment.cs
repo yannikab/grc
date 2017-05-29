@@ -187,5 +187,80 @@ fun program() : nothing
 			AcceptGTypeVisitor(program);
 			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
 		}
+
+
+		[Test]
+		public void TestAssignIndexed1()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char[5];
+	var b : char[5];
+
+{
+	b <- a;	
+}
+
+";
+			Assert.Throws<IndexedTypeInAssignmentException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestAssignIndexed2()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char[2][5];
+	var b : char[4][10];
+
+{
+	b <- a;	
+}
+
+";
+			Assert.Throws<IndexedTypeInAssignmentException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestAssignIndexed3()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char[5];
+
+{
+	""text"" <- a;	
+}
+
+";
+			Assert.Throws<IndexedTypeInAssignmentException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestAssignIndexed4()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char[5];
+	var b : char[5][4];
+
+{
+	a <- b;	
+}
+
+";
+			Assert.Throws<InvalidTypeInAssignmentException>(() => AcceptGTypeVisitor(program));
+		}
 	}
 }

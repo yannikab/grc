@@ -398,9 +398,13 @@ namespace Grc.Sem.Visitor
 
 		public override void Post(StmtAssign n)
 		{
-			// type rule: right side expression type must match the l-value type
+			// type rule: right hand side expression type must match the l-value type
 			if (!object.Equals(n.Lval.Type, n.Expr.Type))
 				throw new InvalidTypeInAssignmentException(n);
+
+			// type rule: indexed types can not be assigned to
+			if (n.Lval.Type is GTypeIndexed)
+				throw new IndexedTypeInAssignmentException(n);
 		}
 
 		public override void Post(StmtFuncCall n)

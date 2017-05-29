@@ -287,6 +287,50 @@ fun program() : nothing
 
 
 		[Test]
+		public void TestPassingVarArrayWithSizeByReference()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var arr : char[5];
+
+	fun foo(ref a : char [10]) : nothing
+	{
+	}
+{
+	foo(arr);
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestPassingVarArrayElementWithSizeByReference()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var c : char[10][5];
+
+	fun foo(ref a : char[10]) : nothing
+	{
+	}
+{
+	foo(c[0]);
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
+		}
+
+
+		[Test]
 		public void TestPassingFunctionCallByVal()
 		{
 			string program = @"

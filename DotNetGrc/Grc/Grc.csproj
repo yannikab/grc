@@ -325,6 +325,7 @@
     <Compile Include="Sem\SymbolTable\Symbol\SymbolBase.cs" />
     <Compile Include="Sem\SymbolTable\Symbol\SymbolFunc.cs" />
     <Compile Include="Sem\SymbolTable\Symbol\SymbolVar.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\IndexedTypeInAssignmentException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\ReturnWithoutExpressionException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\ReturnMissingInFunctionBodyException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\ReturnDifferentTypeException.cs" />
