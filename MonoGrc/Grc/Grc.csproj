@@ -308,16 +308,21 @@
     <Compile Include="IR\Node\Cond\CondOr.cs" />
     <Compile Include="IR\Node\Cond\CondRelOpBase.cs" />
     <Compile Include="Drv\StateCodeTAC.cs" />
-    <Compile Include="Drv\StateParseSource.cs" />
-    <Compile Include="Sem\Node\ExprAdd.cs" />
-    <Compile Include="Sem\Node\ExprBase.cs" />
-    <Compile Include="Sem\Node\ExprDiv.cs" />
-    <Compile Include="Sem\Node\ExprIntegerT.cs" />
-    <Compile Include="Sem\Node\ExprMinus.cs" />
-    <Compile Include="Sem\Node\ExprMod.cs" />
-    <Compile Include="Sem\Node\ExprMul.cs" />
-    <Compile Include="Sem\Node\ExprPlus.cs" />
-    <Compile Include="Sem\Node\ExprSub.cs" />
+    <Compile Include="Drv\StateCodeSrc.cs" />
+    <Compile Include="Sem\Node\Expr\ExprAdd.cs" />
+    <Compile Include="Sem\Node\Expr\ExprBase.cs" />
+    <Compile Include="Sem\Node\Expr\ExprDiv.cs" />
+    <Compile Include="Sem\Node\Expr\ExprFuncCall.cs" />
+    <Compile Include="Sem\Node\Expr\ExprIntegerT.cs" />
+    <Compile Include="Sem\Node\Expr\ExprMinus.cs" />
+    <Compile Include="Sem\Node\Expr\ExprMod.cs" />
+    <Compile Include="Sem\Node\Expr\ExprMul.cs" />
+    <Compile Include="Sem\Node\Expr\ExprPlus.cs" />
+    <Compile Include="Sem\Node\Expr\ExprSub.cs" />
+    <Compile Include="Sem\Node\Func\LocalFuncDecl.cs" />
+    <Compile Include="Sem\Node\Stmt\StmtFuncCall.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\GType\IndexedTypeInAssignmentException.cs" />
+    <Compile Include="Sem\Visitor\ScopeNameVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

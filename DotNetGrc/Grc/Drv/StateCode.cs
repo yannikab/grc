@@ -12,15 +12,15 @@ namespace Grc.Drv
 		{
 			switch (arg)
 			{
-				case "source":
+				case "src":
 
-					context.State = new StateParseSource();
+					context.State = new StateCodeSrc();
 
 					break;
 
 				case "tac":
 
-					context.State = new StateCodeTAC();
+					context.State = new StateCodeTac();
 
 					break;
 
@@ -45,14 +45,14 @@ namespace Grc.Drv
 		private void ShowHelp()
 		{
 			Console.WriteLine("Available actions for module 'code':");
-			Console.WriteLine("source - output reconstructed source code from abstract syntax tree"); 
+			Console.WriteLine("src - output reconstructed source code from abstract syntax tree"); 
 			Console.WriteLine("tac - output intermediate representation of input in three address code");
 		}
 
 		private void ShowUsage()
 		{
 			Console.WriteLine("Usage: grc [module] [action] [filename]");
-			Console.WriteLine("Available actions for module 'code': source, tac, help");
+			Console.WriteLine("Available actions for module 'code': src, tac, help");
 		}
 	}
 }

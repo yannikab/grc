@@ -132,6 +132,10 @@
     <Compile Include="Sem\SymbolTableTests.cs" />
     <Compile Include="Sem\SymbolTypeTests.cs" />
     <Compile Include="Sem\TypeTests.cs" />
+    <Compile Include="Sem\GType\Limits.cs" />
+    <Compile Include="Sem\GType\Semantic.cs" />
+    <Compile Include="Sem\GType\ShadowFunc.cs" />
+    <Compile Include="Sem\GType\ShadowVar.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

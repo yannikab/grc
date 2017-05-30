@@ -23,6 +23,8 @@ namespace Grc.Drv
 			{
 				System.Console.WriteLine(string.Format("{0}:", e.GetType().Name));
 				System.Console.WriteLine(e.Message);
+
+				Environment.Exit(1);
 			}
 		}
 	}

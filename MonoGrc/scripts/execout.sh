@@ -7,7 +7,7 @@ MODULE="code"
 # lex -> -
 # parse -> cst, ast
 # type -> -
-# code -> tac
+# code -> src, tac
 ACTION="tac"
 
 if [ $# -ne 1 ]; then exit 1; fi

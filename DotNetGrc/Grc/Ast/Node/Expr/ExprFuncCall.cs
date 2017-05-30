@@ -69,7 +69,9 @@ namespace Grc.Ast.Node.Expr
 
 		public override string ToString()
 		{
-			return string.Format("{0}{1}{2}", id, lpar, rpar);
+			return string.Format("{0}{1}{2}", id, lpar, rpar)
+				.Remove(0, id[0] == '_' ? 1 : 0)
+				.Replace(".", "." + Environment.NewLine);
 		}
 	}
 }

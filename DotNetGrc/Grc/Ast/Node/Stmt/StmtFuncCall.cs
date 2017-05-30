@@ -12,13 +12,15 @@ namespace Grc.Ast.Node.Stmt
 	{
 		private ExprFuncCall funCall;
 
+		private string name;
+
 		private string semicolon;
 
 		public ExprFuncCall FunCall { get { return funCall; } }
 
 		public IReadOnlyList<ExprBase> Args { get { return funCall.Args; } }
 
-		public string Name { get { return funCall.Name; } }
+		public string Name { get { return name; } }
 
 		public override int Line { get { return funCall.Line; } }
 
@@ -27,6 +29,7 @@ namespace Grc.Ast.Node.Stmt
 		public StmtFuncCall(ExprFuncCall funCall, string semicolon)
 		{
 			this.funCall = funCall;
+			this.name = funCall.Name;
 
 			this.semicolon = semicolon;
 		}

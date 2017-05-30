@@ -11,7 +11,7 @@ using k31.grc.cst.parser;
 
 namespace Grc.Drv
 {
-	class StateParseSource : StateBase
+	class StateCodeSrc : StateBase
 	{
 		public override void HandleArgument(ArgumentContext context, string arg)
 		{

@@ -41,7 +41,7 @@ namespace Grc.Ast.Node.Func
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.AppendLine(header.Text);
+			sb.AppendLine(header.Text.Replace(";", String.Empty));
 
 			foreach (LocalBase l in locals)
 				sb.AppendLine(l.Text);
@@ -53,7 +53,9 @@ namespace Grc.Ast.Node.Func
 
 		public override string ToString()
 		{
-			return "def: " + header.Name + "()";
+			string s = header.Name.Remove(0, header.Name[0] == '_' ? 1 : 0).Replace(".", "." + Environment.NewLine);
+
+			return string.Format("def:{0}{1}()", Environment.NewLine, s);
 		}
 	}
 }

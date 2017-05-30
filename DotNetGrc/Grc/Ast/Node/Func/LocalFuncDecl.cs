@@ -9,7 +9,7 @@ using Grc.Ast.Visitor;
 
 namespace Grc.Ast.Node.Func
 {
-	public class LocalFuncDecl : LocalBase
+	public partial class LocalFuncDecl : LocalBase
 	{
 		private List<HPar> hPars;
 		private HTypeReturn hTypeReturn;
@@ -86,12 +86,16 @@ namespace Grc.Ast.Node.Func
 
 			sb.Append(this.hTypeReturn.Text);
 
+			sb.Append(";");
+
 			return sb.ToString();
 		}
 
 		public override string ToString()
 		{
-			return string.Format("decl: {0}{1}{2}", id, lpar, rpar);
+			string s = id.Remove(0, id[0] == '_' ? 1 : 0).Replace(".", "." + Environment.NewLine);
+
+			return string.Format("decl:{0} {1}{2}{3}", Environment.NewLine, s, lpar, rpar);
 		}
 	}
 }

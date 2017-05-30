@@ -40,7 +40,7 @@ namespace Grc.Sem.Visitor
 			InjectLibraryFunctions();
 		}
 
-		private void InjectLibraryFunctions()
+		protected virtual void InjectLibraryFunctions()
 		{
 			symbolTable.Insert(new SymbolFunc("puti", true, new GTypeFunction(new GTypeInt(false), GTypeNothing.Instance)));
 			symbolTable.Insert(new SymbolFunc("putc", true, new GTypeFunction(new GTypeChar(false), GTypeNothing.Instance)));

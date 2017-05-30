@@ -23,6 +23,8 @@ namespace Grc.Sem.SymbolTable.Symbol
 			set { returned = value; }
 		}
 
+		public string FullName { get; set; }
+
 		public SymbolFunc(string name, bool defined, GTypeBase type)
 			: base(name, type)
 		{

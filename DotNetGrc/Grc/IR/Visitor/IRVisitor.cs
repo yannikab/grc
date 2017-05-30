@@ -21,18 +21,24 @@ namespace Grc.IR.Visitor
 	{
 		private string indexedName;
 
-		public IRVisitor()
+		protected override void InjectLibraryFunctions()
 		{
-		}
+			SymbolTable.Insert(new SymbolFunc("_puti", true, new GTypeFunction(new GTypeInt(false), GTypeNothing.Instance)));
+			SymbolTable.Insert(new SymbolFunc("_putc", true, new GTypeFunction(new GTypeChar(false), GTypeNothing.Instance)));
+			SymbolTable.Insert(new SymbolFunc("_puts", true, new GTypeFunction(new GTypeIndexed(0, new GTypeChar(true)), GTypeNothing.Instance)));
 
-		public override void Pre(Root n)
-		{
-			base.Pre(n);
-		}
+			SymbolTable.Insert(new SymbolFunc("_geti", true, new GTypeFunction(GTypeNothing.Instance, new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("_getc", true, new GTypeFunction(GTypeNothing.Instance, new GTypeChar(false))));
+			SymbolTable.Insert(new SymbolFunc("_gets", true, new GTypeFunction(new GTypeProduct(new GTypeInt(false), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance)));
 
-		public override void Post(Root n)
-		{
-			base.Post(n);
+			SymbolTable.Insert(new SymbolFunc("_abs", true, new GTypeFunction(new GTypeInt(false), new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("_ord", true, new GTypeFunction(new GTypeChar(false), new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("_chr", true, new GTypeFunction(new GTypeInt(false), new GTypeChar(false))));
+
+			SymbolTable.Insert(new SymbolFunc("_strlen", true, new GTypeFunction(new GTypeIndexed(0, new GTypeChar(true)), new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("_strcmp", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), new GTypeInt(false))));
+			SymbolTable.Insert(new SymbolFunc("_strcpy", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance)));
+			SymbolTable.Insert(new SymbolFunc("_strcat", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance)));
 		}
 
 		public override void Pre(LocalFuncDef n)
