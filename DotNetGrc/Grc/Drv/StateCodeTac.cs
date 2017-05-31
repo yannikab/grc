@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node.Helper;
 using Grc.Cst.Visitor.ASTCreation;
-using Grc.IR.Visitor;
+using Grc.Tac.Visitor;
 using Grc.Sem.Visitor;
 using java.io;
 using k31.grc.cst.lexer;
@@ -36,9 +36,9 @@ namespace Grc.Drv
 
 				root.Accept(new ScopeNameVisitor());
 
-				root.Accept(new IRVisitor());
+				root.Accept(new TacVisitor());
 
-				foreach (var q in root.Program.IR)
+				foreach (var q in root.Program.Tac)
 					System.Console.WriteLine(q);
 
 				context.State = new StateExitSuccess();
