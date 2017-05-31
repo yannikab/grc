@@ -299,7 +299,6 @@
     <Compile Include="Sem\Node\Func\LocalFuncDecl.cs" />
     <Compile Include="Sem\Node\Stmt\StmtFuncCall.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\IndexedTypeInAssignmentException.cs" />
-    <Compile Include="Sem\Visitor\ScopeNameVisitor.cs" />
     <Compile Include="Tac\Exceptions\TacException.cs" />
     <Compile Include="Tac\Node\Cond\CondAnd.cs" />
     <Compile Include="Tac\Node\Cond\CondBase.cs" />
@@ -347,6 +346,8 @@
     <Compile Include="Tac\Quads\Quad.cs" />
     <Compile Include="Tac\Quads\QuadList.cs" />
     <Compile Include="Tac\Visitor\TacVisitor.cs" />
+    <Compile Include="Tac\Symbol\SymbolFunc.cs" />
+    <Compile Include="Tac\Visitor\ScopeNameVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Grc.Ast.Node.Helper;
 using Grc.Ast.Visitor.GraphViz;
 using Grc.Cst.Visitor.ASTCreation;
-using Grc.Sem.Visitor;
+using Grc.Tac.Visitor;
 using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.parser;

@@ -7,7 +7,7 @@ using Grc.Sem.Types;
 
 namespace Grc.Sem.SymbolTable.Symbol
 {
-	public class SymbolFunc : SymbolBase
+	public partial class SymbolFunc : SymbolBase
 	{
 		private bool defined;
 		private bool returned;
@@ -23,19 +23,11 @@ namespace Grc.Sem.SymbolTable.Symbol
 			set { returned = value; }
 		}
 
-		public string FullName { get; set; }
-
-		public SymbolFunc(string name, bool defined, GTypeBase type)
-			: base(name, type)
-		{
-			this.defined = defined;
-			this.returned = false;
-		}
-
 		public SymbolFunc(string name, bool defined)
 			: base(name)
 		{
 			this.defined = defined;
+			this.returned = false;
 		}
 
 		public override bool Equals(object obj)

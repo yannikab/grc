@@ -9,11 +9,6 @@ namespace Grc.Sem.SymbolTable.Symbol
 {
 	public class SymbolVar : SymbolBase
 	{
-		public SymbolVar(string name, GTypeBase type)
-			: base(name, type)
-		{
-		}
-
 		public SymbolVar(string name)
 			: base(name)
 		{

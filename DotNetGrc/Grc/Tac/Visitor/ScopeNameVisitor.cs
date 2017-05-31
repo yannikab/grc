@@ -8,9 +8,10 @@ using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
 using Grc.Sem.SymbolTable.Symbol;
+using Grc.Sem.Visitor;
 using Grc.Sem.Visitor.Exceptions.GType;
 
-namespace Grc.Sem.Visitor
+namespace Grc.Tac.Visitor
 {
 	public class ScopeNameVisitor : GTypeVisitor
 	{
@@ -68,7 +69,7 @@ namespace Grc.Sem.Visitor
 		{
 			foreach (LocalFuncDecl d in n.Locals.OfType<LocalFuncDecl>())
 				d.ChangeName(SymbolTable.Lookup<SymbolFunc>(d.Name).FullName);
-			
+
 			base.Post(n);
 
 			n.Header.ChangeName(SymbolTable.Lookup<SymbolFunc>(0).FullName);

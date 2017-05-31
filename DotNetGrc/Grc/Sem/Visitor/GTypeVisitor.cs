@@ -42,22 +42,22 @@ namespace Grc.Sem.Visitor
 
 		protected virtual void InjectLibraryFunctions()
 		{
-			symbolTable.Insert(new SymbolFunc("puti", true, new GTypeFunction(new GTypeInt(false), GTypeNothing.Instance)));
-			symbolTable.Insert(new SymbolFunc("putc", true, new GTypeFunction(new GTypeChar(false), GTypeNothing.Instance)));
-			symbolTable.Insert(new SymbolFunc("puts", true, new GTypeFunction(new GTypeIndexed(0, new GTypeChar(true)), GTypeNothing.Instance)));
+			symbolTable.Insert(new SymbolFunc("puti", true) { Type = new GTypeFunction(new GTypeInt(false), GTypeNothing.Instance) });
+			symbolTable.Insert(new SymbolFunc("putc", true) { Type = new GTypeFunction(new GTypeChar(false), GTypeNothing.Instance) });
+			symbolTable.Insert(new SymbolFunc("puts", true) { Type = new GTypeFunction(new GTypeIndexed(0, new GTypeChar(true)), GTypeNothing.Instance) });
 
-			symbolTable.Insert(new SymbolFunc("geti", true, new GTypeFunction(GTypeNothing.Instance, new GTypeInt(false))));
-			symbolTable.Insert(new SymbolFunc("getc", true, new GTypeFunction(GTypeNothing.Instance, new GTypeChar(false))));
-			symbolTable.Insert(new SymbolFunc("gets", true, new GTypeFunction(new GTypeProduct(new GTypeInt(false), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance)));
+			symbolTable.Insert(new SymbolFunc("geti", true) { Type = new GTypeFunction(GTypeNothing.Instance, new GTypeInt(false)) });
+			symbolTable.Insert(new SymbolFunc("getc", true) { Type = new GTypeFunction(GTypeNothing.Instance, new GTypeChar(false)) });
+			symbolTable.Insert(new SymbolFunc("gets", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeInt(false), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance) });
 
-			symbolTable.Insert(new SymbolFunc("abs", true, new GTypeFunction(new GTypeInt(false), new GTypeInt(false))));
-			symbolTable.Insert(new SymbolFunc("ord", true, new GTypeFunction(new GTypeChar(false), new GTypeInt(false))));
-			symbolTable.Insert(new SymbolFunc("chr", true, new GTypeFunction(new GTypeInt(false), new GTypeChar(false))));
+			symbolTable.Insert(new SymbolFunc("abs", true) { Type = new GTypeFunction(new GTypeInt(false), new GTypeInt(false)) });
+			symbolTable.Insert(new SymbolFunc("ord", true) { Type = new GTypeFunction(new GTypeChar(false), new GTypeInt(false)) });
+			symbolTable.Insert(new SymbolFunc("chr", true) { Type = new GTypeFunction(new GTypeInt(false), new GTypeChar(false)) });
 
-			symbolTable.Insert(new SymbolFunc("strlen", true, new GTypeFunction(new GTypeIndexed(0, new GTypeChar(true)), new GTypeInt(false))));
-			symbolTable.Insert(new SymbolFunc("strcmp", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), new GTypeInt(false))));
-			symbolTable.Insert(new SymbolFunc("strcpy", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance)));
-			symbolTable.Insert(new SymbolFunc("strcat", true, new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance)));
+			symbolTable.Insert(new SymbolFunc("strlen", true) { Type = new GTypeFunction(new GTypeIndexed(0, new GTypeChar(true)), new GTypeInt(false)) });
+			symbolTable.Insert(new SymbolFunc("strcmp", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), new GTypeInt(false)) });
+			symbolTable.Insert(new SymbolFunc("strcpy", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance) });
+			symbolTable.Insert(new SymbolFunc("strcat", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance) });
 		}
 
 		public override void Post(Root n)
@@ -95,7 +95,7 @@ namespace Grc.Sem.Visitor
 			{
 				try
 				{
-					symbolTable.Insert(new SymbolFunc(n.Header.Name, true, funcDefType));
+					symbolTable.Insert(new SymbolFunc(n.Header.Name, true) { Type = funcDefType });
 				}
 				catch (SymbolAlreadyInScopeException e)
 				{
@@ -112,7 +112,7 @@ namespace Grc.Sem.Visitor
 
 				try
 				{
-					symbolTable.Insert(new SymbolFunc(n.Header.Name, true, funcDefType));
+					symbolTable.Insert(new SymbolFunc(n.Header.Name, true) { Type = funcDefType });
 				}
 				catch (SymbolAlreadyInScopeException e)
 				{
@@ -131,7 +131,7 @@ namespace Grc.Sem.Visitor
 			{
 				try
 				{
-					SymbolVar symbolVar = new SymbolVar(p.Name, typeResolver.GetType(p));
+					SymbolVar symbolVar = new SymbolVar(p.Name) { Type = typeResolver.GetType(p) };
 
 					symbolTable.Insert(symbolVar);
 				}
@@ -198,7 +198,7 @@ namespace Grc.Sem.Visitor
 
 			try
 			{
-				symbolTable.Insert(new SymbolFunc(n.Name, false, funcDeclType));
+				symbolTable.Insert(new SymbolFunc(n.Name, false) { Type = funcDeclType });
 			}
 			catch (SymbolAlreadyInScopeException e)
 			{
@@ -212,7 +212,7 @@ namespace Grc.Sem.Visitor
 			{
 				try
 				{
-					symbolTable.Insert(new SymbolVar(v.Name, typeResolver.GetType(v)));
+					symbolTable.Insert(new SymbolVar(v.Name) { Type = typeResolver.GetType(v) });
 				}
 				catch (SymbolAlreadyInScopeException e)
 				{

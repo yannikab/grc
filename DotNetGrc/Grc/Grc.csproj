@@ -222,7 +222,7 @@
     <Compile Include="Sem\Node\Expr\ExprFuncCall.cs" />
     <Compile Include="Sem\Node\Func\LocalFuncDecl.cs" />
     <Compile Include="Sem\Node\Stmt\StmtFuncCall.cs" />
-    <Compile Include="Sem\Visitor\ScopeNameVisitor.cs" />
+    <Compile Include="Tac\Visitor\ScopeNameVisitor.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Functions.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Common.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Conditions.cs" />
@@ -360,6 +360,7 @@
     <Compile Include="Sem\Visitor\GTypeVisitor.cs" />
     <Compile Include="Sem\Visitor\SemanticVisitor.cs" />
     <Compile Include="Sem\Visitor\TypeResolver.cs" />
+    <Compile Include="Tac\Symbol\SymbolFunc.cs" />
     <Compile Include="Tac\Visitor\TacVisitor.cs" />
   </ItemGroup>
   <ItemGroup>

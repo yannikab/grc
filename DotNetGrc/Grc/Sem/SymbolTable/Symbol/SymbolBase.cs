@@ -37,12 +37,6 @@ namespace Grc.Sem.SymbolTable.Symbol
 			set { type = value; }
 		}
 
-		public SymbolBase(string name, GTypeBase type)
-			: this(name)
-		{
-			this.type = type;
-		}
-
 		public SymbolBase(string name)
 		{
 			this.name = name;
