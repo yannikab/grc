@@ -3,15 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Node.Helper;
-using Grc.Cst.Visitor.ASTCreation;
-using Grc.Sem.SymbolTable;
-using Grc.Sem.Visitor;
 using Grc.Sem.Visitor.Exceptions.GType;
 using Grc.Sem.Visitor.Exceptions.Sem;
-using java.io;
-using k31.grc.cst.lexer;
-using k31.grc.cst.parser;
 using NUnit.Framework;
 
 namespace GrcTests.Sem
@@ -20,113 +13,13 @@ namespace GrcTests.Sem
 	public partial class GTypeVisitorTests
 	{
 		[Test]
-		public void TestSameVarVar()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	var a : int;
-	var a : char;
-
-{
-}
-
-";
-			Assert.Throws<VariableAlreadyInScopeException>(() => AcceptGTypeVisitor(program));
-		}
-
-
-		[Test]
-		public void TestSameVarPar()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo(a : int) : nothing
-	
-	var a : char;
-
-	{
-	}
-{
-}
-
-";
-			Assert.Throws<VariableAlreadyInScopeException>(() => AcceptGTypeVisitor(program));
-		}
-
-
-		[Test]
-		public void TestSameParParDef()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo(a : int; a : char) : char
-	{
-	}
-{
-}
-
-";
-			Assert.Throws<VariableAlreadyInScopeException>(() => AcceptGTypeVisitor(program));
-		}
-
-
-		[Test]
-		public void TestSameParParDecl()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo(a : int; a : char) : int;
-	
-	fun foo(b: int; b: char ) : int
-	{
-		return 0;
-	}
-{
-}
-
-";
-
-			Assert.Throws<VariableAlreadyInScopeException>(() => AcceptGTypeVisitor(program));
-		}
-
-
-		[Test]
-		public void TestSameVarFun()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	var foo : int;
-	
-	fun foo() : nothing
-	{
-	}
-{
-}
-
-";
-			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
-		}
-
-
-		[Test]
 		public void TestNotDefinedVar()
 		{
 			string program = @"
 
 fun program() : nothing
 {
-	foo <- 5;
+	boo <- 5;
 }
 
 ";
@@ -141,7 +34,7 @@ fun program() : nothing
 
 fun program() : nothing
 {
-	foo();
+	boo();
 }
 
 ";
@@ -156,7 +49,7 @@ fun program() : nothing
 
 fun program() : nothing
 {
-	foo <- bar();
+	boo <- far();
 }
 
 ";
@@ -179,6 +72,7 @@ fun program() : nothing
 
 ";
 			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 2, MaxSymbols);
 		}
 
 
@@ -189,7 +83,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo(ref a : int) : nothing
+	fun boo(ref a : int) : nothing
 	{
 		a <- 5;
 	}
@@ -198,6 +92,7 @@ fun program() : nothing
 
 ";
 			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
 		}
 
 
@@ -210,12 +105,12 @@ fun program() : nothing
 
 	var a : int;
 
-	fun foo() : int
+	fun boo() : int
 	{
 		return 0;
 	}
 {
-	a <- foo();
+	a <- boo();
 }
 
 ";
@@ -233,76 +128,13 @@ fun program() : nothing
 
 	var a : int;
 
-	fun foo() : int;
+	fun boo() : int;
 {
-	a <- foo();
+	a <- boo();
 }
 
 ";
 			Assert.Throws<FunctionDefinitionMissingException>(() => AcceptGTypeVisitor(program));
-		}
-
-
-		[Test]
-		public void TestSameFunDefFunDef()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo() : int
-	{
-		return 0;
-	}
-
-	fun foo() : char
-	{
-		return 'c';
-	}
-{
-}
-
-";
-			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptGTypeVisitor(program));
-		}
-
-
-		[Test]
-		public void TestSameFunDefFunDecl()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo() : int
-	{
-		return 0;
-	}
-
-	fun foo() : char;
-{
-}
-
-";
-			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptGTypeVisitor(program));
-		}
-
-
-		[Test]
-		public void TestSameFunDeclFunDecl()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo() : int;
-
-	fun foo() : char;
-{
-}
-
-";
-			Assert.Throws<FunctionAlreadyInScopeException>(() => AcceptGTypeVisitor(program));
 		}
 
 
@@ -313,7 +145,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : nothing;
+	fun boo() : nothing;
 {
 }
 
@@ -329,11 +161,11 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : char;
+	fun boo() : char;
 
 	var a, b : char[5];
 	
-	fun foo() : char
+	fun boo() : char
 	{
 		return 'a';
 	}
@@ -353,14 +185,14 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo(ref a : char) : int;
+	fun boo(ref a : char) : int;
 
 	var a : int;
 	var b : char;
 
-	fun foo(ref c : char) : int
+	fun boo(ref c : char) : int
 	{
-		a <- foo(b);
+		a <- boo(b);
 		return a;
 	}
 {
@@ -369,98 +201,6 @@ fun program() : nothing
 ";
 			AcceptGTypeVisitor(program);
 			Assert.AreEqual(LibrarySymbols + 6, MaxSymbols);
-		}
-
-
-		[Test]
-		public void TestOuterDeclInnerDef()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo() : int;
-	
-	fun bar() : nothing
-	
-		fun foo() : char
-		{
-			return 'c';
-		}
-	{
-	}
-	
-	fun foo() : int
-	{
-		return 0;
-	}
-{
-}
-
-";
-			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
-		}
-
-
-		[Test]
-		public void TestFunny1()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo() : int
-	{
-		return 0;
-	}
-
-	fun bar() : nothing
-	
-		fun foo() : nothing
-		{
-		}
-	{
-		foo();
-	}
-{
-}
-
-";
-			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
-		}
-
-
-		[Test]
-		public void TestFunny2()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	var a : int;
-
-	fun foo() : int
-	{
-		return 0;
-	}
-
-	fun bar() : nothing
-	
-		fun foo() : int
-		{
-			return 0;
-		}
-	{
-		a <- foo();
-	}
-{
-}
-
-";
-			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 5, MaxSymbols);
 		}
 	}
 }

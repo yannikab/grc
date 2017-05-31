@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Sem.SymbolTable;
 using Grc.Sem.Visitor.Exceptions.GType;
 using NUnit.Framework;
 
@@ -21,12 +20,12 @@ fun program() : nothing
 
 	var a : int;
 	
-	fun foo(p : char) : int
+	fun boo(p : char) : int
 	{
 		return 0;
 	}
 {
-	a <- foo(3, 'a');
+	a <- boo(3, 'a');
 }
 
 ";
@@ -43,12 +42,12 @@ fun program() : nothing
 
 	var a : int;
 	
-	fun foo(p : char; i : int) : int
+	fun boo(p : char; i : int) : int
 	{
 		return 0;
 	}
 {
-	a <- foo('b', 'c');
+	a <- boo('b', 'c');
 }
 
 ";
@@ -57,17 +56,17 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingVarIntLiteralByReference()
+		public void TestPassingVarLiteralIntByRef()
 		{
 			string program = @"
 
 fun program() : nothing
 
-	fun foo(ref a : int) : nothing
+	fun boo(ref a : int) : nothing
 	{
 	}
 {
-	foo(5);
+	boo(5);
 }
 
 ";
@@ -76,17 +75,17 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingVarCharLiteralByReference()
+		public void TestPassingVarLiteralCharByRef()
 		{
 			string program = @"
 
 fun program() : nothing
 
-	fun foo(ref a : char) : nothing
+	fun boo(ref a : char) : nothing
 	{
 	}
 {
-	foo('t');
+	boo('t');
 }
 
 ";
@@ -95,28 +94,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingVarIntExprByReference1()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	var i : int;
-
-	fun foo(ref a : int) : nothing
-	{
-	}
-{
-	foo(i + 1);
-}
-
-";
-			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program));
-		}
-
-
-		[Test]
-		public void TestPassingVarIntExprByReference2()
+		public void TestPassingVarExprIntByRef1()
 		{
 			string program = @"
 
@@ -124,11 +102,11 @@ fun program() : nothing
 
 	var i : int;
 
-	fun foo(ref a : int) : nothing
+	fun boo(ref a : int) : nothing
 	{
 	}
 {
-	foo(1 + i);
+	boo(i + 1);
 }
 
 ";
@@ -137,7 +115,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingVarIntExprByReference3()
+		public void TestPassingVarExprIntByRef2()
 		{
 			string program = @"
 
@@ -145,11 +123,11 @@ fun program() : nothing
 
 	var i : int;
 
-	fun foo(ref a : int) : nothing
+	fun boo(ref a : int) : nothing
 	{
 	}
 {
-	foo(+ i);
+	boo(1 + i);
 }
 
 ";
@@ -158,7 +136,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingVarIntExprByReference4()
+		public void TestPassingVarExprIntByRef3()
 		{
 			string program = @"
 
@@ -166,11 +144,11 @@ fun program() : nothing
 
 	var i : int;
 
-	fun foo(ref a : int) : nothing
+	fun boo(ref a : int) : nothing
 	{
 	}
 {
-	foo(- i);
+	boo(+ i);
 }
 
 ";
@@ -179,7 +157,28 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingVarArrayCharElementByReference()
+		public void TestPassingVarExprIntByRef4()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var i : int;
+
+	fun boo(ref a : int) : nothing
+	{
+	}
+{
+	boo(- i);
+}
+
+";
+			Assert.Throws<FunctionCallRValueByReferenceException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestPassingVarArrayElement()
 		{
 			string program = @"
 
@@ -187,11 +186,43 @@ fun program() : nothing
 
 	var c : char[10];
 
-	fun foo(ref a : char) : nothing
+	fun boo(ref a : char) : nothing
+	{
+	}
+
+	fun far(a : char) : nothing
 	{
 	}
 {
-	foo(c[0]);
+	boo(c[0]);
+
+	far(c[0]);
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 5, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestPassingVarStringElement()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun boo(ref a : char) : nothing
+	{
+	}
+
+	fun far(a : char) : nothing
+	{
+	}
+{
+	boo(""hello""[2]);
+
+	far(""hello""[2]);
 }
 
 ";
@@ -201,27 +232,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingVarStringCharElementByReference()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo(ref a : char) : nothing
-	{
-	}
-{
-	foo(""hello""[2]);
-}
-
-";
-			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
-		}
-
-
-		[Test]
-		public void TestPassingVarArrayArrayCharElementByReference()
+		public void TestPassingVarArrayArrayElement()
 		{
 			string program = @"
 
@@ -229,21 +240,27 @@ fun program() : nothing
 
 	var c : char[10][5];
 
-	fun foo(ref a : char) : nothing
+	fun boo(ref a : char) : nothing
+	{
+	}
+
+	fun far(a : char) : nothing
 	{
 	}
 {
-	foo(c[0][2]);
+	boo(c[0][2]);
+
+	far(c[0][2]);
 }
 
 ";
 			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
+			Assert.AreEqual(LibrarySymbols + 5, MaxSymbols);
 		}
 
 
 		[Test]
-		public void TestPassingVarArrayByReference()
+		public void TestPassingVarArray()
 		{
 			string program = @"
 
@@ -251,11 +268,11 @@ fun program() : nothing
 
 	var arr : char[5];
 
-	fun foo(ref a : char []) : nothing
+	fun boo(ref a : char []) : nothing
 	{
 	}
 {
-	foo(arr);
+	boo(arr);
 }
 
 ";
@@ -265,7 +282,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingVarArrayElementByReference()
+		public void TestPassingVarArrayElementArray()
 		{
 			string program = @"
 
@@ -273,11 +290,11 @@ fun program() : nothing
 
 	var c : char[10][5];
 
-	fun foo(ref a : char[]) : nothing
+	fun boo(ref a : char[]) : nothing
 	{
 	}
 {
-	foo(c[0]);
+	boo(c[0]);
 }
 
 ";
@@ -287,7 +304,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingVarArrayWithSizeByReference()
+		public void TestPassingVarArrayWithSize()
 		{
 			string program = @"
 
@@ -295,11 +312,11 @@ fun program() : nothing
 
 	var arr : char[5];
 
-	fun foo(ref a : char [10]) : nothing
+	fun boo(ref a : char [10]) : nothing
 	{
 	}
 {
-	foo(arr);
+	boo(arr);
 }
 
 ";
@@ -309,7 +326,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingVarArrayElementWithSizeByReference()
+		public void TestPassingVarArrayElementArrayWithSize()
 		{
 			string program = @"
 
@@ -317,11 +334,11 @@ fun program() : nothing
 
 	var c : char[10][5];
 
-	fun foo(ref a : char[10]) : nothing
+	fun boo(ref a : char[10]) : nothing
 	{
 	}
 {
-	foo(c[0]);
+	boo(c[0]);
 }
 
 ";
@@ -331,47 +348,22 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingFunctionCallByVal()
+		public void TestPassingVarFunctionCallByRef()
 		{
 			string program = @"
 
 fun program() : nothing
 
-	fun foo(a : char) : nothing
+	fun boo(ref a : char) : nothing
 	{
 	}
 
-	fun bar() : char
-	{
-		return 'c';
-	}
-{
-	foo(bar());
-}
-
-";
-			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
-		}
-
-
-		[Test]
-		public void TestPassingFunctionCallByRef()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo(ref a : char) : nothing
-	{
-	}
-
-	fun bar() : char
+	fun far() : char
 	{
 		return 'c';
 	}
 {
-	foo(bar());
+	boo(far());
 }
 
 ";

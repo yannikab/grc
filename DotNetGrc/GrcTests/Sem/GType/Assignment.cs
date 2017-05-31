@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Sem.SymbolTable;
 using Grc.Sem.Visitor.Exceptions.GType;
 using NUnit.Framework;
 
@@ -89,11 +88,11 @@ fun program() : nothing
 
 	var a : int;
 
-	fun foo() : nothing
+	fun boo() : nothing
 	{
 	}
 {
-	a <- foo();
+	a <- boo();
 }
 
 ";
@@ -120,72 +119,6 @@ fun program() : nothing
 ";
 			AcceptGTypeVisitor(program);
 			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
-		}
-
-
-		[Test]
-		public void TestAssignFunctionCallNoArgs()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	var a : int;
-	
-	fun foo() : int
-	{
-		return 0;
-	}
-{
-	a <- foo();
-}
-
-";
-			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
-		}
-
-
-		[Test]
-		public void TestAssignFunctionCallArgs()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	var a : int;
-	
-	fun foo(c : char; i : int; ref a : char[5]) : int
-	{
-		return 0;
-	}
-{
-	a <- foo('f', 34, ""hello"");
-}
-
-";
-			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 6, MaxSymbols);
-		}
-
-
-		[Test]
-		public void TestAssignIndexedChar()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	var a : char[5];
-	var b : char;
-	
-{
-	b <- a[4];	
-}
-
-";
-			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
 		}
 
 
@@ -261,6 +194,49 @@ fun program() : nothing
 
 ";
 			Assert.Throws<InvalidTypeInAssignmentException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestAssignToIndexed()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char[4][5];
+
+{
+	a[1][2] <- 'c';	
+	
+	""hello""[2] <- 'c';	
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 2, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestAssignFromIndexed()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : char[4][5][6];
+	var c : char;
+
+{
+	c <- a[1][2][3];	
+
+	c <- ""hello""[2];
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
 		}
 	}
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Sem.SymbolTable;
 using Grc.Sem.Visitor.Exceptions.Sem;
 using NUnit.Framework;
 
@@ -37,7 +36,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo(a : int) : nothing
+	fun boo(a : int) : nothing
 	
 	var a : char;
 
@@ -58,7 +57,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo(a : int; a : char) : char
+	fun boo(a : int; a : char) : char
 	{
 	}
 {
@@ -76,10 +75,11 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo(a : int; a : char) : int;
+	fun boo(a : int; a : char) : int;
 	
-	fun foo(a : int; a : char) : int
+	fun boo(b : int; b : char) : int
 	{
+		return 0;
 	}
 {
 }

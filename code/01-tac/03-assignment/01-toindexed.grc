@@ -1,0 +1,9 @@
+fun program() : nothing
+
+	var a : char[4][5];
+
+{
+	a[1][2] <- 'c';	
+	
+	"hello"[2] <- 'c';	
+}

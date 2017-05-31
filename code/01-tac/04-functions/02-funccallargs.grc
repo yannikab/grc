@@ -1,0 +1,11 @@
+fun program() : nothing
+
+	var a : int;
+	
+	fun boo(c : char; i : int; ref a : char[5]) : int
+	{
+		return 0;
+	}
+{
+	a <- boo('f', 34, "hello");
+}

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Sem.SymbolTable;
 using NUnit.Framework;
 
 namespace GrcTests.Sem

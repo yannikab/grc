@@ -1,0 +1,8 @@
+fun program() : nothing
+
+	fun boo() : nothing
+	{
+	}
+{
+	boo();
+}

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Sem.SymbolTable;
 using Grc.Sem.Visitor.Exceptions.GType;
 using NUnit.Framework;
 
@@ -47,11 +46,11 @@ fun program() : int
 
 fun program() : nothing
 
-	fun foo() : nothing
+	fun boo() : nothing
 	{
 	}
 {
-	foo();
+	boo();
 }
 
 ";
@@ -67,12 +66,12 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : int
+	fun boo() : int
 	{
 		return 0;
 	}
 {
-	foo();
+	boo();
 }
 
 ";
@@ -87,9 +86,9 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : nothing;
+	fun boo() : nothing;
 	
-	fun foo() : int
+	fun boo() : int
 	{
 	}
 {
@@ -107,9 +106,9 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : nothing;
+	fun boo() : nothing;
 	
-	fun foo(ref a, b : char[][3][5]) : nothing
+	fun boo(ref a, b : char[][3][5]) : nothing
 	{
 	}
 {
@@ -127,11 +126,11 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo(x : int ; ref y : char; ref z : int[][4]) : char;
+	fun boo(x : int ; ref y : char; ref z : int[][4]) : char;
 
 	var a, b : char[5];
 	
-	fun foo(a : int; ref b : char; ref c : int[][4]) : char
+	fun boo(a : int; ref b : char; ref c : int[][4]) : char
 	{
 		return 'a';
 	}
@@ -145,13 +144,13 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestFunctionIndexedPassedByReference()
+		public void TestFunctionIndexedByRef()
 		{
 			string program = @"
 
 fun program() : nothing
 
-	fun foo(ref array : int [][5]) : nothing
+	fun boo(ref array : int [][5]) : nothing
 	{
 	}
 {
@@ -164,13 +163,13 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestFunctionIndexedNotPassedByReference()
+		public void TestFunctionIndexedNotByRef()
 		{
 			string program = @"
 
 fun program() : nothing
 
-	fun foo(array : int [][5]) : nothing
+	fun boo(array : int [][5]) : nothing
 	{
 	}
 {
@@ -188,7 +187,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : nothing
+	fun boo() : nothing
 	{
 		return 5;
 	}
@@ -207,7 +206,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : int
+	fun boo() : int
 	{
 		return 'a';
 	}
@@ -226,7 +225,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : int
+	fun boo() : int
 	{
 		return;
 	}
@@ -245,7 +244,7 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : int
+	fun boo() : int
 	{
 		
 	}
@@ -254,6 +253,31 @@ fun program() : nothing
 
 ";
 			Assert.Throws<ReturnMissingInFunctionBodyException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestFunctionArgumentByVal()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun boo(a : char) : nothing
+	{
+	}
+
+	fun far() : char
+	{
+		return 'c';
+	}
+{
+	boo(far());
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
 		}
 	}
 }

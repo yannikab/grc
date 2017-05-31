@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Sem.SymbolTable;
 using Grc.Sem.Visitor.Exceptions.GType;
 using NUnit.Framework;
 
@@ -21,11 +20,11 @@ fun program() : nothing
 
 	var a : int;
 
-	fun foo() : nothing
+	fun boo() : nothing
 	{
 	}
 {
-	a <- 5 + foo();
+	a <- 5 + boo();
 }
 
 ";
@@ -34,7 +33,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestExprFunctionCallExprAdd()
+		public void TestExprFuncCallAdd()
 		{
 			string program = @"
 
@@ -42,12 +41,58 @@ fun program() : nothing
 
 	var a : int;
 
-	fun foo(c : char; i : int; ref a : char[5]) : int
+	fun boo(c : char; i : int; ref a : char[5]) : int
 	{
 		return 0;
 	}
 {
-	a <- foo('f', 34, ""hello"") + 5;
+	a <- boo('f', 34, ""hello"") + 5;
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 6, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestExprFuncCallNoArgs()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : int;
+	
+	fun boo() : int
+	{
+		return 0;
+	}
+{
+	a <- boo();
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 3, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestExprFuncCallArgs()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var a : int;
+	
+	fun boo(c : char; i : int; ref a : char[5]) : int
+	{
+		return 0;
+	}
+{
+	a <- boo('f', 34, ""hello"");
 }
 
 ";

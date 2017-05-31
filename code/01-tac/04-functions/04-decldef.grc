@@ -1,0 +1,12 @@
+fun program() : nothing
+
+	fun boo(x : int ; ref y : char; ref z : int[][4]) : char;
+
+	var a, b : char[5];
+	
+	fun boo(a : int; ref b : char; ref c : int[][4]) : char
+	{
+		return 'a';
+	}
+{
+}

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Sem.SymbolTable;
 using Grc.Sem.Visitor.Exceptions.Sem;
 using NUnit.Framework;
 
@@ -19,9 +18,9 @@ namespace GrcTests.Sem
 
 fun program() : nothing
 
-	var foo : int;
+	var boo : int;
 	
-	fun foo() : nothing
+	fun boo() : nothing
 	{
 	}
 {
@@ -40,12 +39,12 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : int
+	fun boo() : int
 	{
 		return 0;
 	}
 
-	fun foo(a : int) : char
+	fun boo(a : int) : char
 	{
 		return 'a';
 	}
@@ -64,12 +63,12 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo(c : char) : int
+	fun boo(c : char) : int
 	{
 		return 0;
 	}
 
-	fun foo() : char;
+	fun boo() : char;
 {
 }
 
@@ -85,9 +84,9 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : int;
+	fun boo() : int;
 
-	fun foo(a : int) : char;
+	fun boo(a : int) : char;
 {
 }
 
@@ -103,30 +102,30 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo() : int;
+	fun boo() : int;
 	
-	fun bar() : nothing
+	fun far() : nothing
 	
-		fun foo(c : char) : nothing
+		fun boo(c : char) : nothing
 		{
 		}
 	{
-		foo('c');		$ fun foo(c : char) : nothing;
+		boo('c');		$ fun boo(c : char) : nothing;
 	}
 	
 	var a : int;
 
-	fun foo() : int
+	fun boo() : int
 	{
-		bar();
+		far();
 
-		a <- foo();		$ fun foo() : int;
+		a <- boo();		$ fun boo() : int;
 
 		return 0;
 	}
 
 {
-	a <- foo();			$ fun foo() : int;
+	a <- boo();			$ fun boo() : int;
 }
 
 ";
@@ -136,7 +135,36 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestShadowFuncFunny()
+		public void TestShadowFuncNested1()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun boo() : int
+	{
+		return 0;
+	}
+
+	fun far() : nothing
+	
+		fun boo() : nothing
+		{
+		}
+	{
+		boo();
+	}
+{
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestShadowFuncNested2()
 		{
 			string program = @"
 
@@ -144,19 +172,19 @@ fun program() : nothing
 
 	var a : int;
 
-	fun foo() : int
+	fun boo() : int
 	{
 		return 0;
 	}
 
-	fun bar() : nothing
+	fun far() : nothing
 	
-		fun foo() : int
+		fun boo() : int
 		{
 			return 0;
 		}
 	{
-		a <- foo();
+		a <- boo();
 	}
 {
 }
@@ -168,7 +196,7 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestShadowChild()
+		public void TestShadowFuncChild()
 		{
 			string program = @"
 
@@ -176,15 +204,17 @@ fun program() : nothing
 
 	var a : int;
 
-	fun foo() : int
+	fun boo() : char
 
-		fun foo() : char
+		fun boo() : int
 		{
-			return 'c';
+			return 1;
 		}
 
 	{
-		return 0;
+		a <- boo();
+
+		return 'c';
 	}
 {
 }

@@ -12,12 +12,16 @@ namespace Grc.Ast.Node.Expr
 		private ExprLValBase lval;
 		private ExprBase expr;
 
+		private bool parentIndexed;
+
 		private string lbrack;
 		private string rbrack;
 
 		public ExprLValBase Lval { get { return lval; } }
 
 		public ExprBase Expr { get { return expr; } }
+
+		public bool ParentIndexed { get { return parentIndexed; } }
 
 		public override int Line { get { return lval.Line; } }
 
@@ -30,6 +34,11 @@ namespace Grc.Ast.Node.Expr
 
 			this.lbrack = lbrack;
 			this.rbrack = rbrack;
+
+			this.parentIndexed = false;
+
+			if (lval is ExprLValIndexed)
+				(lval as ExprLValIndexed).parentIndexed = true;
 		}
 
 		public override void Accept(IVisitor v)

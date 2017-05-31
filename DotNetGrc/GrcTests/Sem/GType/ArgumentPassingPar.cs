@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Sem.SymbolTable;
 using NUnit.Framework;
 
 namespace GrcTests.Sem
@@ -12,19 +11,49 @@ namespace GrcTests.Sem
 	public partial class GTypeVisitorTests
 	{
 		[Test]
-		public void TestPassingParArrayCharElementByReference()
+		public void TestPassingParArrayElement()
 		{
 			string program = @"
 
 fun program() : nothing
 
-	fun foo(ref a : char) : nothing
+	fun boo(a : char) : nothing
 	{
 	}
 
-	fun bar(ref c : char[]) : nothing
+	fun far(ref a : char) : nothing
 	{
-		foo(c[0]);
+	}
+
+	fun nap(ref c : char[]) : nothing
+	{
+		boo(c[0]);
+
+		far(c[0]);
+	}
+{
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 5, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestPassingParArrayElementArray()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun boo(ref a : char[]) : nothing
+	{
+	}
+
+	fun far(ref c : char[][10]) : nothing
+	{
+		boo(c[0]);
 	}
 {
 }
@@ -36,19 +65,49 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingParArrayArrayCharElementByReference()
+		public void TestPassingParArrayArrayElement()
 		{
 			string program = @"
 
 fun program() : nothing
 
-	fun foo(ref a : char) : nothing
+	fun boo(a : char) : nothing
 	{
 	}
 
-	fun bar(ref c : char[][5]) : nothing
+	fun far(ref a : char) : nothing
 	{
-		foo(c[0][2]);
+	}
+
+	fun nap(ref c : char[][5]) : nothing
+	{
+		boo(c[1][2]);
+
+		far(c[1][2]);
+	}
+{
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 5, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestPassingParArray()
+		{
+			string program = @"
+
+fun program() : nothing	
+
+	fun boo(ref a : char[]) : nothing
+	{
+	}
+
+	fun far(ref c : char[]) : nothing
+	{
+		boo(c);
 	}
 {
 }
@@ -60,46 +119,22 @@ fun program() : nothing
 
 
 		[Test]
-		public void TestPassingParArrayByReferencePar()
+		public void TestPassingParByRefToByVal()
 		{
 			string program = @"
 
 fun program() : nothing
 
-	fun foo(ref a : char[]) : nothing
+	fun boo(i : int) : nothing
 	{
 	}
 
-	fun bar(ref c : char[]) : nothing
+	fun far(ref a : int) : nothing
 	{
-		foo(c);
-	}
-{
-}		
-
-";
-			AcceptGTypeVisitor(program);
-			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
-		}
-
-
-		[Test]
-		public void TestPassingParArrayElementByReference()
-		{
-			string program = @"
-
-fun program() : nothing
-
-	fun foo(ref a : char[]) : nothing
-	{
-	}
-
-	fun bar(ref c : char[][10]) : nothing
-	{
-		foo(c[0]);
+		boo(a);
 	}
 {
-}		
+}
 
 ";
 			AcceptGTypeVisitor(program);
@@ -114,16 +149,16 @@ fun program() : nothing
 
 fun program() : nothing
 
-	fun foo(ref i : int) : nothing
+	fun boo(ref i : int) : nothing
 	{
 	}
 
-	fun bar(a : int) : nothing
+	fun far(a : int) : nothing
 	{
-		foo(a);
+		boo(a);
 	}
 {
-}		
+}
 
 ";
 			AcceptGTypeVisitor(program);

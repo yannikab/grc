@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Node.Helper;
-using Grc.Cst.Visitor.ASTCreation;
-using Grc.Sem.Visitor;
 using Grc.Sem.Visitor.Exceptions.GType;
-using java.io;
-using k31.grc.cst.lexer;
-using k31.grc.cst.parser;
 using NUnit.Framework;
 
 namespace GrcTests.Sem
@@ -66,7 +60,7 @@ fun program() : nothing
 ";
 			Assert.Throws<ArrayInvalidDimensionException>(() => AcceptGTypeVisitor(program));
 		}
-				
+
 
 		[Test]
 		public void TestLimitsArrayIndexOverBounds()

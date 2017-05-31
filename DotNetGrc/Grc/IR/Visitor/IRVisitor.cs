@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Grc.Ast.Node.Cond;
 using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
-using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
 using Grc.IR.Op;
 using Grc.IR.Quads;
@@ -115,8 +114,6 @@ namespace Grc.IR.Visitor
 			Pre(n);
 
 			n.Addr = new Addr(n.Text);
-
-			this.indexedName = n.Text;
 
 			Post(n);
 		}
@@ -388,7 +385,7 @@ namespace Grc.IR.Visitor
 				n.AddQuad((Quad.GenQuad(OpAssign.Instance, n.Expr.Addr, Addr.Empty, n.Addr)));
 			}
 
-			if (!(n.Type is GTypeIndexed))
+			if (!n.ParentIndexed)
 			{
 				Addr t = new Addr();
 
