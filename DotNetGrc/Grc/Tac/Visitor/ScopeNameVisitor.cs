@@ -9,7 +9,7 @@ using Grc.Ast.Node.Helper;
 using Grc.Ast.Node.Stmt;
 using Grc.Sem.SymbolTable.Symbol;
 using Grc.Sem.Visitor;
-using Grc.Sem.Visitor.Exceptions.GType;
+using Grc.Sem.Visitor.Exceptions.Sem;
 
 namespace Grc.Tac.Visitor
 {
@@ -45,7 +45,7 @@ namespace Grc.Tac.Visitor
 			}
 			catch (NullReferenceException)
 			{
-				throw new FunctionNotInSymbolTableException(n);
+				throw new FunctionNotInOpenScopesException(n);
 			}
 		}
 
@@ -103,7 +103,7 @@ namespace Grc.Tac.Visitor
 			SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Name);
 
 			if (symbolFunc == null)
-				throw new FunctionNotInSymbolTableException(n);
+				throw new FunctionNotInOpenScopesException(n);
 
 			n.ChangeName(symbolFunc.FullName);
 		}
@@ -120,7 +120,7 @@ namespace Grc.Tac.Visitor
 			SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Name);
 
 			if (symbolFunc == null)
-				throw new FunctionNotInSymbolTableException(n);
+				throw new FunctionNotInOpenScopesException(n);
 
 			n.ChangeName(symbolFunc.FullName);
 		}

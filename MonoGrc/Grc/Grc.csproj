@@ -237,7 +237,6 @@
     <Compile Include="Sem\SymbolTable\ISymbolTable.cs" />
     <Compile Include="Sem\SymbolTable\StackSymbolTable.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\FunctionCallStatementWithoutNothingException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\GType\FunctionNotInSymbolTableException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\GTypeException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\InvalidTypeInConditionException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\InvalidTypeInNumericExpression.cs" />

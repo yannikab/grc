@@ -335,7 +335,6 @@
     <Compile Include="Sem\Visitor\Exceptions\GType\ReturnValueNotAllowedException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\FunctionCallArgsMismatchException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\FunctionCallStatementWithoutNothingException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\GType\FunctionNotInSymbolTableException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\GTypeException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\ArrayNotPassedByReferenceException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\LValueNotIndexedTypeException.cs" />

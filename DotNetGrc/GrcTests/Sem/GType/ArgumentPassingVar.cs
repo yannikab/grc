@@ -312,7 +312,7 @@ fun program() : nothing
 
 	var arr : char[5];
 
-	fun boo(ref a : char [10]) : nothing
+	fun boo(ref a : char [5]) : nothing
 	{
 	}
 {
@@ -334,7 +334,7 @@ fun program() : nothing
 
 	var c : char[10][5];
 
-	fun boo(ref a : char[10]) : nothing
+	fun boo(ref a : char[5]) : nothing
 	{
 	}
 {

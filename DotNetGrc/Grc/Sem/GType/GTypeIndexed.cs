@@ -30,7 +30,7 @@ namespace Grc.Sem.Types
 			if (that == null)
 				return false;
 
-			return object.Equals(this.indexedType, that.indexedType);
+			return object.Equals(this.indexedType, that.indexedType) && (this.dim == that.dim || this.dim == 0 || that.dim == 0);
 		}
 
 		public override int GetHashCode()

@@ -7,12 +7,13 @@ using Grc.Ast.Node.Cond;
 using Grc.Ast.Node.Expr;
 using Grc.Ast.Node.Func;
 using Grc.Ast.Node.Stmt;
-using Grc.Tac.Op;
-using Grc.Tac.Quads;
 using Grc.Sem.SymbolTable.Symbol;
 using Grc.Sem.Types;
 using Grc.Sem.Visitor;
 using Grc.Sem.Visitor.Exceptions.GType;
+using Grc.Sem.Visitor.Exceptions.Sem;
+using Grc.Tac.Op;
+using Grc.Tac.Quads;
 
 namespace Grc.Tac.Visitor
 {
@@ -128,7 +129,7 @@ namespace Grc.Tac.Visitor
 			SymbolFunc symbolFunc = SymbolTable.Lookup<SymbolFunc>(n.Name);
 
 			if (symbolFunc == null)
-				throw new FunctionNotInSymbolTableException(n);
+				throw new FunctionNotInOpenScopesException(n);
 
 			GTypeFunction declType = symbolFunc.Type as GTypeFunction;
 

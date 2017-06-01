@@ -149,7 +149,7 @@ fun program() : nothing
 fun program() : nothing
 
 	var a : char[2][5];
-	var b : char[4][10];
+	var b : char[2][5];
 
 {
 	b <- a;	

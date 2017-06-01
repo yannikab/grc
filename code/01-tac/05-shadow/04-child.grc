@@ -1,0 +1,18 @@
+fun program() : nothing
+
+	var a : int;
+
+	fun boo() : char
+
+		fun boo() : int
+		{
+			return 1;
+		}
+
+	{
+		a <- boo();
+
+		return 'c';
+	}
+{
+}

@@ -1,0 +1,28 @@
+fun program() : nothing
+
+	fun outer(a : int; b: int; ref c: char[][5]) : int
+
+		var d : char;
+		var e : char;
+		var f : int;
+
+		fun inner(b : char; e : int) : char
+	
+		var c : int;
+		var f : int[3][5];
+	
+		{
+			a <- 5;
+			b <- 'z';
+			c <- 3;
+			d <- 'x';
+			e <- 6;
+			f[0][2] <- 4;
+
+			return d;
+		}
+	{
+		return b + f;
+	}
+{
+}

@@ -38,7 +38,7 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<FunctionNotInSymbolTableException>(() => AcceptGTypeVisitor(program));
+			Assert.Throws<FunctionNotInOpenScopesException>(() => AcceptGTypeVisitor(program));
 		}
 
 

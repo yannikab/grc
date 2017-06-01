@@ -26,9 +26,9 @@ namespace GrcTests.Sem
 			Parser parser = new Parser(new Lexer(new PushbackReader(sr, 4096)));
 			Root root = new Root();
 			parser.parse().apply(new ASTCreationVisitor(root));
-			ISymbolTable symbolTable = new StackSymbolTable();
-			root.Accept(new SemanticVisitor(out symbolTable));
-			MaxSymbols = symbolTable.MaxSymbols;
+			SemanticVisitor v = new SemanticVisitor();
+			root.Accept(v);
+			MaxSymbols = v.SymbolTable.MaxSymbols;
 		}
 
 

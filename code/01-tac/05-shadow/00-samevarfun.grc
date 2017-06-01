@@ -1,0 +1,9 @@
+fun program() : nothing
+
+	var boo : int;
+	
+	fun boo() : nothing
+	{
+	}
+{
+}

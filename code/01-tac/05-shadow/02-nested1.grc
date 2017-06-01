@@ -1,0 +1,17 @@
+fun program() : nothing
+
+	fun boo() : int
+	{
+		return 0;
+	}
+
+	fun far() : nothing
+	
+		fun boo() : nothing
+		{
+		}
+	{
+		boo();
+	}
+{
+}

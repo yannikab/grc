@@ -187,6 +187,9 @@ fun program() : nothing
 		a <- boo();
 	}
 {
+    a <- boo();
+
+    far();
 }
 
 ";

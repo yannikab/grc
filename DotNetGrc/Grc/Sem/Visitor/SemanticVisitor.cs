@@ -18,14 +18,9 @@ namespace Grc.Sem.Visitor
 {
 	public class SemanticVisitor : DepthFirstVisitor
 	{
-		private ISymbolTable symbolTable;
+		private ISymbolTable symbolTable = new StackSymbolTable();
 
-		public SemanticVisitor(out ISymbolTable symbolTable)
-		{
-			symbolTable = new StackSymbolTable();
-
-			this.symbolTable = symbolTable;
-		}
+		public ISymbolTable SymbolTable { get { return symbolTable; } }
 
 		public override void Pre(Root n)
 		{
@@ -64,7 +59,14 @@ namespace Grc.Sem.Visitor
 				if (symbolFunc.Defined)
 					throw new FunctionAlreadyInScopeException(n.Header, n.Header.Name);
 
-				symbolTable.Insert(new SymbolFunc(n.Header.Name, true));
+				try
+				{
+					symbolTable.Insert(new SymbolFunc(n.Header.Name, true));
+				}
+				catch (SymbolAlreadyInScopeException e)
+				{
+					throw new FunctionAlreadyInScopeException(n.Header, e);
+				}
 			}
 		}
 
@@ -94,7 +96,7 @@ namespace Grc.Sem.Visitor
 				SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(d.Name);
 
 				if (symbolFunc == null)
-					throw new FunctionNotInOpenScopesException(d, d.Name);
+					throw new FunctionNotInOpenScopesException(d);
 
 				if (!symbolFunc.Defined)
 					throw new FunctionDefinitionMissingException(d, symbolFunc);
@@ -152,19 +154,19 @@ namespace Grc.Sem.Visitor
 		public override void Pre(ExprFuncCall n)
 		{
 			if (symbolTable.Lookup<SymbolFunc>(n.Name) == null)
-				throw new FunctionNotInOpenScopesException(n, n.Name);
+				throw new FunctionNotInOpenScopesException(n);
 		}
 
 		public override void Pre(ExprLValIdentifierT n)
 		{
 			if (symbolTable.Lookup<SymbolVar>(n.Name) == null)
-				throw new VariableNotInOpenScopesException(n, n.Name);
+				throw new VariableNotInOpenScopesException(n);
 		}
 
 		public override void Pre(StmtFuncCall n)
 		{
 			if (symbolTable.Lookup<SymbolFunc>(n.Name) == null)
-				throw new FunctionNotInOpenScopesException(n, n.Name);
+				throw new FunctionNotInOpenScopesException(n);
 		}
 	}
 }

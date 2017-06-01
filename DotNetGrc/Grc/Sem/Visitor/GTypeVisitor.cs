@@ -21,17 +21,11 @@ namespace Grc.Sem.Visitor
 {
 	public class GTypeVisitor : DepthFirstVisitor
 	{
-		private ISymbolTable symbolTable;
-		private TypeResolver typeResolver;
+		private TypeResolver typeResolver = new TypeResolver();
+
+		private ISymbolTable symbolTable = new StackSymbolTable();
 
 		public ISymbolTable SymbolTable { get { return symbolTable; } }
-
-		public GTypeVisitor()
-		{
-			this.symbolTable = new StackSymbolTable();
-
-			this.typeResolver = new TypeResolver();
-		}
 
 		public override void Pre(Root n)
 		{
@@ -149,7 +143,7 @@ namespace Grc.Sem.Visitor
 				SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(d.Name);
 
 				if (symbolFunc == null)
-					throw new FunctionNotInOpenScopesException(d, d.Name);
+					throw new FunctionNotInOpenScopesException(d);
 
 				if (!symbolFunc.Defined)
 					throw new FunctionDefinitionMissingException(d, symbolFunc);
@@ -174,7 +168,7 @@ namespace Grc.Sem.Visitor
 			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(0);
 
 			if (symbolFunc == null || !symbolFunc.Name.Equals(n.Header.Name))
-				throw new FunctionNotInSymbolTableException(n);
+				throw new FunctionNotInOpenScopesException(n.Header);
 
 			if (!(symbolFunc.Type is GTypeFunction))
 				throw new SymbolInvalidTypeException(symbolFunc.Name, symbolFunc.Type);
@@ -275,7 +269,7 @@ namespace Grc.Sem.Visitor
 			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Name);
 
 			if (symbolFunc == null)
-				throw new FunctionNotInSymbolTableException(n);
+				throw new FunctionNotInOpenScopesException(n);
 
 			GTypeFunction declType = symbolFunc.Type as GTypeFunction;
 
@@ -300,7 +294,7 @@ namespace Grc.Sem.Visitor
 			SymbolVar symbolVar = symbolTable.Lookup<SymbolVar>(n.Name);
 
 			if (symbolVar == null)
-				throw new VariableNotInOpenScopesException(n, n.Name);
+				throw new VariableNotInOpenScopesException(n);
 
 			// quick solution, a better one would be to clone the type
 			if (symbolVar.Type is GTypeInt)
@@ -412,7 +406,7 @@ namespace Grc.Sem.Visitor
 			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(n.Name);
 
 			if (symbolFunc == null)
-				throw new FunctionNotInSymbolTableException(n);
+				throw new FunctionNotInOpenScopesException(n);
 
 			if (!(symbolFunc.Type is GTypeFunction))
 				throw new SymbolInvalidTypeException(n.Name, symbolFunc.Type);
@@ -429,7 +423,7 @@ namespace Grc.Sem.Visitor
 			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(1);
 
 			if (symbolFunc == null)
-				throw new FunctionNotInSymbolTableException(n);
+				throw new FunctionNotInOpenScopesException(n);
 
 			if (!(symbolFunc.Type is GTypeFunction))
 				throw new SymbolInvalidTypeException(symbolFunc.Name, symbolFunc.Type);

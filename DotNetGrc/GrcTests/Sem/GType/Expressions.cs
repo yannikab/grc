@@ -41,7 +41,7 @@ fun program() : nothing
 
 	var a : int;
 
-	fun boo(c : char; i : int; ref a : char[5]) : int
+	fun boo(c : char; i : int; ref a : char[6]) : int
 	{
 		return 0;
 	}
@@ -87,7 +87,7 @@ fun program() : nothing
 
 	var a : int;
 	
-	fun boo(c : char; i : int; ref a : char[5]) : int
+	fun boo(c : char; i : int; ref a : char[6]) : int
 	{
 		return 0;
 	}
