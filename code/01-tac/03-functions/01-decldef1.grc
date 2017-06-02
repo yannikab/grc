@@ -1,0 +1,12 @@
+fun program() : nothing
+
+	fun boo() : char;
+
+	var a, b : char[5];
+	
+	fun boo() : char
+	{
+		return 'a';
+	}
+{
+}

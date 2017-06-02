@@ -1,0 +1,23 @@
+fun program() : nothing
+
+	var v : int;
+
+	fun boo() : int
+	{
+		return 0;
+	}
+
+	fun far() : nothing
+	
+		fun boo() : int
+		{
+			return 0;
+		}
+	{
+		v <- boo();
+	}
+{
+    v <- boo();
+
+    far();
+}

@@ -1,0 +1,10 @@
+fun program() : nothing
+
+	var v : int;
+
+	fun boo(i : int) : nothing
+	{
+	}
+{
+	boo(v);
+}

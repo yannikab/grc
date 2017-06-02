@@ -1,0 +1,12 @@
+fun program() : nothing	
+
+	fun boo(ref a : char[5]) : nothing
+	{
+	}
+
+	fun far(ref p : char[5]) : nothing
+	{
+		boo(p);
+	}
+{
+}

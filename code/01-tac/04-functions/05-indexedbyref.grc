@@ -1,7 +1,0 @@
-fun program() : nothing
-
-	fun boo(ref array : int [][5]) : nothing
-	{
-	}
-{
-}

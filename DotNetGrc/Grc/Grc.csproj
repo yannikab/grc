@@ -351,7 +351,7 @@
     <Compile Include="Sem\Visitor\Exceptions\GType\FunctionMismatchedDefinitionException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\GType\FunctionCallRValueByReferenceException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionAlreadyInScopeException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionDefinitionMissing.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionDefinitionMissingException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionNotInOpenScopesException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\SemanticException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\VariableAlreadyInScopeException.cs" />

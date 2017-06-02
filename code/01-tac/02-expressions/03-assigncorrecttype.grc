@@ -1,0 +1,10 @@
+fun program() : nothing
+
+	var a : int[3];
+	var b : int;
+	var c : char;
+{
+	a[2] <- 3;
+	b <- 5;
+	c <- 'd';
+}

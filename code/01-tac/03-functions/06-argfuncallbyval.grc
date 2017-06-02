@@ -1,0 +1,13 @@
+fun program() : nothing
+
+	fun boo(c : char) : nothing
+	{
+	}
+
+	fun far() : char
+	{
+		return 'a';
+	}
+{
+	boo(far());
+}

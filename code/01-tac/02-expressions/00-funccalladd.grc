@@ -1,0 +1,11 @@
+fun program() : nothing
+
+	var i : int;
+
+	fun boo() : int
+	{
+		return 4;
+	}
+{
+	i <- boo() + 5;
+}

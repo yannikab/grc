@@ -247,7 +247,6 @@
     <Compile Include="Sem\Visitor\TypeResolver.cs" />
     <Compile Include="Sem\Node\NodeBase.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionAlreadyInScopeException.cs" />
-    <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionDefinitionMissing.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionNotInOpenScopesException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\SemanticException.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\VariableAlreadyInScopeException.cs" />
@@ -347,6 +346,7 @@
     <Compile Include="Tac\Visitor\TacVisitor.cs" />
     <Compile Include="Tac\Symbol\SymbolFunc.cs" />
     <Compile Include="Tac\Visitor\ScopeNameVisitor.cs" />
+    <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionDefinitionMissingException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

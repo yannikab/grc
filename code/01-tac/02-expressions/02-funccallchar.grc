@@ -1,0 +1,11 @@
+fun program() : nothing
+
+	var c : char;
+	
+	fun boo() : char
+	{
+		return 'a';
+	}
+{
+	c <- boo();
+}

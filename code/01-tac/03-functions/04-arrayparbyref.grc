@@ -1,0 +1,7 @@
+fun program() : nothing
+
+	fun boo(ref a : int[][5]) : nothing
+	{
+	}
+{
+}

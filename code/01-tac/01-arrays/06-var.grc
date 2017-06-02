@@ -1,0 +1,10 @@
+fun program() : nothing
+
+	var v : char[5];
+
+	fun boo(ref a : char[]) : nothing
+	{
+	}
+{
+	boo(v);
+}
