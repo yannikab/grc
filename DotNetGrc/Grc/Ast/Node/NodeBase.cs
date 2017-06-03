@@ -22,8 +22,24 @@ namespace Grc.Ast.Node
 			get { return string.Format("[{0}, {1}]", Line, Pos); }
 		}
 
-		public NodeBase()
+		public NodeBase Parent { get; set; }
+
+		protected virtual int Indent
 		{
+			get { return Parent != null ? Parent.Indent + 1 : 0; }
+		}
+
+		protected string Tabs
+		{
+			get
+			{
+				StringBuilder sb = new StringBuilder();
+
+				for (int i = 0; i < Indent; i++)
+					sb.Append("\t");
+
+				return sb.ToString();
+			}
 		}
 
 		public abstract void Accept(IVisitor v);

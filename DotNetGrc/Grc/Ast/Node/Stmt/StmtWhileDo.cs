@@ -10,14 +10,14 @@ namespace Grc.Ast.Node.Stmt
 {
 	public partial class StmtWhileDo : StmtBase
 	{
-		private CondBase cond;
-		private StmtBase stmt;
+		private readonly CondBase cond;
+		private readonly StmtBase stmt;
 
-		private string keyWhile;
-		private string keyDo;
+		private readonly string keyWhile;
+		private readonly string keyDo;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public CondBase Cond { get { return cond; } }
 
@@ -37,6 +37,8 @@ namespace Grc.Ast.Node.Stmt
 
 			this.line = line;
 			this.pos = pos;
+
+			this.stmt.Parent = this;
 		}
 
 		public override void Accept(IVisitor v)
@@ -46,7 +48,7 @@ namespace Grc.Ast.Node.Stmt
 
 		protected override string GetText()
 		{
-			return string.Format("{0} {1} {2} {3}", keyWhile, cond.Text, keyDo, stmt.Text);
+			return string.Format("{0}{1} {2} {3}{4}{5}", Tabs, keyWhile, cond.Text, keyDo, Environment.NewLine, stmt.Text);
 		}
 
 		public override string ToString()

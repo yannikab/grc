@@ -10,11 +10,11 @@ namespace Grc.Ast.Node.Stmt
 {
 	public partial class StmtAssign : StmtBase
 	{
-		private ExprLValBase lval;
-		private ExprBase expr;
+		private readonly ExprLValBase lval;
+		private readonly ExprBase expr;
 
-		private string operAssign;
-		private string semicolon;
+		private readonly string operAssign;
+		private readonly string semicolon;
 
 		public ExprLValBase Lval { get { return this.lval; } }
 
@@ -40,7 +40,7 @@ namespace Grc.Ast.Node.Stmt
 
 		protected override string GetText()
 		{
-			return string.Format("{0} {1} {2}{3}", lval.Text, operAssign, expr.Text, semicolon);
+			return string.Format("{0}{1} {2} {3}{4}{5}", Tabs, lval.Text, operAssign, expr.Text, semicolon, Environment.NewLine);
 		}
 
 		public override string ToString()

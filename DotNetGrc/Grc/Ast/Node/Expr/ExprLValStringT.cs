@@ -11,8 +11,8 @@ namespace Grc.Ast.Node.Expr
 	{
 		private string str;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public override int Line { get { return line; } }
 

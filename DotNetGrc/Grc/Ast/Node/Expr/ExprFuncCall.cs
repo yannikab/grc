@@ -9,14 +9,14 @@ namespace Grc.Ast.Node.Expr
 {
 	public partial class ExprFuncCall : ExprBase
 	{
-		private List<ExprBase> args;
+		private readonly List<ExprBase> args;
 
 		private string id;
-		private string lpar;
-		private string rpar;
+		private readonly string lpar;
+		private readonly string rpar;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public IReadOnlyList<ExprBase> Args { get { return args; } }
 

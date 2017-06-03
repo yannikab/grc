@@ -8,7 +8,7 @@ namespace Grc.Ast.Node.Cond
 {
 	public abstract partial class CondBase : NodeBase
 	{
-		public CondBase()
+		protected CondBase()
 		{
 		}
 	}

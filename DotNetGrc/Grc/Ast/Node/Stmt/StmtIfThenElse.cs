@@ -10,16 +10,16 @@ namespace Grc.Ast.Node.Stmt
 {
 	public partial class StmtIfThenElse : StmtBase
 	{
-		private CondBase cond;
-		private StmtBase stmtThen;
-		private StmtBase stmtElse;
+		private readonly CondBase cond;
+		private readonly StmtBase stmtThen;
+		private readonly StmtBase stmtElse;
 
-		private string keyIf;
-		private string keyThen;
-		private string keyElse;
+		private readonly string keyIf;
+		private readonly string keyThen;
+		private readonly string keyElse;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public CondBase Cond { get { return cond; } }
 
@@ -43,17 +43,22 @@ namespace Grc.Ast.Node.Stmt
 
 			this.line = line;
 			this.pos = pos;
+
+			this.stmtThen.Parent = this;
+			this.stmtElse.Parent = this;
 		}
 
 		public override void Accept(IVisitor v)
 		{
+			string s = this.Text;
 			v.Visit(this);
 		}
 
 		protected override string GetText()
 		{
-			return string.Format("{0} {1} {2} {3} {4} {5}",
-					keyIf, cond.Text, keyThen, stmtThen.Text, keyElse, stmtElse.Text);
+			return string.Format("{0}{1} {2} {3}{4}{5}{6}{7}{8}{9}",
+					Tabs, keyIf, cond.Text, keyThen, Environment.NewLine, stmtThen.Text,
+					Tabs, keyElse, Environment.NewLine, stmtElse.Text);
 		}
 
 		public override string ToString()

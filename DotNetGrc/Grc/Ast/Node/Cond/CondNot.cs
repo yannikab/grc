@@ -9,9 +9,9 @@ namespace Grc.Ast.Node.Cond
 {
 	public partial class CondNot : CondBase
 	{
-		private CondBase cond;
+		private readonly CondBase cond;
 
-		private string operNot;
+		private readonly string operNot;
 
 		public CondBase Cond { get { return cond; } }
 

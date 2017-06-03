@@ -10,12 +10,12 @@ namespace Grc.Ast.Node
 {
 	public class Variable
 	{
-		private string name;
-		private TypeDataBase type;
-		private IReadOnlyList<DimIntegerT> dims;
+		private readonly string name;
+		private readonly TypeDataBase type;
+		private readonly IReadOnlyList<DimIntegerT> dims;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public string Name { get { return name; } }
 

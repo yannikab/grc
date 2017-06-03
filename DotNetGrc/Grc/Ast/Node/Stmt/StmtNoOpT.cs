@@ -9,9 +9,10 @@ namespace Grc.Ast.Node.Stmt
 {
 	public class StmtNoOpT : StmtBase
 	{
-		private string semicolon;
-		private int line;
-		private int pos;
+		private readonly string semicolon;
+
+		private readonly int line;
+		private readonly int pos;
 
 		public override int Line { get { return line; } }
 
@@ -31,7 +32,7 @@ namespace Grc.Ast.Node.Stmt
 
 		protected override string GetText()
 		{
-			return semicolon;
+			return string.Format("{0}{1}{2}", Tabs, semicolon, Environment.NewLine);
 		}
 	}
 }

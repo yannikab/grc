@@ -10,15 +10,15 @@ namespace Grc.Ast.Node
 {
 	public class Parameter
 	{
-		private string name;
-		private bool byRef;
-		private TypeDataBase type;
-		private DimEmptyT dimEmpty;
+		private readonly string name;
+		private readonly bool byRef;
+		private readonly TypeDataBase type;
+		private readonly DimEmptyT dimEmpty;
 
-		private IReadOnlyList<DimIntegerT> dims;
+		private readonly IReadOnlyList<DimIntegerT> dims;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public string Name { get { return name; } }
 

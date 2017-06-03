@@ -9,7 +9,7 @@ namespace Grc.Ast.Node.Type
 {
 	public abstract class TypeDataBase : TypeReturnBase
 	{
-		public TypeDataBase(string keyword, int line, int pos)
+		protected TypeDataBase(string keyword, int line, int pos)
 			: base(keyword, line, pos)
 		{
 		}

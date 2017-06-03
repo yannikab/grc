@@ -9,10 +9,10 @@ namespace Grc.Ast.Node.Cond
 {
 	public partial class CondOr : CondBase
 	{
-		private CondBase left;
-		private CondBase right;
+		private readonly CondBase left;
+		private readonly CondBase right;
 
-		private string operOr;
+		private readonly string operOr;
 
 		public CondBase Left { get { return left; } }
 

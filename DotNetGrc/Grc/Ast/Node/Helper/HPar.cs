@@ -11,16 +11,16 @@ namespace Grc.Ast.Node.Helper
 {
 	public class HPar : NodeBase
 	{
-		private List<ParIdentifierT> identifiers;
-		private HTypePar hTypePar;
+		private readonly List<ParIdentifierT> identifiers;
+		private readonly HTypePar hTypePar;
 
-		private List<Parameter> parameters;
+		private readonly List<Parameter> parameters;
 
-		private string keyRef;
-		private string colon;
+		private readonly string keyRef;
+		private readonly string colon;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public IReadOnlyList<ParIdentifierT> Identifiers { get { return identifiers; } }
 

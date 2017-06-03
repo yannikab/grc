@@ -9,10 +9,10 @@ namespace Grc.Ast.Node.Func
 {
 	public class ParIdentifierT : NodeBase
 	{
-		private string id;
+		private readonly string id;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public override int Line { get { return line; } }
 

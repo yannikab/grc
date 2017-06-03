@@ -18,9 +18,9 @@ namespace Grc.Ast.Node.Helper
 			set { program = value; }
 		}
 
-		public override int Line { get { return program.Line; } }
+		public override int Line { get { return program != null ? program.Line : 0; } }
 
-		public override int Pos { get { return program.Pos; } }
+		public override int Pos { get { return program != null ? program.Pos : 0; } }
 
 		public Root()
 		{

@@ -9,10 +9,10 @@ namespace Grc.Ast.Node.Expr
 {
 	public class ExprLValIdentifierT : ExprLValBase
 	{
-		private string id;
+		private readonly string id;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public string Name { get { return id; } }
 

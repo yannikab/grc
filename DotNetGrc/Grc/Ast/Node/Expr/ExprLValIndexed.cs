@@ -9,13 +9,13 @@ namespace Grc.Ast.Node.Expr
 {
 	public partial class ExprLValIndexed : ExprLValBase
 	{
-		private ExprLValBase lval;
-		private ExprBase expr;
+		private readonly ExprLValBase lval;
+		private readonly ExprBase expr;
 
 		private bool parentIndexed;
 
-		private string lbrack;
-		private string rbrack;
+		private readonly string lbrack;
+		private readonly string rbrack;
 
 		public ExprLValBase Lval { get { return lval; } }
 

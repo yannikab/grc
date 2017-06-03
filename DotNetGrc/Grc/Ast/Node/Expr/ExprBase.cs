@@ -8,7 +8,7 @@ namespace Grc.Ast.Node.Expr
 {
 	public abstract partial class ExprBase : NodeBase
 	{
-		public ExprBase()
+		protected ExprBase()
 		{
 		}
 	}

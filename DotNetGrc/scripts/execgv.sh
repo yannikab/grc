@@ -4,22 +4,35 @@
 MODULE="graphviz"
 
 # actions: cstsimple, cst, ast
-ACTION="ast"
+ACTION1="ast"
+ACTION2=""
 
 if [ $# -ne 1 ]; then exit 1; fi
 
-INFILE=$1
+INFILE="`echo $1 | sed s://*:/:g`"
 
 if ! echo ${INFILE} | grep -q '.*\.grc$'; then exit 1; fi
 
-OUTFILE=`echo ${INFILE} | sed s:grc\$:${MODULE}.${ACTION}.png:`
-
-echo -n "${INFILE} -> " | sed s://*:/:g
-
-echo ${OUTFILE} | sed s://*:/:g
+OUTFILE1=`echo ${INFILE} | sed s:grc\$:${MODULE}.${ACTION1}.png:`
+OUTFILE2=`echo ${INFILE} | sed s:grc\$:${MODULE}.${ACTION2}.png:`
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source ${DIR}/grc.cfg
+source "${DIR}"/grc.cfg
 
-${GRC} ${MODULE} ${ACTION} ${INFILE} | cat | dot -Tpng >${OUTFILE}
+[ ! -x "${GRC}" ] && ("${DIR}"/build.sh; echo)
+
+echo "${INFILE} ->" 
+[ `echo $ACTION1 | wc -w` = 1 -o $MODULE = 'lex' -o $MODULE = 'type' ] && echo ${OUTFILE1}
+[ `echo $ACTION2 | wc -w` = 1 ] && echo ${OUTFILE2}
+echo
+
+if [ ${ENV} = 'DotNet' ]
+then
+    [ `echo $ACTION1 | wc -w` = 1 -o $MODULE = 'lex' -o $MODULE = 'type' ] && "${GRC}" ${MODULE} ${ACTION1} "${INFILE}" | cat | dot -Tpng >"${OUTFILE1}"
+    [ `echo $ACTION2 | wc -w` = 1 ] && "${GRC}" ${MODULE} ${ACTION2} "${INFILE}" | cat | dot -Tpng >"${OUTFILE2}"
+elif [ ${ENV} = 'Mono' ]
+then
+    [ `echo $ACTION1 | wc -w` = 1 -o $MODULE = 'lex' -o $MODULE = 'type' ] && mono "${GRC}" ${MODULE} ${ACTION1} "${INFILE}" | cat | dot -Tpng >"${OUTFILE1}"
+    [ `echo $ACTION2 | wc -w` = 1 ] && mono "${GRC}" ${MODULE} ${ACTION2} "${INFILE}" | cat | dot -Tpng >"${OUTFILE2}"
+fi

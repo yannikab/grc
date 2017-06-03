@@ -8,7 +8,7 @@ namespace Grc.Ast.Node.Stmt
 {
 	public abstract partial class StmtBase : NodeBase
 	{
-		public StmtBase()
+		protected StmtBase()
 		{
 		}
 	}

@@ -4,20 +4,28 @@
 MODULE="code"
 
 # actions:
-# lex -> -
+# lex -> ""
 # parse -> cst, ast
-# type -> -
+# type -> ""
 # code -> src, tac
 ACTION="tac"
 
 if [ $# -ne 1 ]; then exit 1; fi
 
-INFILE=$1
+INFILE="`echo $1 | sed s://*:/:g`"
 
 if ! echo ${INFILE} | grep -q '.*\.grc$'; then exit 1; fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source ${DIR}/grc.cfg
+source "${DIR}"/grc.cfg
 
-${GRC} ${MODULE} ${ACTION} ${INFILE}
+[ ! -x "${GRC}" ] && ("${DIR}"/build.sh; echo)
+
+if [ ${ENV} = 'DotNet' ]
+then
+    [ `echo $ACTION | wc -w` = 1 -o $MODULE = 'lex' -o $MODULE = 'type' ] && "${GRC}" ${MODULE} ${ACTION} "${INFILE}"
+elif [ ${ENV} = 'Mono' ]
+then
+	[ `echo $ACTION | wc -w` = 1 -o $MODULE = 'lex' -o $MODULE = 'type' ] && mono "${GRC}" ${MODULE} ${ACTION} "${INFILE}"
+fi

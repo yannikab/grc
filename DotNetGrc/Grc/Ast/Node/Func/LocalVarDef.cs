@@ -11,17 +11,17 @@ namespace Grc.Ast.Node.Func
 {
 	public class LocalVarDef : LocalBase
 	{
-		private List<VarIdentifierT> identifiers;
-		private HTypeVar hTypeVar;
+		private readonly List<VarIdentifierT> identifiers;
+		private readonly HTypeVar hTypeVar;
 
-		private List<Variable> variables;
+		private readonly List<Variable> variables;
 
-		private string keyVar;
-		private string colon;
-		private string semicolon;
+		private readonly string keyVar;
+		private readonly string colon;
+		private readonly string semicolon;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public IReadOnlyList<VarIdentifierT> Identifiers { get { return identifiers; } }
 
@@ -59,6 +59,8 @@ namespace Grc.Ast.Node.Func
 		protected override string GetText()
 		{
 			StringBuilder sb = new StringBuilder();
+
+			sb.Append(Tabs);
 
 			sb.Append(keyVar + " ");
 

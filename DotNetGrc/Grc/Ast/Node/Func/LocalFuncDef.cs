@@ -11,9 +11,9 @@ namespace Grc.Ast.Node.Func
 {
 	public partial class LocalFuncDef : LocalBase
 	{
-		private LocalFuncDecl header;
-		private List<LocalBase> locals;
-		private StmtBlock stmtBlock;
+		private readonly LocalFuncDecl header;
+		private readonly List<LocalBase> locals;
+		private readonly StmtBlock stmtBlock;
 
 		public LocalFuncDecl Header { get { return header; } }
 
@@ -30,6 +30,13 @@ namespace Grc.Ast.Node.Func
 			this.header = header;
 			this.locals = locals;
 			this.stmtBlock = stmtBlock;
+
+			this.header.Parent = this;
+
+			foreach (NodeBase n in locals)
+				n.Parent = this;
+
+			this.stmtBlock.Parent = this;
 		}
 
 		public override void Accept(IVisitor v)
@@ -41,10 +48,18 @@ namespace Grc.Ast.Node.Func
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.AppendLine(header.Text.Replace(";", String.Empty));
+			sb.AppendLine(header.Text.Remove(header.Text.Length - 1, 1));
+
+			if (locals.Count > 0)
+				sb.AppendLine();
 
 			foreach (LocalBase l in locals)
+			{
 				sb.AppendLine(l.Text);
+
+				if (l != locals[locals.Count - 1])
+					sb.AppendLine();
+			}
 
 			sb.Append(stmtBlock.Text);
 

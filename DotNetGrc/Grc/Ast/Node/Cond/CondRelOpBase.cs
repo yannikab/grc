@@ -10,10 +10,10 @@ namespace Grc.Ast.Node.Cond
 {
 	public abstract partial class CondRelOpBase : CondBase
 	{
-		private ExprBase left;
-		private ExprBase right;
+		private readonly ExprBase left;
+		private readonly ExprBase right;
 
-		private string oper;
+		private readonly string oper;
 
 		public ExprBase Left { get { return left; } }
 
@@ -23,7 +23,7 @@ namespace Grc.Ast.Node.Cond
 
 		public override int Pos { get { return left.Pos; } }
 
-		public CondRelOpBase(ExprBase left, ExprBase right, string oper)
+		protected CondRelOpBase(ExprBase left, ExprBase right, string oper)
 		{
 			this.left = left;
 			this.right = right;

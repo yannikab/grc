@@ -10,11 +10,11 @@ namespace Grc.Ast.Node.Stmt
 {
 	public partial class StmtFuncCall : StmtBase
 	{
-		private ExprFuncCall funCall;
+		private readonly ExprFuncCall funCall;
 
 		private string name;
 
-		private string semicolon;
+		private readonly string semicolon;
 
 		public ExprFuncCall FunCall { get { return funCall; } }
 
@@ -41,7 +41,7 @@ namespace Grc.Ast.Node.Stmt
 
 		protected override string GetText()
 		{
-			return string.Format("{0}{1}", funCall.Text, semicolon);
+			return string.Format("{0}{1}{2}{3}", Tabs, funCall.Text, semicolon, Environment.NewLine);
 		}
 
 		public override string ToString()

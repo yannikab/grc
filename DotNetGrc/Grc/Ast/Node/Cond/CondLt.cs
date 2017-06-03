@@ -7,7 +7,7 @@ using Grc.Ast.Node.Expr;
 
 namespace Grc.Ast.Node.Cond
 {
-	class CondLt : CondRelOpBase
+	public class CondLt : CondRelOpBase
 	{
 		public CondLt(ExprBase left, ExprBase right, string operLt)
 			: base(left, right, operLt)

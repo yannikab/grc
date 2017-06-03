@@ -9,12 +9,12 @@ namespace Grc.Ast.Node.Expr
 {
 	public partial class ExprMinus : ExprBase
 	{
-		private ExprBase expr;
+		private readonly ExprBase expr;
 
-		string operMinus;
+		private readonly string operMinus;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public ExprBase Expr { get { return expr; } }
 

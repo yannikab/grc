@@ -10,7 +10,7 @@ namespace Grc.Ast.Node.Helper
 {
 	public class HTypeReturn : NodeBase
 	{
-		private TypeReturnBase returnType;
+		private readonly TypeReturnBase returnType;
 
 		public TypeReturnBase ReturnType { get { return returnType; } }
 

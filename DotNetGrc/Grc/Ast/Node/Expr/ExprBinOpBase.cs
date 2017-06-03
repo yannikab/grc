@@ -9,10 +9,10 @@ namespace Grc.Ast.Node.Expr
 {
 	public abstract partial class ExprBinOpBase : ExprBase
 	{
-		private ExprBase left;
-		private ExprBase right;
+		private readonly ExprBase left;
+		private readonly ExprBase right;
 
-		private string oper;
+		private readonly string oper;
 
 		public ExprBase Left { get { return left; } }
 
@@ -22,7 +22,7 @@ namespace Grc.Ast.Node.Expr
 
 		public override int Pos { get { return left.Pos; } }
 
-		public ExprBinOpBase(ExprBase left, ExprBase right, string oper)
+		protected ExprBinOpBase(ExprBase left, ExprBase right, string oper)
 		{
 			this.left = left;
 			this.right = right;

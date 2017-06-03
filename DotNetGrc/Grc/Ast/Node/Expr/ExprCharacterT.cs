@@ -9,10 +9,10 @@ namespace Grc.Ast.Node.Expr
 {
 	public class ExprCharacterT : ExprBase
 	{
-		private string character;
+		private readonly string character;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public string Character { get { return character; } }
 

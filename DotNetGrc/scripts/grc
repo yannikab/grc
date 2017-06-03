@@ -2,6 +2,8 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source ${DIR}/grc.cfg
+source "${DIR}"/grc.cfg
 
-${GRC} $*
+[ ! -x "${GRC}" ] && ("${DIR}"/build.sh; echo)
+
+"${GRC}" $*

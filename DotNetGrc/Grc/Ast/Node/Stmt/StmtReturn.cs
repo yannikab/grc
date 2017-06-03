@@ -10,13 +10,13 @@ namespace Grc.Ast.Node.Stmt
 {
 	public partial class StmtReturn : StmtBase
 	{
-		private ExprBase expr;
+		private readonly ExprBase expr;
 
-		private string keyReturn;
-		private string semicolon;
+		private readonly string keyReturn;
+		private readonly string semicolon;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public ExprBase Expr { get { return expr; } }
 
@@ -41,7 +41,7 @@ namespace Grc.Ast.Node.Stmt
 
 		protected override string GetText()
 		{
-			return string.Format("{0}{1}{2}", keyReturn, expr == null ? string.Empty : " " + expr.Text, semicolon);
+			return string.Format("{0}{1}{2}{3}{4}", Tabs, keyReturn, expr == null ? string.Empty : " " + expr.Text, semicolon, Environment.NewLine);
 		}
 
 		public override string ToString()

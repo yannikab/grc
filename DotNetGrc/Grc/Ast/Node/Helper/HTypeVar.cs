@@ -10,8 +10,8 @@ namespace Grc.Ast.Node.Helper
 {
 	public class HTypeVar : NodeBase
 	{
-		private TypeDataBase dataType;
-		private List<DimIntegerT> dims;
+		private readonly TypeDataBase dataType;
+		private readonly List<DimIntegerT> dims;
 
 		public TypeDataBase DataType { get { return dataType; } }
 

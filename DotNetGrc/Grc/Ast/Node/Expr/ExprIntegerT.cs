@@ -9,10 +9,10 @@ namespace Grc.Ast.Node.Expr
 {
 	public partial class ExprIntegerT : ExprBase
 	{
-		private string integer;
+		private readonly string integer;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public string Integer { get { return integer; } }
 

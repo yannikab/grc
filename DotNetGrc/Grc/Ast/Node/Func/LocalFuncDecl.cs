@@ -11,19 +11,19 @@ namespace Grc.Ast.Node.Func
 {
 	public partial class LocalFuncDecl : LocalBase
 	{
-		private List<HPar> hPars;
-		private HTypeReturn hTypeReturn;
+		private readonly List<HPar> hPars;
+		private readonly HTypeReturn hTypeReturn;
 
-		private List<Parameter> parameters;
+		private readonly List<Parameter> parameters;
 
-		private string keyFun;
+		private readonly string keyFun;
 		private string id;
-		private string lpar;
-		private string rpar;
-		private string colon;
+		private readonly string lpar;
+		private readonly string rpar;
+		private readonly string colon;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public IReadOnlyList<HPar> HPars { get { return hPars; } }
 
@@ -36,6 +36,8 @@ namespace Grc.Ast.Node.Func
 		public override int Line { get { return line; } }
 
 		public override int Pos { get { return pos; } }
+
+		protected override int Indent { get { return (Parent as LocalFuncDef).Header == this ? base.Indent - 1 : base.Indent; } }
 
 		public LocalFuncDecl(List<HPar> hPars, HTypeReturn hTypeReturn, string keyFun, string id, string lpar, string rpar, string colon, int line, int pos)
 		{
@@ -53,8 +55,8 @@ namespace Grc.Ast.Node.Func
 
 			this.parameters = new List<Parameter>();
 
-			for (int i = 0; i < hPars.Count; i++)
-				this.parameters.AddRange(hPars[i].Parameters);
+			foreach (HPar h in hPars)
+				this.parameters.AddRange(h.Parameters);
 		}
 
 		public override void Accept(IVisitor v)
@@ -65,6 +67,8 @@ namespace Grc.Ast.Node.Func
 		protected override string GetText()
 		{
 			StringBuilder sb = new StringBuilder();
+
+			sb.Append(Tabs);
 
 			sb.Append(this.keyFun + " ");
 

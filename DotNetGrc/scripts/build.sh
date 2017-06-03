@@ -2,8 +2,8 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source ${DIR}/tool.cfg
+source "${DIR}"/grc.cfg
 
-cd ${DIR}/..
-${BUILDTOOL} /target:clean
-${BUILDTOOL}
+cd "${DIR}"/..
+"${BUILDTOOL}" /p:Configuration=${CONF} /target:clean
+"${BUILDTOOL}" /p:Configuration=${CONF}

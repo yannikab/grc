@@ -9,15 +9,15 @@ namespace Grc.Ast.Node.Type
 {
 	public class DimIntegerT : NodeBase
 	{
-		private string integer;
+		private readonly string integer;
 
-		private string lbrack;
-		private string rbrack;
+		private readonly string lbrack;
+		private readonly string rbrack;
+
+		private readonly int line;
+		private readonly int pos;
 
 		public string Integer { get { return integer; } }
-
-		private int line;
-		private int pos;
 
 		public override int Line { get { return line; } }
 

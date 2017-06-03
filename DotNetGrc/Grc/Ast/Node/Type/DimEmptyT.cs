@@ -9,11 +9,11 @@ namespace Grc.Ast.Node.Type
 {
 	public class DimEmptyT : NodeBase
 	{
-		private string lbrack;
-		private string rbrack;
+		private readonly string lbrack;
+		private readonly string rbrack;
 
-		private int line;
-		private int pos;
+		private readonly int line;
+		private readonly int pos;
 
 		public override int Line { get { return line; } }
 		public override int Pos { get { return pos; } }
