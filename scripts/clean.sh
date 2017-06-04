@@ -5,7 +5,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "${DIR}"/grc.cfg
 
 (
-cd "${DIR}"/..
+cd "${DIR}"/../"${ENV}"Grc
 "${BUILDTOOL}" /target:clean /p:Configuration=Debug
 "${BUILDTOOL}" /target:clean /p:Configuration=Release
 echo;
