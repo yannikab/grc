@@ -46,9 +46,9 @@ namespace Grc.Ast.Node.Expr
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return string.Format("{0}{1}{2}{3}", lval.Text, lbrack, expr.Text, rbrack);
+			get { return string.Format("{0}{1}{2}{3}", lval.Text, lbrack, expr.Text, rbrack); }
 		}
 
 		public override string ToString()

@@ -62,7 +62,7 @@ namespace Grc.Tac.Visitor
 
 			symbolFunc.FullName = SymbolTable.CurrentScopeId == 0 ?
 				string.Format("_{0}", n.Header.Name) :
-				string.Format("{0}.{1}", SymbolTable.Lookup<SymbolFunc>(1).FullName, n.Header.Name);
+				string.Format("{0}.{1}", SymbolTable.LookupLast<SymbolFunc>(1).FullName, n.Header.Name);
 		}
 
 		public override void Post(LocalFuncDef n)
@@ -72,7 +72,7 @@ namespace Grc.Tac.Visitor
 
 			base.Post(n);
 
-			n.Header.ChangeName(SymbolTable.Lookup<SymbolFunc>(0).FullName);
+			n.Header.ChangeName(SymbolTable.LookupLast<SymbolFunc>(0).FullName);
 		}
 
 		public override void Pre(LocalFuncDecl n)
@@ -83,7 +83,7 @@ namespace Grc.Tac.Visitor
 
 			symbolFunc.FullName = SymbolTable.CurrentScopeId == 0 ?
 				string.Format("_{0}", n.Name) :
-				string.Format("{0}.{1}", SymbolTable.Lookup<SymbolFunc>(1).FullName, n.Name);
+				string.Format("{0}.{1}", SymbolTable.LookupLast<SymbolFunc>(1).FullName, n.Name);
 		}
 
 		public override void Post(LocalFuncDecl n)

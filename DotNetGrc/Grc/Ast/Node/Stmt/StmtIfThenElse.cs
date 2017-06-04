@@ -54,11 +54,14 @@ namespace Grc.Ast.Node.Stmt
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return string.Format("{0}{1} {2} {3}{4}{5}{6}{7}{8}{9}",
+			get
+			{
+				return string.Format("{0}{1} {2} {3}{4}{5}{6}{7}{8}{9}",
 					Tabs, keyIf, cond.Text, keyThen, Environment.NewLine, stmtThen.Text,
 					Tabs, keyElse, Environment.NewLine, stmtElse.Text);
+			}
 		}
 
 		public override string ToString()

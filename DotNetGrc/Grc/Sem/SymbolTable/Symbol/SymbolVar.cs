@@ -7,7 +7,7 @@ using Grc.Sem.Types;
 
 namespace Grc.Sem.SymbolTable.Symbol
 {
-	public class SymbolVar : SymbolBase
+	public partial class SymbolVar : SymbolBase
 	{
 		public SymbolVar(string name)
 			: base(name)

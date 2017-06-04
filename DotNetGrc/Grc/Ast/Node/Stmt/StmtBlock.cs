@@ -45,33 +45,36 @@ namespace Grc.Ast.Node.Stmt
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(Tabs);
-			sb.AppendLine(lbrace);
-
-			for (int i = 0; i < stmts.Count; i++)
+			get
 			{
-				if (i != 0 && (stmts[i] is StmtBlock || stmts[i] is StmtIfThen || stmts[i] is StmtIfThenElse || stmts[i] is StmtWhileDo))
+				StringBuilder sb = new StringBuilder();
+
+				sb.Append(Tabs);
+				sb.AppendLine(lbrace);
+
+				for (int i = 0; i < stmts.Count; i++)
+				{
+					if (i != 0 && (stmts[i] is StmtBlock || stmts[i] is StmtIfThen || stmts[i] is StmtIfThenElse || stmts[i] is StmtWhileDo))
+						sb.AppendLine();
+
+					sb.Append(stmts[i].Text);
+
+					if (i != stmts.Count - 1 &&
+						((stmts[i] is StmtBlock || stmts[i] is StmtIfThen || stmts[i] is StmtIfThenElse || stmts[i] is StmtWhileDo) &&
+						!(stmts[i + 1] is StmtBlock || stmts[i + 1] is StmtIfThen || stmts[i + 1] is StmtIfThenElse || stmts[i + 1] is StmtWhileDo)))
+						sb.AppendLine();
+				}
+
+				sb.Append(Tabs);
+				sb.Append(rbrace);
+
+				if (!(Parent is LocalFuncDef))
 					sb.AppendLine();
 
-				sb.Append(stmts[i].Text);
-
-				if (i != stmts.Count - 1 &&
-					((stmts[i] is StmtBlock || stmts[i] is StmtIfThen || stmts[i] is StmtIfThenElse || stmts[i] is StmtWhileDo) &&
-					!(stmts[i + 1] is StmtBlock || stmts[i + 1] is StmtIfThen || stmts[i + 1] is StmtIfThenElse || stmts[i + 1] is StmtWhileDo)))
-					sb.AppendLine();
+				return sb.ToString();
 			}
-
-			sb.Append(Tabs);
-			sb.Append(rbrace);
-
-			if (!(Parent is LocalFuncDef))
-				sb.AppendLine();
-
-			return sb.ToString();
 		}
 
 		public override string ToString()

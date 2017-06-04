@@ -30,9 +30,9 @@ namespace Grc.Ast.Node.Stmt
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return string.Format("{0}{1}{2}", Tabs, semicolon, Environment.NewLine);
+			get { return string.Format("{0}{1}{2}", Tabs, semicolon, Environment.NewLine); }
 		}
 	}
 }

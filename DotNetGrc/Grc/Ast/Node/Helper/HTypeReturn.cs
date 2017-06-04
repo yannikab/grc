@@ -28,9 +28,9 @@ namespace Grc.Ast.Node.Helper
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return returnType.Text;
+			get { return returnType.Text; }
 		}
 	}
 }

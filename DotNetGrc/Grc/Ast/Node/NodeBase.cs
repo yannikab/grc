@@ -9,9 +9,7 @@ namespace Grc.Ast.Node
 {
 	public abstract partial class NodeBase
 	{
-		private string text;
-
-		public string Text { get { return text ?? (text = GetText()); } }
+		public abstract string Text { get; }
 
 		public abstract int Line { get; }
 
@@ -43,8 +41,6 @@ namespace Grc.Ast.Node
 		}
 
 		public abstract void Accept(IVisitor v);
-
-		protected abstract string GetText();
 
 		public override string ToString()
 		{

@@ -5,16 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Node;
 using Grc.Ast.Node.Helper;
+using Grc.Ast.Node.Stmt;
 
 namespace Grc.Ast.Visitor.GraphViz
 {
 	class GraphVizNodeDataVisitor : DepthFirstVisitor
 	{
-		private IDictionary<NodeBase, int> id = new Dictionary<NodeBase, int>();
-
 		private int nextId = 0;
 
-		private Stack<NodeBase> stack = new Stack<NodeBase>();
+		private Stack<int> stack = new Stack<int>();
 
 		private void AddString(string s)
 		{
@@ -24,7 +23,7 @@ namespace Grc.Ast.Visitor.GraphViz
 			Console.WriteLine("\t" + GvName(i) + " [label=\"" + GvData(s) + "\"] ;");
 
 			if (stack.Count > 0)
-				Console.WriteLine("\t" + GvName(id[stack.Peek()]) + " -- " + GvName(i));
+				Console.WriteLine("\t" + GvName(stack.Peek()) + " -- " + GvName(i));
 		}
 
 		private string GvName(int id)
@@ -39,16 +38,15 @@ namespace Grc.Ast.Visitor.GraphViz
 
 		public override void DefaultPre(NodeBase n)
 		{
-			if (!id.ContainsKey(n))
-				id[n] = nextId++;
+			int i = nextId++;
 
-			Console.WriteLine("\t" + GvName(id[n]) + " ;");
-			Console.WriteLine("\t" + GvName(id[n]) + " [label=\"" + GvData(n.ToString()) + "\"] ;");
+			Console.WriteLine("\t" + GvName(i) + " ;");
+			Console.WriteLine("\t" + GvName(i) + " [label=\"" + GvData(n.ToString()) + "\"] ;");
 
 			if (stack.Count > 0)
-				Console.WriteLine("\t" + GvName(id[stack.Peek()]) + " -- " + GvName(id[n]));
+				Console.WriteLine("\t" + GvName(stack.Peek()) + " -- " + GvName(i));
 
-			stack.Push(n);
+			stack.Push(i);
 		}
 
 		public override void DefaultPost(NodeBase n)
@@ -69,12 +67,16 @@ namespace Grc.Ast.Visitor.GraphViz
 		public override void Visit(HTypePar n)
 		{
 			AddString(n.Text);
-
 		}
 
 		public override void Visit(HTypeVar n)
 		{
 			AddString(n.Text);
+		}
+
+		public override void Visit(StmtFuncCall n)
+		{
+			Visit(n.FunCall);
 		}
 	}
 }

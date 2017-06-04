@@ -24,7 +24,7 @@ namespace Grc.Drv
 
 					break;
 
-				case "graphviz":
+				case "gv":
 
 					context.State = new StateGraphViz();
 
@@ -65,7 +65,7 @@ namespace Grc.Drv
 			Console.WriteLine("Available modules:");
 			Console.WriteLine("lex - lexical analysis of input");
 			Console.WriteLine("parse - syntax analysis after lexical analysis");
-			Console.WriteLine("graphviz - output graphviz code for concrete and abstract syntax trees");
+			Console.WriteLine("gv - output graphviz code for concrete and abstract syntax trees");
 			Console.WriteLine("type - type checking after syntax analysis and semantic checking");
 			Console.WriteLine("code - code generation after type checking");
 		}
@@ -73,7 +73,7 @@ namespace Grc.Drv
 		private void ShowUsage()
 		{
 			Console.WriteLine("Usage: grc [module] [action] [filename]");
-			Console.WriteLine("Available modules: lex, parse, graphviz, type, code, help");
+			Console.WriteLine("Available modules: lex, parse, gv, type, code, help");
 		}
 	}
 }

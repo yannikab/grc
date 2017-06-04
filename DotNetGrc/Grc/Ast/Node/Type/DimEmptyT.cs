@@ -32,9 +32,9 @@ namespace Grc.Ast.Node.Type
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return string.Format("{0}{1}", lbrack, rbrack);
+			get { return string.Format("{0}{1}", lbrack, rbrack); }
 		}
 	}
 }

@@ -31,9 +31,9 @@ namespace Grc.Ast.Node.Func
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return id;
+			get { return id; }
 		}
 	}
 }

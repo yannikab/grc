@@ -80,7 +80,7 @@ namespace Grc.Sem.SymbolTable
 			return null;
 		}
 
-		public T Lookup<T>(int level) where T : SymbolBase
+		public T LookupLast<T>(int level) where T : SymbolBase
 		{
 			if (scope.Count == 0)
 				throw new NoCurrentScopeException();
@@ -98,6 +98,24 @@ namespace Grc.Sem.SymbolTable
 					return (T)symbol[i];
 
 			return null;
+		}
+
+		public IEnumerable<T> LookupAll<T>(int level) where T : SymbolBase
+		{
+			if (scope.Count == 0)
+				throw new NoCurrentScopeException();
+
+			if (level < 0 || !(scope.Count - level > 0))
+				throw new NoOuterScopeException(level);
+
+			int outerScope = scope.Count - level - 1;
+
+			int firstSymbol = outerScope > 0 ? scope[outerScope - 1] : 0;
+			int lastSymbol = scope[outerScope] - 1;
+
+			for (int i = firstSymbol; i <= lastSymbol; i++)
+				if (symbol[i] is T)
+					yield return (T)symbol[i];
 		}
 
 		public void Exit()

@@ -46,9 +46,9 @@ namespace Grc.Ast.Node.Stmt
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return string.Format("{0}{1} {2} {3}{4}{5}", Tabs, keyWhile, cond.Text, keyDo, Environment.NewLine, stmt.Text);
+			get { return string.Format("{0}{1} {2} {3}{4}{5}", Tabs, keyWhile, cond.Text, keyDo, Environment.NewLine, stmt.Text); }
 		}
 
 		public override string ToString()

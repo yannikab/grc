@@ -44,26 +44,29 @@ namespace Grc.Ast.Node.Func
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.AppendLine(header.Text.Remove(header.Text.Length - 1, 1));
-
-			if (locals.Count > 0)
-				sb.AppendLine();
-
-			foreach (LocalBase l in locals)
+			get
 			{
-				sb.AppendLine(l.Text);
+				StringBuilder sb = new StringBuilder();
 
-				if (l != locals[locals.Count - 1])
+				sb.AppendLine(header.Text.Remove(header.Text.Length - 1, 1));
+
+				if (locals.Count > 0)
 					sb.AppendLine();
+
+				foreach (LocalBase l in locals)
+				{
+					sb.AppendLine(l.Text);
+
+					if (l != locals[locals.Count - 1])
+						sb.AppendLine();
+				}
+
+				sb.Append(stmtBlock.Text);
+
+				return sb.ToString();
 			}
-
-			sb.Append(stmtBlock.Text);
-
-			return sb.ToString();
 		}
 
 		public override string ToString()

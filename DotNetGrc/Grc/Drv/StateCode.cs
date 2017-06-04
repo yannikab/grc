@@ -18,9 +18,27 @@ namespace Grc.Drv
 
 					break;
 
+				case "srcll":
+
+					context.State = new StateCodeSrcLL();
+
+					break;
+
 				case "tac":
 
 					context.State = new StateCodeTac();
+
+					break;
+
+				case "tacll":
+
+					context.State = new StateCodeTacLL();
+
+					break;
+
+				case "cil":
+
+					context.State = new StateCodeCil();
 
 					break;
 
@@ -45,14 +63,17 @@ namespace Grc.Drv
 		private void ShowHelp()
 		{
 			Console.WriteLine("Available actions for module 'code':");
-			Console.WriteLine("src - output reconstructed source code from abstract syntax tree"); 
+			Console.WriteLine("src - output reconstructed source code from abstract syntax tree");
+			Console.WriteLine("srcll - output reconstructed source code after lambda lifting");
 			Console.WriteLine("tac - output intermediate representation of input in three address code");
+			Console.WriteLine("tacll - output intermediate representation after lambda lifting");
+			Console.WriteLine("cil - output target code (Common Intermediate Language)");
 		}
 
 		private void ShowUsage()
 		{
 			Console.WriteLine("Usage: grc [module] [action] [filename]");
-			Console.WriteLine("Available actions for module 'code': src, tac, help");
+			Console.WriteLine("Available actions for module 'code': src, srcll, tac, tacll, cil, help");
 		}
 	}
 }

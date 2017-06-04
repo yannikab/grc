@@ -38,9 +38,9 @@ namespace Grc.Ast.Node.Stmt
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return string.Format("{0}{1} {2} {3}{4}{5}", Tabs, lval.Text, operAssign, expr.Text, semicolon, Environment.NewLine);
+			get { return string.Format("{0}{1} {2} {3}{4}{5}", Tabs, lval.Text, operAssign, expr.Text, semicolon, Environment.NewLine); }
 		}
 
 		public override string ToString()

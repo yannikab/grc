@@ -32,6 +32,8 @@ namespace Grc.Ast.Node.Stmt
 			this.name = funCall.Name;
 
 			this.semicolon = semicolon;
+
+			this.funCall.Parent = this;
 		}
 
 		public override void Accept(IVisitor v)
@@ -39,9 +41,9 @@ namespace Grc.Ast.Node.Stmt
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return string.Format("{0}{1}{2}{3}", Tabs, funCall.Text, semicolon, Environment.NewLine);
+			get { return string.Format("{0}{1}{2}{3}", Tabs, funCall.Text, semicolon, Environment.NewLine); }
 		}
 
 		public override string ToString()

@@ -32,16 +32,19 @@ namespace Grc.Ast.Node.Helper
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			StringBuilder sb = new StringBuilder();
+			get
+			{
+				StringBuilder sb = new StringBuilder();
 
-			sb.Append(dataType.Text);
+				sb.Append(dataType.Text);
 
-			foreach (var d in dims)
-				sb.Append(d.Text);
+				foreach (var d in dims)
+					sb.Append(d.Text);
 
-			return sb.ToString();
+				return sb.ToString();
+			}
 		}
 
 		public override string ToString()

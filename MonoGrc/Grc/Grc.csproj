@@ -210,7 +210,6 @@
     <Compile Include="Cst\Visitor\ASTCreation\Statements.cs" />
     <Compile Include="Cst\Visitor\ASTCreation\Variables.cs" />
     <Compile Include="Ast\Visitor\GraphViz\GraphVizNodeDataVisitor.cs" />
-    <Compile Include="Ast\Node\NodeException.cs" />
     <Compile Include="Ast\Node\Helper\HPar.cs" />
     <Compile Include="Ast\Node\Helper\HTypePar.cs" />
     <Compile Include="Ast\Node\Helper\HTypeReturn.cs" />
@@ -347,6 +346,19 @@
     <Compile Include="Tac\Symbol\SymbolFunc.cs" />
     <Compile Include="Tac\Visitor\ScopeNameVisitor.cs" />
     <Compile Include="Sem\Visitor\Exceptions\Sem\FunctionDefinitionMissingException.cs" />
+    <Compile Include="Cil\Exception\CilException.cs" />
+    <Compile Include="Cil\Node\Expr\ExprFuncCall.cs" />
+    <Compile Include="Cil\Node\Func\LocalFuncDecl.cs" />
+    <Compile Include="Cil\Node\Func\LocalFuncDef.cs" />
+    <Compile Include="Cil\Symbol\SymbolVar.cs" />
+    <Compile Include="Cil\Visitor\LLBoomVisitor.cs" />
+    <Compile Include="Cil\Visitor\LLTickVisitor.cs" />
+    <Compile Include="Cil\Visitor\NodeComposer.cs" />
+    <Compile Include="Tac\Visitor\ScopeGTypeVisitor.cs" />
+    <Compile Include="Drv\StateCodeCil.cs" />
+    <Compile Include="Drv\StateCodeSrcLL.cs" />
+    <Compile Include="Drv\StateCodeTacLL.cs" />
+    <Compile Include="Drv\StateGraphVizAstLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

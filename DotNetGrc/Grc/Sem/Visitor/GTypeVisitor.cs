@@ -165,7 +165,7 @@ namespace Grc.Sem.Visitor
 				throw new SemanticException(e);
 			}
 
-			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(0);
+			SymbolFunc symbolFunc = symbolTable.LookupLast<SymbolFunc>(0);
 
 			if (symbolFunc == null || !symbolFunc.Name.Equals(n.Header.Name))
 				throw new FunctionNotInOpenScopesException(n.Header);
@@ -420,7 +420,7 @@ namespace Grc.Sem.Visitor
 
 		public override void Post(StmtReturn n)
 		{
-			SymbolFunc symbolFunc = symbolTable.Lookup<SymbolFunc>(1);
+			SymbolFunc symbolFunc = symbolTable.LookupLast<SymbolFunc>(1);
 
 			if (symbolFunc == null)
 				throw new FunctionNotInOpenScopesException(n);

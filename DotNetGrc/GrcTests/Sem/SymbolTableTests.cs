@@ -166,46 +166,46 @@ namespace GrcTests.Sem
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
 
-			Assert.IsNull(ist.Lookup<SymbolFunc>(0));
-			Assert.IsNull(ist.Lookup<SymbolVar>(0));
+			Assert.IsNull(ist.LookupLast<SymbolFunc>(0));
+			Assert.IsNull(ist.LookupLast<SymbolVar>(0));
 
 			ist.Insert(new SymbolFunc("fun", true));
 
-			Assert.AreEqual(ist.Lookup<SymbolFunc>(0).Name, "fun");
-			Assert.IsNull(ist.Lookup<SymbolVar>(0));
+			Assert.AreEqual(ist.LookupLast<SymbolFunc>(0).Name, "fun");
+			Assert.IsNull(ist.LookupLast<SymbolVar>(0));
 
 			ist.Enter();
 
-			Assert.IsNull(ist.Lookup<SymbolFunc>(0));
-			Assert.IsNull(ist.Lookup<SymbolVar>(0));
+			Assert.IsNull(ist.LookupLast<SymbolFunc>(0));
+			Assert.IsNull(ist.LookupLast<SymbolVar>(0));
 
-			Assert.AreEqual(ist.Lookup<SymbolFunc>(1).Name, "fun");
-			Assert.IsNull(ist.Lookup<SymbolVar>(1));
+			Assert.AreEqual(ist.LookupLast<SymbolFunc>(1).Name, "fun");
+			Assert.IsNull(ist.LookupLast<SymbolVar>(1));
 
 			ist.Insert(new SymbolVar("par1"));
 			ist.Insert(new SymbolVar("par2"));
 
-			Assert.IsNull(ist.Lookup<SymbolFunc>(0));
-			Assert.AreEqual(ist.Lookup<SymbolVar>(0).Name, "par2");
+			Assert.IsNull(ist.LookupLast<SymbolFunc>(0));
+			Assert.AreEqual(ist.LookupLast<SymbolVar>(0).Name, "par2");
 
-			Assert.AreEqual(ist.Lookup<SymbolFunc>(1).Name, "fun");
-			Assert.IsNull(ist.Lookup<SymbolVar>(1));
+			Assert.AreEqual(ist.LookupLast<SymbolFunc>(1).Name, "fun");
+			Assert.IsNull(ist.LookupLast<SymbolVar>(1));
 
 			ist.Insert(new SymbolFunc("fun2", true));
 
-			Assert.AreEqual(ist.Lookup<SymbolFunc>(0).Name, "fun2");
-			Assert.AreEqual(ist.Lookup<SymbolVar>(0).Name, "par2");
+			Assert.AreEqual(ist.LookupLast<SymbolFunc>(0).Name, "fun2");
+			Assert.AreEqual(ist.LookupLast<SymbolVar>(0).Name, "par2");
 
 			ist.Enter();
 
-			Assert.IsNull(ist.Lookup<SymbolFunc>(0));
-			Assert.IsNull(ist.Lookup<SymbolVar>(0));
+			Assert.IsNull(ist.LookupLast<SymbolFunc>(0));
+			Assert.IsNull(ist.LookupLast<SymbolVar>(0));
 
-			Assert.AreEqual(ist.Lookup<SymbolFunc>(1).Name, "fun2");
-			Assert.AreEqual(ist.Lookup<SymbolVar>(1).Name, "par2");
+			Assert.AreEqual(ist.LookupLast<SymbolFunc>(1).Name, "fun2");
+			Assert.AreEqual(ist.LookupLast<SymbolVar>(1).Name, "par2");
 
-			Assert.AreEqual(ist.Lookup<SymbolFunc>(2).Name, "fun");
-			Assert.IsNull(ist.Lookup<SymbolVar>(2));
+			Assert.AreEqual(ist.LookupLast<SymbolFunc>(2).Name, "fun");
+			Assert.IsNull(ist.LookupLast<SymbolVar>(2));
 		}
 	}
 }

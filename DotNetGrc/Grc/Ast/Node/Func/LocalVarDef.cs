@@ -56,29 +56,32 @@ namespace Grc.Ast.Node.Func
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(Tabs);
-
-			sb.Append(keyVar + " ");
-
-			for (int i = 0; i < Variables.Count; i++)
+			get
 			{
-				sb.Append(Variables[i].Name);
+				StringBuilder sb = new StringBuilder();
 
-				if (i < Variables.Count - 1)
-					sb.Append(", ");
+				sb.Append(Tabs);
+
+				sb.Append(keyVar + " ");
+
+				for (int i = 0; i < Variables.Count; i++)
+				{
+					sb.Append(Variables[i].Name);
+
+					if (i < Variables.Count - 1)
+						sb.Append(", ");
+				}
+
+				sb.Append(string.Format(" {0} ", colon));
+
+				sb.Append(hTypeVar.Text);
+
+				sb.Append(semicolon);
+
+				return sb.ToString();
 			}
-
-			sb.Append(string.Format(" {0} ", colon));
-
-			sb.Append(hTypeVar.Text);
-
-			sb.Append(semicolon);
-
-			return sb.ToString();
 		}
 
 		public override string ToString()

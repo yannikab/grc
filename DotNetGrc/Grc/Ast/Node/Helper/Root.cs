@@ -31,9 +31,9 @@ namespace Grc.Ast.Node.Helper
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return program.Text;
+			get { return program != null ? program.Text : string.Empty; }
 		}
 
 		public override string ToString()

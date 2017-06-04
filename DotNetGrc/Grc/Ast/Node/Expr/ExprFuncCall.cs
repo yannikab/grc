@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Visitor;
+using Grc.Ast.Node.Stmt;
 
 namespace Grc.Ast.Node.Expr
 {
@@ -43,33 +44,33 @@ namespace Grc.Ast.Node.Expr
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			if (args == null)
-				throw new NodeException("Children have not been properly set.");
-
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(id);
-
-			sb.Append(lpar);
-
-			for (int i = 0; i < args.Count; i++)
+			get
 			{
-				sb.Append(args[i].Text);
+				StringBuilder sb = new StringBuilder();
 
-				if (i < args.Count - 1)
-					sb.Append(", ");
+				sb.Append(id);
+
+				sb.Append(lpar);
+
+				for (int i = 0; i < args.Count; i++)
+				{
+					sb.Append(args[i].Text);
+
+					if (i < args.Count - 1)
+						sb.Append(", ");
+				}
+
+				sb.Append(rpar);
+
+				return sb.ToString();
 			}
-
-			sb.Append(rpar);
-
-			return sb.ToString();
 		}
 
 		public override string ToString()
 		{
-			return string.Format("{0}{1}{2}", id, lpar, rpar)
+			return string.Format("{0}{1}{2}{3}", id, lpar, rpar, Parent is StmtFuncCall ? ";" : string.Empty)
 				.Remove(0, id[0] == '_' ? 1 : 0)
 				.Replace(".", "." + Environment.NewLine);
 		}

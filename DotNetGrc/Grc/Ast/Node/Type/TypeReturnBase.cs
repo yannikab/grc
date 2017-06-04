@@ -25,9 +25,9 @@ namespace Grc.Ast.Node.Type
 			this.pos = pos;
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return keyword;
+			get { return keyword; }
 		}
 	}
 }

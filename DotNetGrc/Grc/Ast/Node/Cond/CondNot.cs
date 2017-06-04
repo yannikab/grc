@@ -31,9 +31,9 @@ namespace Grc.Ast.Node.Cond
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return string.Format("({0} {1})", operNot, cond);
+			get { return string.Format("({0} {1})", operNot, cond.Text); }
 		}
 
 		public override string ToString()

@@ -64,35 +64,38 @@ namespace Grc.Ast.Node.Func
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(Tabs);
-
-			sb.Append(this.keyFun + " ");
-
-			sb.Append(this.id);
-
-			sb.Append(this.lpar);
-
-			for (int i = 0; i < hPars.Count; i++)
+			get
 			{
-				sb.Append(hPars[i].Text);
+				StringBuilder sb = new StringBuilder();
 
-				if (i < hPars.Count - 1)
-					sb.Append("; ");
+				sb.Append(Tabs);
+
+				sb.Append(this.keyFun + " ");
+
+				sb.Append(this.id);
+
+				sb.Append(this.lpar);
+
+				for (int i = 0; i < hPars.Count; i++)
+				{
+					sb.Append(hPars[i].Text);
+
+					if (i < hPars.Count - 1)
+						sb.Append("; ");
+				}
+
+				sb.Append(this.rpar);
+
+				sb.Append(string.Format(" {0} ", this.colon));
+
+				sb.Append(this.hTypeReturn.Text);
+
+				sb.Append(";");
+
+				return sb.ToString();
 			}
-
-			sb.Append(this.rpar);
-
-			sb.Append(string.Format(" {0} ", this.colon));
-
-			sb.Append(this.hTypeReturn.Text);
-
-			sb.Append(";");
-
-			return sb.ToString();
 		}
 
 		public override string ToString()

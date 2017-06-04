@@ -37,9 +37,9 @@ namespace Grc.Ast.Node.Expr
 			v.Visit(this);
 		}
 
-		protected override string GetText()
+		public override string Text
 		{
-			return string.Format("({0} {1})", operMinus, expr.Text);
+			get { return string.Format("({0} {1})", operMinus, expr.Text); }
 		}
 
 		public override string ToString()
