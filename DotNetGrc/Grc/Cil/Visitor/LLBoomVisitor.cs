@@ -11,20 +11,13 @@ namespace Grc.Cil.Visitor
 {
 	class LLBoomVisitor : DepthFirstVisitor
 	{
-		private bool madeChanges;
-
-		public bool MadeChanges { get { return madeChanges; } }
+		public bool MadeChanges { get; private set; }
 
 		public override void Pre(Root n)
 		{
-			madeChanges = false;
+			MadeChanges = false;
 
 			base.Pre(n);
-		}
-
-		public override void Post(Root n)
-		{
-			base.Post(n);
 		}
 
 		public override void Pre(LocalFuncDef n)
@@ -44,7 +37,7 @@ namespace Grc.Cil.Visitor
 			{
 				(n.Parent as LocalFuncDef).Lift(n, d);
 
-				madeChanges = true;
+				MadeChanges = true;
 			}
 
 			n.ClearFuncLocals();

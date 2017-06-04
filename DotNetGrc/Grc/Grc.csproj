@@ -225,7 +225,7 @@
     <Compile Include="Cil\Symbol\SymbolVar.cs" />
     <Compile Include="Cil\Visitor\LLBoomVisitor.cs" />
     <Compile Include="Cil\Visitor\LLTickVisitor.cs" />
-    <Compile Include="Cil\Visitor\NodeComposer.cs" />
+    <Compile Include="Drv\ContextWrapper.cs" />
     <Compile Include="Drv\StateGraphVizAstLL.cs" />
     <Compile Include="Drv\StateCodeTacLL.cs" />
     <Compile Include="Drv\StateCodeSrcLL.cs" />

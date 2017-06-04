@@ -71,7 +71,7 @@ namespace Grc.Ast.Node.Expr
 		public override string ToString()
 		{
 			return string.Format("{0}{1}{2}{3}", id, lpar, rpar, Parent is StmtFuncCall ? ";" : string.Empty)
-				.Remove(0, id[0] == '_' ? 1 : 0)
+				.Remove(0, id[0] == '_' ? (id.Length > 1 && id[1] == '.' ? 2 : 1) : 0)
 				.Replace(".", "." + Environment.NewLine);
 		}
 	}

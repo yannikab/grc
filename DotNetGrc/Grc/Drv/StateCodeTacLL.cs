@@ -35,6 +35,8 @@ namespace Grc.Drv
 
 				parser.parse().apply(new ASTCreationVisitor(root));
 
+				new ContextWrapper().WrapIntoContext(root);
+
 				root.Accept(new ScopeNameVisitor());
 
 				LLTickVisitor tick = new LLTickVisitor();

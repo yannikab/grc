@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Grc.Ast.Node.Helper;
 using Grc.Cil.Visitor;
 using Grc.Cst.Visitor.ASTCreation;
-using Grc.Sem.Visitor;
 using Grc.Tac.Visitor;
 using java.io;
 using k31.grc.cst.lexer;
@@ -34,6 +33,8 @@ namespace Grc.Drv
 				Root root = new Root();
 
 				parser.parse().apply(new ASTCreationVisitor(root));
+
+				new ContextWrapper().WrapIntoContext(root);
 
 				root.Accept(new ScopeNameVisitor());
 

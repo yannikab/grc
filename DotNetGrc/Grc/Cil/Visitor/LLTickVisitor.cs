@@ -15,20 +15,13 @@ namespace Grc.Cil.Visitor
 	{
 		private Stack<LocalFuncDef> localFuncDefs = new Stack<LocalFuncDef>();
 
-		private bool madeChanges;
-
-		public bool MadeChanges { get { return madeChanges; } }
+		public bool MadeChanges { get; private set; }
 
 		public override void Pre(Root n)
 		{
-			madeChanges = false;
+			MadeChanges = false;
 
 			base.Pre(n);
-		}
-
-		public override void Post(Root n)
-		{
-			base.Post(n);
 		}
 
 		public override void Pre(LocalFuncDef n)
@@ -64,7 +57,7 @@ namespace Grc.Cil.Visitor
 			{
 				foreach (var g in a.SymbolGroups)
 				{
-					madeChanges = true;
+					MadeChanges = true;
 
 					a.FuncDef.Header.AddParameters(g.Type, g.Names);
 

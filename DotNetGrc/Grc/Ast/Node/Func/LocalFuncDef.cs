@@ -71,7 +71,9 @@ namespace Grc.Ast.Node.Func
 
 		public override string ToString()
 		{
-			string s = header.Name.Remove(0, header.Name[0] == '_' ? 1 : 0).Replace(".", "." + Environment.NewLine);
+			string s = header.Name
+				.Remove(0, header.Name[0] == '_' ? (header.Name.Length > 1 && header.Name[1] == '.' ? 2 : 1) : 0)
+				.Replace(".", "." + Environment.NewLine);
 
 			return string.Format("def:{0}{1}()", Environment.NewLine, s);
 		}
