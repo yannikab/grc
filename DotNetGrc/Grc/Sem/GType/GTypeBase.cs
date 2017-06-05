@@ -8,21 +8,14 @@ namespace Grc.Sem.Types
 {
 	public abstract class GTypeBase
 	{
-		private bool byRef;
-
-		public bool ByRef { get { return byRef; } }
-
-		public GTypeBase(bool byRef)
-		{
-			this.byRef = byRef;
-		}
+		public bool ByRef { get; set; }
 
 		public override bool Equals(object obj)
 		{
 			if (obj == null)
 				return false;
 
-			return obj.GetType().Equals(this.GetType());
+			return obj.GetType().Equals(GetType());
 		}
 
 		public override int GetHashCode()
@@ -36,5 +29,7 @@ namespace Grc.Sem.Types
 		}
 
 		public abstract bool MatchesRef(GTypeBase obj);
+
+		public abstract GTypeBase Clone();
 	}
 }

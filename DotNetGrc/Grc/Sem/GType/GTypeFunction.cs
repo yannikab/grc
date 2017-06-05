@@ -8,15 +8,14 @@ namespace Grc.Sem.Types
 {
 	public class GTypeFunction : GTypeBase
 	{
-		private GTypeBase from;
-		private GTypeBase to;
+		private readonly GTypeBase from;
+		private readonly GTypeBase to;
 
 		public GTypeBase From { get { return from; } }
 
 		public GTypeBase To { get { return to; } }
 
 		public GTypeFunction(GTypeBase from, GTypeBase to)
-			: base(false)
 		{
 			this.from = from;
 			this.to = to;
@@ -24,12 +23,12 @@ namespace Grc.Sem.Types
 
 		public override bool Equals(object obj)
 		{
-			GTypeFunction that;
+			GTypeFunction that = obj as GTypeFunction;
 
-			if ((that = obj as GTypeFunction) == null)
+			if (that == null)
 				return false;
 
-			return object.Equals(this.from, that.from) && object.Equals(this.to, that.to);
+			return Equals(this.from, that.from) && Equals(this.to, that.to);
 		}
 
 		public override int GetHashCode()
@@ -44,7 +43,7 @@ namespace Grc.Sem.Types
 			if (that == null)
 				return false;
 
-			if (!object.Equals(this, that))
+			if (!Equals(this, that))
 				return false;
 
 			return this.From.MatchesRef(that.From);
@@ -53,6 +52,11 @@ namespace Grc.Sem.Types
 		public override string ToString()
 		{
 			return string.Format("{0} <- {1}", to, from);
+		}
+
+		public override GTypeBase Clone()
+		{
+			return new GTypeFunction(from.Clone(), to.Clone());
 		}
 	}
 }

@@ -8,19 +8,12 @@ namespace Grc.Sem.Types
 {
 	public class GTypeInt : GTypeData
 	{
-		public GTypeInt(bool byRef)
-			: base(byRef)
-		{
-		}
-
 		public override bool MatchesRef(GTypeBase obj)
 		{
-			GTypeInt that = obj as GTypeInt;
-
-			if (that == null)
+			if (!Equals(this, obj))
 				return false;
 
-			if (!that.ByRef)
+			if (!obj.ByRef)
 				return true;
 
 			return ByRef;
@@ -29,6 +22,11 @@ namespace Grc.Sem.Types
 		public override string ToString()
 		{
 			return string.Format("{0}{1}", ByRef ? "ref " : string.Empty, "int");
+		}
+
+		public override GTypeBase Clone()
+		{
+			return new GTypeInt() { ByRef = this.ByRef };
 		}
 	}
 }

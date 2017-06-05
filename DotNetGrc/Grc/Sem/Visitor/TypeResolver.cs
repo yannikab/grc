@@ -59,9 +59,9 @@ namespace Grc.Sem.Visitor
 			GTypeBase parType = null;
 
 			if (p.Type is Grc.Ast.Node.Type.TypeDataIntT)
-				parType = new GTypeInt(p.Indexed ? true : p.ByRef);
+				parType = new GTypeInt() { ByRef = p.ByRef };
 			else if (p.Type is Grc.Ast.Node.Type.TypeDataCharT)
-				parType = new GTypeChar(p.Indexed ? true : p.ByRef);
+				parType = new GTypeChar() { ByRef = p.ByRef };
 			else
 				throw new GTypeException("Invalid parameter type.");
 
@@ -74,7 +74,7 @@ namespace Grc.Sem.Visitor
 					if (!(dim > 0))
 						throw new ArrayInvalidDimensionException(p.Dims[i]);
 
-					parType = new GTypeIndexed(dim, parType);
+					parType = new GTypeIndexed(dim, parType) { InHeader = true };
 				}
 				catch (ArgumentNullException e)
 				{
@@ -91,7 +91,7 @@ namespace Grc.Sem.Visitor
 			}
 
 			if (p.DimEmpty != null)
-				parType = new GTypeIndexed(0, parType);
+				parType = new GTypeIndexed(0, parType) { InHeader = true };
 
 			// type rule: arrays must be passed by reference
 			if (parType is GTypeIndexed && !p.ByRef)
@@ -105,9 +105,9 @@ namespace Grc.Sem.Visitor
 			GTypeBase varType = null;
 
 			if (v.Type is Grc.Ast.Node.Type.TypeDataIntT)
-				varType = new GTypeInt(true);
+				varType = new GTypeInt();
 			else if (v.Type is Grc.Ast.Node.Type.TypeDataCharT)
-				varType = new GTypeChar(true);
+				varType = new GTypeChar();
 			else
 				throw new GTypeException("Invalid variable type.");
 
@@ -120,7 +120,7 @@ namespace Grc.Sem.Visitor
 					if (!(dim > 0))
 						throw new ArrayInvalidDimensionException(v.Dims[i]);
 
-					varType = new GTypeIndexed(dim, varType);
+					varType = new GTypeIndexed(dim, varType) { InHeader = false };
 				}
 				catch (ArgumentNullException e)
 				{
@@ -146,9 +146,9 @@ namespace Grc.Sem.Visitor
 			if (n.ReturnType is Grc.Ast.Node.Type.TypeReturnNothingT)
 				returnType = GTypeNothing.Instance;
 			else if (n.ReturnType is Grc.Ast.Node.Type.TypeDataIntT)
-				returnType = new GTypeInt(false);
+				returnType = new GTypeInt();
 			else if (n.ReturnType is Grc.Ast.Node.Type.TypeDataCharT)
-				returnType = new GTypeChar(false);
+				returnType = new GTypeChar();
 			else
 				throw new GTypeException("Invalid return type.");
 

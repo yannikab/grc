@@ -8,15 +8,14 @@ namespace Grc.Sem.Types
 {
 	public class GTypeProduct : GTypeBase
 	{
-		private GTypeBase left;
-		private GTypeBase right;
+		private readonly GTypeBase left;
+		private readonly GTypeBase right;
 
 		public GTypeBase Left { get { return left; } }
 
 		public GTypeBase Right { get { return right; } }
 
 		public GTypeProduct(GTypeBase left, GTypeBase right)
-			: base(false)
 		{
 			this.left = left;
 			this.right = right;
@@ -24,12 +23,12 @@ namespace Grc.Sem.Types
 
 		public override bool Equals(object obj)
 		{
-			GTypeProduct that;
+			GTypeProduct that = obj as GTypeProduct;
 
-			if ((that = obj as GTypeProduct) == null)
+			if (that == null)
 				return false;
 
-			return object.Equals(this.left, that.left) && object.Equals(this.right, that.right);
+			return Equals(this.left, that.left) && Equals(this.right, that.right);
 		}
 
 		public override int GetHashCode()
@@ -44,7 +43,7 @@ namespace Grc.Sem.Types
 			if (that == null)
 				return false;
 
-			if (!object.Equals(this, that))
+			if (!Equals(this, that))
 				return false;
 
 			if (!this.left.MatchesRef(that.left))
@@ -62,7 +61,7 @@ namespace Grc.Sem.Types
 			{
 				string l;
 				string r;
-				(left as GTypeProduct).TypeString(out l, out r);
+				((GTypeProduct)left).TypeString(out l, out r);
 				typeLeft = string.Format("{0}, {1}", l, r);
 			}
 			else
@@ -74,7 +73,7 @@ namespace Grc.Sem.Types
 			{
 				string l;
 				string r;
-				(right as GTypeProduct).TypeString(out l, out r);
+				((GTypeProduct)right).TypeString(out l, out r);
 				typeRight = string.Format("{0}, {1}", l, r);
 			}
 			else
@@ -91,6 +90,11 @@ namespace Grc.Sem.Types
 			TypeString(out typeLeft, out typeRight);
 
 			return string.Format("({0}, {1})", typeLeft, typeRight);
+		}
+
+		public override GTypeBase Clone()
+		{
+			return new GTypeProduct(left.Clone(), right.Clone());
 		}
 	}
 }

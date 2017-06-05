@@ -8,19 +8,21 @@ namespace Grc.Sem.Types
 {
 	public class GTypeIndexed : GTypeBase
 	{
-		private GTypeBase indexedType;
-		private int dim;
+		private readonly GTypeBase indexedType;
+		private readonly int dim;
 
 		public GTypeBase IndexedType { get { return indexedType; } }
 
 		public int Dim { get { return dim; } }
 
+		public bool InHeader { get; set; }
+
 		public GTypeIndexed(int dim, GTypeBase indexedType)
-			: base(true)
 		{
 			this.indexedType = indexedType;
-
 			this.dim = dim;
+
+			ByRef = true;
 		}
 
 		public override bool Equals(object obj)
@@ -30,7 +32,16 @@ namespace Grc.Sem.Types
 			if (that == null)
 				return false;
 
-			return object.Equals(this.indexedType, that.indexedType) && (this.dim == that.dim || this.dim == 0 || that.dim == 0);
+			if (!Equals(this.indexedType, that.indexedType))
+				return false;
+
+			if (this.InHeader && that.InHeader && this.dim != that.dim)
+				return false;
+
+			if (!(this.dim == that.dim || this.dim == 0 || that.dim == 0))
+				return false;
+
+			return true;
 		}
 
 		public override int GetHashCode()
@@ -45,7 +56,7 @@ namespace Grc.Sem.Types
 			if (that == null)
 				return false;
 
-			if (!object.Equals(this, that))
+			if (!Equals(this, that))
 				return false;
 
 			return true;
@@ -74,6 +85,11 @@ namespace Grc.Sem.Types
 			TypeString(out type, out dims);
 
 			return string.Format("{0} {1}", type, dims);
+		}
+
+		public override GTypeBase Clone()
+		{
+			return new GTypeIndexed(dim, indexedType.Clone()) { InHeader = this.InHeader };
 		}
 	}
 }

@@ -96,6 +96,46 @@ fun program() : nothing
 
 
 		[Test]
+		public void TestMismatchedDeclDef3()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun boo(ref a : int[][4]) : nothing;
+	
+	fun boo(ref a : int[3][4]) : nothing
+	{
+	}
+{
+}
+
+";
+			Assert.Throws<FunctionMismatchedDefinitionException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestMismatchedDeclDef4()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	fun boo(ref a : int[3][4]) : nothing;
+	
+	fun boo(ref a : int[][4]) : nothing
+	{
+	}
+{
+}
+
+";
+			Assert.Throws<FunctionMismatchedDefinitionException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
 		public void TestDefMissing()
 		{
 			string program = @"

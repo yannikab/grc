@@ -57,7 +57,7 @@ namespace Grc.Tac.Quads
 			if (that == null)
 				return false;
 
-			return object.Equals(this.addr, that.addr);
+			return Equals(this.addr, that.addr);
 		}
 
 		public override int GetHashCode()

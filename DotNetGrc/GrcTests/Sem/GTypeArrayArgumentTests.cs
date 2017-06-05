@@ -12,7 +12,7 @@ namespace GrcTests.Sem
 	public class GTypeArrayArgumentTests : GTypeVisitorTests
 	{
 		[Test]
-		public void TestPar()
+		public void TestParBothNoSize()
 		{
 			string program = @"
 
@@ -79,6 +79,54 @@ fun program() : nothing
 
 ";
 			Assert.Throws<FunctionCallArgsMismatchException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestParSrcNoSize()
+		{
+			string program = @"
+
+fun program() : nothing	
+
+	fun boo(ref a : char[5]) : nothing
+	{
+	}
+
+	fun far(ref p : char[]) : nothing
+	{
+		boo(p);
+	}
+{
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
+		}
+
+
+		[Test]
+		public void TestParTrgNoSize()
+		{
+			string program = @"
+
+fun program() : nothing	
+
+	fun boo(ref a : char[]) : nothing
+	{
+	}
+
+	fun far(ref p : char[5]) : nothing
+	{
+		boo(p);
+	}
+{
+}
+
+";
+			AcceptGTypeVisitor(program);
+			Assert.AreEqual(LibrarySymbols + 4, MaxSymbols);
 		}
 
 

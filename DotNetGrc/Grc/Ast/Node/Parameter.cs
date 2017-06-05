@@ -30,8 +30,6 @@ namespace Grc.Ast.Node
 
 		public IReadOnlyList<DimIntegerT> Dims { get { return dims; } }
 
-		public bool Indexed { get { return dimEmpty != null || dims.Count > 0; } }
-
 		public string Text
 		{
 			get

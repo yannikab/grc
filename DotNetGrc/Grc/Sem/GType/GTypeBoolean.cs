@@ -10,21 +10,7 @@ namespace Grc.Sem.Types
 	{
 		private static GTypeBoolean instance;
 
-		public static GTypeBoolean Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new GTypeBoolean(false);
-
-				return instance;
-			}
-		}
-
-		private GTypeBoolean(bool byRef)
-			: base(byRef)
-		{
-		}
+		public static GTypeBoolean Instance { get { return instance ?? (instance = new GTypeBoolean()); } }
 
 		public override bool MatchesRef(GTypeBase obj)
 		{
@@ -37,6 +23,11 @@ namespace Grc.Sem.Types
 				return true;
 
 			return ByRef;
+		}
+
+		public override GTypeBase Clone()
+		{
+			return new GTypeBoolean() { ByRef = this.ByRef };
 		}
 	}
 }

@@ -36,22 +36,22 @@ namespace Grc.Sem.Visitor
 
 		protected virtual void InjectLibraryFunctions()
 		{
-			symbolTable.Insert(new SymbolFunc("puti", true) { Type = new GTypeFunction(new GTypeInt(false), GTypeNothing.Instance) });
-			symbolTable.Insert(new SymbolFunc("putc", true) { Type = new GTypeFunction(new GTypeChar(false), GTypeNothing.Instance) });
-			symbolTable.Insert(new SymbolFunc("puts", true) { Type = new GTypeFunction(new GTypeIndexed(0, new GTypeChar(true)), GTypeNothing.Instance) });
+			symbolTable.Insert(new SymbolFunc("puti", true) { Type = new GTypeFunction(new GTypeInt(), GTypeNothing.Instance) });
+			symbolTable.Insert(new SymbolFunc("putc", true) { Type = new GTypeFunction(new GTypeChar(), GTypeNothing.Instance) });
+			symbolTable.Insert(new SymbolFunc("puts", true) { Type = new GTypeFunction(new GTypeIndexed(0, new GTypeChar()) { InHeader = true }, GTypeNothing.Instance) });
 
-			symbolTable.Insert(new SymbolFunc("geti", true) { Type = new GTypeFunction(GTypeNothing.Instance, new GTypeInt(false)) });
-			symbolTable.Insert(new SymbolFunc("getc", true) { Type = new GTypeFunction(GTypeNothing.Instance, new GTypeChar(false)) });
-			symbolTable.Insert(new SymbolFunc("gets", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeInt(false), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance) });
+			symbolTable.Insert(new SymbolFunc("geti", true) { Type = new GTypeFunction(GTypeNothing.Instance, new GTypeInt()) });
+			symbolTable.Insert(new SymbolFunc("getc", true) { Type = new GTypeFunction(GTypeNothing.Instance, new GTypeChar()) });
+			symbolTable.Insert(new SymbolFunc("gets", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeInt(), new GTypeIndexed(0, new GTypeChar()) { InHeader = true }), GTypeNothing.Instance) });
 
-			symbolTable.Insert(new SymbolFunc("abs", true) { Type = new GTypeFunction(new GTypeInt(false), new GTypeInt(false)) });
-			symbolTable.Insert(new SymbolFunc("ord", true) { Type = new GTypeFunction(new GTypeChar(false), new GTypeInt(false)) });
-			symbolTable.Insert(new SymbolFunc("chr", true) { Type = new GTypeFunction(new GTypeInt(false), new GTypeChar(false)) });
+			symbolTable.Insert(new SymbolFunc("abs", true) { Type = new GTypeFunction(new GTypeInt(), new GTypeInt()) });
+			symbolTable.Insert(new SymbolFunc("ord", true) { Type = new GTypeFunction(new GTypeChar(), new GTypeInt()) });
+			symbolTable.Insert(new SymbolFunc("chr", true) { Type = new GTypeFunction(new GTypeInt(), new GTypeChar()) });
 
-			symbolTable.Insert(new SymbolFunc("strlen", true) { Type = new GTypeFunction(new GTypeIndexed(0, new GTypeChar(true)), new GTypeInt(false)) });
-			symbolTable.Insert(new SymbolFunc("strcmp", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), new GTypeInt(false)) });
-			symbolTable.Insert(new SymbolFunc("strcpy", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance) });
-			symbolTable.Insert(new SymbolFunc("strcat", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar(true)), new GTypeIndexed(0, new GTypeChar(true))), GTypeNothing.Instance) });
+			symbolTable.Insert(new SymbolFunc("strlen", true) { Type = new GTypeFunction(new GTypeIndexed(0, new GTypeChar()) { InHeader = true }, new GTypeInt()) });
+			symbolTable.Insert(new SymbolFunc("strcmp", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar()) { InHeader = true }, new GTypeIndexed(0, new GTypeChar()) { InHeader = true }), new GTypeInt()) });
+			symbolTable.Insert(new SymbolFunc("strcpy", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar()) { InHeader = true }, new GTypeIndexed(0, new GTypeChar()) { InHeader = true }), GTypeNothing.Instance) });
+			symbolTable.Insert(new SymbolFunc("strcat", true) { Type = new GTypeFunction(new GTypeProduct(new GTypeIndexed(0, new GTypeChar()) { InHeader = true }, new GTypeIndexed(0, new GTypeChar()) { InHeader = true }), GTypeNothing.Instance) });
 		}
 
 		public override void Post(Root n)
@@ -217,7 +217,7 @@ namespace Grc.Sem.Visitor
 
 		public override void Post(ExprIntegerT n)
 		{
-			n.Type = new GTypeInt(false);
+			n.Type = new GTypeInt();
 
 			try
 			{
@@ -231,7 +231,7 @@ namespace Grc.Sem.Visitor
 
 		public override void Post(ExprCharacterT n)
 		{
-			n.Type = new GTypeChar(false);
+			n.Type = new GTypeChar();
 		}
 
 		public override void Post(ExprBinOpBase n)
@@ -243,7 +243,7 @@ namespace Grc.Sem.Visitor
 			if (!(n.Right.Type is GTypeInt))
 				throw new InvalidTypeInNumericExpression(n, n.Right);
 
-			n.Type = new GTypeInt(false);
+			n.Type = new GTypeInt();
 		}
 
 		public override void Post(ExprPlus n)
@@ -252,7 +252,7 @@ namespace Grc.Sem.Visitor
 			if (!(n.Expr.Type is GTypeInt))
 				throw new InvalidTypeInNumericExpression(n, n.Expr);
 
-			n.Type = new GTypeInt(false);
+			n.Type = new GTypeInt();
 		}
 
 		public override void Post(ExprMinus n)
@@ -261,7 +261,7 @@ namespace Grc.Sem.Visitor
 			if (!(n.Expr.Type is GTypeInt))
 				throw new InvalidTypeInNumericExpression(n, n.Expr);
 
-			n.Type = new GTypeInt(false);
+			n.Type = new GTypeInt();
 		}
 
 		public override void Post(ExprFuncCall n)
@@ -296,19 +296,18 @@ namespace Grc.Sem.Visitor
 			if (symbolVar == null)
 				throw new VariableNotInOpenScopesException(n);
 
-			// quick solution, a better one would be to clone the type
-			if (symbolVar.Type is GTypeInt)
-				n.Type = new GTypeInt(true);
-			else if (symbolVar.Type is GTypeChar)
-				n.Type = new GTypeChar(true);
-			else
-				n.Type = symbolVar.Type;
+			n.Type = symbolVar.Type.Clone();
+
+			n.Type.ByRef = true;
+
+			if (n.Type is GTypeIndexed)
+				(n.Type as GTypeIndexed).InHeader = false;
 		}
 
 		public override void Post(ExprLValStringT n)
 		{
 			// type rule: string literals are of type char []
-			n.Type = new GTypeIndexed(n.Text.Length - 1, new GTypeChar(true));
+			n.Type = new GTypeIndexed(n.Text.Length - 1, new GTypeChar()) { InHeader = false };
 		}
 
 		public override void Post(ExprLValIndexed n)
@@ -323,7 +322,12 @@ namespace Grc.Sem.Visitor
 
 			GTypeIndexed lvalType = (GTypeIndexed)n.Lval.Type;
 
-			n.Type = lvalType.IndexedType;
+			n.Type = lvalType.IndexedType.Clone();
+
+			n.Type.ByRef = true;
+
+			if (n.Type is GTypeIndexed)
+				((GTypeIndexed)n.Type).InHeader = false;
 
 			// type rule: integer indices that are known at compile time must be within array bounds
 			try
@@ -384,7 +388,7 @@ namespace Grc.Sem.Visitor
 			if (!(n.Right.Type is GTypeInt || n.Right.Type is GTypeChar))
 				throw new InvalidTypeInRelOpException(n, n.Right);
 
-			if (!object.Equals(n.Left.Type, n.Right.Type))
+			if (!Equals(n.Left.Type, n.Right.Type))
 				throw new InvalidTypeInRelOpException(n);
 
 			n.Type = GTypeBoolean.Instance;
@@ -393,7 +397,7 @@ namespace Grc.Sem.Visitor
 		public override void Post(StmtAssign n)
 		{
 			// type rule: right hand side expression type must match the l-value type
-			if (!object.Equals(n.Lval.Type, n.Expr.Type))
+			if (!Equals(n.Lval.Type, n.Expr.Type))
 				throw new InvalidTypeInAssignmentException(n);
 
 			// type rule: indexed types can not be assigned to
@@ -440,7 +444,7 @@ namespace Grc.Sem.Visitor
 				if (n.Expr == null)
 					throw new ReturnWithoutExpressionException(n, symbolFunc.Name, typeFunc);
 
-				if (!object.Equals(n.Expr.Type, typeFunc.To))
+				if (!Equals(n.Expr.Type, typeFunc.To))
 					throw new ReturnDifferentTypeException(n, symbolFunc.Name, typeFunc, n.Expr);
 
 				symbolFunc.Returned = true;

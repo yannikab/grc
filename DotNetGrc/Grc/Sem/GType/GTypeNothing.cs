@@ -10,35 +10,25 @@ namespace Grc.Sem.Types
 	{
 		private static GTypeNothing instance;
 
-		public static GTypeNothing Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new GTypeNothing();
-
-				return instance;
-			}
-		}
+		public static GTypeNothing Instance { get { return instance ?? (instance = new GTypeNothing()); } }
 
 		private GTypeNothing()
-			: base(false)
 		{
 		}
 
 		public override bool MatchesRef(GTypeBase obj)
 		{
-			GTypeNothing that = obj as GTypeNothing;
-
-			if (that == null)
-				return false;
-
-			return true;
+			return Equals(this, obj);
 		}
 
 		public override string ToString()
 		{
 			return "nothing";
+		}
+
+		public override GTypeBase Clone()
+		{
+			return this;
 		}
 	}
 }

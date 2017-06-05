@@ -8,9 +8,5 @@ namespace Grc.Sem.Types
 {
 	public abstract class GTypeData : GTypeReturn
 	{
-		public GTypeData(bool byRef)
-			: base(byRef)
-		{
-		}
 	}
 }

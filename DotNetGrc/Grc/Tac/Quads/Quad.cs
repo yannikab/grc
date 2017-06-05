@@ -30,7 +30,7 @@ namespace Grc.Tac.Quads
 			get { return arg1; }
 			set
 			{
-				if (!object.Equals(arg1, Addr.Star))
+				if (!Equals(arg1, Addr.Star))
 					throw new TacException();
 
 				arg1 = value;
@@ -42,7 +42,7 @@ namespace Grc.Tac.Quads
 			get { return arg2; }
 			set
 			{
-				if (!object.Equals(arg2, Addr.Star))
+				if (!Equals(arg2, Addr.Star))
 					throw new TacException();
 
 				arg2 = value;
@@ -54,7 +54,7 @@ namespace Grc.Tac.Quads
 			get { return res; }
 			set
 			{
-				if (!object.Equals(res, Addr.Star))
+				if (!Equals(res, Addr.Star))
 					throw new TacException();
 
 				res = value;
