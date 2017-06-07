@@ -1,3 +1,57 @@
+c41e6cc	Kampylafkas Ioannis	2017-06-07 10:24:02 +0300	Project tree restructuring.
+d7b566f	Kampylafkas Ioannis	2017-06-07 05:33:55 +0300	- Added boolean property that indicates if a variable symbol corresponds to a parameter or local variable - Made separate address classes for each type of addressable in three address code - Condition and expression node classes return their corresponding three address code opcode - Added some tests for overflowing of integer expressions, plus some omitted code that checks for it - Corrected an issue with the depth property of nodes, also an omission in the context function wrapper
+e7d5784	Kampylafkas Ioannis	2017-06-05 10:48:36 +0300	Types can now be cloned, so that expression types can be independent from parameter/variable types. The indexed type now has a property that specifies if it corresponds to a parameter. For equality tests, if both indexed types are on a header, they must now match exactly. This corrects function declaration/definition mismatch issues when unspecified dimensions are used.
+f0ecaf9	Kampylafkas Ioannis	2017-06-05 01:15:40 +0300	Added wrapping of the main function into a context, now the last lambda lifting operation is always a Boom.
+ac309ab	Kampylafkas Ioannis	2017-06-04 11:47:55 +0300	Scripts moved to a single directory in the project root.
+778cca6	Kampylafkas Ioannis	2017-06-04 11:29:51 +0300	Moved parser project from root into a directory of its own.
+a3e0578	Kampylafkas Ioannis	2017-06-04 10:03:33 +0300	Lambda lifting.
+bca3bbb	Kampylafkas Ioannis	2017-06-03 21:08:23 +0300	- Source code output formatting - Private fields of abstract syntax tree node classes made readonly - Script changes
+5941db5	Kampylafkas Ioannis	2017-06-02 06:46:49 +0300	- Reorganized test cases and sample code - SableCC generated classes are back into revision control
+7e6f649	Kampylafkas Ioannis	2017-06-01 16:11:11 +0300	- Equality of indexed types now requires equal dimensions in addition to equal inner types - Added some tests for function/variable shadowing - Removed some unused exceptions - Minor script changes
+6fb7ac6	Kampylafkas Ioannis	2017-05-31 08:28:06 +0300	Moved three address code visitor to Tac namespace.
+df5069e	Kampylafkas Ioannis	2017-05-31 07:36:08 +0300	Renamed IR namespace to Tac.
+6f2e03c	Kampylafkas Ioannis	2017-05-31 06:56:57 +0300	- Fixed missing array op in three address code when arrays are partially indexed - Went through the tests, removed duplicates, added them as source files under code/ directory - IKVM assemblies that are not necessary were set to public
+e0ee0e2	Kampylafkas Ioannis	2017-05-30 23:53:54 +0300	Added a visitor that renames functions according to their enclosing scope, giving them unique names.
+2276b74	Kampylafkas Ioannis	2017-05-29 17:50:09 +0300	Assignment to indexed variables forbidden.
+c1eb499	Kampylafkas Ioannis	2017-05-28 20:06:08 +0300	Fixed several issues pertaining to passing by value / reference.
+56833fe	Kampylafkas Ioannis	2017-05-28 03:59:00 +0300	- Simplified and improved ExprLValIndexed TAC generation - TAC segments are stored as lists on their corresponding nodes - Modified driver classes, added option to output reconstructed source code - Added a static integer value to expressions in order to catch some compile time array index errors - Script changes for DotNetGrc and MonoGrc projects
+5bd6fe7	Kampylafkas Ioannis	2017-05-20 18:36:04 +0300	- Incorporated the semantic tests to the type visitor tests - Function definition after declaration inserts a new symbol instead of updating the previous one (required for return) - Correction to variable definitions, they were not considered l-values
+b5de3f0	Kampylafkas Ioannis	2017-05-19 22:22:16 +0300	Organized program invocation using a simple state pattern.
+9472807	Kampylafkas Ioannis	2017-05-19 18:47:37 +0300	- Added new function in symbol table that returns the most recent symbol of a scope (current or outer) - Symbol table does not throw an exception when a symbol has not been found but instead returns null - Handled return statement - Modified some exception messages - Added/modified some tests
+6e70f97	Kampylafkas Ioannis	2017-05-18 20:34:21 +0300	- GTypeVisitor now evaluates types in Post(), using the already computed types of children nodes - Embedded SemanticVisitor symbol table functionality into GTypeVisitor, which is now a DepthFirstVisitor - Most of the type checking functionality was moved from TypeResolver to GTypeVisitor - TypeResolver is now a smaller auxiliary class without access to the symbol table - Minor changes to IRVisitor, surprisingly it seems to still work after the GTypeVisitor changes
+ead6dcc	Kampylafkas Ioannis	2017-05-18 13:50:10 +0300	- Moved type information to a property in NodeBase - Implemented array index calculation code
+589d233	Kampylafkas Ioannis	2017-05-17 14:30:22 +0300	Library functions injected in symbol table, added code examples (with minor corrections).
+d02d51a	Kampylafkas Ioannis	2017-05-17 13:32:36 +0300	Namespace change.
+dcd1a69	Kampylafkas Ioannis	2017-05-17 12:56:02 +0300	Organized type checking tests, some more tests added for passing by value/reference.
+2438ed9	Kampylafkas Ioannis	2017-05-17 10:08:47 +0300	Type checking modifications to support pass by value/reference. More testing needed.
+9d9e6eb	Kampylafkas Ioannis	2017-05-16 10:05:47 +0300	Initial code for translation to Intermediate Representation.
+d9a0e8d	Kampylafkas Ioannis	2017-05-12 03:03:16 +0300	- AST is now built from the bottom up, children nodes are passed to their parent's constructor - Corrected some code that used mismatched AST node classes during AST creation
+7753133	Kampylafkas Ioannis	2017-05-09 23:18:08 +0300	- Added boolean condition type - Made corrections to type visitor - Moved all type checking logic in type resolver class - Added a few more type tests
+a2bf0ed	Kampylafkas Ioannis	2017-05-09 05:01:10 +0300	Semantic visitor corrections.
+c3e1412	Kampylafkas Ioannis	2017-05-08 13:30:58 +0300	Type checking added and is more or less complete.
+155935a	Kampylafkas Ioannis	2017-05-07 02:58:37 +0300	- Interface change for symbol table, lookup method is now generic - Additions to semantic visitor, exception handling and function declaration/definition handling - Some test cases added for semantic visitor concerning function declaration/definition
+683f155	Kampylafkas Ioannis	2017-05-06 03:16:38 +0300	Merge branch 'dotnet'
+454b90d	Kampylafkas Ioannis	2017-05-06 01:07:34 +0300	File mode changes.
+ca90634	Kampylafkas Ioannis	2017-05-06 01:05:15 +0300	Merge branch 'dotnetwin' into dotnet
+3334c51	Kampylafkas Ioannis	2017-05-06 00:59:16 +0300	File mode changes.
+2554b4f	Kampylafkas Ioannis	2017-05-05 23:35:55 +0300	- Removed ProcessChildren() method from NodeBase class - AddChild() is now virtual so that nodes can immediately set their fields - Children list removed, parent property is now protected - Added GetText() abstract method for building nodes' textual representation
+b184b78	Kampylafkas Ioannis	2017-05-04 18:03:06 +0300	- AST nodes are now responsible for setting up their own fields instead of the AST creation visitor - The AST now maintains a complete recursive textual representation of the parsed program - Each AST node also maintains its corresponding source code line and position information - The AST now expands completely into parameter declarations and variable definitions, including their types - Code is now more modular with corrections, simplifications and some cosmetic changes
+17ed3e9	Kampylafkas Ioannis	2017-05-03 02:40:14 +0300	- Changed the way the abstract syntax tree is built to facilitate symbol line and position reporting - Abstract syntax tree creation visitor is split into partial classes for easier management - Moved some files in more sensible locations and updated namespaces
+3f52fce	Kampylafkas Ioannis	2017-05-03 02:25:36 +0300	Changes in scripts under Mono project.
+2cf7822	Kampylafkas Ioannis	2017-05-02 18:36:47 +0300	Switched testing framework to NUnit 3.6.1
+8a81064	Kampylafkas Ioannis	2017-05-02 17:13:31 +0300	File mode changes after transferring project to Windows host.
+7655b1b	Kampylafkas Ioannis	2017-05-02 15:08:43 +0300	Added some symbol table and semantic visitor tests.
+729ccec	Kampylafkas Ioannis	2017-05-02 14:49:37 +0300	- Added stack based symbol table implementation - Added an initial version of a semantic analysis AST visitor - Minor changes to AST node classes
+b484ac2	Kampylafkas Ioannis	2017-05-01 18:05:07 +0300	- AST now preserves order of variable definitions - Moved some code from ASTCreationVisitor to the AST classes it concerns - Added a default AST depth first visitor to simplify custom visitors - Made AST classes public for testing - Modified some scripts in Mono project
+1f04a37	Kampylafkas Ioannis	2017-05-01 14:15:46 +0300	Moved parser test code to separate subdirectory.
+7267d14	Kampylafkas Ioannis	2017-05-01 00:40:44 +0300	Renamed aux package to helper.
+fdbc503	Kampylafkas Ioannis	2017-04-30 23:55:25 +0300	Minor changes in AST classes.
+99059d4	Kampylafkas Ioannis	2017-04-26 06:39:59 +0300	- Added GraphViz CST visitors and AST creation CST visitor - Added GraphViz AST visitor that uses node data for traversal - Referenced .dll was compiled from a .jar with CST classes only
+81d2540	Kampylafkas Ioannis	2017-04-25 21:18:43 +0300	Added abstract syntax tree node classes in C#.
+57f49ef	Kampylafkas Ioannis	2017-04-24 22:54:04 +0300	- IKVM dependencies handled by NuGet, version is 8.1 RC0 (8.1.5717.0) - Parser .jar compiled with same version ikvmc compiler - Added the parser's main method in C#
+91b4071	Kampylafkas Ioannis	2017-04-24 21:13:53 +0300	Renamed .Net solution directory.
+b377cc6	Kampylafkas Ioannis	2017-04-23 13:11:24 +0300	- Switched Java version to 1.7 - Added initial .Net and Mono projects referencing the ikvm produced dll
+2834a47	Kampylafkas Ioannis	2017-04-08 23:23:52 +0300	Minor README changes.
 de76478	Kampylafkas Ioannis	2017-04-07 21:05:16 +0300	Final packaging changes for first part of the project.
 194fa9f	Kampylafkas Ioannis	2017-04-07 17:46:49 +0300	Minor test code changes. Removed notes folder from revision control.
 24a0aac	Kampylafkas Ioannis	2017-04-07 07:17:53 +0300	- Added AST class hierarchy. - Created a CST visitor that transforms CST to AST. - Created an AST visitor that outputs the AST to GraphViz format.

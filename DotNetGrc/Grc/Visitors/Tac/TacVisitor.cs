@@ -10,9 +10,9 @@ using Grc.Nodes.Expr;
 using Grc.Nodes.Func;
 using Grc.Nodes.Stmt;
 using Grc.Symbols;
-using Grc.Tac.Addr;
-using Grc.Tac.Op;
-using Grc.Tac.Quads;
+using Grc.Quads.Addr;
+using Grc.Quads.Op;
+using Grc.Quads;
 using Grc.Types;
 
 namespace Grc.Visitors.Tac

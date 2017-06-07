@@ -7,7 +7,7 @@ MODULE="code"
 # lex -> ""
 # parse -> cst, ast
 # type -> ""
-# code -> src, srcll, tac, tacll, cil
+# code -> src, srcll, tac, tacll
 ACTION1="srcll"
 ACTION2="tacll"
 

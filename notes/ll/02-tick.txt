@@ -1,0 +1,38 @@
+fun program() : nothing
+
+	var a : int;
+
+	fun zul() : nothing
+
+		var b : int;
+
+		fun nap() : nothing
+
+			var c : int;
+
+			fun far(ref c : int) : nothing;
+
+			fun boo(ref c : int) : nothing
+			{
+				a <- 1;
+				b <- 2;
+				c <- 3;
+				far(c);
+			}
+
+			fun far(ref c : int) : nothing
+			{
+				boo(c);
+			}
+		{
+			boo(c);
+			zul();
+			far(c);
+		}
+	{
+		a <- 5;
+		nap();
+	}
+{
+	zul();
+}
