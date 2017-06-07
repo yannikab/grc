@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Tac.Op;
-using Grc.Tac.Exceptions;
+using Grc.Exceptions.Tac;
 using Grc.Tac.Addr;
+using Grc.Tac.Op;
 
 namespace Grc.Tac.Quads
 {

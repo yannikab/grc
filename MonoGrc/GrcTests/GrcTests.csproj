@@ -146,17 +146,17 @@
   <ItemGroup>
     <Compile Include="Cst\BottomUpHelperTests.cs" />
     <Compile Include="Sem\SemanticVisitorTests.cs" />
-    <Compile Include="Sem\SymbolTableTests.cs" />
-    <Compile Include="Sem\SymbolTypeTests.cs" />
-    <Compile Include="Sem\TypeTests.cs" />
-    <Compile Include="Sem\GTypeArrayArgumentTests.cs" />
-    <Compile Include="Sem\GTypeArrayTests.cs" />
-    <Compile Include="Sem\GTypeExampleTests.cs" />
-    <Compile Include="Sem\GTypeExpressionTests.cs" />
-    <Compile Include="Sem\GTypeFuncDefinitionTests.cs" />
-    <Compile Include="Sem\GTypeFuncUsageTests.cs" />
-    <Compile Include="Sem\GTypeShadowingTests.cs" />
-    <Compile Include="Sem\GTypeVisitorTests.cs" />
+    <Compile Include="Symbols\SymbolTableTests.cs" />
+    <Compile Include="Symbols\SymbolTypeTests.cs" />
+    <Compile Include="Types\TypeArrayArgumentTests.cs" />
+    <Compile Include="Types\TypeArrayTests.cs" />
+    <Compile Include="Types\TypeExampleTests.cs" />
+    <Compile Include="Types\TypeExpressionTests.cs" />
+    <Compile Include="Types\TypeFuncDefinitionTests.cs" />
+    <Compile Include="Types\TypeFuncUsageTests.cs" />
+    <Compile Include="Types\TypeShadowingTests.cs" />
+    <Compile Include="Types\TypeTests.cs" />
+    <Compile Include="Types\TypeVisitorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

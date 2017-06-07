@@ -172,21 +172,21 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Cst\BottomUpHelperTests.cs" />
-    <Compile Include="Sem\GTypeArrayTests.cs" />
-    <Compile Include="Sem\GTypeArrayArgumentTests.cs" />
-    <Compile Include="Sem\GTypeFuncUsageTests.cs" />
-    <Compile Include="Sem\GTypeShadowingTests.cs" />
-    <Compile Include="Sem\GTypeFuncDefinitionTests.cs" />
-    <Compile Include="Sem\GTypeExpressionTests.cs" />
-    <Compile Include="Sem\GTypeExampleTests.cs" />
-    <Compile Include="Sem\TypeTests.cs" />
-    <Compile Include="Sem\GTypeVisitorTests.cs">
+    <Compile Include="Types\TypeArrayTests.cs" />
+    <Compile Include="Types\TypeArrayArgumentTests.cs" />
+    <Compile Include="Types\TypeFuncUsageTests.cs" />
+    <Compile Include="Types\TypeShadowingTests.cs" />
+    <Compile Include="Types\TypeFuncDefinitionTests.cs" />
+    <Compile Include="Types\TypeExpressionTests.cs" />
+    <Compile Include="Types\TypeExampleTests.cs" />
+    <Compile Include="Types\TypeTests.cs" />
+    <Compile Include="Types\TypeVisitorTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sem\SemanticVisitorTests.cs" />
-    <Compile Include="Sem\SymbolTableTests.cs" />
+    <Compile Include="Symbols\SymbolTableTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sem\SymbolTypeTests.cs" />
+    <Compile Include="Symbols\SymbolTypeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Grc\Grc.csproj">

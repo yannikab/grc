@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Ast.Node;
-using Grc.Ast.Node.Helper;
-using Grc.Cst.Visitor.ASTCreation;
-using Grc.Sem.SymbolTable;
-using Grc.Sem.Types;
-using Grc.Sem.Visitor;
-using Grc.Sem.Visitor.Exceptions.GType;
+using Grc.Nodes;
+using Grc.Nodes.Helper;
+using Grc.Visitors.Cst;
+using Grc.Types;
+using Grc.Visitors.Sem;
 using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.parser;
 using NUnit.Framework;
-using Grc.Ast.Node.Cond;
-using Grc.Ast.Node.Func;
-using Grc.Ast.Node.Expr;
+using Grc.Nodes.Cond;
+using Grc.Nodes.Func;
+using Grc.Nodes.Expr;
 
 namespace GrcTests.Cst
 {
