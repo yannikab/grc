@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpMul instance;
 
-		public static OpMul Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpMul();
-
-				return instance;
-			}
-		}
+		public static OpMul Instance { get { return instance ?? (instance = new OpMul()); } }
 
 		private OpMul()
 		{

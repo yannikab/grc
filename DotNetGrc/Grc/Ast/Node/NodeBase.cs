@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grc.Ast.Visitor;
+using Grc.Ast.Node.Helper;
 
 namespace Grc.Ast.Node
 {
@@ -24,7 +25,7 @@ namespace Grc.Ast.Node
 
 		protected virtual int Indent
 		{
-			get { return Parent != null ? Parent.Indent + 1 : 0; }
+			get { return Parent == null || Parent is Root ? 0 : Parent.Indent + 1; }
 		}
 
 		protected string Tabs

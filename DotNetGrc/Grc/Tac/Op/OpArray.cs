@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpArray instance;
 
-		public static OpArray Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpArray();
-
-				return instance;
-			}
-		}
+		public static OpArray Instance { get { return instance ?? (instance = new OpArray()); } }
 
 		private OpArray()
 		{

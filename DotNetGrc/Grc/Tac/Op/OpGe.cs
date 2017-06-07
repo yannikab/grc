@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpGe instance;
 
-		public static OpGe Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpGe();
-
-				return instance;
-			}
-		}
+		public static OpGe Instance { get { return instance ?? (instance = new OpGe()); } }
 
 		private OpGe()
 		{

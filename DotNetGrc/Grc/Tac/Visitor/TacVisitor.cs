@@ -13,18 +13,19 @@ using Grc.Sem.Visitor.Exceptions.GType;
 using Grc.Sem.Visitor.Exceptions.Sem;
 using Grc.Tac.Op;
 using Grc.Tac.Quads;
+using Grc.Tac.Addr;
 
 namespace Grc.Tac.Visitor
 {
-	public class TacVisitor : ScopeGTypeVisitor
+	public class TacVisitor : GTypeVisitorScope
 	{
-		private string indexedName;
+		private ExprLValBase indexed;
 
 		public override void Pre(LocalFuncDef n)
 		{
 			base.Pre(n);
 
-			n.AddQuad(Quad.GenQuad(OpUnit.Instance, new Addr(n.Header.Name), Addr.Empty, Addr.Empty));
+			n.AddQuad(Quad.GenQuad(OpUnit.Instance, new AddrFunc(n.Header.Name), AddrEmpty.Instance, AddrEmpty.Instance));
 		}
 
 		public override void Post(LocalFuncDef n)
@@ -34,14 +35,14 @@ namespace Grc.Tac.Visitor
 			if (n.Block.Stmts.Count > 0)
 				n.Block.Stmts[n.Block.Stmts.Count - 1].NextList.BackPatch(Quad.NextQuad.Addr);
 
-			n.AddQuad(Quad.GenQuad(OpEndu.Instance, new Addr(n.Header.Name), Addr.Empty, Addr.Empty));
+			n.AddQuad(Quad.GenQuad(OpEndu.Instance, new AddrFunc(n.Header.Name), AddrEmpty.Instance, AddrEmpty.Instance));
 		}
 
 		public override void Visit(ExprIntegerT n)
 		{
 			Pre(n);
 
-			n.Addr = new Addr(n.Integer);
+			n.Addr = new AddrInt(int.Parse(n.Integer));
 
 			Post(n);
 		}
@@ -50,7 +51,7 @@ namespace Grc.Tac.Visitor
 		{
 			Pre(n);
 
-			n.Addr = new Addr(n.Character);
+			n.Addr = new AddrChar(n.Character);
 
 			Post(n);
 		}
@@ -59,32 +60,49 @@ namespace Grc.Tac.Visitor
 		{
 			base.Visit(n);
 
-			n.Addr = new Addr();
+			AddrSym result = new AddrTemp();
+			
+			SymbolTable.Insert(new SymbolVar(result.Name, false) { Type = n.Type });
 
-			n.AddQuad(Quad.GenQuad(OpBase.GetOp(n), n.Left.Addr, n.Right.Addr, n.Addr));
+			n.AddQuad(Quad.GenQuad(n.Op, n.Left.Addr, n.Right.Addr, result));
+
+			n.Addr = result;
 		}
 
 		public override void Visit(ExprPlus n)
 		{
 			base.Visit(n);
 
-			n.Addr = n.Expr.Addr;
+			AddrSym result = new AddrTemp();
+
+			SymbolTable.Insert(new SymbolVar(result.Name, false) { Type = n.Type });
+
+			n.Addr = result;
 		}
 
 		public override void Visit(ExprMinus n)
 		{
 			base.Visit(n);
 
-			n.Addr = new Addr();
+			AddrSym result = new AddrTemp();
 
-			n.AddQuad(Quad.GenQuad(OpBase.GetOp(n), new Addr(0), n.Expr.Addr, n.Addr));
+			SymbolTable.Insert(new SymbolVar(result.Name, false) { Type = n.Type });
+
+			n.AddQuad(Quad.GenQuad(n.Op, new AddrInt(0), n.Expr.Addr, result));
+
+			n.Addr = result;
 		}
 
 		public override void Visit(ExprLValIdentifierT n)
 		{
 			Pre(n);
 
-			n.Addr = new Addr(n.Name);
+			SymbolVar symbolVar = SymbolTable.Lookup<SymbolVar>(n.Name);
+
+			if (symbolVar == null)
+				throw new VariableNotInOpenScopesException(n);
+
+			n.Addr = symbolVar.IsPar ? (AddrSym)new AddrPar(n.Name) : (AddrSym)new AddrVar(n.Name);
 
 			Post(n);
 		}
@@ -93,7 +111,7 @@ namespace Grc.Tac.Visitor
 		{
 			Pre(n);
 
-			n.Addr = new Addr(n.Text);
+			n.Addr = new AddrString(n.Text);
 
 			Post(n);
 		}
@@ -115,20 +133,20 @@ namespace Grc.Tac.Visitor
 			if (declType == null)
 				throw new SymbolInvalidTypeException(n.Name, symbolFunc.Type);
 
-			Stack<bool> passingModes = new Stack<bool>();
+			Stack<AddrBase> passingModes = new Stack<AddrBase>();
 
 			GTypeBase current = declType.From;
 
 			while (current is GTypeProduct)
 			{
-				passingModes.Push((current as GTypeProduct).Right.ByRef);
+				passingModes.Push((current as GTypeProduct).Right.ByRef ? (AddrBase)AddrRef.Instance : (AddrBase)AddrVal.Instance);
 				current = (current as GTypeProduct).Left;
 			}
 
-			passingModes.Push(current.ByRef);
+			passingModes.Push(current.ByRef ? (AddrBase)AddrRef.Instance : (AddrBase)AddrVal.Instance);
 
 			foreach (ExprBase e in n.Args)
-				n.AddQuad(Quad.GenQuad(OpPar.Instance, e.Addr, passingModes.Pop() ? Addr.ByRef : Addr.ByVal, Addr.Empty));
+				n.AddQuad(Quad.GenQuad(OpPar.Instance, e.Addr, passingModes.Pop(), AddrEmpty.Instance));
 
 			Post(n);
 		}
@@ -139,12 +157,16 @@ namespace Grc.Tac.Visitor
 
 			if (!(n.Type.Equals(GTypeNothing.Instance)))
 			{
-				n.Addr = new Addr();
+				AddrSym value = new AddrTemp();
 
-				n.AddQuad(Quad.GenQuad(OpPar.Instance, Addr.Ret, n.Addr, Addr.Empty));
+				SymbolTable.Insert(new SymbolVar(value.Name, false) { Type = n.Type });
+
+				n.AddQuad(Quad.GenQuad(OpPar.Instance, AddrRet.Instance, value, AddrEmpty.Instance));
+
+				n.Addr = value;
 			}
 
-			n.AddQuad(Quad.GenQuad(OpCall.Instance, Addr.Empty, Addr.Empty, new Addr(n.Name)));
+			n.AddQuad(Quad.GenQuad(OpCall.Instance, AddrEmpty.Instance, AddrEmpty.Instance, new AddrFunc(n.Name)));
 		}
 
 		public override void Visit(CondAnd n)
@@ -204,11 +226,11 @@ namespace Grc.Tac.Visitor
 
 			n.TrueList = QuadList.Make(Quad.NextQuad);
 
-			n.AddQuad(Quad.GenQuad(OpBase.GetOp(n), n.Left.Addr, n.Right.Addr, Addr.Star));
+			n.AddQuad(Quad.GenQuad(n.Op, n.Left.Addr, n.Right.Addr, AddrStar.Instance));
 
 			n.FalseList = QuadList.Make(Quad.NextQuad);
 
-			n.AddQuad((Quad.GenQuad(OpGoto.Instance, Addr.Empty, Addr.Empty, Addr.Star)));
+			n.AddQuad((Quad.GenQuad(OpGoto.Instance, AddrEmpty.Instance, AddrEmpty.Instance, AddrStar.Instance)));
 
 			Post(n);
 		}
@@ -249,7 +271,7 @@ namespace Grc.Tac.Visitor
 
 			List<Quad> l = QuadList.Make(Quad.NextQuad);
 
-			n.AddQuad((Quad.GenQuad(OpGoto.Instance, Addr.Empty, Addr.Empty, Addr.Star)));
+			n.AddQuad((Quad.GenQuad(OpGoto.Instance, AddrEmpty.Instance, AddrEmpty.Instance, AddrStar.Instance)));
 
 			n.Cond.FalseList.BackPatch(Quad.NextQuad.Addr);
 
@@ -274,7 +296,7 @@ namespace Grc.Tac.Visitor
 
 			n.Stmt.NextList.BackPatch(q.Addr);
 
-			n.AddQuad(Quad.GenQuad(OpGoto.Instance, Addr.Empty, Addr.Empty, q.Addr));
+			n.AddQuad(Quad.GenQuad(OpGoto.Instance, AddrEmpty.Instance, AddrEmpty.Instance, q.Addr));
 
 			n.NextList = n.Cond.FalseList;
 
@@ -305,7 +327,7 @@ namespace Grc.Tac.Visitor
 		{
 			base.Visit(n);
 
-			n.AddQuad(Quad.GenQuad(OpAssign.Instance, n.Expr.Addr, Addr.Empty, n.Lval.Addr));
+			n.AddQuad(Quad.GenQuad(OpAssign.Instance, n.Expr.Addr, AddrEmpty.Instance, n.Lval.Addr));
 
 			n.NextList = QuadList.Empty();
 		}
@@ -329,10 +351,10 @@ namespace Grc.Tac.Visitor
 			{
 				n.Expr.Accept(this);
 
-				n.AddQuad(Quad.GenQuad(OpAssign.Instance, n.Expr.Addr, Addr.Empty, Addr.RetVal));
+				n.AddQuad(Quad.GenQuad(OpAssign.Instance, n.Expr.Addr, AddrEmpty.Instance, AddrRetVal.Instance));
 			}
 
-			n.AddQuad(Quad.GenQuad(OpRet.Instance, Addr.Empty, Addr.Empty, Addr.Empty));
+			n.AddQuad(Quad.GenQuad(OpRet.Instance, AddrEmpty.Instance, AddrEmpty.Instance, AddrEmpty.Instance));
 
 			n.NextList = QuadList.Empty();
 
@@ -345,35 +367,62 @@ namespace Grc.Tac.Visitor
 
 			if (n.Lval is ExprLValIndexed)
 			{
-				Addr t = new Addr();
+				AddrSym temp = new AddrTemp();
 
-				n.Addr = new Addr();
+				AddrSym index = new AddrTemp();
 
-				n.AddQuad(Quad.GenQuad(OpMul.Instance, n.Lval.Addr, new Addr((n.Lval.Type as GTypeIndexed).Dim), t));
+				SymbolTable.Insert(new SymbolVar(temp.Name, false) { Type = new GTypeInt() });
 
-				n.AddQuad((Quad.GenQuad(OpAdd.Instance, t, n.Expr.Addr, n.Addr)));
+				SymbolTable.Insert(new SymbolVar(index.Name, false) { Type = new GTypeInt() });
+
+				n.AddQuad(Quad.GenQuad(OpMul.Instance, n.Lval.Addr, new AddrInt(((GTypeIndexed)n.Lval.Type).Dim), temp));
+
+				n.AddQuad(Quad.GenQuad(OpAdd.Instance, temp, n.Expr.Addr, index));
+
+				n.Addr = index;
 			}
 			else
 			{
-				if (n.Lval is ExprLValIdentifierT)
-					this.indexedName = (n.Lval as ExprLValIdentifierT).Name;
-				else if (n.Lval is ExprLValStringT)
-					this.indexedName = (n.Lval as ExprLValStringT).Text;
+				this.indexed = n.Lval;
 
-				n.Addr = new Addr();
+				AddrSym index = new AddrTemp();
 
-				n.AddQuad((Quad.GenQuad(OpAssign.Instance, n.Expr.Addr, Addr.Empty, n.Addr)));
+				SymbolTable.Insert(new SymbolVar(index.Name, false) { Type = new GTypeInt() });
+
+				n.AddQuad((Quad.GenQuad(OpAssign.Instance, n.Expr.Addr, AddrEmpty.Instance, index)));
+
+				n.Addr = index;
 			}
 
 			if (!n.ParentIndexed)
 			{
-				Addr t = new Addr();
+				AddrSym temp = new AddrTemp();
 
-				n.AddQuad(Quad.GenQuad(OpArray.Instance, new Addr(indexedName), n.Addr, t));
+				SymbolTable.Insert(new SymbolVar(temp.Name, false) { Type = new GTypeInt() });
 
-				n.Addr = new Addr(string.Format("[{0}]", t));
+				if (indexed is ExprLValIdentifierT)
+				{
+					ExprLValIdentifierT id = (ExprLValIdentifierT)indexed;
 
-				this.indexedName = null;
+					SymbolVar symbolVar = SymbolTable.Lookup<SymbolVar>(id.Name);
+
+					if (symbolVar == null)
+						throw new VariableNotInOpenScopesException(id);
+
+					AddrSym addr = symbolVar.IsPar ? (AddrSym)new AddrPar(id.Name) : (AddrSym)new AddrVar(id.Name);
+
+					n.AddQuad(Quad.GenQuad(OpArray.Instance, addr, n.Addr, temp));
+				}
+				else if (indexed is ExprLValStringT)
+				{
+					ExprLValStringT str = (ExprLValStringT)indexed;
+
+					n.AddQuad(Quad.GenQuad(OpArray.Instance, new AddrString(str.Text), n.Addr, temp));
+				}
+
+				n.Addr = new AddrArray(temp.Name);
+
+				this.indexed = null;
 			}
 		}
 	}

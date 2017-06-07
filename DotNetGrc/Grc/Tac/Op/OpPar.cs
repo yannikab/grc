@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpPar instance;
 
-		public static OpPar Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpPar();
-
-				return instance;
-			}
-		}
+		public static OpPar Instance { get { return instance ?? (instance = new OpPar()); } }
 
 		private OpPar()
 		{

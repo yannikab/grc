@@ -25,7 +25,9 @@ namespace Grc.Drv
 	
 			LocalFuncDecl header = new LocalFuncDecl(new List<HPar>(), new HTypeReturn(new TypeReturnNothingT("nothing", 0, 0)), "fun", "", "(", ")", ":", 0, 0);
 			LocalFuncDef context = new LocalFuncDef(header, new List<LocalBase>() { root.Program }, stmtBlock);
-			
+
+			context.Parent = root;
+
 			root.Program = context;
 		}
 	}

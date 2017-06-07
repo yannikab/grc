@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Tac.Addr;
 
 namespace Grc.Tac.Quads
 {
@@ -27,17 +28,17 @@ namespace Grc.Tac.Quads
 			return a.Concat(b).ToList();
 		}
 
-		public static void BackPatch(this List<Quad> l, Addr a)
+		public static void BackPatch(this List<Quad> l, AddrQuad a)
 		{
 			foreach (Quad q in l)
 			{
-				if (q.Arg1.Equals(Addr.Star))
+				if (q.Arg1 is AddrStar)
 					q.Arg1 = a;
 
-				if (q.Arg2.Equals(Addr.Star))
+				if (q.Arg2 is AddrStar)
 					q.Arg2 = a;
 
-				if (q.Res.Equals(Addr.Star))
+				if (q.Res is AddrStar)
 					q.Res = a;
 			}
 		}

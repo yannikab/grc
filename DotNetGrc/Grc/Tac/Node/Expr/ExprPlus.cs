@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grc.Tac.Quads;
+using Grc.Tac.Op;
 
 namespace Grc.Ast.Node.Expr
 {
@@ -13,5 +14,7 @@ namespace Grc.Ast.Node.Expr
 		{
 			get { return this.tac; }
 		}
+
+		public OpBase Op { get { return OpAdd.Instance; } }
 	}
 }

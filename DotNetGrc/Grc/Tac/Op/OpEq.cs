@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpEq instance;
 
-		public static OpEq Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpEq();
-
-				return instance;
-			}
-		}
+		public static OpEq Instance { get { return instance ?? (instance = new OpEq()); } }
 
 		private OpEq()
 		{

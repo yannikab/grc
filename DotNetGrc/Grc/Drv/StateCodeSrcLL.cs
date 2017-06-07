@@ -53,7 +53,7 @@ namespace Grc.Drv
 
 				} while (boom.MadeChanges);
 
-				root.Accept(new ScopeGTypeVisitor());
+				root.Accept(new GTypeVisitorScope());
 
 				System.Console.WriteLine(root.Text);
 

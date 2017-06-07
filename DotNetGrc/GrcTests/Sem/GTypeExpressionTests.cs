@@ -209,7 +209,96 @@ fun program() : nothing
 }
 
 ";
-			Assert.Throws<OverflowInIntegerLiteralException>(() => AcceptGTypeVisitor(program));
+			Assert.Throws<OverflowInIntegerExpressionException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestOverflowByOneAdd()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var i : int;
+{
+	i <- 2147483647 + 1;
+}
+
+";
+			Assert.Throws<OverflowInIntegerExpressionException>(() => AcceptGTypeVisitor(program));
+			//AcceptGTypeVisitor(program);
+		}
+
+
+		[Test]
+		public void TestOverflowByOneAddNeg()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var i : int;
+{
+	i <- - 2147483648 - 1;
+}
+
+";
+			Assert.Throws<OverflowInIntegerExpressionException>(() => AcceptGTypeVisitor(program));
+		}
+
+
+		[Test]
+		public void TestOverflowMul()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var i : int;
+{
+	i <- 46341 * 46341;
+}
+
+";
+			Assert.Throws<OverflowInIntegerExpressionException>(() => AcceptGTypeVisitor(program));
+			//AcceptGTypeVisitor(program);
+		}
+
+
+		[Test]
+		public void TestOverflowMulNeg()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var i : int;
+{
+	i <- - 46341 * 46341;
+}
+
+";
+			Assert.Throws<OverflowInIntegerExpressionException>(() => AcceptGTypeVisitor(program));
+			//AcceptGTypeVisitor(program);
+		}
+
+
+		[Test]
+		public void TestDivByZero()
+		{
+			string program = @"
+
+fun program() : nothing
+
+	var i : int;
+{
+	i <- 1 div 0;
+}
+
+";
+			Assert.Throws<OverflowInIntegerExpressionException>(() => AcceptGTypeVisitor(program));
+			//AcceptGTypeVisitor(program);
 		}
 
 

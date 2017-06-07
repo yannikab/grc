@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpDiv instance;
 
-		public static OpDiv Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpDiv();
-
-				return instance;
-			}
-		}
+		public static OpDiv Instance { get { return instance ?? (instance = new OpDiv()); } }
 
 		private OpDiv()
 		{

@@ -7,7 +7,6 @@ using Grc.Ast.Node.Helper;
 using Grc.Ast.Visitor.GraphViz;
 using Grc.Cil.Visitor;
 using Grc.Cst.Visitor.ASTCreation;
-using Grc.Sem.Visitor;
 using Grc.Tac.Visitor;
 using java.io;
 using k31.grc.cst.lexer;
@@ -55,7 +54,7 @@ namespace Grc.Drv
 
 				} while (boom.MadeChanges);
 
-				root.Accept(new ScopeGTypeVisitor());
+				root.Accept(new GTypeVisitorScope());
 
 				root.Accept(new GraphVizNodeDataVisitor());
 

@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpMod instance;
 
-		public static OpMod Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpMod();
-
-				return instance;
-			}
-		}
+		public static OpMod Instance { get { return instance ?? (instance = new OpMod()); } }
 
 		private OpMod()
 		{

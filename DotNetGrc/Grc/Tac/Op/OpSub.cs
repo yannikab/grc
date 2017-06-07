@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpSub instance;
 
-		public static OpSub Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpSub();
-
-				return instance;
-			}
-		}
+		public static OpSub Instance { get { return instance ?? (instance = new OpSub()); } }
 
 		private OpSub()
 		{

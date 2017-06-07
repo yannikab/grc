@@ -17,8 +17,8 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test", false));
 		}
 
 		[Test]
@@ -26,7 +26,7 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
 
 			Assert.IsNull(ist.Lookup<SymbolFunc>("test"));
 		}
@@ -36,9 +36,9 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
 			ist.Insert(new SymbolFunc("test", false));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test", false));
 			Assert.AreEqual(ist.Lookup<SymbolFunc>("test"), new SymbolFunc("test", false));
 		}
 	}

@@ -9,7 +9,7 @@ using Grc.Sem.Visitor;
 
 namespace Grc.Tac.Visitor
 {
-	public class ScopeGTypeVisitor : GTypeVisitor
+	public class GTypeVisitorScope : GTypeVisitor
 	{
 		protected override void InjectLibraryFunctions()
 		{

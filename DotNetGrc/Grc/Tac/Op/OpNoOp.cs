@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpNoOp instance;
 
-		public static OpNoOp Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpNoOp();
-
-				return instance;
-			}
-		}
+		public static OpNoOp Instance { get { return instance ?? (instance = new OpNoOp()); } }
 
 		private OpNoOp()
 		{

@@ -11,7 +11,7 @@ using Grc.Tac.Visitor;
 
 namespace Grc.Cil.Visitor
 {
-	class LLTickVisitor : ScopeGTypeVisitor
+	class LLTickVisitor : GTypeVisitorScope
 	{
 		private Stack<LocalFuncDef> localFuncDefs = new Stack<LocalFuncDef>();
 

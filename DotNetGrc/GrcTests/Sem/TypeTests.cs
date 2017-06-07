@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Grc.Sem.Types;
 using NUnit.Framework;
 
-
 namespace GrcTests.Sem
 {
 	[TestFixture]
@@ -87,6 +86,7 @@ namespace GrcTests.Sem
 
 			Assert.AreEqual(tf1, tf2);
 		}
+
 
 		[Test]
 		public void TestGTypeFunctionNotEqualFrom()

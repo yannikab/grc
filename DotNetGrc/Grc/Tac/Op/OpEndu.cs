@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpEndu instance;
 
-		public static OpEndu Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpEndu();
-
-				return instance;
-			}
-		}
+		public static OpEndu Instance { get { return instance ?? (instance = new OpEndu()); } }
 
 		private OpEndu()
 		{

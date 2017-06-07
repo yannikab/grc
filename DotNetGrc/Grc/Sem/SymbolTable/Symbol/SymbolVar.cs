@@ -9,9 +9,12 @@ namespace Grc.Sem.SymbolTable.Symbol
 {
 	public partial class SymbolVar : SymbolBase
 	{
-		public SymbolVar(string name)
+		public bool IsPar { get; private set; }
+
+		public SymbolVar(string name, bool isPar)
 			: base(name)
 		{
+			this.IsPar = isPar;
 		}
 
 		public override bool Equals(object obj)

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Tac.Quads;
+using Grc.Tac.Addr;
 
 namespace Grc.Ast.Node.Expr
 {
 	public abstract partial class ExprBase : NodeBase
 	{
-		public Addr Addr { get; set; }
+		public AddrBase Addr { get; set; }
 	}
 }

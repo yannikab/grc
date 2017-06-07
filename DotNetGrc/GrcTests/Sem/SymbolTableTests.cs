@@ -24,7 +24,7 @@ namespace GrcTests.Sem
 		public void TestInsertWithoutEnter()
 		{
 			ISymbolTable ist = new StackSymbolTable();
-			Assert.Throws<NoCurrentScopeException>(() => ist.Insert(new SymbolVar("test")));
+			Assert.Throws<NoCurrentScopeException>(() => ist.Insert(new SymbolVar("test", false)));
 		}
 
 		[Test]
@@ -49,7 +49,7 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
 		}
 
 		[Test]
@@ -57,8 +57,8 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test", false));
 		}
 
 		[Test]
@@ -66,8 +66,8 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test", false));
 			ist.Exit();
 			Assert.Throws<NoCurrentScopeException>(() => ist.Lookup<SymbolVar>("test"));
 		}
@@ -77,10 +77,10 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test", false));
 			ist.Exit();
-			Assert.Throws<NoCurrentScopeException>(() => ist.Insert(new SymbolVar("test2")));
+			Assert.Throws<NoCurrentScopeException>(() => ist.Insert(new SymbolVar("test2", false)));
 		}
 
 		[Test]
@@ -88,12 +88,12 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test1"));
-			ist.Insert(new SymbolVar("test2"));
-			ist.Insert(new SymbolVar("test3"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test2"), new SymbolVar("test2"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test3"), new SymbolVar(("test3")));
+			ist.Insert(new SymbolVar("test1", false));
+			ist.Insert(new SymbolVar("test2", false));
+			ist.Insert(new SymbolVar("test3", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test2"), new SymbolVar("test2", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test3"), new SymbolVar("test3", false));
 			ist.Exit();
 		}
 
@@ -102,10 +102,10 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test", false));
 			ist.Enter();
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test", false));
 		}
 
 		[Test]
@@ -113,13 +113,13 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test", false));
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test", false));
 			ist.Exit();
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test"));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test"), new SymbolVar("test", false));
 			ist.Exit();
 		}
 
@@ -128,14 +128,14 @@ namespace GrcTests.Sem
 		{
 			ISymbolTable ist = new StackSymbolTable();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test1"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1"));
+			ist.Insert(new SymbolVar("test1", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1", false));
 			ist.Enter();
-			ist.Insert(new SymbolVar("test2"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1"));
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test2"), new SymbolVar("test2"));
+			ist.Insert(new SymbolVar("test2", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1", false));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test2"), new SymbolVar("test2", false));
 			ist.Exit();
-			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1"));
+			Assert.AreEqual(ist.Lookup<SymbolVar>("test1"), new SymbolVar("test1", false));
 			Assert.IsNull(ist.Lookup<SymbolVar>("test2"));
 		}
 
@@ -146,15 +146,15 @@ namespace GrcTests.Sem
 			ist.Enter();
 			Assert.AreEqual(0, ist.CurrentScopeId);
 			Assert.AreEqual(0, ist.SymbolsInScope);
-			ist.Insert(new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
 			Assert.AreEqual(0, ist.CurrentScopeId);
 			Assert.AreEqual(1, ist.SymbolsInScope);
-			ist.Insert(new SymbolVar("test2"));
+			ist.Insert(new SymbolVar("test2", false));
 			Assert.AreEqual(0, ist.CurrentScopeId);
 			Assert.AreEqual(2, ist.SymbolsInScope);
 			ist.Exit();
 			ist.Enter();
-			ist.Insert(new SymbolVar("test"));
+			ist.Insert(new SymbolVar("test", false));
 			Assert.AreEqual(0, ist.CurrentScopeId);
 			Assert.AreEqual(1, ist.SymbolsInScope);
 			ist.Exit();
@@ -182,8 +182,8 @@ namespace GrcTests.Sem
 			Assert.AreEqual(ist.LookupLast<SymbolFunc>(1).Name, "fun");
 			Assert.IsNull(ist.LookupLast<SymbolVar>(1));
 
-			ist.Insert(new SymbolVar("par1"));
-			ist.Insert(new SymbolVar("par2"));
+			ist.Insert(new SymbolVar("par1", false));
+			ist.Insert(new SymbolVar("par2", false));
 
 			Assert.IsNull(ist.LookupLast<SymbolFunc>(0));
 			Assert.AreEqual(ist.LookupLast<SymbolVar>(0).Name, "par2");

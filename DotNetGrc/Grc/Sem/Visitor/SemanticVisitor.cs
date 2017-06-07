@@ -80,7 +80,7 @@ namespace Grc.Sem.Visitor
 			{
 				try
 				{
-					symbolTable.Insert(new SymbolVar(p.Name));
+					symbolTable.Insert(new SymbolVar(p.Name, true));
 				}
 				catch (SymbolAlreadyInScopeException e)
 				{
@@ -142,7 +142,7 @@ namespace Grc.Sem.Visitor
 			{
 				try
 				{
-					symbolTable.Insert(new SymbolVar(v.Name));
+					symbolTable.Insert(new SymbolVar(v.Name, false));
 				}
 				catch (SymbolAlreadyInScopeException e)
 				{

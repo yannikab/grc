@@ -10,17 +10,8 @@ namespace Grc.Tac.Op
 	{
 		private static OpGt instance;
 
-		public static OpGt Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpGt();
-
-				return instance;
-			}
-		}
-
+		public static OpGt Instance { get { return instance ?? (instance = new OpGt()); } }
+		
 		private OpGt()
 		{
 		}

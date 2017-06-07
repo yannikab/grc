@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Grc.Tac.Op;
 using Grc.Tac.Exceptions;
+using Grc.Tac.Addr;
 
 namespace Grc.Tac.Quads
 {
@@ -14,47 +15,47 @@ namespace Grc.Tac.Quads
 
 		private readonly int id;
 
-		private readonly Addr addr;
+		private readonly AddrQuad addr;
 
 		private OpBase op;
-		private Addr arg1;
-		private Addr arg2;
-		private Addr res;
+		private AddrBase arg1;
+		private AddrBase arg2;
+		private AddrBase res;
 
-		public Addr Addr { get { return addr; } }
+		public AddrQuad Addr { get { return addr; } }
 
 		public OpBase Op { get { return op; } }
 
-		public Addr Arg1
+		public AddrBase Arg1
 		{
 			get { return arg1; }
 			set
 			{
-				if (!Equals(arg1, Addr.Star))
+				if (!(arg1 is AddrStar))
 					throw new TacException();
 
 				arg1 = value;
 			}
 		}
 
-		public Addr Arg2
+		public AddrBase Arg2
 		{
 			get { return arg2; }
 			set
 			{
-				if (!Equals(arg2, Addr.Star))
+				if (!(arg2 is AddrStar))
 					throw new TacException();
 
 				arg2 = value;
 			}
 		}
 
-		public Addr Res
+		public AddrBase Res
 		{
 			get { return res; }
 			set
 			{
-				if (!Equals(res, Addr.Star))
+				if (!(res is AddrStar))
 					throw new TacException();
 
 				res = value;
@@ -63,13 +64,13 @@ namespace Grc.Tac.Quads
 
 		static Quad()
 		{
-			nextQuad = new Quad(0, OpNoOp.Instance, Addr.Empty, Addr.Empty, Addr.Empty);
+			nextQuad = new Quad(0, OpNoOp.Instance, AddrEmpty.Instance, AddrEmpty.Instance, AddrEmpty.Instance);
 		}
 
-		private Quad(int id, OpBase op, Addr arg1, Addr arg2, Addr res)
+		private Quad(int id, OpBase op, AddrBase arg1, AddrBase arg2, AddrBase res)
 		{
 			this.id = id;
-			this.addr = new Addr(id);
+			this.addr = new AddrQuad(id);
 
 			this.op = op;
 			this.arg1 = arg1;
@@ -79,11 +80,11 @@ namespace Grc.Tac.Quads
 
 		public static Quad NextQuad { get { return nextQuad; } }
 
-		public static Quad GenQuad(OpBase op, Addr arg1, Addr arg2, Addr res)
+		public static Quad GenQuad(OpBase op, AddrBase arg1, AddrBase arg2, AddrBase res)
 		{
 			Quad q = nextQuad;
 
-			nextQuad = new Quad(q.id + 1, OpNoOp.Instance, Addr.Empty, Addr.Empty, Addr.Empty);
+			nextQuad = new Quad(q.id + 1, OpNoOp.Instance, AddrEmpty.Instance, AddrEmpty.Instance, AddrEmpty.Instance);
 
 			q.op = op;
 			q.arg1 = arg1;

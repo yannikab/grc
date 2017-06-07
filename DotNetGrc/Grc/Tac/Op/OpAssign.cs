@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpAssign instance;
 
-		public static OpAssign Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpAssign();
-
-				return instance;
-			}
-		}
+		public static OpAssign Instance { get { return instance ?? (instance = new OpAssign()); } }
 
 		private OpAssign()
 		{

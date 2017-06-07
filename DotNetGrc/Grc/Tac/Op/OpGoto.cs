@@ -10,16 +10,7 @@ namespace Grc.Tac.Op
 	{
 		private static OpGoto instance;
 
-		public static OpGoto Instance
-		{
-			get
-			{
-				if (instance == null)
-					instance = new OpGoto();
-
-				return instance;
-			}
-		}
+		public static OpGoto Instance { get { return instance ?? (instance = new OpGoto()); } }
 
 		private OpGoto()
 		{
