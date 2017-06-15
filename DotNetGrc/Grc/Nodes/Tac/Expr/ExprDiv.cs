@@ -9,6 +9,9 @@ namespace Grc.Nodes.Expr
 {
 	public partial class ExprDiv : ExprBinOpBase
 	{
-		public override OpBase Op { get { return OpDiv.Instance; } }
+		public override OpBase GetOp()
+		{
+			return new OpDiv();
+		}
 	}
 }

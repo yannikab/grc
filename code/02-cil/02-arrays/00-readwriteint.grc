@@ -1,0 +1,15 @@
+fun program() : nothing
+
+	var a : int[10];
+	var b, c : int;
+{
+	b <- 15;
+
+	a[5] <- b;
+
+	a[3] <- a[5];
+
+	c <- a[3];
+
+	puti(c);
+}

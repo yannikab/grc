@@ -9,6 +9,9 @@ namespace Grc.Nodes.Cond
 {
 	public partial class CondGt : CondRelOpBase
 	{
-		public override OpBase Op { get { return OpGt.Instance; } }
+		public override OpBase GetOp()
+		{
+			return new OpGt();
+		}
 	}
 }

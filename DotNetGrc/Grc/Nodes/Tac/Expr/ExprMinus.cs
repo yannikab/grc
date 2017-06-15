@@ -15,6 +15,9 @@ namespace Grc.Nodes.Expr
 			get { return expr.Tac.Concat(this.tac); }
 		}
 
-		public OpBase Op { get { return OpSub.Instance; } }
+		public OpBase GetOp()
+		{
+			return new OpSub();
+		}
 	}
 }

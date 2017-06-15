@@ -36,6 +36,12 @@ namespace Grc.Drivers
 
 					break;
 
+				case "cil":
+
+					context.State = new StateCodeCil();
+
+					break;
+
 				case "help":
 
 					ShowHelp();

@@ -15,6 +15,9 @@ namespace Grc.Nodes.Expr
 			get { return this.tac; }
 		}
 
-		public OpBase Op { get { return OpAdd.Instance; } }
+		public OpBase GetOp()
+		{
+			return new OpAdd();
+		}
 	}
 }

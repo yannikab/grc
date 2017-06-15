@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Grc.Nodes.Helper;
 using Grc.Visitors.Cst;
 using Grc.Visitors.Tac;
-using Grc.Visitors.Trg;
+using Grc.Visitors.Cil;
 using java.io;
 using k31.grc.cst.lexer;
 using k31.grc.cst.parser;
@@ -36,7 +36,7 @@ namespace Grc.Drivers
 
 				new ContextWrapper().WrapIntoContext(root);
 
-				root.Accept(new ScopeNameVisitor());
+				root.Accept(new ScopeNamingVisitor());
 
 				LLTickVisitor tick = new LLTickVisitor();
 				LLBoomVisitor boom = new LLBoomVisitor();

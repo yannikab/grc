@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Grc.Quads.Addr.AddrArray" Collapsed="true">
+    <Position X="14" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAgAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Addr\Symbol\AddrArray.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrBase" Collapsed="true">
+    <Position X="16.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Quads\Tac\Addr\AddrBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrVar" Collapsed="true">
+    <Position X="10.5" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Tac\Addr\Symbol\AddrVar.cs</FileName>
+      <NewMemberFileName>Quads\Cil\Addr\Symbol\AddrArg.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrQuad" Collapsed="true">
+    <Position X="27.5" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Quads\Tac\Addr\AddrQuad.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrRef" Collapsed="true">
+    <Position X="29.75" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Tac\Addr\Calls\AddrRef.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrRet" Collapsed="true">
+    <Position X="16.25" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Tac\Addr\Calls\AddrRet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrRetVal" Collapsed="true">
+    <Position X="20.75" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Tac\Addr\Calls\AddrRetVal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrVal" Collapsed="true">
+    <Position X="23" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Tac\Addr\Calls\AddrVal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrEmpty" Collapsed="true">
+    <Position X="25.25" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Tac\Addr\Helper\AddrEmpty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrStar" Collapsed="true">
+    <Position X="32" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Tac\Addr\Helper\AddrStar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrChar" Collapsed="true">
+    <Position X="0.5" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAEAAAAAAAAAAAACAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Addr\Literal\AddrChar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrLit" Collapsed="true">
+    <Position X="2.75" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Tac\Addr\Literal\AddrLit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrString" Collapsed="true">
+    <Position X="2.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAEAAAAAAAAAAAACAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Addr\Literal\AddrString.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrFunc" Collapsed="true">
+    <Position X="18.5" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAEAAAAAAQAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Addr\AddrFunc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrLoc" Collapsed="true">
+    <Position X="11.75" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Addr\Symbol\AddrLoc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrTmp" Collapsed="true">
+    <Position X="7.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAABAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Addr\Symbol\AddrTmp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrSym" Collapsed="true">
+    <Position X="10.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEgAAAAAQBAAAFCIAAAQFAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Addr\Symbol\AddrSym.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrExpr" Collapsed="true">
+    <Position X="7.25" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Addr\AddrExpr.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrInt" Collapsed="true">
+    <Position X="5" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAEAAAAAAAAAAAACAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Addr\Literal\AddrInt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Addr.AddrArg" Collapsed="true">
+    <Position X="9.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Addr\Symbol\AddrArg.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

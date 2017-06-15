@@ -1,0 +1,8 @@
+fun assign() : nothing
+
+	var a : int;
+{
+	a <- 15;
+
+	puti(a);
+}

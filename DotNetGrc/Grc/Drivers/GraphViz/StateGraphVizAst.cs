@@ -34,7 +34,7 @@ namespace Grc.Drivers
 
 				parser.parse().apply(new ASTCreationVisitor(root));
 
-				root.Accept(new ScopeNameVisitor());
+				root.Accept(new ScopeNamingVisitor());
 
 				root.Accept(new GraphVizNodeDataVisitor());
 

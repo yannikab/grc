@@ -135,6 +135,8 @@ namespace Grc.Visitors.Sem
 				}
 			}
 
+			InHeaderLocals(n);
+
 			foreach (LocalBase l in n.Locals)
 				l.Accept(this);
 
@@ -148,6 +150,8 @@ namespace Grc.Visitors.Sem
 				if (!symbolFunc.Defined)
 					throw new FunctionDefinitionMissingException(d, symbolFunc);
 			}
+
+			InLocalsBlock(n);
 
 			n.Block.Accept(this);
 
@@ -317,6 +321,8 @@ namespace Grc.Visitors.Sem
 			if (!typeFrom.MatchesRef(declType.From))
 				throw new FunctionCallRValueByReferenceException(n, typeFrom, declType.From);
 
+			n.TypeFrom = declType.From;
+
 			n.Type = declType.To;
 		}
 
@@ -333,6 +339,8 @@ namespace Grc.Visitors.Sem
 
 			if (n.Type is TypeIndexed)
 				((TypeIndexed)n.Type).InHeader = false;
+
+			n.IsPar = symbolVar.IsPar;
 		}
 
 		public override void Post(ExprLValStringT n)

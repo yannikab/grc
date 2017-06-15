@@ -13,5 +13,7 @@ namespace Grc.Nodes.Stmt
 		{
 			get { return cond.Tac.Concat(stmtThen.Tac).Concat(this.tac).Concat(stmtElse.Tac); }
 		}
+
+		public List<Quad> Temp { get; set; }
 	}
 }

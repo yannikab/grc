@@ -1,0 +1,26 @@
+fun relop1() : nothing
+
+	var a : int;
+{
+	a <- 5;
+
+	if (a < 6) then
+		a <- 2;
+
+	if (a > 1) then
+		a <- 3;
+
+	if (a <= 5) then
+		a <- 4;
+
+	if (a >= 2) then
+		a <- 8;
+
+	if (a = 8) then
+		a <- 7;
+
+	if (a # 6) then
+		a <- 6;
+
+	puti(a);
+}

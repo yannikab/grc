@@ -1,0 +1,14 @@
+fun relop3() : nothing
+
+	var a : int;
+{
+	a <- 5;
+
+	if (a < 8) then
+		a <- 10;
+
+	if (a < 7) then
+		a <- 3;
+
+	puti(a);
+}

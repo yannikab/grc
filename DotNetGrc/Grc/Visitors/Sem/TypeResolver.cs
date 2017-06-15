@@ -53,9 +53,9 @@ namespace Grc.Visitors.Sem
 			TypeBase parType = null;
 
 			if (p.Type is Grc.Nodes.Type.TypeDataIntT)
-				parType = new TypeInt() { ByRef = p.ByRef };
+				parType = new TypeInt() { ByRef = p.Indexed ? false : p.ByRef };
 			else if (p.Type is Grc.Nodes.Type.TypeDataCharT)
-				parType = new TypeChar() { ByRef = p.ByRef };
+				parType = new TypeChar() { ByRef = p.Indexed ? false : p.ByRef };
 			else
 				throw new TypeException("Invalid parameter type.");
 

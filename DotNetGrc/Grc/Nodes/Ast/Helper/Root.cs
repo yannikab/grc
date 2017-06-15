@@ -8,7 +8,7 @@ using Grc.Nodes.Func;
 
 namespace Grc.Nodes.Helper
 {
-	public class Root : NodeBase
+	public partial class Root : NodeBase
 	{
 		private LocalFuncDef program;
 

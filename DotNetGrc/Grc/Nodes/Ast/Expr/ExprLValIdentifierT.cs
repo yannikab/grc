@@ -7,7 +7,7 @@ using Grc.Visitors.Ast;
 
 namespace Grc.Nodes.Expr
 {
-	public class ExprLValIdentifierT : ExprLValBase
+	public partial class ExprLValIdentifierT : ExprLValBase
 	{
 		private readonly string id;
 

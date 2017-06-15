@@ -13,14 +13,14 @@ namespace Grc.Nodes.Func
 		{
 			get
 			{
-				IEnumerable<Quad> ie = this.tac.GetRange(0, 1);
+				IEnumerable<Quad> ie = this.tac.Count > 0 ? this.tac.GetRange(0, 1) : this.tac;
 
 				foreach (LocalBase l in locals)
 					ie = ie.Concat(l.Tac);
 
 				ie = ie.Concat(stmtBlock.Tac);
 
-				return ie.Concat(this.tac.GetRange(1, 1));
+				return ie.Concat(this.tac.Count > 1 ? this.tac.GetRange(1, 1) : new List<Quad>());
 			}
 		}
 	}

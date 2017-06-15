@@ -15,22 +15,12 @@ namespace Grc.Visitors.Ast
 {
 	public class DepthFirstVisitor : VisitorAdapter
 	{
-		public virtual void DefaultPre(NodeBase n)
-		{
-		}
-
-		public virtual void DefaultPost(NodeBase n)
-		{
-		}
-
 		public virtual void Pre(Root n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(Root n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(Root n)
@@ -44,12 +34,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(ExprIntegerT n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(ExprIntegerT n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(ExprIntegerT n)
@@ -61,12 +49,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(ExprCharacterT n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(ExprCharacterT n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(ExprCharacterT n)
@@ -78,12 +64,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(ExprLValIdentifierT n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(ExprLValIdentifierT n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(ExprLValIdentifierT n)
@@ -95,12 +79,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(ExprLValStringT n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(ExprLValStringT n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(ExprLValStringT n)
@@ -112,12 +94,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(ExprLValIndexed n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(ExprLValIndexed n)
+		{
 		}
 
 		public virtual void Post(ExprLValIndexed n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(ExprLValIndexed n)
@@ -126,6 +110,8 @@ namespace Grc.Visitors.Ast
 
 			n.Lval.Accept(this);
 
+			In(n);
+
 			n.Expr.Accept(this);
 
 			Post(n);
@@ -133,12 +119,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(ExprBinOpBase n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(ExprBinOpBase n)
+		{
 		}
 
 		public virtual void Post(ExprBinOpBase n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(ExprBinOpBase n)
@@ -147,6 +135,8 @@ namespace Grc.Visitors.Ast
 
 			n.Left.Accept(this);
 
+			In(n);
+
 			n.Right.Accept(this);
 
 			Post(n);
@@ -154,12 +144,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(ExprPlus n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(ExprPlus n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(ExprPlus n)
@@ -173,12 +161,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(ExprMinus n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(ExprMinus n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(ExprMinus n)
@@ -192,12 +178,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(ExprFuncCall n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(ExprFuncCall n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(ExprFuncCall n)
@@ -212,12 +196,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(CondRelOpBase n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(CondRelOpBase n)
+		{
 		}
 
 		public virtual void Post(CondRelOpBase n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(CondRelOpBase n)
@@ -226,6 +212,8 @@ namespace Grc.Visitors.Ast
 
 			n.Left.Accept(this);
 
+			In(n);
+
 			n.Right.Accept(this);
 
 			Post(n);
@@ -233,12 +221,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(CondOr n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(CondOr n)
+		{
 		}
 
 		public virtual void Post(CondOr n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(CondOr n)
@@ -247,6 +237,8 @@ namespace Grc.Visitors.Ast
 
 			n.Left.Accept(this);
 
+			In(n);
+
 			n.Right.Accept(this);
 
 			Post(n);
@@ -254,12 +246,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(CondAnd n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(CondAnd n)
+		{
 		}
 
 		public virtual void Post(CondAnd n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(CondAnd n)
@@ -268,6 +262,8 @@ namespace Grc.Visitors.Ast
 
 			n.Left.Accept(this);
 
+			In(n);
+
 			n.Right.Accept(this);
 
 			Post(n);
@@ -275,12 +271,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(CondNot n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(CondNot n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(CondNot n)
@@ -294,12 +288,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(StmtNoOpT n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(StmtNoOpT n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(StmtNoOpT n)
@@ -311,12 +303,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(StmtBlock n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(StmtBlock n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(StmtBlock n)
@@ -331,12 +321,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(StmtAssign n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(StmtAssign n)
+		{
 		}
 
 		public virtual void Post(StmtAssign n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(StmtAssign n)
@@ -345,6 +337,8 @@ namespace Grc.Visitors.Ast
 
 			n.Lval.Accept(this);
 
+			In(n);
+
 			n.Expr.Accept(this);
 
 			Post(n);
@@ -352,12 +346,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(StmtIfThen n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(StmtIfThen n)
+		{
 		}
 
 		public virtual void Post(StmtIfThen n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(StmtIfThen n)
@@ -366,6 +362,8 @@ namespace Grc.Visitors.Ast
 
 			n.Cond.Accept(this);
 
+			In(n);
+
 			n.Stmt.Accept(this);
 
 			Post(n);
@@ -373,12 +371,18 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(StmtIfThenElse n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void InCondThen(StmtIfThenElse n)
+		{
+		}
+
+		public virtual void InThenElse(StmtIfThenElse n)
+		{
 		}
 
 		public virtual void Post(StmtIfThenElse n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(StmtIfThenElse n)
@@ -387,7 +391,11 @@ namespace Grc.Visitors.Ast
 
 			n.Cond.Accept(this);
 
+			InCondThen(n);
+
 			n.StmtThen.Accept(this);
+
+			InThenElse(n);
 
 			n.StmtElse.Accept(this);
 
@@ -396,12 +404,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(StmtWhileDo n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(StmtWhileDo n)
+		{
 		}
 
 		public virtual void Post(StmtWhileDo n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(StmtWhileDo n)
@@ -410,6 +420,8 @@ namespace Grc.Visitors.Ast
 
 			n.Cond.Accept(this);
 
+			In(n);
+
 			n.Stmt.Accept(this);
 
 			Post(n);
@@ -417,12 +429,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(StmtFuncCall n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(StmtFuncCall n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(StmtFuncCall n)
@@ -436,12 +446,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(StmtReturn n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(StmtReturn n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(StmtReturn n)
@@ -456,12 +464,18 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(LocalFuncDef n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void InHeaderLocals(LocalFuncDef n)
+		{
+		}
+
+		public virtual void InLocalsBlock(LocalFuncDef n)
+		{
 		}
 
 		public virtual void Post(LocalFuncDef n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(LocalFuncDef n)
@@ -470,8 +484,12 @@ namespace Grc.Visitors.Ast
 
 			n.Header.Accept(this);
 
+			InHeaderLocals(n);
+
 			foreach (LocalBase l in n.Locals)
 				l.Accept(this);
+
+			InLocalsBlock(n);
 
 			n.Block.Accept(this);
 
@@ -480,12 +498,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(LocalFuncDecl n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(LocalFuncDecl n)
+		{
 		}
 
 		public virtual void Post(LocalFuncDecl n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(LocalFuncDecl n)
@@ -495,6 +515,8 @@ namespace Grc.Visitors.Ast
 			foreach (HPar h in n.HPars)
 				h.Accept(this);
 
+			In(n);
+
 			n.HTypeReturn.Accept(this);
 
 			Post(n);
@@ -502,12 +524,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(HPar n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(HPar n)
+		{
 		}
 
 		public virtual void Post(HPar n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(HPar n)
@@ -517,6 +541,8 @@ namespace Grc.Visitors.Ast
 			foreach (ParIdentifierT id in n.Identifiers)
 				id.Accept(this);
 
+			In(n);
+
 			n.HTypePar.Accept(this);
 
 			Post(n);
@@ -524,12 +550,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(ParIdentifierT n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(ParIdentifierT n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(ParIdentifierT n)
@@ -541,12 +565,18 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(HTypePar n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void InDimEmpty(HTypePar n)
+		{
+		}
+
+		public virtual void InDims(HTypePar n)
+		{
 		}
 
 		public virtual void Post(HTypePar n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(HTypePar n)
@@ -555,8 +585,12 @@ namespace Grc.Visitors.Ast
 
 			n.DataType.Accept(this);
 
+			InDimEmpty(n);
+
 			if (n.DimEmpty != null)
 				n.DimEmpty.Accept(this);
+
+			InDims(n);
 
 			foreach (DimIntegerT d in n.Dims)
 				d.Accept(this);
@@ -566,12 +600,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(TypeDataBase n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(TypeDataBase n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(TypeDataBase n)
@@ -583,12 +615,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(DimEmptyT n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(DimEmptyT n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(DimEmptyT n)
@@ -600,12 +630,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(DimIntegerT n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(DimIntegerT n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(DimIntegerT n)
@@ -617,12 +645,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(LocalVarDef n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(LocalVarDef n)
+		{
 		}
 
 		public virtual void Post(LocalVarDef n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(LocalVarDef n)
@@ -632,6 +662,8 @@ namespace Grc.Visitors.Ast
 			foreach (VarIdentifierT id in n.Identifiers)
 				id.Accept(this);
 
+			In(n);
+
 			n.HTypeVar.Accept(this);
 
 			Post(n);
@@ -639,12 +671,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(HTypeReturn n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(HTypeReturn n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(HTypeReturn n)
@@ -656,12 +686,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(TypeReturnNothingT n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(TypeReturnNothingT n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(TypeReturnNothingT n)
@@ -673,12 +701,10 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(VarIdentifierT n)
 		{
-			DefaultPre(n);
 		}
 
 		public virtual void Post(VarIdentifierT n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(VarIdentifierT n)
@@ -690,12 +716,14 @@ namespace Grc.Visitors.Ast
 
 		public virtual void Pre(HTypeVar n)
 		{
-			DefaultPre(n);
+		}
+
+		public virtual void In(HTypeVar n)
+		{
 		}
 
 		public virtual void Post(HTypeVar n)
 		{
-			DefaultPost(n);
 		}
 
 		public override void Visit(HTypeVar n)
@@ -703,6 +731,8 @@ namespace Grc.Visitors.Ast
 			Pre(n);
 
 			n.DataType.Accept(this);
+
+			In(n);
 
 			foreach (DimIntegerT d in n.Dims)
 				d.Accept(this);

@@ -1,0 +1,21 @@
+fun binop() : nothing
+
+	var a : int;
+
+{
+	a <- 1 + 2;
+
+	puti(a);
+
+	a <- 1 - 2;
+
+	puti(a);
+
+	a <- 17 * 2;
+
+	puti(a);
+
+	a <- 17 mod 2;
+
+	puti(a);
+}
