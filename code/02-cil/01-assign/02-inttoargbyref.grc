@@ -1,0 +1,15 @@
+fun inttoargbyref() : nothing
+	
+	var c : int;
+	
+	fun call(ref a : int) : nothing
+	{
+		a <- 15;
+
+		puti(a);
+	}
+{
+	puti(c);
+	call(c);
+	puti(c);
+}

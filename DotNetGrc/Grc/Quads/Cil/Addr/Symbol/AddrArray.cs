@@ -9,8 +9,20 @@ namespace Grc.Quads.Addr
 {
 	public partial class AddrArray : AddrSym
 	{
-		protected override OpCode LoadOpCode { get { return OpCodes.Ldind_I4; } }
+		public override void EmitLoad(ILGenerator cil)
+		{
+			cil.Emit(OpCodes.Ldloc, elemAddr.Index);
+		}
 
-		protected override OpCode StoreOpCode { get { return OpCodes.Stind_I4; } }
+		public override void EmitLoadInd(ILGenerator cil)
+		{
+			cil.Emit(OpCodes.Ldloc, elemAddr.Index);
+			cil.Emit(OpCodes.Ldind_I4, Index);
+		}
+
+		public override void EmitStoreInd(ILGenerator cil)
+		{
+			cil.Emit(OpCodes.Stind_I4, Index);
+		}
 	}
 }

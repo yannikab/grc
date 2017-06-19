@@ -1,0 +1,16 @@
+fun argtoargbyref() : nothing
+	
+	var c : int;
+	
+	fun call(ref a : int; b : int) : nothing
+	{
+		a <- b;
+
+		puti(a);
+	}
+{
+	c <- 5;
+	puti(c);
+	call(c, 10);
+	puti(c);
+}

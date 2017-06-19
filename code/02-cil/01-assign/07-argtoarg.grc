@@ -1,0 +1,11 @@
+fun argtoarg() : nothing
+
+	fun call(a, b : int) : nothing
+	{
+		b <- a;
+		
+		puti(b);
+	}
+{
+	call(10, 5);
+}

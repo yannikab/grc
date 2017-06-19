@@ -8,9 +8,8 @@ namespace Grc.Types
 {
 	public partial class TypeChar : TypeData
 	{
-		public override Type DotNetType
-		{
-			get { return typeof(char); }
-		}
+		public override Type DotNetType { get { return typeof(byte); } }
+
+		public override int ByteSize { get { return 1; } }
 	}
 }

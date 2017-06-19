@@ -18,6 +18,7 @@ namespace Grc.Visitors.Tac
 	public class TacVisitor : DepthFirstVisitor
 	{
 		private ExprLValBase indexed;
+		private int noIndexDims;
 
 		public override void Pre(LocalFuncDef n)
 		{
@@ -44,7 +45,7 @@ namespace Grc.Visitors.Tac
 
 		public override void Post(ExprBinOpBase n)
 		{
-			AddrTmp result = new AddrTmp(n.Type);
+			AddrTmp result = new AddrTmp(n.Type, false);
 
 			n.AddQuad(Quad.GenQuad(n.GetOp(), n.Left.Addr, n.Right.Addr, result));
 
@@ -53,14 +54,14 @@ namespace Grc.Visitors.Tac
 
 		public override void Post(ExprPlus n)
 		{
-			AddrTmp result = new AddrTmp(n.Type);
+			AddrTmp result = new AddrTmp(n.Type, false);
 
 			n.Addr = result;
 		}
 
 		public override void Post(ExprMinus n)
 		{
-			AddrTmp result = new AddrTmp(n.Type);
+			AddrTmp result = new AddrTmp(n.Type, false);
 
 			n.AddQuad(Quad.GenQuad(n.GetOp(), new AddrInt(0), n.Expr.Addr, result));
 
@@ -69,7 +70,10 @@ namespace Grc.Visitors.Tac
 
 		public override void Post(ExprLValIdentifierT n)
 		{
-			n.Addr = n.IsPar ? (AddrVar)new AddrArg(n) : (AddrVar)new AddrLoc(n);
+			if (n.IsPar)
+				n.Addr = new AddrArg(n.Name, n.Type, n.IsParByRef);
+			else
+				n.Addr = new AddrLoc(n.Name, n.Type, n.Type is TypeIndexed);
 		}
 
 		public override void Post(ExprLValStringT n)
@@ -89,17 +93,17 @@ namespace Grc.Visitors.Tac
 
 				current = (current as TypeProduct).Left;
 			}
-			
+
 			passingModes.Push(current.ByRef ? (AddrBase)AddrRef.Instance : (AddrBase)AddrVal.Instance);
 
 			foreach (ExprBase e in n.Args)
-				n.AddQuad(Quad.GenQuad(OpPar.Instance, e.Addr, passingModes.Pop(), AddrEmpty.Instance));
+				n.AddQuad(Quad.GenQuad(new OpParArg(), e.Addr, passingModes.Pop(), AddrEmpty.Instance));
 
 			if (!(n.Type.Equals(TypeNothing.Instance)))
 			{
-				AddrTmp value = new AddrTmp(n.Type);
+				AddrTmp value = new AddrTmp(n.Type, false);
 
-				n.AddQuad(Quad.GenQuad(OpPar.Instance, AddrRet.Instance, value, AddrEmpty.Instance));
+				n.AddQuad(Quad.GenQuad(new OpParRet(), AddrRet.Instance, value, AddrEmpty.Instance));
 
 				n.Addr = value;
 			}
@@ -146,7 +150,7 @@ namespace Grc.Visitors.Tac
 
 			n.FalseList = QuadList.Make(Quad.NextQuad);
 
-			n.AddQuad((Quad.GenQuad(new OpGoto(), AddrEmpty.Instance, AddrEmpty.Instance, AddrStar.Instance)));
+			n.AddQuad(Quad.GenQuad(new OpGoto(), AddrEmpty.Instance, AddrEmpty.Instance, AddrStar.Instance));
 		}
 
 		public override void Post(StmtNoOpT n)
@@ -173,7 +177,7 @@ namespace Grc.Visitors.Tac
 		{
 			n.Temp = QuadList.Make(Quad.NextQuad);
 
-			n.AddQuad((Quad.GenQuad(new OpGoto(), AddrEmpty.Instance, AddrEmpty.Instance, AddrStar.Instance)));
+			n.AddQuad(Quad.GenQuad(new OpGoto(), AddrEmpty.Instance, AddrEmpty.Instance, AddrStar.Instance));
 
 			n.Cond.FalseList.BackPatch(Quad.NextQuad.Addr);
 		}
@@ -244,44 +248,67 @@ namespace Grc.Visitors.Tac
 		{
 			if (n.Lval is ExprLValIndexed)
 			{
-				AddrTmp temp = new AddrTmp(n.Expr.Type);
+				AddrTmp temp = new AddrTmp(n.Expr.Type, false);
 
-				AddrTmp index = new AddrTmp(n.Expr.Type);
+				AddrTmp index = new AddrTmp(n.Expr.Type, false);
 
-				n.AddQuad(Quad.GenQuad(new OpMul(), n.Lval.Addr, new AddrInt(((TypeIndexed)n.Lval.Type).Dim), temp));
+				n.AddQuad(Quad.GenQuad(new OpMul(), n.Lval.Addr, new AddrInt((n.Lval.Type as TypeIndexed).Dim), temp));
 
 				n.AddQuad(Quad.GenQuad(new OpAdd(), temp, n.Expr.Addr, index));
 
 				n.Addr = index;
+
+				noIndexDims--;
 			}
 			else
 			{
 				this.indexed = n.Lval;
 
-				AddrTmp index = new AddrTmp(n.Expr.Type);
+				ExprLValIdentifierT id = this.indexed as ExprLValIdentifierT;
 
-				n.AddQuad((Quad.GenQuad(new OpAssign(), n.Expr.Addr, AddrEmpty.Instance, index)));
+				if (id != null)
+					noIndexDims = (id.Type as TypeIndexed).TotalDims - 1;
+
+				AddrTmp index = new AddrTmp(n.Expr.Type, false);
+
+				n.AddQuad(Quad.GenQuad(new OpAssign(), n.Expr.Addr, AddrEmpty.Instance, index));
 
 				n.Addr = index;
 			}
 
 			if (!n.ParentIndexed)
 			{
-				AddrTmp addrElem = new AddrTmp(n.Type);
-
 				if (indexed is ExprLValIdentifierT)
 				{
 					ExprLValIdentifierT id = (ExprLValIdentifierT)indexed;
 
-					AddrVar addrVar = id.IsPar ? (AddrVar)new AddrArg(id) : (AddrVar)new AddrLoc(id);
+					for (int i = noIndexDims; i > 0; i--)
+					{
+						AddrTmp temp = new AddrTmp(n.Expr.Type, false);
 
-					n.AddQuad(Quad.GenQuad(new OpArray(), addrVar, n.Addr, addrElem));
+						TypeIndexed typeIndexed = (TypeIndexed)id.Type;
+
+						int dim = typeIndexed.GetDim(typeIndexed.TotalDims - i);
+
+						n.AddQuad(Quad.GenQuad(new OpMul(), n.Addr, new AddrInt(dim), temp));
+
+						n.Addr = temp;
+					}
+
+					AddrTmp addrElem = new AddrTmp(n.Type, true);
+
+					if (id.IsPar)
+						n.AddQuad(Quad.GenQuad(new OpArray(), new AddrArg(id.Name, id.Type, id.IsParByRef), n.Addr, addrElem));
+					else
+						n.AddQuad(Quad.GenQuad(new OpArray(), new AddrLoc(id.Name, id.Type, id.Type is TypeIndexed), n.Addr, addrElem));
 
 					n.Addr = new AddrArray(addrElem);
 				}
 				else if (indexed is ExprLValStringT)
 				{
 					ExprLValStringT str = (ExprLValStringT)indexed;
+
+					AddrTmp addrElem = new AddrTmp(n.Type, true);
 
 					AddrString addrString = new AddrString(str.Text);
 

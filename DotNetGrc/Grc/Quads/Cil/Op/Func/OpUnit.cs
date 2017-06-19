@@ -9,12 +9,7 @@ namespace Grc.Quads.Op
 {
 	partial class OpUnit : OpBase
 	{
-		public override OpCode OpCode
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public override void EmitQuad(ILGenerator ilg)
+		public override void EmitQuad(ILGenerator cil)
 		{
 		}
 	}

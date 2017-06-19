@@ -11,16 +11,14 @@ namespace Grc.Quads.Addr
 	{
 		public int Index { get; set; }
 
-		protected abstract OpCode StoreOpCode { get; }
-
-		public override void EmitLoad(ILGenerator ilg)
+		public virtual void EmitStore(ILGenerator cil)
 		{
-			ilg.Emit(LoadOpCode, Index);
+			throw new NotImplementedException();
 		}
 
-		public virtual void EmitStore(ILGenerator ilg)
+		public virtual void EmitStoreInd(ILGenerator cil)
 		{
-			ilg.Emit(StoreOpCode, Index);
+			throw new NotImplementedException();
 		}
 	}
 }

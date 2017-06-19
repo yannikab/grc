@@ -1,0 +1,24 @@
+fun twobythree() : nothing
+	
+	var a : int[2][3];
+	var b : int;
+	
+	fun call(ref c : int[3]) : nothing
+	{
+		puti(c[2]);
+	}
+{
+	a[0][0] <- 0;
+	a[0][1] <- 1;
+	a[0][2] <- 2;
+	a[1][0] <- 3;
+	a[1][1] <- 4;
+	a[1][2] <- 5;
+	
+	b <- a[0][1];
+	
+	puti(b);
+	puts("\n");
+	
+	call(a[1]);
+}

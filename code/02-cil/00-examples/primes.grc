@@ -1,5 +1,5 @@
-fun main () : nothing
-    fun prime (n : int) : int
+fun primes() : nothing
+    fun prime(n : int) : int
       var i : int;
     {
       if n<0              then return prime(-1);

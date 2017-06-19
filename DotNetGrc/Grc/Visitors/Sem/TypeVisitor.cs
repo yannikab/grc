@@ -72,6 +72,8 @@ namespace Grc.Visitors.Sem
 
 			n.Type = funcDefType;
 
+			n.Header.Type = funcDefType;
+
 			if (SymbolTable.CurrentScopeId == 0)
 			{
 				// type rule: main function can not have parameters
@@ -128,6 +130,8 @@ namespace Grc.Visitors.Sem
 					SymbolVar symbolVar = new SymbolVar(p.Name, true) { Type = typeResolver.GetType(p) };
 
 					SymbolTable.Insert(symbolVar);
+
+					p.Type = symbolVar.Type;
 				}
 				catch (SymbolAlreadyInScopeException e)
 				{
@@ -341,12 +345,14 @@ namespace Grc.Visitors.Sem
 				((TypeIndexed)n.Type).InHeader = false;
 
 			n.IsPar = symbolVar.IsPar;
+
+			n.IsParByRef = symbolVar.Type.ByRef;
 		}
 
 		public override void Post(ExprLValStringT n)
 		{
 			// type rule: string literals are of type char []
-			n.Type = new TypeIndexed(n.Text.Length - 1, new TypeChar()) { InHeader = false };
+			n.Type = new TypeIndexed(n.Text.Substring(1, n.Text.Length - 2).Length + 1, new TypeChar()) { InHeader = false };
 		}
 
 		public override void Post(ExprLValIndexed n)

@@ -8,6 +8,5 @@ namespace Grc.Quads.Addr
 {
 	public abstract class AddrBase
 	{
-
 	}
 }

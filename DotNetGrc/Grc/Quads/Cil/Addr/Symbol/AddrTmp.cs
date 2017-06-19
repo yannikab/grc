@@ -9,8 +9,14 @@ namespace Grc.Quads.Addr
 {
 	public partial class AddrTmp : AddrSym
 	{
-		protected override OpCode LoadOpCode { get { return OpCodes.Ldloc; } }
+		public override void EmitLoad(ILGenerator cil)
+		{
+			cil.Emit(OpCodes.Ldloc, Index);
+		}
 
-		protected override OpCode StoreOpCode { get { return OpCodes.Stloc; } }
+		public override void EmitStore(ILGenerator cil)
+		{
+			cil.Emit(OpCodes.Stloc, Index);
+		}
 	}
 }

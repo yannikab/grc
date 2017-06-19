@@ -1,0 +1,36 @@
+fun reloparray() : nothing
+
+	var a : int[10];
+	var i : int;
+	
+	fun call(ref a : int[]) : nothing
+	{
+		i <- 0;
+		while i < 10 do
+		{
+			puti(a[i]);
+			puts("\n");
+			i <- i + 1;
+		}
+	
+		i <- 4;
+	
+		if a[i+1] > a[i] then {
+			puts(">\n");
+		}
+	
+		if a[i] < a[i+1] then {
+			puts("<\n");
+		}
+	}
+	
+{
+	i <- 0;
+	while i < 10 do
+	{
+		a[i] <- i;
+		i <- i + 1;
+	}
+	
+	call(a);
+}

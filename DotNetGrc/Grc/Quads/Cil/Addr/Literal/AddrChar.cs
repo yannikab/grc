@@ -9,14 +9,9 @@ namespace Grc.Quads.Addr
 {
 	public partial class AddrChar : AddrLit
 	{
-		protected override OpCode LoadOpCode
+		public override void EmitLoad(ILGenerator cil)
 		{
-			get { return OpCodes.Ldc_I4; }
-		}
-
-		public override void EmitLoad(ILGenerator ilg)
-		{
-			ilg.Emit(LoadOpCode, this.s[1]);
+			cil.Emit(OpCodes.Ldc_I4, this.text[1]);
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grc.Exceptions.Sem;
 
 namespace Grc.Types
 {
@@ -90,6 +91,68 @@ namespace Grc.Types
 		public override TypeBase Clone()
 		{
 			return new TypeIndexed(dim, indexedType.Clone()) { InHeader = this.InHeader };
+		}
+
+		public int TotalDims
+		{
+			get
+			{
+				TypeIndexed typeIndexed = indexedType as TypeIndexed;
+
+				return typeIndexed == null ? 1 : typeIndexed.TotalDims + 1;
+			}
+		}
+
+		public int GetDim(int dim)
+		{
+			if (dim < 0 || dim > TotalDims - 1)
+				throw new SemanticException("Invalid dimension index");
+
+			TypeIndexed typeIndexed = this;
+
+			for (int i = 0; i < dim; i++)
+				typeIndexed = (TypeIndexed)typeIndexed.indexedType;
+
+			return typeIndexed.Dim;
+		}
+
+		public int TotalElements
+		{
+			get
+			{
+				int totalElements = 1;
+
+				TypeIndexed typeIndexed = this;
+
+				do
+				{
+					totalElements *= typeIndexed.Dim;
+
+					typeIndexed = typeIndexed.IndexedType as TypeIndexed;
+
+				} while (typeIndexed != null);
+
+				return totalElements;
+			}
+		}
+
+		public TypeBase ElementType
+		{
+			get
+			{
+				TypeBase type = indexedType;
+
+				TypeIndexed typeIndexed = indexedType as TypeIndexed;
+
+				while (typeIndexed != null)
+				{
+					type = typeIndexed.indexedType;
+
+					typeIndexed = typeIndexed.indexedType as TypeIndexed;
+				}
+
+				return type;
+			}
 		}
 	}
 }

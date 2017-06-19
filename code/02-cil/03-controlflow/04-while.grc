@@ -1,0 +1,12 @@
+fun for() : nothing
+	
+	var i : int;
+{
+	i <- 0;
+	
+	while i < 10 do
+	{
+		puti(i);
+		i <- i + 1;
+	}
+}

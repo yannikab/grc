@@ -1,7 +1,5 @@
 fun paramnotused() : nothing
 
-	var a : int;
-	
 	fun add(a : int; b : int) : int
 	{
 		return a;

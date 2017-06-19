@@ -14,20 +14,20 @@ namespace Grc.Quads
 
 		public Label? Label { get { return label; } }
 
-		public void DefineLabel(ILGenerator ilg)
+		public void DefineLabel(ILGenerator cil)
 		{
 			if (label != null)
 				throw new CilException("Label already defined.");
 
-			label = ilg.DefineLabel();
+			label = cil.DefineLabel();
 		}
 
-		public void Emit(ILGenerator ilg)
+		public void Emit(ILGenerator cil)
 		{
 			if (label.HasValue)
-				ilg.MarkLabel(label.Value);
+				cil.MarkLabel(label.Value);
 
-			op.EmitQuad(ilg);
+			op.EmitQuad(cil);
 		}
 	}
 }

@@ -1,0 +1,13 @@
+fun argtoloc() : nothing
+
+	fun call(a : int) : nothing
+			
+		var b : int;
+	{
+		b <- a;
+		
+		puti(b);
+	}
+{
+	call(5);
+}

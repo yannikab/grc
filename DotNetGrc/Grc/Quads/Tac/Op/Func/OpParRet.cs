@@ -6,16 +6,8 @@ using System.Threading.Tasks;
 
 namespace Grc.Quads.Op
 {
-	partial class OpPar : OpBase
+	partial class OpParRet : OpBase
 	{
-		private static OpPar instance;
-
-		public static OpPar Instance { get { return instance ?? (instance = new OpPar()); } }
-
-		private OpPar()
-		{
-		}
-
 		public override string ToString()
 		{
 			return "par";

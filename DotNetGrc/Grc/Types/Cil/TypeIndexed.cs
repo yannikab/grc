@@ -12,20 +12,23 @@ namespace Grc.Types
 		{
 			get
 			{
-				return InnerDotNetType.MakeArrayType();
+				return DotNetElementType.MakeArrayType();
 			}
 		}
 
-		public Type InnerDotNetType
+		public Type DotNetElementType
 		{
 			get
 			{
-				TypeBase type = indexedType;
+				return ElementType.DotNetType;
+			}
+		}
 
-				while (type is TypeIndexed)
-					type = (type as TypeIndexed).indexedType;
-
-				return type.DotNetType;
+		public override int ByteSize
+		{
+			get
+			{
+				return TotalElements * ElementType.ByteSize;
 			}
 		}
 	}

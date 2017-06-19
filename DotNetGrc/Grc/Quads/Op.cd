@@ -1,157 +1,171 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Grc.Quads.Op.OpAdd" Collapsed="true">
-    <Position X="2.75" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\Bin\OpAdd.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpBin" Collapsed="true">
-    <Position X="7.25" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Quads\Tac\Op\Bin\OpBin.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpDiv" Collapsed="true">
-    <Position X="9.5" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\Bin\OpDiv.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpMod" Collapsed="true">
+  <Class Name="Grc.Quads.Op.OpEq" Collapsed="true">
     <Position X="5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\Bin\OpMod.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpMul" Collapsed="true">
-    <Position X="7.25" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\Bin\OpMul.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpSub" Collapsed="true">
-    <Position X="11.75" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\Bin\OpSub.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpArray" Collapsed="true">
-    <Position X="0.5" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpArray.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpAssign" Collapsed="true">
-    <Position X="20.75" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpAssign.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpBase" Collapsed="true">
-    <Position X="22" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAEAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpBase.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpCall" Collapsed="true">
-    <Position X="36.5" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpCall.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpEndu" Collapsed="true">
-    <Position X="14" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpEndu.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpEq" Collapsed="true">
-    <Position X="23" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpEq.cs</FileName>
+      <FileName>Quads\Cil\Op\Cond\OpEq.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Grc.Quads.Op.OpGe" Collapsed="true">
-    <Position X="29.75" Y="1.75" Width="1.5" />
+    <Position X="9.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpGe.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Grc.Quads.Op.OpGoto" Collapsed="true">
-    <Position X="38.75" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpGoto.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Cond\OpGe.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Grc.Quads.Op.OpGt" Collapsed="true">
-    <Position X="16.25" Y="1.75" Width="1.5" />
+    <Position X="11.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpGt.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Cond\OpGt.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Grc.Quads.Op.OpLe" Collapsed="true">
-    <Position X="25.25" Y="1.75" Width="1.5" />
+    <Position X="14" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpLe.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Cond\OpLe.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Grc.Quads.Op.OpLt" Collapsed="true">
-    <Position X="32" Y="1.75" Width="1.5" />
+    <Position X="16.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpLt.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Cond\OpLt.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Grc.Quads.Op.OpNe" Collapsed="true">
-    <Position X="41" Y="1.75" Width="1.5" />
+    <Position X="7.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpNe.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Cond\OpNe.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Grc.Quads.Op.OpNoOp" Collapsed="true">
-    <Position X="18.5" Y="1.75" Width="1.5" />
+  <Class Name="Grc.Quads.Op.OpRel" Collapsed="true">
+    <Position X="10.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpNoOp.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Op\Cond\OpRel.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Grc.Quads.Op.OpPar" Collapsed="true">
-    <Position X="27.5" Y="1.75" Width="1.5" />
+  <Class Name="Grc.Quads.Op.OpAdd" Collapsed="true">
+    <Position X="36.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpPar.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Expr\OpAdd.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Grc.Quads.Op.OpRet" Collapsed="true">
-    <Position X="34.25" Y="1.75" Width="1.5" />
+  <Class Name="Grc.Quads.Op.OpDiv" Collapsed="true">
+    <Position X="41" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpRet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Expr\OpDiv.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Grc.Quads.Op.OpUnit" Collapsed="true">
+  <Class Name="Grc.Quads.Op.OpExprBin" Collapsed="true">
+    <Position X="36.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Quads\Cil\Op\Expr\OpExprBin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpMod" Collapsed="true">
+    <Position X="32" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Expr\OpMod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpMul" Collapsed="true">
+    <Position X="34.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Expr\OpMul.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpSub" Collapsed="true">
+    <Position X="38.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Expr\OpSub.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpCall" Collapsed="true">
+    <Position X="25.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Func\OpCall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpEndu" Collapsed="true">
     <Position X="43.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
-      <FileName>Quads\Tac\Op\OpUnit.cs</FileName>
+      <FileName>Quads\Cil\Op\Func\OpEndu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpParArg" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Func\OpParArg.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpParRet" Collapsed="true">
+    <Position X="18.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Func\OpParRet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpRet" Collapsed="true">
+    <Position X="20.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Func\OpRet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpUnit" Collapsed="true">
+    <Position X="27.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\Func\OpUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpArray" Collapsed="true">
+    <Position X="45.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\OpArray.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpAssign" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\OpAssign.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpBase" Collapsed="true">
+    <Position X="23" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAEAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\OpBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpGoto" Collapsed="true">
+    <Position X="23" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\OpGoto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grc.Quads.Op.OpNoOp" Collapsed="true">
+    <Position X="29.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAABAAAAAQAAAAAAAAAQ=</HashCode>
+      <FileName>Quads\Cil\Op\OpNoOp.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

@@ -1,15 +1,12 @@
-fun program() : nothing
+fun readwriteint() : nothing
 
-	var a : int[10];
+	var a : int[5][10];
+
 	var b, c : int;
 {
 	b <- 15;
-
-	a[5] <- b;
-
-	a[3] <- a[5];
-
-	c <- a[3];
-
+	a[3][4] <- b;
+	a[2][1] <- a[3][4];
+	c <- a[2][1];
 	puti(c);
 }

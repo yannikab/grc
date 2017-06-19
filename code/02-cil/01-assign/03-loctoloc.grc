@@ -1,0 +1,10 @@
+fun loctoloc() : nothing
+
+	var a, b : int;
+{
+	a <- 15;
+
+	b <- a;
+	
+	puti(b);
+}

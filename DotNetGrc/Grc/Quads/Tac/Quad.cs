@@ -19,6 +19,8 @@ namespace Grc.Quads
 
 		private OpBase op;
 
+		public OpBase Op { get { return op; } }
+
 		private readonly AddrBase[] addrs = new AddrBase[3];
 
 		public int Id { get { return id; } }

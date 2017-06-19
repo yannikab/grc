@@ -1,0 +1,15 @@
+fun funcallbyref() : nothing
+
+	var a : int;
+	
+	fun call(ref a : int) : nothing
+	{
+		a <- 10;
+	}
+{
+	a <- 5;
+	
+	call(a);
+
+	puti(a);
+}

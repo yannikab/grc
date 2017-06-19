@@ -9,8 +9,6 @@ namespace Grc.Quads.Op
 {
 	public abstract partial class OpBase
 	{
-		public abstract OpCode OpCode { get; }
-
-		public abstract void EmitQuad(ILGenerator ilg);
+		public abstract void EmitQuad(ILGenerator cil);
 	}
 }

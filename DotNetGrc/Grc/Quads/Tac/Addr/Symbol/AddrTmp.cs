@@ -11,9 +11,16 @@ namespace Grc.Quads.Addr
 	{
 		private static int nextId;
 
-		public AddrTmp(TypeBase type)
-			: base(string.Format("${0}", (nextId++).ToString("D1")), type)
+		private readonly TypeBase type;
+
+		public override TypeBase Type { get { return type; } }
+
+		public AddrTmp(TypeBase type, bool byRef)
+			: base(string.Format("${0}", (nextId++).ToString("D1")))
 		{
+			this.type = type.Clone();
+
+			this.type.ByRef = byRef;
 		}
 	}
 }

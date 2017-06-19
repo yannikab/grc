@@ -8,11 +8,11 @@ using Grc.Nodes.Func;
 
 namespace Grc.Nodes
 {
-	public class Parameter
+	public partial class Parameter
 	{
 		private readonly string name;
 		private readonly bool byRef;
-		private readonly TypeDataBase type;
+		private readonly TypeDataBase nodeType;
 		private readonly DimEmptyT dimEmpty;
 
 		private readonly IReadOnlyList<DimIntegerT> dims;
@@ -24,7 +24,7 @@ namespace Grc.Nodes
 
 		public bool ByRef { get { return byRef; } }
 
-		public TypeDataBase Type { get { return type; } }
+		public TypeDataBase NodeType { get { return nodeType; } }
 
 		public DimEmptyT DimEmpty { get { return dimEmpty; } }
 
@@ -45,7 +45,7 @@ namespace Grc.Nodes
 
 				sb.Append(" : ");
 
-				sb.Append(type.Text);
+				sb.Append(nodeType.Text);
 
 				if (dimEmpty != null)
 					sb.Append("[]");
@@ -66,11 +66,11 @@ namespace Grc.Nodes
 			get { return string.Format("[{0}, {1}]", line, pos); }
 		}
 
-		public Parameter(string name, bool byRef, TypeDataBase type, DimEmptyT dimEmpty, IReadOnlyList<DimIntegerT> dims, int line, int pos)
+		public Parameter(string name, bool byRef, TypeDataBase nodeType, DimEmptyT dimEmpty, IReadOnlyList<DimIntegerT> dims, int line, int pos)
 		{
 			this.name = name;
 			this.byRef = byRef;
-			this.type = type;
+			this.nodeType = nodeType;
 			this.dimEmpty = dimEmpty;
 			this.dims = dims;
 

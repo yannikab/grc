@@ -1,4 +1,4 @@
-fun assign() : nothing
+fun inttoloc() : nothing
 
 	var a : int;
 {

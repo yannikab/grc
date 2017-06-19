@@ -1,0 +1,22 @@
+fun twoarrays() : nothing
+
+	var a, b : char[32];
+	
+	fun call(ref s : char[32]; ref r : char[32]) : nothing
+
+		var i : int;
+	{
+		i <- 5;
+		
+		r[i + 2] <- s[i - 3];
+	}
+{
+	a[7] <- 'c';
+	b[2] <- 'd';
+	putc(a[7]); puts("\n");
+	putc(b[2]); puts("\n");
+	
+	call(a, b);
+	putc(a[7]); puts("\n");
+	putc(b[2]); puts("\n");
+}

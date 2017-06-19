@@ -1,0 +1,17 @@
+fun argbyreftoloc() : nothing
+
+	var c : int;
+	
+	fun call(ref a : int) : nothing
+			
+		var b : int;
+	{
+		b <- a;
+		
+		puti(b);
+	}
+{
+	c <- 5;
+	puti(c);
+	call(c);
+}

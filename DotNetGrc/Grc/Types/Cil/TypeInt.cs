@@ -8,9 +8,8 @@ namespace Grc.Types
 {
 	public partial class TypeInt : TypeData
 	{
-		public override Type DotNetType
-		{
-			get { return typeof(int); }
-		}
+		public override Type DotNetType { get { return typeof(int); } }
+
+		public override int ByteSize { get { return 4; } }
 	}
 }

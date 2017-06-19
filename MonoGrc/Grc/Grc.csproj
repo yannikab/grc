@@ -328,7 +328,6 @@
     <Compile Include="Visitors\Cil\ContextWrapper.cs" />
     <Compile Include="Visitors\Cil\LLBoomVisitor.cs" />
     <Compile Include="Visitors\Cil\LLTickVisitor.cs" />
-    <Compile Include="Visitors\Cil\Methods.cs" />
     <Compile Include="Nodes\Cil\Expr\ExprFuncCall.cs" />
     <Compile Include="Nodes\Cil\Func\LocalFuncDecl.cs" />
     <Compile Include="Nodes\Cil\Func\LocalFuncDef.cs" />
@@ -375,7 +374,6 @@
     <Compile Include="Quads\Cil\Op\Expr\OpSub.cs" />
     <Compile Include="Quads\Cil\Op\Func\OpCall.cs" />
     <Compile Include="Quads\Cil\Op\Func\OpEndu.cs" />
-    <Compile Include="Quads\Cil\Op\Func\OpPar.cs" />
     <Compile Include="Quads\Cil\Op\Func\OpRet.cs" />
     <Compile Include="Quads\Cil\Op\Func\OpUnit.cs" />
     <Compile Include="Quads\Cil\Op\OpArray.cs" />
@@ -419,7 +417,6 @@
     <Compile Include="Quads\Tac\Op\Expr\OpSub.cs" />
     <Compile Include="Quads\Tac\Op\Func\OpCall.cs" />
     <Compile Include="Quads\Tac\Op\Func\OpEndu.cs" />
-    <Compile Include="Quads\Tac\Op\Func\OpPar.cs" />
     <Compile Include="Quads\Tac\Op\Func\OpRet.cs" />
     <Compile Include="Quads\Tac\Op\Func\OpUnit.cs" />
     <Compile Include="Quads\Tac\Op\OpArray.cs" />
@@ -433,6 +430,13 @@
     <Compile Include="Visitors\Ast\DepthFirstVisitorDefaults.cs" />
     <Compile Include="Drivers\Code\StateCodeCil.cs" />
     <Compile Include="Nodes\Sem\Expr\ExprLValIdentifierT.cs" />
+    <Compile Include="Quads\Cil\Op\Func\OpParArg.cs" />
+    <Compile Include="Quads\Cil\Op\Func\OpParRet.cs" />
+    <Compile Include="Quads\Tac\Op\Func\OpParArg.cs" />
+    <Compile Include="Quads\Tac\Op\Func\OpParRet.cs" />
+    <Compile Include="Visitors\Cil\MethodLibrary.cs" />
+    <Compile Include="Visitors\Cil\MethodVault.cs" />
+    <Compile Include="Nodes\Sem\Parameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -11,28 +11,69 @@ namespace Grc.Quads.Op
 {
 	partial class OpAssign : OpBase
 	{
-		public override OpCode OpCode
+		public override void EmitQuad(ILGenerator cil)
 		{
-			get { return OpCodes.Nop; }
+			if (Quad.Res is AddrRetVal)
+			{
+				LoadRetVal(cil);
+				return;
+			}
+
+			if ((Quad.Res as AddrSym).Type.ByRef)
+				AssignToByRef(cil);
+			else
+				AssignToByVal(cil);
 		}
 
-		public override void EmitQuad(ILGenerator ilg)
+		private void LoadRetVal(ILGenerator cil)
 		{
 			AddrExpr source = (AddrExpr)Quad.Arg1;
 
-			source.EmitLoad(ilg);
+			source.EmitLoad(cil);
+		}
 
-			AddrRetVal retVal = Quad.Res as AddrRetVal;
+		private void AssignToByRef(ILGenerator cil)
+		{
+			AddrSym target = (AddrSym)Quad.Res;
 
-			if (retVal != null)
-				return;
+			target.EmitLoad(cil);
 
-			AddrSym target = Quad.Res as AddrSym;
+			AddrSym source = Quad.Arg1 as AddrSym;
 
-			if (target == null)
-				throw new CilException("Invalid assignment target.");
+			if (source != null)
+			{
+				if (source.Type.ByRef)
+					source.EmitLoadInd(cil);
+				else
+					source.EmitLoad(cil);
+			}
+			else
+			{
+				(Quad.Arg1 as AddrExpr).EmitLoad(cil);
+			}
 
-			target.EmitStore(ilg);
+			target.EmitStoreInd(cil);
+		}
+
+		private void AssignToByVal(ILGenerator cil)
+		{
+			AddrSym source = Quad.Arg1 as AddrSym;
+
+			if (source != null)
+			{
+				if (source.Type.ByRef)
+					source.EmitLoadInd(cil);
+				else
+					source.EmitLoad(cil);
+			}
+			else
+			{
+				(Quad.Arg1 as AddrExpr).EmitLoad(cil);
+			}
+
+			AddrSym target = (AddrSym)Quad.Res;
+
+			target.EmitStore(cil);
 		}
 	}
 }

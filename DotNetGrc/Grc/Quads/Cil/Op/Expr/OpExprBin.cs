@@ -10,7 +10,9 @@ namespace Grc.Quads.Op
 {
 	abstract partial class OpExprBin : OpBase
 	{
-		public override void EmitQuad(ILGenerator ilg)
+		public virtual OpCode OpCode { get { return OpCodes.Nop; } }
+
+		public override void EmitQuad(ILGenerator cil)
 		{
 			AddrExpr arg1 = (AddrExpr)Quad.Arg1;
 
@@ -18,13 +20,19 @@ namespace Grc.Quads.Op
 
 			AddrTmp res = (AddrTmp)Quad.Res;
 
-			arg1.EmitLoad(ilg);
+			if (arg1.Type.ByRef)
+				arg1.EmitLoadInd(cil);
+			else
+				arg1.EmitLoad(cil);
 
-			arg2.EmitLoad(ilg);
+			if (arg2.Type.ByRef)
+				arg2.EmitLoadInd(cil);
+			else
+				arg2.EmitLoad(cil);
 
-			ilg.Emit(OpCode);
+			cil.Emit(OpCode);
 
-			res.EmitStore(ilg);
+			res.EmitStore(cil);
 		}
 	}
 }

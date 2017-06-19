@@ -1,0 +1,19 @@
+fun loctoargbyref() : nothing
+	
+	var c : int;
+	
+	fun call(ref a : int) : nothing
+			
+		var b : int;
+	{
+		b <- 15;
+		
+		a <- b;
+
+		puti(a);
+	}
+{
+	puti(c);
+	call(c);
+	puti(c);
+}

@@ -8,9 +8,8 @@ namespace Grc.Types
 {
 	public abstract partial class TypeBase
 	{
-		public virtual Type DotNetType
-		{
-			get { return typeof(void); }
-		}
+		public virtual Type DotNetType { get { return typeof(void); } }
+
+		public virtual int ByteSize { get { return 0; } }
 	}
 }

@@ -11,26 +11,25 @@ namespace Grc.Quads.Op
 {
 	partial class OpArray : OpBase
 	{
-		public override OpCode OpCode
+		public override void EmitQuad(ILGenerator cil)
 		{
-			get { return OpCodes.Ldelema; }
-		}
-
-		public override void EmitQuad(ILGenerator ilg)
-		{
-			AddrVar array = (AddrVar)Quad.Arg1;
+			AddrExpr arrayAddr = (AddrExpr)Quad.Arg1;
 
 			AddrTmp index = (AddrTmp)Quad.Arg2;
 
-			//AddrTmp elemAddr = (AddrTmp)Quad.Res;
+			AddrTmp elemAddr = (AddrTmp)Quad.Res;
 
-			array.EmitLoad(ilg);
+			arrayAddr.EmitLoad(cil);
 
-			index.EmitLoad(ilg);
+			index.EmitLoad(cil);
 
-			ilg.Emit(OpCode, ((TypeIndexed)array.Type).InnerDotNetType);
+			cil.Emit(OpCodes.Ldc_I4, (arrayAddr.Type as TypeIndexed).ElementType.ByteSize);
 
-			//elemAddr.EmitStore(ilg);
+			cil.Emit(OpCodes.Mul);
+
+			cil.Emit(OpCodes.Add);
+
+			elemAddr.EmitStore(cil);
 		}
 	}
 }

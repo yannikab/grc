@@ -1,0 +1,9 @@
+fun stringindex() : nothing
+
+	var c : char;
+{
+	c <- "Hello worldz\n"[2];
+
+	putc(c);
+	puts("\n");
+}

@@ -1,0 +1,12 @@
+fun stringpar() : nothing
+
+	var c : char;
+	
+	fun proc(ref a : char[]) : nothing
+	{
+		$ puts(a);
+		putc(a[4]);
+	}
+{
+	proc("Hello worldz\n");
+}

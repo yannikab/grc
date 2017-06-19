@@ -10,16 +10,11 @@ namespace Grc.Quads.Op
 {
 	partial class OpGoto : OpBase
 	{
-		public override OpCode OpCode
-		{
-			get { return OpCodes.Br; }
-		}
-
-		public override void EmitQuad(ILGenerator ilg)
+		public override void EmitQuad(ILGenerator cil)
 		{
 			AddrQuad res = (AddrQuad)Quad.Res;
 
-			ilg.Emit(OpCode, res.Quad.Label.Value);
+			cil.Emit(OpCodes.Br, res.Quad.Label.Value);
 		}
 	}
 }

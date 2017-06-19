@@ -9,14 +9,9 @@ namespace Grc.Quads.Op
 {
 	partial class OpRet : OpBase
 	{
-		public override OpCode OpCode
+		public override void EmitQuad(ILGenerator cil)
 		{
-			get { return OpCodes.Ret; }
-		}
-
-		public override void EmitQuad(ILGenerator ilg)
-		{
-			ilg.Emit(OpCode);
+			cil.Emit(OpCodes.Ret);
 		}
 	}
 }

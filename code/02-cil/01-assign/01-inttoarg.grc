@@ -1,0 +1,11 @@
+fun inttoarg() : nothing
+
+	fun call(a : int) : nothing
+	{
+		a <- 15;
+
+		puti(a);
+	}
+{
+	call(5);
+}

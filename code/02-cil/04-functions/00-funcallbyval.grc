@@ -1,0 +1,13 @@
+fun funcallbyval() : nothing
+
+	var a : int;
+	
+	fun call(a : int) : int
+	{
+		return 3 + a;
+	}
+{
+	a <- call(5);
+
+	puti(a);
+}

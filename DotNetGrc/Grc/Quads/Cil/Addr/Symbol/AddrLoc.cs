@@ -9,8 +9,30 @@ namespace Grc.Quads.Addr
 {
 	public partial class AddrLoc : AddrVar
 	{
-		protected override OpCode LoadOpCode { get { return OpCodes.Ldloc_S; } }
+		public override void EmitLoad(ILGenerator cil)
+		{
+			cil.Emit(OpCodes.Ldloc, Index);
+		}
 
-		protected override OpCode StoreOpCode { get { return OpCodes.Stloc_S; } }
+		public override void EmitLoadInd(ILGenerator cil)
+		{
+			cil.Emit(OpCodes.Ldloc, Index);
+			cil.Emit(OpCodes.Ldind_I4);
+		}
+
+		public override void EmitLoadAddr(ILGenerator cil)
+		{
+			cil.Emit(OpCodes.Ldloca, Index);
+		}
+
+		public override void EmitStore(ILGenerator cil)
+		{
+			cil.Emit(OpCodes.Stloc, Index);
+		}
+
+		public override void EmitStoreInd(ILGenerator cil)
+		{
+			cil.Emit(OpCodes.Stind_I4);
+		}
 	}
 }

@@ -220,6 +220,7 @@
     <Compile Include="Nodes\Cil\Helper\Root.cs" />
     <Compile Include="Nodes\Cil\NodeBase.cs" />
     <Compile Include="Nodes\Sem\Expr\ExprLValIdentifierT.cs" />
+    <Compile Include="Nodes\Sem\Parameter.cs" />
     <Compile Include="Quads\Cil\Addr\Calls\AddrFunc.cs" />
     <Compile Include="Quads\Cil\Addr\Literal\AddrChar.cs" />
     <Compile Include="Quads\Cil\Addr\Literal\AddrInt.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Quads\Cil\Op\Cond\OpLt.cs" />
     <Compile Include="Quads\Cil\Op\Cond\OpNe.cs" />
     <Compile Include="Quads\Cil\Op\Expr\OpExprBin.cs" />
+    <Compile Include="Quads\Cil\Op\Func\OpParRet.cs" />
     <Compile Include="Quads\Cil\Op\Func\OpRet.cs" />
     <Compile Include="Quads\Cil\Op\OpArray.cs" />
     <Compile Include="Quads\Cil\Op\OpAssign.cs" />
@@ -259,7 +261,8 @@
     <Compile Include="Quads\Tac\Addr\Symbol\AddrVar.cs" />
     <Compile Include="Quads\Tac\Op\Cond\OpRel.cs" />
     <Compile Include="Quads\Tac\Op\Expr\OpExprBin.cs" />
-    <Compile Include="Quads\Cil\Op\Func\OpPar.cs" />
+    <Compile Include="Quads\Cil\Op\Func\OpParArg.cs" />
+    <Compile Include="Quads\Tac\Op\Func\OpParRet.cs" />
     <Compile Include="Types\Cil\TypeBase.cs" />
     <Compile Include="Types\Cil\TypeChar.cs" />
     <Compile Include="Types\Cil\TypeIndexed.cs" />
@@ -283,7 +286,8 @@
     <Compile Include="Nodes\Tac\Expr\ExprMod.cs" />
     <Compile Include="Nodes\Tac\Expr\ExprMul.cs" />
     <Compile Include="Nodes\Tac\Expr\ExprSub.cs" />
-    <Compile Include="Visitors\Cil\Methods.cs" />
+    <Compile Include="Visitors\Cil\MethodLibrary.cs" />
+    <Compile Include="Visitors\Cil\MethodVault.cs" />
     <Compile Include="Visitors\Cil\LLBoomVisitor.cs" />
     <Compile Include="Visitors\Cil\LLTickVisitor.cs" />
     <Compile Include="Visitors\Cil\ContextWrapper.cs" />
@@ -361,7 +365,7 @@
     <Compile Include="Quads\Tac\Op\Func\OpEndu.cs" />
     <Compile Include="Quads\Tac\Op\Func\OpUnit.cs" />
     <Compile Include="Quads\Tac\Op\Func\OpCall.cs" />
-    <Compile Include="Quads\Tac\Op\Func\OpPar.cs" />
+    <Compile Include="Quads\Tac\Op\Func\OpParArg.cs" />
     <Compile Include="Quads\Tac\Op\Expr\OpMod.cs" />
     <Compile Include="Quads\Tac\Op\Expr\OpDiv.cs" />
     <Compile Include="Quads\Tac\Op\Expr\OpMul.cs" />

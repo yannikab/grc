@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Types;
 
 namespace Grc.Quads.Addr
 {
@@ -11,16 +10,11 @@ namespace Grc.Quads.Addr
 	{
 		private readonly string name;
 
-		private readonly TypeBase type;
-
 		public string Name { get { return name; } }
 
-		public TypeBase Type { get { return type; } }
-
-		protected AddrSym(string name, TypeBase type)
+		protected AddrSym(string name)
 		{
 			this.name = name;
-			this.type = type;
 		}
 
 		public override bool Equals(object obj)

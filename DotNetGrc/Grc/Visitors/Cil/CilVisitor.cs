@@ -9,6 +9,7 @@ using Grc.Nodes.Func;
 using Grc.Nodes.Helper;
 using Grc.Quads;
 using Grc.Quads.Addr;
+using Grc.Quads.Op;
 using Grc.Types;
 using Grc.Visitors.Ast;
 using System.Reflection;
@@ -19,21 +20,37 @@ namespace Grc.Visitors.Cil
 {
 	public class CilVisitor : DepthFirstVisitorDefaults
 	{
-		public TypeBuilder contextBuilder;
+		private MethodVault methodVault;
 
-		private ILGenerator ilg;
+		private ILGenerator Cil { get { return methodVault.Cil; } }
 
-		private Methods methods;
-
-		private MethodBuilder CreateMethod(string name)
+		private void Enter(LocalFuncDecl n)
 		{
-			MethodBuilder methodBuilder = contextBuilder.DefineMethod(name, MethodAttributes.Private | MethodAttributes.Static);
+			Type returnType = (n.Type as TypeFunction).To.DotNetType;
 
-			methods[name] = methodBuilder;
+			List<Type> paramTypes = new List<Type>();
+			List<string> paramNames = new List<string>();
 
-			ilg = methodBuilder.GetILGenerator();
+			foreach (var p in n.Parameters.OrderBy(p => p.Name))
+			{
+				TypeIndexed typeIndexed = p.Type as TypeIndexed;
 
-			return methodBuilder;
+				if (typeIndexed != null)
+					paramTypes.Add(typeIndexed.DotNetElementType.MakePointerType());
+				else if (p.ByRef)
+					paramTypes.Add(p.Type.DotNetType.MakeByRefType());
+				else
+					paramTypes.Add(p.Type.DotNetType);
+
+				paramNames.Add(p.Name);
+			}
+
+			methodVault.Enter(n.Name, returnType, paramTypes.ToArray(), paramNames);
+		}
+
+		private void Exit()
+		{
+			methodVault.Exit();
 		}
 
 		public override void Pre(Root n)
@@ -46,36 +63,21 @@ namespace Grc.Visitors.Cil
 
 			string contextName = string.Format("{0}.{1}", programName, n.Program.Header.Name);
 
-			contextBuilder = module.DefineType(contextName, TypeAttributes.NotPublic);
-
-			methods = new Methods(contextBuilder);
+			methodVault = new MethodVault(module.DefineType(contextName, TypeAttributes.NotPublic));
 		}
 
 		public override void Post(Root n)
 		{
-			MethodBuilder mainBuilder = CreateMethod("main");
+			n.AssemblyBuilder.SetEntryPoint(methodVault[n.Program.Header.Name]);
 
-			mainBuilder.SetReturnType(typeof(void));
-
-			mainBuilder.SetParameters();
-
-			ilg.EmitCall(OpCodes.Call, methods[n.Program.Locals.OfType<LocalFuncDef>().First().Header.Name], null);
-
-			ilg.Emit(OpCodes.Ret);
-
-			n.AssemblyBuilder.SetEntryPoint(mainBuilder);
-
-			contextBuilder.CreateType();
+			methodVault.CreateType();
 
 			n.AssemblyBuilder.Save(string.Format("{0}.exe", n.AssemblyBuilder.GetName().Name));
 		}
 
 		public override void Visit(LocalFuncDef n)
 		{
-			if (n.Parent is LocalFuncDef)
-				Pre(n);
-
-			n.Header.Accept(this);
+			Pre(n);
 
 			InHeaderLocals(n);
 
@@ -84,58 +86,56 @@ namespace Grc.Visitors.Cil
 
 			InLocalsBlock(n);
 
-			if (n.Parent is LocalFuncDef)
-				n.Block.Accept(this);
+			n.Block.Accept(this);
 
-			if (n.Parent is LocalFuncDef)
-				Post(n);
+			Post(n);
 		}
 
 		public override void Pre(LocalFuncDef n)
 		{
-			base.Pre(n);
+			Enter(n.Header);
+
+			if (n.Parent is Root)
+				return;
+
+			n.OwnTac.First().Emit(Cil);
+
+			var parameters = n.Header.Parameters.OrderBy(p => p.Name).ToList();
 
 			IEnumerable<AddrSym> args = n.Tac.Select(q => q.Addrs).SelectMany(x => x).OfType<AddrArg>();
 
-			var parameters = n.Header.Parameters.ToList();
-
 			var qArgs = from p in parameters
-					 	join a in args
+						join a in args
 						on p.Name equals a.Name
-						group a by new { Param = p, Type = a.Type } into g
-						orderby parameters.IndexOf(g.Key.Param)
+						group a by p into g
 						select new
 						{
-							Name = g.Key.Param.Name,
-							Type = g.Key.Type,
-							Index = parameters.IndexOf(g.Key.Param),
-							Addrs = g.ToList()
+							Param = g.Key,
+							Addrs = g,
+							Index = parameters.IndexOf(g.Key)
 						};
 
-			MethodBuilder methodBuilder = CreateMethod(n.Header.Name);
-
-			methodBuilder.SetParameters(qArgs.Select(a => a.Type.DotNetType).ToArray());
-
 			foreach (var g in qArgs)
-			{
-				methodBuilder.DefineParameter(g.Index + 1, ParameterAttributes.None, g.Name);
-
 				foreach (var a in g.Addrs)
 					a.Index = g.Index;
-			}
-
-			methodBuilder.SetReturnType(((TypeFunction)n.Type).To.DotNetType);
 
 			IEnumerable<AddrSym> vars = n.Tac.Select(q => q.Addrs).SelectMany(x => x).OfType<AddrLoc>();
-			IEnumerable<AddrTmp> temps = n.Tac.Select(q => q.Addrs).SelectMany(x => x).OfType<AddrTmp>();
+			IEnumerable<AddrSym> tmps = n.Tac.Select(q => q.Addrs).SelectMany(x => x).OfType<AddrTmp>();
 
-			var qLocals = from a in vars.Concat(temps.Distinct())
-						  group a by new { Class = a.GetType().Name, Type = a.Type, Name = a.Name } into g
-						  orderby g.Key.Class, g.Key.Name
+			var qLocals = from a in vars.Concat(tmps.Distinct())
+						  group a by new
+						  {
+							  Class = a.GetType(),
+							  Type = a.Type,
+							  Name = a.Name,
+							  OrderName = a.Name.StartsWith("$") ? a.Name.Remove(0, 1).PadLeft(6, '0') : a.Name
+						  } into g
+						  orderby g.Key.Class.Name, g.Key.OrderName
 						  select new
 						  {
-							  Name = g.Key.Name,
+							  Class = g.Key.Class,
 							  Type = g.Key.Type,
+							  Name = g.Key.Name,
 							  Addrs = g
 						  };
 
@@ -146,34 +146,64 @@ namespace Grc.Visitors.Cil
 				foreach (var a in g.Addrs)
 					a.Index = index;
 
-				LocalBuilder localBuilder = ilg.DeclareLocal(g.Type.DotNetType);
-
-				localBuilder.SetLocalSymInfo(g.Name);
+				Type type = null;
 
 				TypeIndexed typeAsIndexed = g.Type as TypeIndexed;
 
-				if (typeAsIndexed != null)
+				if (g.Class.Equals(typeof(AddrLoc)))
 				{
-					int length = 1;
-
-					TypeBase indexedType;
-
-					do
-					{
-						length *= typeAsIndexed.Dim;
-
-						indexedType = typeAsIndexed.IndexedType;
-
-						typeAsIndexed = indexedType as TypeIndexed;
-
-					} while (typeAsIndexed != null);
-
-					ilg.Emit(OpCodes.Ldc_I4, length);
-
-					ilg.Emit(OpCodes.Newarr, indexedType.DotNetType);
-
-					ilg.Emit(OpCodes.Stloc, index);
+					type = typeAsIndexed != null ? typeAsIndexed.DotNetElementType.MakePointerType() : g.Type.DotNetType;
 				}
+				else if (g.Class.Equals(typeof(AddrTmp)))
+				{
+					type = g.Type.ByRef ? g.Type.DotNetType.MakePointerType() : g.Type.DotNetType;
+				}
+
+				LocalBuilder localBuilder = Cil.DeclareLocal(type);
+
+				localBuilder.SetLocalSymInfo(g.Name);
+
+				if (typeAsIndexed != null && g.Class.Equals(typeof(AddrLoc)))
+				{
+					Cil.Emit(OpCodes.Ldc_I4, typeAsIndexed.TotalElements);
+
+					Cil.Emit(OpCodes.Newarr, typeAsIndexed.DotNetElementType);
+
+					Cil.Emit(OpCodes.Stloc, index);
+				}
+
+				index++;
+			}
+
+			IEnumerable<AddrString> strings = n.Tac.Select(q => q.Addrs).SelectMany(x => x).OfType<AddrString>();
+
+			foreach (var s in strings)
+			{
+				TypeIndexed typeIndexed = (TypeIndexed)s.Type;
+
+				s.Index = index;
+
+				LocalBuilder localBuilder = Cil.DeclareLocal(typeIndexed.DotNetElementType.MakeArrayType());
+
+				localBuilder.SetLocalSymInfo(string.Format("_{0}", index));
+
+				Cil.Emit(OpCodes.Call, MethodLibrary.Instance["Encoding.get_ASCII"]);
+
+				string str = s.Text;
+
+				byte[] bytes = Encoding.ASCII.GetBytes(str);
+				byte[] bytesTerm = new byte[bytes.Length + 1];
+				Array.Copy(bytes, bytesTerm, bytes.Length);
+				bytesTerm[bytesTerm.Length - 1] = 0;
+
+				str = Encoding.ASCII.GetString(bytesTerm);
+
+				Cil.Emit(OpCodes.Ldstr, str);
+
+
+				Cil.Emit(OpCodes.Callvirt, MethodLibrary.Instance["Encoding.GetBytes"]);
+
+				Cil.Emit(OpCodes.Stloc, index);
 
 				index++;
 			}
@@ -183,26 +213,48 @@ namespace Grc.Visitors.Cil
 											 SelectMany(x => x).Select(a => a.Quad).Distinct();
 
 			foreach (Quad q in jumpTargets)
-				q.DefineLabel(ilg);
+				q.DefineLabel(Cil);
+		}
+
+		public override void Post(LocalFuncDef n)
+		{
+			n.OwnTac.Last().Emit(Cil);
+
+			methodVault.Exit();
+		}
+
+		public override void Pre(LocalFuncDecl n)
+		{
+			Enter(n);
+
+			Exit();
 		}
 
 		public override void Post(ExprFuncCall n)
 		{
-			foreach (var q in n.Tac)
-			{
-				AddrFunc addrFunc = q.Res as AddrFunc;
+			Quad call = n.OwnTac.Single(q => q.Op is OpCall);
 
-				if (addrFunc != null)
-					addrFunc.MethodInfo = methods[addrFunc.Name];
+			AddrFunc addrFunc = call.Res as AddrFunc;
 
-				q.Emit(ilg);
-			}
+			addrFunc.MethodInfo = methodVault[addrFunc.Name];
+
+			Quad retVal = n.OwnTac.SingleOrDefault(q => q.Op is OpParRet);
+
+			IEnumerable<Quad> args = n.OwnTac.Where(q => q.Op is OpParArg);
+
+			foreach (var q in args)
+				q.Emit(Cil);
+
+			call.Emit(Cil);
+
+			if (retVal != null)
+				retVal.Emit(Cil);
 		}
 
 		public override void DefaultPost(NodeBase n)
 		{
 			foreach (Quad q in n.OwnTac)
-				q.Emit(ilg);
+				q.Emit(Cil);
 		}
 	}
 }
