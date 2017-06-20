@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection.Emit;
+using Grc.Types;
 
 namespace Grc.Quads.Addr
 {
@@ -14,7 +15,7 @@ namespace Grc.Quads.Addr
 			throw new NotImplementedException();
 		}
 
-		public virtual void EmitLoadInd(ILGenerator cil)
+		public virtual void EmitLoadInd(ILGenerator cil, TypeData typeData)
 		{
 			throw new NotImplementedException();
 		}

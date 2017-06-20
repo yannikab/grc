@@ -437,6 +437,8 @@
     <Compile Include="Visitors\Cil\MethodLibrary.cs" />
     <Compile Include="Visitors\Cil\MethodVault.cs" />
     <Compile Include="Nodes\Sem\Parameter.cs" />
+    <Compile Include="Types\Cil\TypeData.cs" />
+    <Compile Include="Quads\Cil\Addr\Symbol\AddrVar.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

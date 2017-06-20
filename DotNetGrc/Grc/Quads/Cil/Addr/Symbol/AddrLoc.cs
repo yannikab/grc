@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection.Emit;
+using Grc.Types;
 
 namespace Grc.Quads.Addr
 {
@@ -14,10 +15,10 @@ namespace Grc.Quads.Addr
 			cil.Emit(OpCodes.Ldloc, Index);
 		}
 
-		public override void EmitLoadInd(ILGenerator cil)
+		public override void EmitLoadInd(ILGenerator cil, TypeData typeData)
 		{
 			cil.Emit(OpCodes.Ldloc, Index);
-			cil.Emit(OpCodes.Ldind_I4);
+			cil.Emit(typeData.LdIndirectOp);
 		}
 
 		public override void EmitLoadAddr(ILGenerator cil)
@@ -28,11 +29,6 @@ namespace Grc.Quads.Addr
 		public override void EmitStore(ILGenerator cil)
 		{
 			cil.Emit(OpCodes.Stloc, Index);
-		}
-
-		public override void EmitStoreInd(ILGenerator cil)
-		{
-			cil.Emit(OpCodes.Stind_I4);
 		}
 	}
 }

@@ -9,5 +9,5 @@ cd "${DIR}"/../"${ENV}"Grc
 "${BUILDTOOL}" /target:clean /p:Configuration=Debug
 "${BUILDTOOL}" /target:clean /p:Configuration=Release
 echo;
-find ../code \( -name '*.txt' -o -name '*.png' \) -exec echo '{}' \; | while read f; do echo "Deleting $f"; rm "$f"; done
+find ../code \( -type f ! -name '*.grc' \) -exec echo '{}' \; | while read f; do echo "Deleting $f"; rm "$f"; done
 )

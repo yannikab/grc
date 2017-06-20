@@ -231,6 +231,7 @@
     <Compile Include="Quads\Cil\Addr\Symbol\AddrLoc.cs" />
     <Compile Include="Quads\Cil\Addr\Symbol\AddrTmp.cs" />
     <Compile Include="Quads\Cil\Addr\Symbol\AddrSym.cs" />
+    <Compile Include="Quads\Cil\Addr\Symbol\AddrVar.cs" />
     <Compile Include="Quads\Cil\Op\Cond\OpRel.cs" />
     <Compile Include="Quads\Cil\Op\Cond\OpEq.cs" />
     <Compile Include="Quads\Cil\Op\Cond\OpGe.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Quads\Tac\Op\Func\OpParRet.cs" />
     <Compile Include="Types\Cil\TypeBase.cs" />
     <Compile Include="Types\Cil\TypeChar.cs" />
+    <Compile Include="Types\Cil\TypeData.cs" />
     <Compile Include="Types\Cil\TypeIndexed.cs" />
     <Compile Include="Types\Cil\TypeInt.cs" />
     <Compile Include="Visitors\Ast\DepthFirstVisitorDefaults.cs" />

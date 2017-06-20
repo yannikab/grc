@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Grc.Quads.Addr;
 using System.Reflection.Emit;
+using Grc.Types;
 
 namespace Grc.Quads.Op
 {
@@ -21,12 +22,12 @@ namespace Grc.Quads.Op
 			AddrTmp res = (AddrTmp)Quad.Res;
 
 			if (arg1.Type.ByRef)
-				arg1.EmitLoadInd(cil);
+				arg1.EmitLoadInd(cil, (TypeData)arg1.Type);
 			else
 				arg1.EmitLoad(cil);
 
 			if (arg2.Type.ByRef)
-				arg2.EmitLoadInd(cil);
+				arg2.EmitLoadInd(cil, (TypeData)arg2.Type);
 			else
 				arg2.EmitLoad(cil);
 

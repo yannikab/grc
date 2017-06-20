@@ -3,23 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Threading;
 using Grc.Nodes;
 using Grc.Nodes.Expr;
 using Grc.Nodes.Func;
 using Grc.Nodes.Helper;
+using Grc.Nodes.Stmt;
 using Grc.Quads;
 using Grc.Quads.Addr;
 using Grc.Quads.Op;
 using Grc.Types;
 using Grc.Visitors.Ast;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Threading;
 
 namespace Grc.Visitors.Cil
 {
 	public class CilVisitor : DepthFirstVisitorDefaults
 	{
+		private bool unicode = false;
+
+		private bool outputEncodingSet;
+
+		private void SetOutputEncoding()
+		{
+			if (outputEncodingSet)
+				return;
+
+			MethodInfo encodingGetASCII = MethodLibrary.Instance["Encoding.get_ASCII"];
+			MethodInfo encodingGetUnicode = MethodLibrary.Instance["Encoding.get_Unicode"];
+			MethodInfo consoleSetOutputEncoding = MethodLibrary.Instance["Console.set_OutputEncoding"];
+
+			Cil.Emit(OpCodes.Call, unicode ? encodingGetUnicode : encodingGetASCII);
+
+			Cil.Emit(OpCodes.Call, consoleSetOutputEncoding);
+
+			outputEncodingSet = true;
+		}
+
 		private MethodVault methodVault;
 
 		private ILGenerator Cil { get { return methodVault.Cil; } }
@@ -63,7 +84,7 @@ namespace Grc.Visitors.Cil
 
 			string contextName = string.Format("{0}.{1}", programName, n.Program.Header.Name);
 
-			methodVault = new MethodVault(module.DefineType(contextName, TypeAttributes.NotPublic));
+			methodVault = new MethodVault(module.DefineType(contextName, TypeAttributes.NotPublic), unicode);
 		}
 
 		public override void Post(Root n)
@@ -94,6 +115,8 @@ namespace Grc.Visitors.Cil
 		public override void Pre(LocalFuncDef n)
 		{
 			Enter(n.Header);
+
+			SetOutputEncoding();
 
 			if (n.Parent is Root)
 				return;
@@ -183,27 +206,30 @@ namespace Grc.Visitors.Cil
 
 				s.Index = index;
 
-				LocalBuilder localBuilder = Cil.DeclareLocal(typeIndexed.DotNetElementType.MakeArrayType());
+				LocalBuilder localBuilder = Cil.DeclareLocal(typeIndexed.DotNetElementType.MakePointerType());
 
 				localBuilder.SetLocalSymInfo(string.Format("_{0}", index));
 
-				Cil.Emit(OpCodes.Call, MethodLibrary.Instance["Encoding.get_ASCII"]);
 
-				string str = s.Text;
+				Cil.Emit(OpCodes.Ldc_I4, typeIndexed.ByteSize);
 
-				byte[] bytes = Encoding.ASCII.GetBytes(str);
-				byte[] bytesTerm = new byte[bytes.Length + 1];
-				Array.Copy(bytes, bytesTerm, bytes.Length);
-				bytesTerm[bytesTerm.Length - 1] = 0;
-
-				str = Encoding.ASCII.GetString(bytesTerm);
-
-				Cil.Emit(OpCodes.Ldstr, str);
-
-
-				Cil.Emit(OpCodes.Callvirt, MethodLibrary.Instance["Encoding.GetBytes"]);
+				Cil.Emit(OpCodes.Newarr, typeIndexed.DotNetElementType);
 
 				Cil.Emit(OpCodes.Stloc, index);
+
+				for (int i = 0; i < s.Text.Length + 1; i++)
+				{
+					Cil.Emit(OpCodes.Ldloc, index);
+					Cil.Emit(OpCodes.Ldc_I4, i * typeIndexed.IndexedType.ByteSize);
+					Cil.Emit(OpCodes.Add);
+
+					if (i < s.Text.Length)
+						Cil.Emit(OpCodes.Ldc_I4, (int)s.Text[i]);
+					else
+						Cil.Emit(OpCodes.Ldc_I4, 0);
+
+					Cil.Emit((typeIndexed.IndexedType as TypeData).StIndirectOp);
+				}
 
 				index++;
 			}
@@ -255,6 +281,16 @@ namespace Grc.Visitors.Cil
 		{
 			foreach (Quad q in n.OwnTac)
 				q.Emit(Cil);
+		}
+
+		public override void InThenElse(StmtIfThenElse n)
+		{
+			n.OwnTac.Single().Emit(Cil);
+		}
+
+		public override void Post(StmtIfThenElse n)
+		{
+			return;
 		}
 	}
 }

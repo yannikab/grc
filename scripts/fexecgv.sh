@@ -8,4 +8,6 @@ test `find "$1" -maxdepth 1 -type f -name '*.grc' | wc -l` -eq 0 && exit 1
 
 [ ! -x "${GRC}" ] && ("${DIR}"/build.sh; echo)
 
-for f in "$1"/*.grc; do "${DIR}"/execgv.sh "$f"; done
+pushd "$1" >/dev/null
+for f in *.grc; do "${DIR}"/execgv.sh "$f"; done
+popd

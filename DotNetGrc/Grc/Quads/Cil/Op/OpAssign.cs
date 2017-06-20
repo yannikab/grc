@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Quads.Addr;
 using System.Reflection.Emit;
-using Grc.Exceptions.Cil;
+using Grc.Quads.Addr;
+using Grc.Types;
 
 namespace Grc.Quads.Op
 {
@@ -43,7 +43,7 @@ namespace Grc.Quads.Op
 			if (source != null)
 			{
 				if (source.Type.ByRef)
-					source.EmitLoadInd(cil);
+					source.EmitLoadInd(cil, (TypeData)source.Type);
 				else
 					source.EmitLoad(cil);
 			}
@@ -52,7 +52,7 @@ namespace Grc.Quads.Op
 				(Quad.Arg1 as AddrExpr).EmitLoad(cil);
 			}
 
-			target.EmitStoreInd(cil);
+			target.EmitStoreInd(cil, (TypeData)target.Type);
 		}
 
 		private void AssignToByVal(ILGenerator cil)
@@ -62,7 +62,7 @@ namespace Grc.Quads.Op
 			if (source != null)
 			{
 				if (source.Type.ByRef)
-					source.EmitLoadInd(cil);
+					source.EmitLoadInd(cil, (TypeData)source.Type);
 				else
 					source.EmitLoad(cil);
 			}

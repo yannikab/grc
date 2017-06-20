@@ -25,13 +25,21 @@ namespace Grc.Visitors.Cil
 		private MethodLibrary()
 		{
 			this["Encoding.get_ASCII"] = typeof(Encoding).GetMethod("get_ASCII");
+			this["Encoding.get_Unicode"] = typeof(Encoding).GetMethod("get_Unicode");
 			this["Encoding.GetBytes"] = typeof(Encoding).GetMethod("GetBytes", new Type[] { typeof(string) });
 			this["Encoding.GetString"] = typeof(Encoding).GetMethod("GetString", new Type[] { typeof(byte[]) });
 
 			this["String.get_Length"] = typeof(String).GetMethod("get_Length");
 			this["String.Replace"] = typeof(String).GetMethod("Replace", new Type[] { typeof(string), typeof(string) });
 
-			this["Console.Write"] = typeof(Console).GetMethod("Write", new Type[] { typeof(string) });
+			this["Array.get_Length"] = typeof(Array).GetMethod("get_Length");
+
+			this["Console.set_OutputEncoding"] = typeof(Console).GetMethod("set_OutputEncoding", new Type[] { typeof(Encoding) });
+			this["Console.WriteInt"] = typeof(Console).GetMethod("Write", new Type[] { typeof(int) });
+			this["Console.WriteChar"] = typeof(Console).GetMethod("Write", new Type[] { typeof(char) });
+			this["Console.WriteString"] = typeof(Console).GetMethod("Write", new Type[] { typeof(string) });
+			
+			this["Object.ToString"] = typeof(Object).GetMethod("ToString", new Type[] { });
 		}
 	}
 }

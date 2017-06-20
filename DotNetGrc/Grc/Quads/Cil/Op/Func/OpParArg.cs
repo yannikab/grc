@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grc.Quads.Addr;
 using System.Reflection.Emit;
+using Grc.Quads.Addr;
+using Grc.Types;
 
 namespace Grc.Quads.Op
 {
@@ -42,7 +43,7 @@ namespace Grc.Quads.Op
 			}
 
 			if (addrExpr.Type.ByRef)
-				addrExpr.EmitLoadInd(cil);
+				addrExpr.EmitLoadInd(cil, (TypeData)addrExpr.Type);
 			else
 				addrExpr.EmitLoad(cil);
 		}
