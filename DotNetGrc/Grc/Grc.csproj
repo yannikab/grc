@@ -288,7 +288,6 @@
     <Compile Include="Nodes\Tac\Expr\ExprMod.cs" />
     <Compile Include="Nodes\Tac\Expr\ExprMul.cs" />
     <Compile Include="Nodes\Tac\Expr\ExprSub.cs" />
-    <Compile Include="Visitors\Cil\MethodLibrary.cs" />
     <Compile Include="Visitors\Cil\MethodVault.cs" />
     <Compile Include="Visitors\Cil\LLBoomVisitor.cs" />
     <Compile Include="Visitors\Cil\LLTickVisitor.cs" />
@@ -460,6 +459,12 @@
     <None Include="packages.config" />
     <None Include="Quads\Addr.cd" />
     <None Include="Quads\Op.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GrcIO\GrcIO.csproj">
+      <Project>{b8f96442-3688-4b9e-9d16-7013938816e8}</Project>
+      <Name>GrcIO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

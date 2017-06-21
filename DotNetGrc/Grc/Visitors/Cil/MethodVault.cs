@@ -49,15 +49,16 @@ namespace Grc.Visitors.Cil
 			typeBuilder.CreateType();
 		}
 
-		public MethodVault(TypeBuilder typeBuilder, bool unicode)
+		public MethodVault(TypeBuilder typeBuilder)
 		{
 			this.typeBuilder = typeBuilder;
 
 			EmitPuti();
 			EmitPutc();
-			EmitPuts(unicode);
+			EmitPuts();
 
-			EmitStrLen(unicode);
+			EmitStrLen();
+			EmitStrCmp();
 		}
 
 		private void EmitPuti()
@@ -66,7 +67,7 @@ namespace Grc.Visitors.Cil
 
 			Cil.Emit(OpCodes.Ldarg, 0);
 
-			Cil.Emit(OpCodes.Call, MethodLibrary.Instance["Console.WriteInt"]);
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("PutInt", new Type[] { typeof(int) }));
 
 			Cil.Emit(OpCodes.Ret);
 
@@ -75,225 +76,56 @@ namespace Grc.Visitors.Cil
 
 		private void EmitPutc()
 		{
-			Enter("_putc", typeof(void), new Type[] { typeof(char) }, new string[] { "c" });
+			Enter("_putc", typeof(void), new Type[] { typeof(byte) }, new string[] { "c" });
 
 			Cil.Emit(OpCodes.Ldarg, 0);
 
-			Cil.Emit(OpCodes.Call, MethodLibrary.Instance["Console.WriteChar"]);
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("PutChar", new Type[] { typeof(byte) }));
 
 			Cil.Emit(OpCodes.Ret);
 
 			Exit();
 		}
 
-		private void EmitPuts(bool unicode)
+		private void EmitPuts()
 		{
-			Enter("_puts", typeof(void), new Type[] { typeof(byte[]) }, new string[] { "s" });
-
-			MethodInfo encodingGetASCII = MethodLibrary.Instance["Encoding.get_ASCII"];
-			MethodInfo encodingGetUnicode = MethodLibrary.Instance["Encoding.get_Unicode"];
-			MethodInfo encodingGetString = MethodLibrary.Instance["Encoding.GetString"];
-			MethodInfo stringReplace = MethodLibrary.Instance["String.Replace"];
-			MethodInfo consoleWriteString = MethodLibrary.Instance["Console.WriteString"];
-
-			Cil.Emit(OpCodes.Call, unicode ? encodingGetUnicode : encodingGetASCII);
+			Enter("_puts", typeof(void), new Type[] { typeof(byte).MakePointerType() }, new string[] { "p" });
 
 			Cil.Emit(OpCodes.Ldarg, 0);
 
-			Cil.Emit(OpCodes.Callvirt, encodingGetString);
-
-			EmitEscapedTab(unicode);
-
-			EmitTab(unicode);
-
-			Cil.Emit(OpCodes.Callvirt, stringReplace);
-
-
-			EmitEscapedNewLine(unicode);
-
-			EmitNewLine(unicode);
-
-			Cil.Emit(OpCodes.Callvirt, stringReplace);
-
-
-			EmitEscapedQuote(unicode);
-
-			EmitQuote(unicode);
-
-			Cil.Emit(OpCodes.Callvirt, stringReplace);
-
-
-			EmitEscapedBackSlash(unicode);
-
-			EmitBackSlash(unicode);
-
-			Cil.Emit(OpCodes.Callvirt, stringReplace);
-
-
-			Cil.Emit(OpCodes.Call, consoleWriteString);
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("PutStr", new Type[] { typeof(byte).MakePointerType() }));
 
 			Cil.Emit(OpCodes.Ret);
 
 			Exit();
 		}
 
-		private void EmitEscapedBackSlash(bool unicode)
+		private void EmitStrLen()
 		{
-			EmitEscaped(92, unicode); // \\
-		}
-
-		private void EmitBackSlash(bool unicode)
-		{
-			Emit(92, unicode); // \
-		}
-
-		private void EmitEscapedQuote(bool unicode)
-		{
-			EmitEscaped(34, unicode); // \"
-		}
-
-		private void EmitQuote(bool unicode)
-		{
-			Emit(34, unicode); // "
-		}
-
-		private void EmitEscapedNewLine(bool unicode)
-		{
-			EmitEscaped(110, unicode); // \n
-		}
-
-		private void EmitNewLine(bool unicode)
-		{
-			Emit(10, unicode); // <10>
-		}
-
-		private void EmitEscapedTab(bool unicode)
-		{
-			EmitEscaped(116, unicode);  // \t
-		}
-
-		private void EmitTab(bool unicode)
-		{
-			Emit(9, unicode); // <9>
-		}
-
-		private void EmitEscaped(int c, bool unicode)
-		{
-			MethodInfo encodingGetASCII = MethodLibrary.Instance["Encoding.get_ASCII"];
-			MethodInfo encodingGetUnicode = MethodLibrary.Instance["Encoding.get_Unicode"];
-			MethodInfo encodingGetString = MethodLibrary.Instance["Encoding.GetString"];
-
-			Cil.Emit(OpCodes.Ldc_I4, unicode ? 4 : 2);
-
-			Cil.Emit(OpCodes.Newarr, typeof(byte));
-
-			Cil.Emit(OpCodes.Starg, 0);
-
-			int i = 0;
+			Enter("_strlen", typeof(int), new Type[] { typeof(byte).MakePointerType() }, new string[] { "p" });
 
 			Cil.Emit(OpCodes.Ldarg, 0);
 
-			Cil.Emit(OpCodes.Ldc_I4, i++);
-
-			Cil.Emit(OpCodes.Ldc_I4, 92);
-
-			Cil.Emit(OpCodes.Stelem_I1);
-
-			if (unicode)
-			{
-				Cil.Emit(OpCodes.Ldarg, 0);
-
-				Cil.Emit(OpCodes.Ldc_I4, i++);
-
-				Cil.Emit(OpCodes.Ldc_I4, 0);
-
-				Cil.Emit(OpCodes.Stelem_I1);
-			}
-
-			Cil.Emit(OpCodes.Ldarg, 0);
-
-			Cil.Emit(OpCodes.Ldc_I4, i++);
-
-			Cil.Emit(OpCodes.Ldc_I4, c);
-
-			Cil.Emit(OpCodes.Stelem_I1);
-
-			if (unicode)
-			{
-				Cil.Emit(OpCodes.Ldarg, 0);
-
-				Cil.Emit(OpCodes.Ldc_I4, i++);
-
-				Cil.Emit(OpCodes.Ldc_I4, 0);
-
-				Cil.Emit(OpCodes.Stelem_I1);
-			}
-
-			Cil.Emit(OpCodes.Call, unicode ? encodingGetUnicode : encodingGetASCII);
-
-			Cil.Emit(OpCodes.Ldarg, 0);
-
-			Cil.Emit(OpCodes.Callvirt, encodingGetString);
-		}
-
-		private void Emit(int c, bool unicode)
-		{
-			MethodInfo encodingGetASCII = MethodLibrary.Instance["Encoding.get_ASCII"];
-			MethodInfo encodingGetUnicode = MethodLibrary.Instance["Encoding.get_Unicode"];
-			MethodInfo encodingGetString = MethodLibrary.Instance["Encoding.GetString"];
-
-			Cil.Emit(OpCodes.Ldc_I4, unicode ? 2 : 1);
-
-			Cil.Emit(OpCodes.Newarr, typeof(byte));
-
-			Cil.Emit(OpCodes.Starg, 0);
-
-			int i = 0;
-
-			Cil.Emit(OpCodes.Ldarg, 0);
-
-			Cil.Emit(OpCodes.Ldc_I4, i++);
-
-			Cil.Emit(OpCodes.Ldc_I4, c);
-
-			Cil.Emit(OpCodes.Stelem_I1);
-
-			if (unicode)
-			{
-				Cil.Emit(OpCodes.Ldarg, 0);
-
-				Cil.Emit(OpCodes.Ldc_I4, i++);
-
-				Cil.Emit(OpCodes.Ldc_I4, 0);
-
-				Cil.Emit(OpCodes.Stelem_I1);
-			}
-
-			Cil.Emit(OpCodes.Call, unicode ? encodingGetUnicode : encodingGetASCII);
-
-			Cil.Emit(OpCodes.Ldarg, 0);
-
-			Cil.Emit(OpCodes.Callvirt, encodingGetString);
-		}
-
-		private void EmitStrLen(bool unicode)
-		{
-			Enter("_strlen", typeof(int), new Type[] { typeof(byte[]) }, new string[] { "s" });
-
-			MethodInfo encodingGetASCII = MethodLibrary.Instance["Encoding.get_ASCII"];
-			MethodInfo encodingGetUnicode = MethodLibrary.Instance["Encoding.get_Unicode"];
-			MethodInfo encodingGetString = MethodLibrary.Instance["Encoding.GetString"];
-			MethodInfo stringGetLength = MethodLibrary.Instance["String.get_Length"];
-
-			Cil.Emit(OpCodes.Call, unicode ? encodingGetUnicode : encodingGetASCII);
-
-			Cil.Emit(OpCodes.Ldarg, 0);
-
-			Cil.Emit(OpCodes.Callvirt, encodingGetString);
-
-			Cil.Emit(OpCodes.Callvirt, stringGetLength);
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("StrLen", new Type[] { typeof(byte).MakePointerType() }));
 
 			Cil.Emit(OpCodes.Ret);
+
+			Exit();
+		}
+
+		private void EmitStrCmp()
+		{
+			Enter("_strcmp", typeof(int), new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }, new string[] { "p1", "p2" });
+
+			Cil.Emit(OpCodes.Ldarg, 0);
+
+			Cil.Emit(OpCodes.Ldarg, 1);
+
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("StrCmp", new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }));
+
+			Cil.Emit(OpCodes.Ret);
+
+			Exit();
 		}
 	}
 }

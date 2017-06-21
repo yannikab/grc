@@ -38,7 +38,7 @@ namespace Grc.Visitors.Cil
 			this["Console.WriteInt"] = typeof(Console).GetMethod("Write", new Type[] { typeof(int) });
 			this["Console.WriteChar"] = typeof(Console).GetMethod("Write", new Type[] { typeof(char) });
 			this["Console.WriteString"] = typeof(Console).GetMethod("Write", new Type[] { typeof(string) });
-			
+
 			this["Object.ToString"] = typeof(Object).GetMethod("ToString", new Type[] { });
 		}
 	}

@@ -434,7 +434,6 @@
     <Compile Include="Quads\Cil\Op\Func\OpParRet.cs" />
     <Compile Include="Quads\Tac\Op\Func\OpParArg.cs" />
     <Compile Include="Quads\Tac\Op\Func\OpParRet.cs" />
-    <Compile Include="Visitors\Cil\MethodLibrary.cs" />
     <Compile Include="Visitors\Cil\MethodVault.cs" />
     <Compile Include="Nodes\Sem\Parameter.cs" />
     <Compile Include="Types\Cil\TypeData.cs" />
@@ -448,6 +447,12 @@
     <Folder Include="Nodes\Sem\Func\" />
     <Folder Include="Nodes\Sem\Stmt\" />
     <Folder Include="Types\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GrcIO\GrcIO.csproj">
+      <Project>{540B99D4-92B3-4A84-9813-7565B4B8093E}</Project>
+      <Name>GrcIO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

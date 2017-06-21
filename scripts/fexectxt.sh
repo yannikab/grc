@@ -10,4 +10,4 @@ test `find "$1" -maxdepth 1 -type f -name '*.grc' | wc -l` -eq 0 && exit 1
 
 pushd "$1" >/dev/null
 for f in *.grc; do "${DIR}"/exectxt.sh "$f"; done
-popd
+popd >/dev/null

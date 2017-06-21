@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grc", "Grc\Grc.csproj", "{9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrcTests", "GrcTests\GrcTests.csproj", "{EEE0ED49-9BF6-409A-99CE-FCBBE2D89AFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrcIO", "GrcIO\GrcIO.csproj", "{540B99D4-92B3-4A84-9813-7565B4B8093E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -19,5 +21,9 @@ Global
 		{EEE0ED49-9BF6-409A-99CE-FCBBE2D89AFE}.Debug|x86.Build.0 = Debug|Any CPU
 		{EEE0ED49-9BF6-409A-99CE-FCBBE2D89AFE}.Release|x86.ActiveCfg = Release|Any CPU
 		{EEE0ED49-9BF6-409A-99CE-FCBBE2D89AFE}.Release|x86.Build.0 = Release|Any CPU
+		{540B99D4-92B3-4A84-9813-7565B4B8093E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{540B99D4-92B3-4A84-9813-7565B4B8093E}.Debug|x86.Build.0 = Debug|Any CPU
+		{540B99D4-92B3-4A84-9813-7565B4B8093E}.Release|x86.ActiveCfg = Release|Any CPU
+		{540B99D4-92B3-4A84-9813-7565B4B8093E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

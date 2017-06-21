@@ -20,5 +20,5 @@ fun hanoi() : nothing
 {
   puts("Rings: ");
   NumberOfRings <- geti();
-  hanoi(NumberOfRings, "left", "right", "middle");
+  solve(NumberOfRings, "left", "right", "middle");
 }

@@ -21,26 +21,6 @@ namespace Grc.Visitors.Cil
 {
 	public class CilVisitor : DepthFirstVisitorDefaults
 	{
-		private bool unicode = false;
-
-		private bool outputEncodingSet;
-
-		private void SetOutputEncoding()
-		{
-			if (outputEncodingSet)
-				return;
-
-			MethodInfo encodingGetASCII = MethodLibrary.Instance["Encoding.get_ASCII"];
-			MethodInfo encodingGetUnicode = MethodLibrary.Instance["Encoding.get_Unicode"];
-			MethodInfo consoleSetOutputEncoding = MethodLibrary.Instance["Console.set_OutputEncoding"];
-
-			Cil.Emit(OpCodes.Call, unicode ? encodingGetUnicode : encodingGetASCII);
-
-			Cil.Emit(OpCodes.Call, consoleSetOutputEncoding);
-
-			outputEncodingSet = true;
-		}
-
 		private MethodVault methodVault;
 
 		private ILGenerator Cil { get { return methodVault.Cil; } }
@@ -84,7 +64,7 @@ namespace Grc.Visitors.Cil
 
 			string contextName = string.Format("{0}.{1}", programName, n.Program.Header.Name);
 
-			methodVault = new MethodVault(module.DefineType(contextName, TypeAttributes.NotPublic), unicode);
+			methodVault = new MethodVault(module.DefineType(contextName, TypeAttributes.NotPublic));
 		}
 
 		public override void Post(Root n)
@@ -115,8 +95,6 @@ namespace Grc.Visitors.Cil
 		public override void Pre(LocalFuncDef n)
 		{
 			Enter(n.Header);
-
-			SetOutputEncoding();
 
 			if (n.Parent is Root)
 				return;
@@ -217,16 +195,15 @@ namespace Grc.Visitors.Cil
 
 				Cil.Emit(OpCodes.Stloc, index);
 
-				for (int i = 0; i < s.Text.Length + 1; i++)
+				byte[] byteText = s.GetByteText();
+
+				for (int i = 0; i < byteText.Length; i++)
 				{
 					Cil.Emit(OpCodes.Ldloc, index);
-					Cil.Emit(OpCodes.Ldc_I4, i * typeIndexed.IndexedType.ByteSize);
+					Cil.Emit(OpCodes.Ldc_I4, i);
 					Cil.Emit(OpCodes.Add);
 
-					if (i < s.Text.Length)
-						Cil.Emit(OpCodes.Ldc_I4, (int)s.Text[i]);
-					else
-						Cil.Emit(OpCodes.Ldc_I4, 0);
+					Cil.Emit(OpCodes.Ldc_I4, (int)byteText[i]);
 
 					Cil.Emit((typeIndexed.IndexedType as TypeData).StIndirectOp);
 				}

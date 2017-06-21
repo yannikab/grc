@@ -23,9 +23,14 @@ namespace Grc.Quads.Op
 
 			index.EmitLoad(cil);
 
-			cil.Emit(OpCodes.Ldc_I4, (arrayAddr.Type as TypeIndexed).ElementType.ByteSize);
+			TypeIndexed typeIndexed = (TypeIndexed)arrayAddr.Type;
 
-			cil.Emit(OpCodes.Mul);
+			if (typeIndexed.ByteSize != 1)
+			{
+				cil.Emit(OpCodes.Ldc_I4, typeIndexed.ElementType.ByteSize);
+
+				cil.Emit(OpCodes.Mul);
+			}
 
 			cil.Emit(OpCodes.Add);
 

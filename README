@@ -18,17 +18,17 @@ $ ./scripts/clean.sh
 
 The first three scripts have module and action settings. Running grc help should clarify things.
 
-exec.sh			Executes grc with a single *.grc file argument
-exectxt.sh		Executes grc with a single *.grc file argument and dumps output in a .txt file
-execgv.sh		Executes grc with a single *.grc file argument and creates a graphviz .png file
+exec.sh         Executes grc with a single *.grc file argument
+exectxt.sh      Executes grc with a single *.grc file argument and dumps output in a .txt file
+execgv.sh       Executes grc with a single *.grc file argument and creates a graphviz .png file
 
-fexec.sh		Executes exec.sh for all *.grc files in its directory argument
-fexectxt.sh		Executes exectxt.sh for all *.grc files in its directory argument
-fexecgv.sh		Executes execgv.sh for all *.grc files in its directory argument
+fexec.sh        Executes exec.sh for all *.grc files in its directory argument
+fexectxt.sh     Executes exectxt.sh for all *.grc files in its directory argument
+fexecgv.sh      Executes execgv.sh for all *.grc files in its directory argument
 
-allexec.sh		Executes fexec.sh for each subdirectory of code/ directory
-allexectxt.sh	Executes fexectxt.sh for each subdirectory of code/ directory
-allexecgv.sh	Executes fexecgv.sh for each subdirectory of code/ directory
+allexec.sh      Executes fexec.sh for each subdirectory of code/ directory
+allexectxt.sh   Executes fexectxt.sh for each subdirectory of code/ directory
+allexecgv.sh    Executes fexecgv.sh for each subdirectory of code/ directory
 
 
 - Examples
