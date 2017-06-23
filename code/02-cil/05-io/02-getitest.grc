@@ -1,0 +1,13 @@
+fun getitest() : nothing
+
+	var i : int;
+{
+	while 1 = 1 do
+	{
+		i <- geti();
+		puti(i); putc('\n');
+		puti(abs(i)); putc('\n');
+		putc(chr(i)); putc('\n');
+		putc('\n');
+	}
+}

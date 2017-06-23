@@ -1,0 +1,10 @@
+fun getstest() : nothing
+
+	var s : char[1024];
+{
+	while 1 = 1 do
+	{
+		gets(1024, s);
+		puts(s);
+	}
+}

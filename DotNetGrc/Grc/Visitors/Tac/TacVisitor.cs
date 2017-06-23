@@ -99,16 +99,20 @@ namespace Grc.Visitors.Tac
 			foreach (ExprBase e in n.Args)
 				n.AddQuad(Quad.GenQuad(new OpParArg(), e.Addr, passingModes.Pop(), AddrEmpty.Instance));
 
+			OpParRet opParRet = null;
+
 			if (!(n.Type.Equals(TypeNothing.Instance)))
 			{
 				AddrTmp value = new AddrTmp(n.Type, false);
 
-				n.AddQuad(Quad.GenQuad(new OpParRet(), AddrRet.Instance, value, AddrEmpty.Instance));
+				opParRet = new OpParRet();
+
+				n.AddQuad(Quad.GenQuad(opParRet, AddrRet.Instance, value, AddrEmpty.Instance));
 
 				n.Addr = value;
 			}
 
-			n.AddQuad(Quad.GenQuad(new OpCall(), AddrEmpty.Instance, AddrEmpty.Instance, new AddrFunc(n.Name)));
+			n.AddQuad(Quad.GenQuad(opParRet != null ? new OpCall(opParRet) : new OpCall(), AddrEmpty.Instance, AddrEmpty.Instance, new AddrFunc(n.Name)));
 		}
 
 		public override void In(CondAnd n)
@@ -239,7 +243,7 @@ namespace Grc.Visitors.Tac
 			if (n.Expr != null)
 				n.AddQuad(Quad.GenQuad(new OpAssign(), n.Expr.Addr, AddrEmpty.Instance, AddrRetVal.Instance));
 
-			n.AddQuad(Quad.GenQuad(OpRet.Instance, AddrEmpty.Instance, AddrEmpty.Instance, AddrEmpty.Instance));
+			n.AddQuad(Quad.GenQuad(new OpRet(), AddrEmpty.Instance, AddrEmpty.Instance, AddrEmpty.Instance));
 
 			n.NextList = QuadList.Empty();
 		}

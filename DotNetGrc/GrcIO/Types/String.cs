@@ -10,27 +10,33 @@ namespace Grc
 	{
 		public static unsafe void PutStr(byte* p)
 		{
-			List<byte> bytes = new List<byte>();
+			byte c;
 
-			for (int i = 0; *(p + i) != 0; i++)
-				bytes.Add(*(p + i));
+			int i = 0;
 
-			Console.Write(Encoding.ASCII.GetString(bytes.ToArray()));
+			while ((c = *(p + i++)) != 0)
+				Console.Write((char)c);
 		}
 
-		public static unsafe int GetStr(int n, byte* p)
+		public static unsafe void GetStr(int n, byte* p)
 		{
-			return 0;
+			string s = System.Console.ReadLine();
+
+			int i;
+
+			for (i = 0; i < s.Length && i < n - 1; i++)
+				*(p + i) = (byte)s[i];
+
+			*(p + i) = (byte)'\0';
 		}
 
 		public static unsafe int StrLen(byte* p)
 		{
 			int i = 0;
 
-			while (*(p + i) != 0)
-				i++;
+			while (*(p + i++) != 0) ;
 
-			return i;
+			return i - 1;
 		}
 
 		public static unsafe int StrCmp(byte* p1, byte* p2)
@@ -41,12 +47,10 @@ namespace Grc
 				return 0;
 			else if (*p1 == 0)
 				return -1;
-			else if (*p2 == 0)
+			else if (*p2 == 0 || *p1 > *p2)
 				return 1;
-			else if (*p1 < *p2)
-				return -1;
 			else
-				return 1;
+				return -1;
 		}
 
 		public static unsafe void StrCpy(byte* p2, byte* p1)

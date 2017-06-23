@@ -15,7 +15,7 @@ namespace Grc
 
 		public static byte GetChar()
 		{
-			return 0;
+			return (byte)Console.Read();
 		}
 
 		public static int CharGetOrd(byte c)

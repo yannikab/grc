@@ -1,0 +1,16 @@
+fun ordchr() : nothing
+
+	var i : int;
+	var c : char;
+{
+	
+	i <- 32;
+	while i < 127 do
+	{
+		putc(chr(i)); putc(' ');
+		puti(ord(chr(i))); putc('\t');
+		i <- i + 1;
+	}
+	
+	putc('\n');
+}

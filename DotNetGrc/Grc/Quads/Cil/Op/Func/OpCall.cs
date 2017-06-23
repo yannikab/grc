@@ -12,6 +12,9 @@ namespace Grc.Quads.Op
 	{
 		public override void EmitQuad(ILGenerator cil)
 		{
+			if (opParRet != null && opParRet.Quad.Label.HasValue)
+				cil.MarkLabel(opParRet.Quad.Label.Value);
+
 			cil.Emit(OpCodes.Call, (Quad.Res as AddrFunc).MethodInfo);
 		}
 	}

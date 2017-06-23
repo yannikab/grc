@@ -15,7 +15,17 @@ namespace Grc
 
 		public static int GetInt()
 		{
-			return 0;
+			string s;
+
+			int i;
+
+			do
+			{
+				s = Console.ReadLine();
+
+			} while (!int.TryParse(s, out i));
+
+			return i;
 		}
 
 		public static byte IntGetChar(int i)
@@ -28,7 +38,7 @@ namespace Grc
 			if (i > 0)
 				return i;
 			else if (i < 0)
-				return -1;
+				return -i;
 			else
 				return 0;
 		}

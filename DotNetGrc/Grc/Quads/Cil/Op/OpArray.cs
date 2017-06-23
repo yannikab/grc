@@ -25,7 +25,7 @@ namespace Grc.Quads.Op
 
 			TypeIndexed typeIndexed = (TypeIndexed)arrayAddr.Type;
 
-			if (typeIndexed.ByteSize != 1)
+			if (typeIndexed.ElementType.ByteSize != 1)
 			{
 				cil.Emit(OpCodes.Ldc_I4, typeIndexed.ElementType.ByteSize);
 

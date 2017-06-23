@@ -1,0 +1,64 @@
+fun mergesort() : nothing
+
+	var b : char[1024];
+	var l : int;
+
+	fun sort(ref t : char[]; a, b : int) : nothing
+
+		var m, i, j, k : int;
+
+		var s : char[1024];
+	{
+		if b <= a then
+			return;
+
+		m <- (a + b) div 2;
+
+		sort(t, a, m);
+
+		sort(t, m + 1, b);
+
+		i <- m;
+		while i >= a do
+		{
+			s[i] <- t[i];
+			i <- i - 1;
+		}
+
+		j <- m + 1;
+		while j <= b do
+		{
+			s[b + m + 1 - j] <- t[j];
+			j <- j + 1;
+		}
+
+		i <- a;
+		j <- b;
+
+		k <- a;
+		while k <= b do
+		{
+			if s[i] < s[j] then
+			{
+				t[k] <- s[i];
+				i <- i + 1;
+			} else {
+				t[k] <- s[j];
+				j <- j - 1;
+			}
+			k <- k + 1;
+		}
+	}
+{
+	puts("Enter string to sort: ");
+	gets(1024, b);
+
+	while (strlen(b) > 0) do
+	{
+		sort(b, 0, strlen(b)-1);
+		puts("String after sorting: ");
+		puts(b); puts("\n"); puts("\n");
+		puts("Enter string to sort: ");
+		gets(1024, b);
+	}
+}

@@ -32,7 +32,7 @@ namespace Grc.Visitors.Cil
 			List<Type> paramTypes = new List<Type>();
 			List<string> paramNames = new List<string>();
 
-			foreach (var p in n.Parameters.OrderBy(p => p.Name))
+			foreach (var p in n.Parameters)
 			{
 				TypeIndexed typeIndexed = p.Type as TypeIndexed;
 
@@ -101,7 +101,7 @@ namespace Grc.Visitors.Cil
 
 			n.OwnTac.First().Emit(Cil);
 
-			var parameters = n.Header.Parameters.OrderBy(p => p.Name).ToList();
+			var parameters = n.Header.Parameters.ToList();
 
 			IEnumerable<AddrSym> args = n.Tac.Select(q => q.Addrs).SelectMany(x => x).OfType<AddrArg>();
 

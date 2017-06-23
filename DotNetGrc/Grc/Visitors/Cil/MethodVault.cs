@@ -57,6 +57,14 @@ namespace Grc.Visitors.Cil
 			EmitPutc();
 			EmitPuts();
 
+			EmitGeti();
+			EmitGetc();
+			EmitGets();
+
+			EmitAbs();
+			EmitOrd();
+			EmitChr();
+
 			EmitStrLen();
 			EmitStrCmp();
 		}
@@ -94,6 +102,82 @@ namespace Grc.Visitors.Cil
 			Cil.Emit(OpCodes.Ldarg, 0);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("PutStr", new Type[] { typeof(byte).MakePointerType() }));
+
+			Cil.Emit(OpCodes.Ret);
+
+			Exit();
+		}
+
+		private void EmitGeti()
+		{
+			Enter("_geti", typeof(int), new Type[] { }, new string[] { });
+
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("GetInt", new Type[] { }));
+
+			Cil.Emit(OpCodes.Ret);
+
+			Exit();
+		}
+
+		private void EmitGetc()
+		{
+			Enter("_getc", typeof(byte), new Type[] { }, new string[] { });
+
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("GetChar", new Type[] { }));
+
+			Cil.Emit(OpCodes.Ret);
+
+			Exit();
+		}
+
+		private void EmitGets()
+		{
+			Enter("_gets", typeof(void), new Type[] { typeof(int), typeof(byte).MakePointerType() }, new string[] { "n", "p" });
+
+			Cil.Emit(OpCodes.Ldarg, 0);
+
+			Cil.Emit(OpCodes.Ldarg, 1);
+
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("GetStr", new Type[] { typeof(int), typeof(byte).MakePointerType() }));
+
+			Cil.Emit(OpCodes.Ret);
+
+			Exit();
+		}
+
+		private void EmitAbs()
+		{
+			Enter("_abs", typeof(int), new Type[] { typeof(int) }, new string[] { "i" });
+
+			Cil.Emit(OpCodes.Ldarg, 0);
+
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("IntGetAbs", new Type[] { typeof(int) }));
+
+			Cil.Emit(OpCodes.Ret);
+
+			Exit();
+		}
+
+		private void EmitOrd()
+		{
+			Enter("_ord", typeof(int), new Type[] { typeof(byte) }, new string[] { "c" });
+
+			Cil.Emit(OpCodes.Ldarg, 0);
+
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("CharGetOrd", new Type[] { typeof(byte) }));
+
+			Cil.Emit(OpCodes.Ret);
+
+			Exit();
+		}
+
+		private void EmitChr()
+		{
+			Enter("_chr", typeof(byte), new Type[] { typeof(int) }, new string[] { "i" });
+
+			Cil.Emit(OpCodes.Ldarg, 0);
+
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("IntGetChar", new Type[] { typeof(int) }));
 
 			Cil.Emit(OpCodes.Ret);
 

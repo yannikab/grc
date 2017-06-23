@@ -8,14 +8,6 @@ namespace Grc.Quads.Op
 {
 	partial class OpRet : OpBase
 	{
-		private static OpRet instance;
-
-		public static OpRet Instance { get { return instance ?? (instance = new OpRet()); } }
-
-		private OpRet()
-		{
-		}
-
 		public override string ToString()
 		{
 			return "ret";

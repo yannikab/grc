@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection.Emit;
 using Grc.Exceptions.Cil;
+using Grc.Quads.Op;
 
 namespace Grc.Quads
 {
@@ -24,7 +25,7 @@ namespace Grc.Quads
 
 		public void Emit(ILGenerator cil)
 		{
-			if (label.HasValue)
+			if (label.HasValue && !(op is OpParRet))
 				cil.MarkLabel(label.Value);
 
 			op.EmitQuad(cil);

@@ -1,7 +1,11 @@
 fun hanoi() : nothing
+
+    var i : int;
+
       fun solve(rings : int; ref source, target, auxiliary : char[]) : nothing
          fun move (ref source, target : char[]) : nothing
          {
+            puti(i); i <- i + 1; puts(": ");
             puts("Moving from ");
             puts(source);
             puts(" to ");
