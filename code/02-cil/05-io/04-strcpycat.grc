@@ -1,0 +1,11 @@
+fun strcpycat() : nothing
+
+	var s : char[1024];
+{
+		strcpy(s, "hello");
+		puts(s); puts("\n");
+		strcat(s, " there");
+		puts(s); puts("\n");
+		strcpy(s, "clobber!");
+		puts(s); puts("\n");
+}

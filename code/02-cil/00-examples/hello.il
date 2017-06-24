@@ -21,13 +21,13 @@
   .ver 0:0:0:0
 }
 .module hello
-// MVID: {0CE3192F-7A7C-43D3-84DD-FA39ECACE610}
+// MVID: {F2B26A3A-E60A-4913-A3FB-C0DF93745999}
 .imagebase 0x00400000
 .file alignment 0x00000200
 .stackreserve 0x00100000
 .subsystem 0x0003       // WINDOWS_CUI
 .corflags 0x00000001    //  ILONLY
-// Image base: 0x002F0000
+// Image base: 0x001E0000
 
 
 // =============== CLASS MEMBERS DECLARATION ===================
@@ -138,6 +138,30 @@
     IL_0011:  ret
   } // end of method _::_strcmp
 
+  .method private static void  _strcpy(uint8* p2,
+                                       uint8* p1) cil managed
+  {
+    // 
+    .maxstack  2
+    IL_0000:  ldarg      p2
+    IL_0006:  ldarg      p1
+    IL_000c:  call       void [GrcIO]Grc.IO::StrCpy(uint8*,
+                                                    uint8*)
+    IL_0011:  ret
+  } // end of method _::_strcpy
+
+  .method private static void  _strcat(uint8* p2,
+                                       uint8* p1) cil managed
+  {
+    // 
+    .maxstack  2
+    IL_0000:  ldarg      p2
+    IL_0006:  ldarg      p1
+    IL_000c:  call       void [GrcIO]Grc.IO::StrCat(uint8*,
+                                                    uint8*)
+    IL_0011:  ret
+  } // end of method _::_strcat
+
   .method private static void  _() cil managed
   {
     .entrypoint
@@ -151,81 +175,81 @@
   {
     // 
     .maxstack  2
-    .locals init ([0] uint8* _0)
+    .locals init (uint8* V_0)
     IL_0000:  ldc.i4     0xf
     IL_0005:  newarr     [mscorlib]System.Byte
-    IL_000a:  stloc      _0
-    IL_0010:  ldloc      _0
+    IL_000a:  stloc      V_0
+    IL_0010:  ldloc      V_0
     IL_0016:  ldc.i4     0x0
     IL_001b:  add
     IL_001c:  ldc.i4     0x48
     IL_0021:  stind.i1
-    IL_0022:  ldloc      _0
+    IL_0022:  ldloc      V_0
     IL_0028:  ldc.i4     0x1
     IL_002d:  add
     IL_002e:  ldc.i4     0x65
     IL_0033:  stind.i1
-    IL_0034:  ldloc      _0
+    IL_0034:  ldloc      V_0
     IL_003a:  ldc.i4     0x2
     IL_003f:  add
     IL_0040:  ldc.i4     0x6c
     IL_0045:  stind.i1
-    IL_0046:  ldloc      _0
+    IL_0046:  ldloc      V_0
     IL_004c:  ldc.i4     0x3
     IL_0051:  add
     IL_0052:  ldc.i4     0x6c
     IL_0057:  stind.i1
-    IL_0058:  ldloc      _0
+    IL_0058:  ldloc      V_0
     IL_005e:  ldc.i4     0x4
     IL_0063:  add
     IL_0064:  ldc.i4     0x6f
     IL_0069:  stind.i1
-    IL_006a:  ldloc      _0
+    IL_006a:  ldloc      V_0
     IL_0070:  ldc.i4     0x5
     IL_0075:  add
     IL_0076:  ldc.i4     0x20
     IL_007b:  stind.i1
-    IL_007c:  ldloc      _0
+    IL_007c:  ldloc      V_0
     IL_0082:  ldc.i4     0x6
     IL_0087:  add
     IL_0088:  ldc.i4     0x77
     IL_008d:  stind.i1
-    IL_008e:  ldloc      _0
+    IL_008e:  ldloc      V_0
     IL_0094:  ldc.i4     0x7
     IL_0099:  add
     IL_009a:  ldc.i4     0x6f
     IL_009f:  stind.i1
-    IL_00a0:  ldloc      _0
+    IL_00a0:  ldloc      V_0
     IL_00a6:  ldc.i4     0x8
     IL_00ab:  add
     IL_00ac:  ldc.i4     0x72
     IL_00b1:  stind.i1
-    IL_00b2:  ldloc      _0
+    IL_00b2:  ldloc      V_0
     IL_00b8:  ldc.i4     0x9
     IL_00bd:  add
     IL_00be:  ldc.i4     0x6c
     IL_00c3:  stind.i1
-    IL_00c4:  ldloc      _0
+    IL_00c4:  ldloc      V_0
     IL_00ca:  ldc.i4     0xa
     IL_00cf:  add
     IL_00d0:  ldc.i4     0x64
     IL_00d5:  stind.i1
-    IL_00d6:  ldloc      _0
+    IL_00d6:  ldloc      V_0
     IL_00dc:  ldc.i4     0xb
     IL_00e1:  add
     IL_00e2:  ldc.i4     0x21
     IL_00e7:  stind.i1
-    IL_00e8:  ldloc      _0
+    IL_00e8:  ldloc      V_0
     IL_00ee:  ldc.i4     0xc
     IL_00f3:  add
     IL_00f4:  ldc.i4     0xa
     IL_00f9:  stind.i1
-    IL_00fa:  ldloc      _0
+    IL_00fa:  ldloc      V_0
     IL_0100:  ldc.i4     0xd
     IL_0105:  add
     IL_0106:  ldc.i4     0x0
     IL_010b:  stind.i1
-    IL_010c:  ldloc      _0
+    IL_010c:  ldloc      V_0
     IL_0112:  call       void hello._::_puts(uint8*)
     IL_0117:  ret
   } // end of method _::_.hello

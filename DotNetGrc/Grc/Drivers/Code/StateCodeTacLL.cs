@@ -53,6 +53,8 @@ namespace Grc.Drivers
 
 				} while (boom.MadeChanges);
 
+				root.Accept(new ScopeTypeVisitor());
+
 				root.Accept(new TacVisitor());
 
 				foreach (var q in root.Program.Tac)

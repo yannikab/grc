@@ -67,6 +67,8 @@ namespace Grc.Visitors.Cil
 
 			EmitStrLen();
 			EmitStrCmp();
+			EmitStrCpy();
+			EmitStrCat();
 		}
 
 		private void EmitPuti()
@@ -206,6 +208,37 @@ namespace Grc.Visitors.Cil
 			Cil.Emit(OpCodes.Ldarg, 1);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("StrCmp", new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }));
+
+			Cil.Emit(OpCodes.Ret);
+
+			Exit();
+		}
+
+		private void EmitStrCpy()
+		{
+			Enter("_strcpy", typeof(void), new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }, new string[] { "p2", "p1" });
+
+			Cil.Emit(OpCodes.Ldarg, 0);
+
+			Cil.Emit(OpCodes.Ldarg, 1);
+
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("StrCpy", new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }));
+
+			Cil.Emit(OpCodes.Ret);
+
+			Exit();
+		}
+
+
+		private void EmitStrCat()
+		{
+			Enter("_strcat", typeof(void), new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }, new string[] { "p2", "p1" });
+
+			Cil.Emit(OpCodes.Ldarg, 0);
+
+			Cil.Emit(OpCodes.Ldarg, 1);
+
+			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("StrCat", new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }));
 
 			Cil.Emit(OpCodes.Ret);
 

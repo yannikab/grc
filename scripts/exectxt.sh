@@ -17,8 +17,8 @@ INFILE="`echo $1 | sed s://*:/:g`"
 
 if ! echo ${INFILE} | grep -q '.*\.grc$'; then exit 1; fi
 
-OUTFILE1=`echo ${INFILE} | sed s:grc\$:${MODULE}.${ACTION1}.txt:`
-OUTFILE2=`echo ${INFILE} | sed s:grc\$:${MODULE}.${ACTION2}.txt:`
+OUTFILE1=`echo ${INFILE} | sed s:grc\$:${MODULE}.${ACTION1:0:3}:`
+OUTFILE2=`echo ${INFILE} | sed s:grc\$:${MODULE}.${ACTION2:0:3}:`
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 

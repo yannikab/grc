@@ -53,12 +53,11 @@ namespace Grc.Drivers
 
 				} while (boom.MadeChanges);
 
+				root.Accept(new ScopeTypeVisitor());
+
 				root.Accept(new TacVisitor());
 
 				root.Accept(new CilVisitor());
-
-				//foreach (var q in root.Program.Tac)
-				//	System.Console.WriteLine(q);
 
 				context.State = new StateExitSuccess();
 

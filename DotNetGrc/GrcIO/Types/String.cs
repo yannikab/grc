@@ -55,12 +55,34 @@ namespace Grc
 
 		public static unsafe void StrCpy(byte* p2, byte* p1)
 		{
-			return;
+			byte c;
+
+			int i = 0;
+
+			do
+			{
+				c = *(p1 + i);
+
+				*(p2 + i++) = c;
+			}
+			while (c != (byte)'\0');
 		}
 
 		public static unsafe void StrCat(byte* p2, byte* p1)
 		{
-			return;
+			byte c;
+
+			int i = 0;
+
+			int o = StrLen(p2);
+
+			do
+			{
+				c = *(p1 + i);
+
+				*(p2 + o + i++) = c;
+			}
+			while (c != (byte)'\0');
 		}
 	}
 }
