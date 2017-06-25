@@ -1,5 +1,5 @@
 fun paramused() : nothing
-	
+
 	fun add(a : int) : int
 	{
 		return a;

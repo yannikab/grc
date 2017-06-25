@@ -1,14 +1,14 @@
 fun funcallarray() : nothing
 
 	var a : int[5];
-	
+
 	fun call(ref a : int[]) : nothing
 	{
 		a[1] <- 10;
 	}
 {
 	a[1] <- 5;
-	
+
 	call(a);
 
 	puti(a[1]);

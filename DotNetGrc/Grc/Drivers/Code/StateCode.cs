@@ -67,12 +67,13 @@ namespace Grc.Drivers
 			Console.WriteLine("srcll - output reconstructed source code after lambda lifting");
 			Console.WriteLine("tac - output intermediate representation of input in three address code");
 			Console.WriteLine("tacll - output intermediate representation after lambda lifting");
+			Console.WriteLine("cil - output Common Intermediate Language executable");
 		}
 
 		private void ShowUsage()
 		{
 			Console.WriteLine("Usage: grc [module] [action] [filename]");
-			Console.WriteLine("Available actions for module 'code': src, srcll, tac, tacll, help");
+			Console.WriteLine("Available actions for module 'code': src, srcll, tac, tacll, cil, help");
 		}
 	}
 }

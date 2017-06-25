@@ -19,7 +19,7 @@ echo "${INFILE} -> ${OUTFILE}"
 if [ ${ENV} = 'DotNet' ]
 then
 	${DIR}/../tools/ildasm.exe /text ${INFILE} | grep -v 'IL_[0-9,a-f]*:  nop' >${OUTFILE}
-	
+
 elif [ ${ENV} = 'Mono' ]
 then
 	monodis ${INFILE} | grep -v 'IL_[0-9,a-f]*:  nop' >${OUTFILE}

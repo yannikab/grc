@@ -5,7 +5,7 @@ fun getctest() : nothing
 	while 1 = 1 do
 	{
 		c <- getc();
-		
+
 		putc(c); putc('\t');
 		puti(ord(c)); putc('\n');
 	}

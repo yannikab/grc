@@ -7,7 +7,7 @@ fun twoarrays() : nothing
 		var i : int;
 	{
 		i <- 5;
-		
+
 		r[i + 2] <- s[i - 3];
 	}
 {
@@ -15,7 +15,7 @@ fun twoarrays() : nothing
 	b[2] <- 'd';
 	putc(a[7]); puts("\n");
 	putc(b[2]); puts("\n");
-	
+
 	call(a, b);
 	putc(a[7]); puts("\n");
 	putc(b[2]); puts("\n");

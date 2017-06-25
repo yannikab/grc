@@ -1,20 +1,53 @@
-- Help
+<TL;DR>
+1) Place code files in a directory under code/
+2) Run /scripts/allexec.sh to produce executables for all code files
+3) Run /scripts/allexecil.sh to disassemble executables to symbolic CIL
+4) 02-cil/ can be removed from exclude.cfg to compile the code files already included
+</TL;DR>
 
-$ cd scripts/; ./grc help
 
-
-- Environment configuration
+Environment configuration:
 
 scripts/grc.cfg
+scripts/exclude.cfg contains directories under code/ to exclude from processing
 
 
-- Building
+Building:
 
 $ ./scripts/build.sh
 $ ./scripts/clean.sh
 
 
-- Execution
+After building, compiler can be executed using grc wrapper script under scripts/ directory:
+
+$ cd scripts
+$ ./grc
+
+
+For help:
+
+$ ./grc help
+
+
+Tools:
+
+under /tools directory
+
+  ildasm.exe : outputs CIL code for given executable
+  ilasm.exe : compiles a CIL symbolic code file into an executable
+  peverify.exe : verifies the structure of a given executable
+
+    peverify.exe will emit warnings of two types for the most part:
+
+    a) [IL]: Error: [hanoi.exe : hanoi._::_puts][offset 0x00000000] Unmanaged pointers are not a verifiable type.
+       This warning is due to the use of unmanaged pointers for array and array element addresses.
+
+    b) [IL]: Error: [hanoi.exe : hanoi._::_puts][offset 0x0000000A][found ref array mdarray 'System.Byte[]']
+       [expected unmanaged pointer] Unexpected type on the stack.
+       This warning is due to the forceful conversion of arrays to unmanaged pointers.
+
+
+Helper scripts:
 
 The first three scripts have module and action settings. Running grc help should clarify things.
 
@@ -31,138 +64,26 @@ allexectxt.sh   Executes fexectxt.sh for each subdirectory of code/ directory
 allexecgv.sh    Executes fexecgv.sh for each subdirectory of code/ directory
 
 
-- Examples
+Examples:
 
-./grc code src ../code/01-tac/00-examples/hanoi.grc
+./grc code src ../code/01-tac/00-examples/hanoi.grc    outputs formatted source code for file
 
-./exec.sh ../code/01-tac/00-examples/hanoi.grc
+./exec.sh ../code/01-tac/00-examples/hanoi.grc         executes action in exec.sh on parameter
 
-./fexec.sh ../code/01-tac/00-examples/
+./fexec.sh ../code/01-tac/00-examples/                 executes exec.sh action on all files in dir
 
-./allexec.sh
-
-
-
-- Implementation Notes
-
-1. Abstact syntax tree
-
-The abstract syntax tree was hand built from the resulting SableCC concrete syntax tree for maximum
-flexibility plus avoiding having to struggle with possibly limited SableCC ast transformation syntax.
-
-Nodes/Ast/
-
-Visitors/Cst/ASTCreationVisitor.cs
-Visitors/Ast/IVisitor.cs
-Visitors/Ast/DepthFirstVisitor.cs
-
-
-2. Semantic analysis/Type checking
-
-Partial classes were extensively used to add members to existing classes without having them depend
-on later stages of development. This is why ast node classes reappear in Nodes/Sem/ for example.
-Subclassing the node classes would require downcasting in visitor methods to use their new members.
-
-Nodes/Sem/
-
-Visitors/Sem/SemanticVisitor.cs
-Visitors/Sem/TypeVisitor.cs
-Visitors/Sem/TypeResolver.cs
-
-Symbols/
-
-Types/
-
-Exception/Symbols/
-Exceptions/Sem/
-Exceptions/Types/
-
-The symbol table knows about parameter/variable versus function symbols (SymbolVar-SymbolFunc).
-The symbol table interface can be used to insert and lookup either of these two types. This allows
-for parameters/variables having the same name with functions, even in the same scope.
-
-SemanticVisitor does very basic semantic checking without caring for types, it was used only for
-development. Instead of subclassing it, its functionality was incorporated in TypeVisitor which
-does complete checking.
-
-
-3. Intermediate representation in three address code
-
-Although the compiler is targeting a stack based virtual machine, the intermediate representation
-was not changed from the initial three address code to a stack based form.
-
-Nodes/Tac/
-
-Visitors/Tac/ScopeNameVisitor.cs
-Visitors/Tac/ScopeTypeVisitor.cs
-Visitors/Tac/TacVisitor.cs
-
-Quads/
-
-Exceptions/Tac/
-
-ScopeNameVisitor (which is a TypeVisitor) processes the initial ast and renames each function and
-each corresponding function call using their ancestor functions' names so that they have unique names
-throughout the program. This initially allows functions to have ancestors with the same name without
-ambiguity in function calls. At a later stage the abstract syntax tree is flattened so there is an
-additional requirement that each function has a unique name throughout the program. ScopeNameVisitor
-provides this property for the program.
-
-ScopeTypeVisitor is just a TypeVisitor that can type check a tree with changed names.
-
-TacVisitor is the main three address code generation visitor, using backpatching. The resulting code
-is not stored on a hash table but decorates each corresponding node of the abstract syntax tree.
-
-
-4. Lambda Lifting
-
-Nodes/Trg/
-
-Visitors/Trg/ContextWrapper.cs
-Visitors/Trg/LLTickVisitor.cs
-Visitors/Trg/LLBoomVisitor.cs
-
-Exceptions/Trg/
-
-Two visitors are used in lambda lifting. LLTickvisitor decorates functions and their corresponding
-functions calls with the free variables from the immediately enclosing scope as ref parameters. It
-is used iteratively until it can make no more changes to the program. Then LLBoomVisitor does the
-actual lifting, elevating each function that has no children one level above, right after its parent,
-with a function declaration immediately before the parent, as it may be invoking the lifted function.
-An example of the process is included under the notes/ directory, it is direct output of the compiler.
-
-ContextWrapper just wraps the main program function in another function without parameters or return
-value that just invokes it. If applied before the lambda lifting visitors, the last lambda operation
-is always a boom, function declarations exist for all functions at the beginning of the output, and
-the first function definition in the program is the initial main function.
-
-
-
-- Odds and Ends
-
-Tests:
-Test cases can be found under GrcTests. All test cases pass with the current code and can be used as
-documentation as to what the compiler considers legal or illegal.
+./allexec.sh                                           executes exec.sh action on all files in code/
 
 
 Stage abbreviations:
+
+Cst: Concrete syntax tree
 Ast: Abstract syntax tree
 Sem: Semantic analysis/Type checking
 Tac: Three address code intermediate representation
-Trg: Target code generation
+Cil: Target code generation (Common Intermediate Language)
 
 
-Each ast node is decorated with:
-- Its formatted source code (Text property, synthesized from own source and child nodes' source).
-- Its type (Type property, set by TypeVisitor).
-- Its three address code (Tac property, synthesized from own tac and child nodes' tac).
+Internals:
 
-
-Static integer values:
-A static integer value property has been added to expressions, for detecting invalid integer values
-that are known at compile time.
-
-
-Subclassing:
-There is not a single switch statement or multiple else if statement in the project, except in
-program argument passing. Extensive subclassing was used instead, inspired by SableCC's approach.
+One can see the compiler at work under the notes/ directory.

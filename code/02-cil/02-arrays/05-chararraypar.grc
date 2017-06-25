@@ -1,0 +1,25 @@
+fun chararraypar() : nothing
+
+	var a : char[16];
+	
+	fun proc(ref a : char[]) : nothing
+	{
+		if 'n' < a[2] then
+		{
+			puts("true");
+			putc('\n');
+		} else {
+			puts("false");
+			putc('\n');
+		}
+	}
+{
+	a[0] <- 'h';
+	a[1] <- 'e';
+	a[2] <- 'y';
+	a[3] <- '!';
+	a[4] <- '\0';
+	
+	proc(a);
+	proc("hello!");
+}
