@@ -54,9 +54,7 @@ namespace Grc.Visitors.Tac
 
 		public override void Post(ExprPlus n)
 		{
-			AddrTmp result = new AddrTmp(n.Type, false);
-
-			n.Addr = result;
+			n.Addr = n.Expr.Addr;
 		}
 
 		public override void Post(ExprMinus n)

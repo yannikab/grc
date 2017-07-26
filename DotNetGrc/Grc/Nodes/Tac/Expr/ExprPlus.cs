@@ -12,7 +12,7 @@ namespace Grc.Nodes.Expr
 	{
 		public override IEnumerable<Quad> Tac
 		{
-			get { return this.tac; }
+			get { return expr.Tac; }
 		}
 
 		public OpBase GetOp()
