@@ -10,7 +10,7 @@ namespace Grc.Quads.Addr
 {
 	public abstract partial class AddrSym : AddrExpr
 	{
-		public int Index { get; set; }
+		public short Index { get; set; }
 
 		public virtual void EmitStore(ILGenerator cil)
 		{

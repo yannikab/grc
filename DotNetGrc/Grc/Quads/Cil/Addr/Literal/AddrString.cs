@@ -9,7 +9,7 @@ namespace Grc.Quads.Addr
 {
 	public partial class AddrString : AddrLit
 	{
-		public int Index { get; set; }
+		public short Index { get; set; }
 
 		public override void EmitLoad(ILGenerator cil)
 		{

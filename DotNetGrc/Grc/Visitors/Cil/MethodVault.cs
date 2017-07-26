@@ -75,7 +75,7 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_puti", typeof(void), new Type[] { typeof(int) }, new string[] { "i" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("PutInt", new Type[] { typeof(int) }));
 
@@ -88,7 +88,7 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_putc", typeof(void), new Type[] { typeof(byte) }, new string[] { "c" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("PutChar", new Type[] { typeof(byte) }));
 
@@ -101,7 +101,7 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_puts", typeof(void), new Type[] { typeof(byte).MakePointerType() }, new string[] { "p" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("PutStr", new Type[] { typeof(byte).MakePointerType() }));
 
@@ -136,9 +136,9 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_gets", typeof(void), new Type[] { typeof(int), typeof(byte).MakePointerType() }, new string[] { "n", "p" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
-			Cil.Emit(OpCodes.Ldarg, 1);
+			Cil.Emit(OpCodes.Ldarg, (short)1);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("GetStr", new Type[] { typeof(int), typeof(byte).MakePointerType() }));
 
@@ -151,7 +151,7 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_abs", typeof(int), new Type[] { typeof(int) }, new string[] { "i" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("IntGetAbs", new Type[] { typeof(int) }));
 
@@ -164,7 +164,7 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_ord", typeof(int), new Type[] { typeof(byte) }, new string[] { "c" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("CharGetOrd", new Type[] { typeof(byte) }));
 
@@ -177,7 +177,7 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_chr", typeof(byte), new Type[] { typeof(int) }, new string[] { "i" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("IntGetChar", new Type[] { typeof(int) }));
 
@@ -190,7 +190,7 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_strlen", typeof(int), new Type[] { typeof(byte).MakePointerType() }, new string[] { "p" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("StrLen", new Type[] { typeof(byte).MakePointerType() }));
 
@@ -203,9 +203,9 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_strcmp", typeof(int), new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }, new string[] { "p1", "p2" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
-			Cil.Emit(OpCodes.Ldarg, 1);
+			Cil.Emit(OpCodes.Ldarg, (short)1);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("StrCmp", new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }));
 
@@ -218,9 +218,9 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_strcpy", typeof(void), new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }, new string[] { "p2", "p1" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
-			Cil.Emit(OpCodes.Ldarg, 1);
+			Cil.Emit(OpCodes.Ldarg, (short)1);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("StrCpy", new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }));
 
@@ -234,9 +234,9 @@ namespace Grc.Visitors.Cil
 		{
 			Enter("_strcat", typeof(void), new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }, new string[] { "p2", "p1" });
 
-			Cil.Emit(OpCodes.Ldarg, 0);
+			Cil.Emit(OpCodes.Ldarg, (short)0);
 
-			Cil.Emit(OpCodes.Ldarg, 1);
+			Cil.Emit(OpCodes.Ldarg, (short)1);
 
 			Cil.Emit(OpCodes.Call, typeof(IO).GetMethod("StrCat", new Type[] { typeof(byte).MakePointerType(), typeof(byte).MakePointerType() }));
 

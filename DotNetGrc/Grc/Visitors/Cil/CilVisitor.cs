@@ -118,7 +118,7 @@ namespace Grc.Visitors.Cil
 
 			foreach (var g in qArgs)
 				foreach (var a in g.Addrs)
-					a.Index = g.Index;
+					a.Index = (short)g.Index;
 
 			IEnumerable<AddrSym> vars = n.Tac.Select(q => q.Addrs).SelectMany(x => x).OfType<AddrLoc>();
 			IEnumerable<AddrSym> tmps = n.Tac.Select(q => q.Addrs).SelectMany(x => x).OfType<AddrTmp>();
@@ -140,7 +140,7 @@ namespace Grc.Visitors.Cil
 							  Addrs = g
 						  };
 
-			int index = 0;
+			short index = 0;
 
 			foreach (var g in qLocals)
 			{
