@@ -1,0 +1,11 @@
+a = ImageSource("00-source.gv.ast.png", end=50).LanczosResize(1280,720)
+b = ImageSource("01-tick.gv.ast.png", end=50).LanczosResize(1280,720)
+c = ImageSource("02-tick.gv.ast.png", end=50).LanczosResize(1280,720)
+d = ImageSource("03-boom.gv.ast.png", end=50).LanczosResize(1280,720)
+e = ImageSource("04-tick.gv.ast.png", end=50).LanczosResize(1280,720)
+f = ImageSource("05-tick.gv.ast.png", end=50).LanczosResize(1280,720)
+g = ImageSource("06-boom.gv.ast.png", end=50).LanczosResize(1280,720)
+h = ImageSource("07-tick.gv.ast.png", end=50).LanczosResize(1280,720)
+i = ImageSource("08-tick.gv.ast.png", end=50).LanczosResize(1280,720)
+
+Dissolve(a, b, c, d, e, f, g, h, i, 10)
